@@ -1,5 +1,14 @@
 package org.dudss.nodeshot.screens;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.entities.NodeConnector;
+
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -20,14 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
-import org.dudss.nodeshot.entities.NodeConnector;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class MenuScreen implements Screen {
 
@@ -56,8 +57,19 @@ public class MenuScreen implements Screen {
     {
         this.nodeshotGame = game;
 
-        atlas = new TextureAtlas(Gdx.files.internal("data/uiskin.atlas"));
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"), atlas);
+        Texture logoTex = null;
+        
+        if (Gdx.app.getType() == ApplicationType.Android) {
+        	atlas = new TextureAtlas(Gdx.files.internal("data/uiskin.atlas"));
+        	skin = new Skin(Gdx.files.internal("data/uiskin.json"), atlas);
+        	
+        	logoTex = new Texture(Gdx.files.internal("nodelogo.png"));
+        } else if (Gdx.app.getType() == ApplicationType.Desktop) {
+        	atlas = new TextureAtlas("res/data/uiskin.atlas");
+        	skin = new Skin(Gdx.files.classpath("res/data/uiskin.json"), atlas);
+        	logoTex = new Texture(Gdx.files.classpath("res/nodelogo.png"));
+        }
+       
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -77,7 +89,6 @@ public class MenuScreen implements Screen {
         textField2 = new TextField("", skin);
         textField5 = new TextField("", skin);
 
-        Texture logoTex = new Texture(Gdx.files.internal("nodelogo.png"));
         logo = new Image(logoTex);
 
         stage = new Stage(viewport, batch);
@@ -93,7 +104,7 @@ public class MenuScreen implements Screen {
         //Set table to fill stage
         mainTable.setFillParent(true);
         //Set alignment of contents in the table.
-        mainTable.top();
+        mainTable.center();
 
         //Create buttons
 

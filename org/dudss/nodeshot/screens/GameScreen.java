@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -107,7 +108,11 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Inpu
 
         mapTiles = new Sprite[size_x*size_y];
 
-        spriteSheet = new Texture(Gdx.files.internal("spritesheet16x16.png"));
+        if (Gdx.app.getType() == ApplicationType.Android) {
+        	spriteSheet = new Texture(Gdx.files.internal("spritesheet16x16.png"));
+        } else if (Gdx.app.getType() == ApplicationType.Desktop) {
+        	spriteSheet = new Texture("res/spritesheet16x16.png");
+        }
         Texture mapTex = new Texture("res/4Kmap.png");
         mapSprite = new Sprite(mapTex);
         mapSprite.setPosition(0, 0);
