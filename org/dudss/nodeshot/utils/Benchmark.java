@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.entities.Node;
 
 import com.badlogic.gdx.Gdx;
@@ -44,8 +44,8 @@ public class Benchmark implements Runnable{
 	@Override
 	public void run() {
 		System.out.println("BENCHMARK RUN: " + second + " s");
-		//Base.BaseClass.fps
-		BenchmarkContainer bC = new BenchmarkContainer(Gdx.graphics.getFramesPerSecond(), BaseClass.sfps, BaseClass.simFac);
+		//Base.GameScreen.fps
+		BenchmarkContainer bC = new BenchmarkContainer(Gdx.graphics.getFramesPerSecond(), GameScreen.sfps, GameScreen.simFac);
 		values.add(bC);	
 		
 		second++;
@@ -90,17 +90,17 @@ public class Benchmark implements Runnable{
 		
 		for (int x = 0; x < n1; x++) {
 			for (int y = 0; y < n2; y++) {
-				Node n = new Node((BaseClass.WORLD_SIZE/10)*x, (BaseClass.WORLD_SIZE/100)*y, Base.RADIUS);
-				BaseClass.nodelist.add(n);
+				Node n = new Node((GameScreen.WORLD_SIZE/10)*x, (GameScreen.WORLD_SIZE/100)*y, Base.RADIUS);
+				GameScreen.nodelist.add(n);
 			}
 		}
 	}
 	
 	void removeGeneratedNodes() {
-		int size = BaseClass.nodelist.size();
+		int size = GameScreen.nodelist.size();
 			
 		for (int i = (size - number); i < number + (size - number); i++) {
-			BaseClass.nodelist.get(BaseClass.nodelist.size() - 1).remove();
+			GameScreen.nodelist.get(GameScreen.nodelist.size() - 1).remove();
 		}
 	}	
 }

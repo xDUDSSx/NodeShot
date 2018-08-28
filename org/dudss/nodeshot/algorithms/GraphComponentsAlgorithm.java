@@ -3,7 +3,7 @@ package org.dudss.nodeshot.algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.entities.Node;
 
 public class GraphComponentsAlgorithm {
@@ -20,15 +20,15 @@ public class GraphComponentsAlgorithm {
 	}
 	
 	void process() {
-		    for (int i = 0; i < BaseClass.nodelist.size(); i++) {		
+		    for (int i = 0; i < GameScreen.nodelist.size(); i++) {		
 				state.add("FRESH");
-				BaseClass.nodelist.get(i).setState("FRESH");
+				GameScreen.nodelist.get(i).setState("FRESH");
 			}
 			
 		    int counter = 0;
 			
-			for (Node n : BaseClass.nodelist) {			
-				if (state.get(BaseClass.nodelist.indexOf(n)).equals("FRESH")) {
+			for (Node n : GameScreen.nodelist) {			
+				if (state.get(GameScreen.nodelist.indexOf(n)).equals("FRESH")) {
 					counter++;
 												
 					try {
@@ -42,7 +42,7 @@ public class GraphComponentsAlgorithm {
 				}
 			}	
 
-	    	for (Node n : BaseClass.nodelist) {
+	    	for (Node n : GameScreen.nodelist) {
 				n.setState("");
 	    	}
 	    	state.clear();	
@@ -50,14 +50,14 @@ public class GraphComponentsAlgorithm {
 	}
 	
 	void goThrough(Node n) throws InterruptedException {
-		if(state.get(BaseClass.nodelist.indexOf(n)).equals("FRESH")) {
-			state.set(BaseClass.nodelist.indexOf(n), "OPENED");
+		if(state.get(GameScreen.nodelist.indexOf(n)).equals("FRESH")) {
+			state.set(GameScreen.nodelist.indexOf(n), "OPENED");
 			n.setState("OPENED");
 			bufferNodes.add(n);
 			for (Node conNode : n.getAllConnectedNodes()) {
 				goThrough(conNode);
 			}
-			state.set(BaseClass.nodelist.indexOf(n), "CLOSED");
+			state.set(GameScreen.nodelist.indexOf(n), "CLOSED");
 			n.setState("CLOSED");
 		}
 	}

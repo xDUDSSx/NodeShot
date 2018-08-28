@@ -6,7 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
-import org.dudss.nodeshot.entities.NodeConnector;
+import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.entities.Connector;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -28,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MenuScreen implements Screen {
@@ -70,24 +73,23 @@ public class MenuScreen implements Screen {
         	logoTex = new Texture(Gdx.files.classpath("res/nodelogo.png"));
         }
        
-
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        viewport = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(), camera);
         viewport.apply();
 
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
 
-        playButton = new TextButton("Play", skin);
-        sendButton = new TextButton("Send", skin);
-        exitButton = new TextButton("Exit", skin);;
-        keepButton = new TextButton("Keep", skin);
-        closeButton = new TextButton("Close node", skin);
+        playButton = new TextButton("Play", skin, "font30");
+        sendButton = new TextButton("Send", skin, "font30");
+        exitButton = new TextButton("Exit", skin, "font30");
+        keepButton = new TextButton("Keep", skin, "font30");
+        closeButton = new TextButton("Close node", skin, "font30");
 
-        textField1 = new TextField("", skin);
-        textField2 = new TextField("", skin);
-        textField5 = new TextField("", skin);
+        textField1 = new TextField("", skin, "font30");
+        textField2 = new TextField("", skin, "font30");
+        textField5 = new TextField("", skin, "font30");
 
         logo = new Image(logoTex);
 
@@ -102,12 +104,15 @@ public class MenuScreen implements Screen {
         //Create Table
         Table mainTable = new Table();
         //Set table to fill stage
-        mainTable.setFillParent(true);
+        //mainTable.setFillParent(true);
+        mainTable.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //Set alignment of contents in the table.
         mainTable.center();
-
+        mainTable.debugAll();
         //Create buttons
 
+        System.out.println("ww " + mainTable.getWidth() + mainTable.getHeight());
+        
         playButton.padLeft(100);
         playButton.padRight(100);
 
@@ -141,7 +146,7 @@ public class MenuScreen implements Screen {
                 System.out.println("from: " + valueFrom + " to " + valueTo + " sending!");
 
                 com.badlogic.gdx.graphics.Color color = new com.badlogic.gdx.graphics.Color((Base.getRandomIntNumberInRange(0, 255) / 255f),(Base.getRandomFloatNumberInRange(0, 255) / 255f),(Base.getRandomFloatNumberInRange(0, 255) / 255f), 1.0f);
-                BaseClass.nodelist.get(indexFrom).sendPackage(BaseClass.nodelist.get(indexTo), color);
+                GameScreen.nodelist.get(indexFrom).sendPackage(GameScreen.nodelist.get(indexTo), color);
             }
         });
         keepButton.addListener(new ClickListener(){
@@ -163,15 +168,15 @@ public class MenuScreen implements Screen {
                         }
 
                         Boolean isClear = true;
-                        for (NodeConnector nC : BaseClass.nodeConnectorHandler.getAllConnectorsToNode(BaseClass.nodelist.get(from))) {
-                            Boolean clear = nC.checkEntrance(BaseClass.nodelist.get(from), Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED);
+                        for (Connector nC : GameScreen.nodeConnectorHandler.getAllConnectorsToNode(GameScreen.nodelist.get(from))) {
+                            Boolean clear = nC.checkEntrance(GameScreen.nodelist.get(from), Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED);
                             if (clear == false) {
                                 isClear = false;
                             }
                         }
 
                         if (isClear) {
-                            BaseClass.nodelist.get(from).sendPackage(BaseClass.nodelist.get(to), color);
+                            GameScreen.nodelist.get(from).sendPackage(GameScreen.nodelist.get(to), color);
                             loops++;
                         }
                     }
@@ -195,8 +200,8 @@ public class MenuScreen implements Screen {
         closeButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Boolean isClosed = BaseClass.nodelist.get(Integer.valueOf(textField5.getText())).isClosed();
-                BaseClass.nodelist.get(Integer.valueOf(textField5.getText())).setClosed(!isClosed);
+                Boolean isClosed = GameScreen.nodelist.get(Integer.valueOf(textField5.getText())).isClosed();
+                GameScreen.nodelist.get(Integer.valueOf(textField5.getText())).setClosed(!isClosed);
             }
         });
 

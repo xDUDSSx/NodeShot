@@ -2,9 +2,15 @@
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "default-font": {
       "file": "helvetica120.fnt"
-    }
+    },
+	"font30": {
+      "file": "helvetica30.fnt"
+    },
     "font60" : {
       "file": "helvetica60.fnt"
+    },
+	"font120": {
+      "file": "helvetica120.fnt"
     }
   },
   "com.badlogic.gdx.graphics.Color": {
@@ -69,7 +75,13 @@
       "font": "default-font",
       "fontColor": "white",
       "downFontColor": "red"
-    }
+    },
+	"font30": {
+	  "down": "default-round-down",
+      "up": "default-round",
+      "font": "font30",
+      "fontColor": "white"
+	}
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
     "default": {
@@ -144,6 +156,13 @@
       "selection": "selection",
       "background": "textfield",
       "font": "default-font",
+      "fontColor": "white",
+      "cursor": "cursor"
+    }
+    "font30": {
+      "selection": "selection",
+      "background": "textfield",
+      "font": "font30",
       "fontColor": "white",
       "cursor": "cursor"
     }

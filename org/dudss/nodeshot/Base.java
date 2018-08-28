@@ -4,19 +4,14 @@ import com.badlogic.gdx.Gdx;
 
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Node;
-import org.dudss.nodeshot.entities.NodeConnector;
+import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Package;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
-//TODO: Add node connect dragging 
-
 public class Base {
-
-	private static final long serialVersionUID = 1L;
 
 	static Boolean running = true;
 	static Boolean noupdate = false;
@@ -35,13 +30,13 @@ public class Base {
 	public static int PACKAGE_RADIUS = 16;
 
 	public static float PACKAGE_SPEED = 0.5f;
-	public static float PACKAGE_BLOCK_RANGE = 10;
+	public static float PACKAGE_BLOCK_RANGE = 8;
 
 	public static int CONNECT_DISTANCE = 900;
 	public static int MAX_CONNECTIONS = 9;
 
 	public static int lineWidth = 3;
-	public static int HUD_FONT_SIZE = 32;
+	public static int HUD_FONT_SIZE = 16;  //Mobile 32
 
 	static int paint_spacing = 2;
 
@@ -109,9 +104,9 @@ public class Base {
 		}
 			return listToString(entityList);
 	}
-		public static String nodeConnectorListToString (List < NodeConnector > list) {
+		public static String nodeConnectorListToString (List < Connector > list) {
 			List<Entity> entityList = new ArrayList<Entity>();
-			for (final NodeConnector n : list) {
+			for (final Connector n : list) {
 				entityList.add(new Entity() {
 					@Override
 					public int getID() {

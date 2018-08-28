@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.screens.GameScreen;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,25 +13,31 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static org.dudss.nodeshot.Base.PACKAGE_BLOCK_RANGE;
 import static org.dudss.nodeshot.Base.PACKAGE_SPEED;
 
-public class NodeConnector implements Entity{
+public class Connector implements Entity{
 	Node from;
 	Node to;
 	
 	int id;
 	
+	double lenght;
+	
 	List<Package> packages;
 	
-	public NodeConnector(Node from, Node to) {
+	public Connector(Node from, Node to) {
 		this.from = from;
 		this.to = to;
 		
 		this.id = java.lang.System.identityHashCode(this);
 		
 		packages = new CopyOnWriteArrayList<Package>();
+		
+		lenght = Math.hypot(from.getCX() - to.getCX(), from.getCY() - to.getCY());
+		
+		System.out.println("New connector lenght" + lenght);
 	}
 	
 	public void draw(ShapeRenderer sR) {
-		if (BaseClass.highlightedIndex == this.getID()) {
+		if (GameScreen.selectedID == this.getID()) {
 			sR.setColor(Color.WHITE);
 			sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth + 1);
 		}
@@ -58,7 +64,12 @@ public class NodeConnector implements Entity{
                 Vector2 vector = new Vector2(p2.x - p1.x, p2.y - p1.y);
 	   	 		
 	   	 		Boolean packageJam = false;
-	   	 		Boolean toBeJammed = false;
+	   	 		
+	   	 		double lenghtFactor = 100/lenght;
+	   	 		
+	   	 		double ACTUAL_PACKAGE_SPEED = PACKAGE_SPEED * lenghtFactor;
+	   	 		double ACTUAL_PACKAGE_BLOCK_RANGE = PACKAGE_BLOCK_RANGE * lenghtFactor;
+	   	 		
 	   	 		for (Package p : packages) {
 	   	 			if (p != packAge) {
 	   	 				if (p.from == packAge.from) {
@@ -68,7 +79,7 @@ public class NodeConnector implements Entity{
 			   	 				
 		   	 				//} 
 	   	 					
-		   	 				if (((p.percentage <= (packAge.percentage + PACKAGE_SPEED + PACKAGE_BLOCK_RANGE)) && (packAge.percentage <= (p.percentage + PACKAGE_BLOCK_RANGE))) && p.isFinished() == false) {		   	 				
+		   	 				if (((p.percentage <= (packAge.percentage + ACTUAL_PACKAGE_SPEED + ACTUAL_PACKAGE_BLOCK_RANGE)) && (packAge.percentage <= (p.percentage + ACTUAL_PACKAGE_BLOCK_RANGE))) && p.isFinished() == false) {		   	 				
 		   	 					if (packAge.percentage > p.percentage) {
 		   	 						packageJam = false;
 		   	 					} else 
@@ -113,20 +124,11 @@ public class NodeConnector implements Entity{
 			 				*/
 		   	 			}
 	   	 			}
-	   	 		}
-	   	 		
-	   	 		if (toBeJammed == true) {
-	   	 			packageJam = true;
-	   	 		}
-	   	 		
-	   	 		//System.out.println("packageJAM: " + packageJam);
-	   	 		//
-				// System.out.println("Package going ack pkgJam: " + packageJam + " " + packAge.getID() + " AT: " + System.currentTimeMillis());
-				
+	   	 		}	   	
 	   	 		
 	   	 		if (!(packAge.percentage >= 95) && packageJam == false) {
 	   	 			//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " Percentage up " + packAge.percentage);
-	 				packAge.percentage += PACKAGE_SPEED;	 	
+	 				packAge.percentage += ACTUAL_PACKAGE_SPEED;	 	
 	 				
 	 				Vector2 finalVector = new Vector2((float)(vector.x * (0.01 * packAge.percentage)), (float)(vector.y * (0.01 * packAge.percentage)));
 	 				
@@ -136,22 +138,26 @@ public class NodeConnector implements Entity{
 	   	 		} else if (packAge.percentage >= 95 && packageJam == false && packAge.to.isClosed() == false) {
 	   	 			//Check if the path for the next pkg is free
 	   	 			Boolean nextPackageJam = false;
+	   	 			System.out.println("checking next node at " + System.currentTimeMillis());
 	   	 			if (packAge.getNextNode() != null) {
-	   	 				NodeConnector nextConnector = BaseClass.nodeConnectorHandler.getConnectorInbetween(packAge.to, packAge.getNextNode(), packAge.to.connectors);
+	   	 				Connector nextConnector = GameScreen.nodeConnectorHandler.getConnectorInbetween(packAge.from, packAge.getNextNode(), packAge.to.connectors);
 	   	 				//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " packageTO: " + packAge.to.getID() + " packageNEXT: " + packAge.getNextNode().getID() + " nextConnector: " + nextConnector.getID());
-			   	 		for (Package p : nextConnector.packages) {			   	 			
-	   	 					//System.out.println("SAMEPKGinNextnode");
-		   	 				if (0 <= (p.percentage + PACKAGE_BLOCK_RANGE) && p.percentage <= (0 + PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
-		   	 					nextPackageJam = true;
-		   	 					//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " nextPackageJam true p.percentage: " + p.percentage + " 0Percentage: " + 0);
-			   	 			}			
+			   	 		if (nextConnector != null) {
+			   	 		System.out.println("nextConnector null");
+		   	 				for (Package p : nextConnector.packages) {			   	 			
+		   	 					//System.out.println("SAMEPKGinNextnode");
+			   	 				if (0 <= (p.percentage + ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 + ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
+			   	 					nextPackageJam = true;
+			   	 					//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " nextPackageJam true p.percentage: " + p.percentage + " 0Percentage: " + 0);
+				   	 			}			
+				   	 		}
 			   	 		}
 	   	 			}
 	   	 			
 	   	 			if (!nextPackageJam) {
-	   	 				//System.out.println("Destroying package FROM: " + packAge.from.getID());
-		   	 			packAge.destroy();
-		   	 			packages.remove(packAge);
+		   	 			//packAge.destroy();
+	   	 				packAge.alert();
+		   	 			//packages.remove(packAge);
 		   	 		}
 		   	 	}
 	 		}
@@ -164,24 +170,30 @@ public class NodeConnector implements Entity{
 	*/
 	public Boolean checkEntrance(Node n, float blockRange, float packageSpeed) {
 		Boolean clear = true;
+		
+		double lenghtFactor = 100/lenght;
+	 		
+	 	double ACTUAL_PACKAGE_SPEED = PACKAGE_SPEED * lenghtFactor;
+	 	double ACTUAL_PACKAGE_BLOCK_RANGE = PACKAGE_BLOCK_RANGE * lenghtFactor;
+		
 		for (Package p : this.packages) {
 			if (this.from == n) {
 				if (p.from == this.from) {
-					if (0 <= (p.percentage + PACKAGE_BLOCK_RANGE) && p.percentage <= (0 + PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
+					if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
 						clear = false;				
 			 		}	
 				} else {
-					if ((100 - PACKAGE_BLOCK_RANGE) <= (p.percentage + PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
+					if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
 						clear = false;				
 			 		}	
 				}
 			} else {
 				if (p.from == this.from) {
-					if ((100 - PACKAGE_BLOCK_RANGE) <= (p.percentage + PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
+					if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
 						clear = false;				
 			 		}	
 				} else {
-					if (0 <= (p.percentage + PACKAGE_BLOCK_RANGE) && p.percentage <= (0 + PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
+					if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
 						clear = false;				
 			 		}	
 				}
@@ -222,6 +234,10 @@ public class NodeConnector implements Entity{
 	
 	public int getID() {
 		return id;
+	}
+	
+	public int getIndex() {
+		return GameScreen.nodeConnectorHandler.getAllConnectors().indexOf(this);
 	}
 	
 	public List<Package> getPackages() {

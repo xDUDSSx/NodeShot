@@ -5,17 +5,15 @@ import java.util.List;
 import java.util.Queue;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.algorithms.NodePathfindingAlgorithm;
 import org.dudss.nodeshot.entities.Node;
-import org.dudss.nodeshot.entities.NodeConnector;
+import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Package;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 
-class PackagePathHandler {
+class PackagePathHandler implements PathHandler {
 	
 	Queue<Node> nodesToGo;
 	
@@ -33,6 +31,7 @@ class PackagePathHandler {
 	
 	Boolean started = false;
 	Boolean done = false;
+	Boolean failed = false;
 	
 	PackagePathHandler(Node from, Node to) {
 		this.from = from;
@@ -46,7 +45,25 @@ class PackagePathHandler {
 		currentIndex = 0;
 	}
 	
-	void start() {
+	PackagePathHandler(Node from, Node to, Package p) {
+		this.from = from;
+		this.to = to;
+		
+		this.id = System.identityHashCode(this);
+		
+		currentPackage = p;
+		
+		try {
+			allNodes = calculatePath();
+			nodesToGo = new LinkedList<Node>(allNodes);
+			currentIndex = 0;
+		} catch (RuntimeException ex) {
+			System.out.println("Cannot create path!");
+			failed = true;
+		}
+	}
+	
+	public void start() {
 		if (nodesToGo.size() <= 1) {
 			System.out.println("Can't send package to the same node!");
 		} else {
@@ -60,7 +77,7 @@ class PackagePathHandler {
 			currentIndex++;		
 			
 			System.out.println("Start p: " + n1.getIndex() + " to " + n2.getIndex());
-			NodeConnector nC = BaseClass.nodeConnectorHandler.getConnectorInbetween(n1, n2);
+			Connector nC = GameScreen.nodeConnectorHandler.getConnectorInbetween(n1, n2);
 			nC.add(currentPackage);	
 			currentPackage.go();System.out.println("Package sent: at: " + System.currentTimeMillis());
 		}
@@ -68,7 +85,7 @@ class PackagePathHandler {
 		started = true;
 	}
 	
-	void update() {
+	public void update() {
 		//Check if pathHandlern start method has executed, a "concurrency failsafe"
 		if(started) {
 			if (nodesToGo.size() <= 1) {
@@ -85,7 +102,7 @@ class PackagePathHandler {
 				currentIndex++;
 			
 				System.out.println("Start p: " + n1.getIndex() + " to " + n2.getIndex());
-				NodeConnector nC = BaseClass.nodeConnectorHandler.getConnectorInbetween(n1, n2);
+				Connector nC = GameScreen.nodeConnectorHandler.getConnectorInbetween(n1, n2);
 				nC.add(currentPackage);	
 				currentPackage.go();
 				System.out.println("Package sent: at: " + System.currentTimeMillis());
@@ -119,7 +136,7 @@ class PackagePathHandler {
 		
 	}
 	
-	void finish() {
+	public void finish() {
 		done = true;
 		System.out.println("Path at |" + from.getIndex() + "| to |" + to.getIndex() + "| finished!");
 	}
@@ -131,7 +148,7 @@ class PackagePathHandler {
 		//Check if pFA returned -1 (-> Nodes in different webs)
 		if (pFA.getSteps() == -1) {
 			System.out.println("Cannot create path!");
-			return null;
+			throw new RuntimeException("Cannot create path!");
 		}
 		
 		//Retrieving path from pFA
@@ -168,7 +185,7 @@ class PackagePathHandler {
 		return color;
 	}
 	
-	Boolean isDone() {
+	public boolean isDone() {
 		return done;
 	}
 }
