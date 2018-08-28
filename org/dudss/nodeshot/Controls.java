@@ -87,7 +87,7 @@ public class Controls {
 		btnClearNodes.setBackground(Color.RED);
 		btnClearNodes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				for (Node n : BaseClass.nodelist) {
+				for (Node n : GameScreen.nodelist) {
 					n.remove();
 				}
 			}
@@ -99,8 +99,8 @@ public class Controls {
 		btnClearPackages.setBackground(Color.RED);
 		btnClearPackages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				BaseClass.packagelist.clear();
-				BaseClass.packageHandler.clear();
+				GameScreen.packagelist.clear();
+				GameScreen.packageHandler.clear();
 			}
 		});
 		contentPanel.add(btnClearPackages, "cell 0 1,growx");
@@ -109,7 +109,7 @@ public class Controls {
 		btnToggleSelectiveInfo.setBackground(Color.YELLOW);
 		btnToggleSelectiveInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				BaseClass.NodeSelectiveInfo = !BaseClass.NodeSelectiveInfo;
+				GameScreen.NodeSelectiveInfo = !GameScreen.NodeSelectiveInfo;
 			}
 		});
 		
@@ -126,7 +126,7 @@ public class Controls {
 		btnToggleConnectionDistance.setBackground(Color.YELLOW);
 		btnToggleConnectionDistance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				BaseClass.NodeConnectRadiusHidden = !BaseClass.NodeConnectRadiusHidden;
+				GameScreen.NodeConnectRadiusHidden = !GameScreen.NodeConnectRadiusHidden;
 			}
 		});
 		contentPanel.add(btnToggleConnectionDistance, "cell 0 5,growx,aligny top");
@@ -161,7 +161,7 @@ public class Controls {
 		btnToggleConnectMode = new JButton("Toggle connect mode");
 		btnToggleConnectMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				BaseClass.toggleConnectMode = !BaseClass.toggleConnectMode;
+				GameScreen.toggleConnectMode = !GameScreen.toggleConnectMode;
 			}
 		});
 		btnToggleConnectMode.setBackground(Color.ORANGE);
@@ -171,7 +171,7 @@ public class Controls {
 		btnGetStepsFrom = new JButton("Get steps from to");
 		btnGetStepsFrom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				BaseClass.nodelist.get(Integer.valueOf(txtFrom.getText())).getStepsTo(BaseClass.nodelist.get(Integer.valueOf(txtTo.getText())));
+				GameScreen.nodelist.get(Integer.valueOf(txtFrom.getText())).getStepsTo(GameScreen.nodelist.get(Integer.valueOf(txtTo.getText())));
 			}
 		});
 		
@@ -187,7 +187,7 @@ public class Controls {
 		btnPingPackagehandler = new JButton("Ping PackageHandler");
 		btnPingPackagehandler.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				BaseClass.packageHandler.addPath(BaseClass.nodelist.get(0),BaseClass.nodelist.get(3));
+				GameScreen.packageHandler.addPath(GameScreen.nodelist.get(0),GameScreen.nodelist.get(3));
 			}
 		});
 		contentPanel.add(btnPingPackagehandler, "cell 0 12,growx");
@@ -249,7 +249,7 @@ public class Controls {
 		btnSendPackage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				com.badlogic.gdx.graphics.Color color = new com.badlogic.gdx.graphics.Color((Base.getRandomIntNumberInRange(0, 255) / 255f),(Base.getRandomFloatNumberInRange(0, 255) / 255f),(Base.getRandomFloatNumberInRange(0, 255) / 255f), 1.0f);
-				BaseClass.nodelist.get(Integer.valueOf(txtGofrom.getText())).sendPackage(BaseClass.nodelist.get(Integer.valueOf(txtGoto.getText())), color);
+				GameScreen.nodelist.get(Integer.valueOf(txtGofrom.getText())).sendPackage(GameScreen.nodelist.get(Integer.valueOf(txtGoto.getText())), color);
 			}
 		});
 		contentPanel.add(btnSendPackage, "flowy,cell 0 23,growx");
@@ -257,7 +257,7 @@ public class Controls {
 		btnDistanceBetween = new JButton("Distance between a, b");
 		btnDistanceBetween.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(BaseClass.nodelist.get(Integer.valueOf(txtDistancefrom.getText())).getDistance(BaseClass.nodelist.get(Integer.valueOf(txtDistanceto.getText()))));
+				System.out.println(GameScreen.nodelist.get(Integer.valueOf(txtDistancefrom.getText())).getDistance(GameScreen.nodelist.get(Integer.valueOf(txtDistanceto.getText()))));
 			}
 		});
 		contentPanel.add(btnDistanceBetween, "cell 0 17,growx,aligny top");
@@ -273,19 +273,19 @@ public class Controls {
 			class GeneratePackagesTask extends TimerTask {
 				
 				public void run() {
-					for(int i = 0; i < BaseClass.nodelist.size(); i++) {						
-						Package packAge = new Package(BaseClass.nodelist.get(i), getTargetNodeOtherThanIndex(i));
+					for(int i = 0; i < GameScreen.nodelist.size(); i++) {						
+						Package packAge = new Package(GameScreen.nodelist.get(i), getTargetNodeOtherThanIndex(i));
 						packAge.go();
 					}
 				}
 				Node getTargetNodeOtherThanIndex(int i) {
-					int result = Base.getRandomIntNumberInRange(1, BaseClass.nodelist.size()) - 1;
+					int result = Base.getRandomIntNumberInRange(1, GameScreen.nodelist.size()) - 1;
 					
 					if (result == i) {
-						result = Base.getRandomIntNumberInRange(1, BaseClass.nodelist.size()) - 1;
+						result = Base.getRandomIntNumberInRange(1, GameScreen.nodelist.size()) - 1;
 					}
 					
-					return BaseClass.nodelist.get(result);
+					return GameScreen.nodelist.get(result);
 				}
 			}
 		});
@@ -310,10 +310,10 @@ public class Controls {
 		btnShowNodeInfo.setBackground(Color.YELLOW);
 		btnShowNodeInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(BaseClass.NodeInfoHidden == false) {
-					BaseClass.NodeInfoHidden = true;
+				if(GameScreen.NodeInfoHidden == false) {
+					GameScreen.NodeInfoHidden = true;
 				} else {
-					BaseClass.NodeInfoHidden = false;
+					GameScreen.NodeInfoHidden = false;
 				}
 			}
 		});
@@ -339,15 +339,15 @@ public class Controls {
 						}
 						
 						Boolean isClear = true;
-						for (NodeConnector nC : BaseClass.nodeConnectorHandler.getAllConnectorsToNode(BaseClass.nodelist.get(from))) {
-							Boolean clear = nC.checkEntrance(BaseClass.nodelist.get(from), Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED); 
+						for (NodeConnector nC : GameScreen.nodeConnectorHandler.getAllConnectorsToNode(GameScreen.nodelist.get(from))) {
+							Boolean clear = nC.checkEntrance(GameScreen.nodelist.get(from), Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED); 
 							if (clear == false) {
 								isClear = false;
 							}
 						}
 						
 						if (isClear) {
-							BaseClass.nodelist.get(from).sendPackage(BaseClass.nodelist.get(to), color);
+							GameScreen.nodelist.get(from).sendPackage(GameScreen.nodelist.get(to), color);
 						}
 						loops++;
 					}
@@ -374,8 +374,8 @@ public class Controls {
 		btnSendOpposingPkgs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println(System.currentTimeMillis());
-				BaseClass.nodelist.get(0).sendPackage(BaseClass.nodelist.get(1));
-				BaseClass.nodelist.get(1).sendPackage(BaseClass.nodelist.get(0));
+				GameScreen.nodelist.get(0).sendPackage(GameScreen.nodelist.get(1));
+				GameScreen.nodelist.get(1).sendPackage(GameScreen.nodelist.get(0));
 				System.out.println(System.currentTimeMillis());
 			}
 		});
@@ -388,8 +388,8 @@ public class Controls {
 		btnCloseNode = new JButton("Close node");
 		btnCloseNode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Boolean isClosed = BaseClass.nodelist.get(Integer.valueOf(txtClose.getText())).isClosed();
-				BaseClass.nodelist.get(Integer.valueOf(txtClose.getText())).setClosed(!isClosed);
+				Boolean isClosed = GameScreen.nodelist.get(Integer.valueOf(txtClose.getText())).isClosed();
+				GameScreen.nodelist.get(Integer.valueOf(txtClose.getText())).setClosed(!isClosed);
 			}
 		});
 		contentPanel.add(btnCloseNode, "cell 0 24,growx");

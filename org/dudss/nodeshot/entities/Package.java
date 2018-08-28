@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.screens.GameScreen;
 
 public class Package extends Sprite implements Entity{
 
@@ -48,20 +48,14 @@ public class Package extends Sprite implements Entity{
 		
 		currentMovePos = new Vector2(from.getCX(), from.getCY());
 		
-		this.set(new Sprite(BaseClass.spriteSheet, 0, 0, 16, 16));
+		System.out.println("Setting package sprite!");
+		this.set(new Sprite(GameScreen.spriteSheet, 0, 0, 16, 16));
 		this.setPosition(x, y);
 	}
 	//TODO: implement speed
 
 	public void draw(SpriteBatch batch) {
-		/*
-		g2d.setColor(Color.yellow);		
-		g2d.fill(this);
-		g2d.setColor(Color.black);
-		g2d.drawRect ((int) x, (int) y, radius, radius); 
-		*/
-		
-		Sprite packageSprite = new Sprite(BaseClass.spriteSheet, 0, 0, 16, 16);
+		Sprite packageSprite = new Sprite(GameScreen.spriteSheet, 0, 0, 16, 16);
 
 		if (this.color != null) {
 			packageSprite.setColor(color);
@@ -82,9 +76,15 @@ public class Package extends Sprite implements Entity{
 	}
 	
 	public void destroy() {
-		BaseClass.packagelist.remove(this); //wont be rendered anymore
+		GameScreen.packagelist.remove(this); //wont be rendered anymore
 		going = false;
 		finished = true;
+		System.out.println("REMOVING PACKAGE");
+	}
+	
+	public void alert() {
+		going = false;
+		System.out.println("Package ALERT!");
 	}
 	
 	public void transform(float x, float y) {
@@ -95,7 +95,7 @@ public class Package extends Sprite implements Entity{
 	
 	public void go() {
 		going = true;
-		BaseClass.packagelist.add(this);
+		GameScreen.packagelist.add(this);
 	}
 	
 	public Boolean isFinished() {
@@ -119,4 +119,9 @@ public class Package extends Sprite implements Entity{
 	public int getID() {
 		return id;
 	}
+	
+	public int getIndex() {
+		return GameScreen.packagelist.indexOf(this);
+	}
+	
 }

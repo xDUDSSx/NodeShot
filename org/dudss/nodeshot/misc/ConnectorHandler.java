@@ -5,40 +5,40 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.entities.Node;
-import org.dudss.nodeshot.entities.NodeConnector;
+import org.dudss.nodeshot.entities.Connector;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-public class NodeConnectorHandler {
-	List<NodeConnector> connectors;
+public class ConnectorHandler {
+	List<Connector> connectors;
 	
-	public NodeConnectorHandler() {
+	public ConnectorHandler() {
 		//connectors = Collections.synchronizedList(new ArrayList<NodeConnector>());
-		connectors = new CopyOnWriteArrayList<NodeConnector>();
+		connectors = new CopyOnWriteArrayList<Connector>();
 	}
 	
 	//Call updates to Connectors
 	public void update() {
-		for (NodeConnector nC : connectors) {
+		for (Connector nC : connectors) {
 			nC.update();
 		}
 	}
 	
-	public void addConnector(NodeConnector nC) {
+	public void addConnector(Connector nC) {
 		connectors.add(nC);
 	}
 	
 	public void createConnector(Node from, Node to) {
-		connectors.add(new NodeConnector(from, to));
+		connectors.add(new Connector(from, to));
 		//System.out.println("added new connector, from: " + from.getIndex() + " to: " + to.getIndex() + " connectorsSize: " + connectors.size());
 	}
 	
-	public void removeConnector(NodeConnector nC) {
+	public void removeConnector(Connector nC) {
 		connectors.remove(nC);
 	}
 	
-	public NodeConnector getConnectorInbetween(Node from, Node to) {
-		for (NodeConnector nC : connectors) {
+	public Connector getConnectorInbetween(Node from, Node to) {
+		for (Connector nC : connectors) {
 			if ((nC.getFrom() == from && nC.getTo() == to) || (nC.getTo() == from && nC.getFrom() == to)) {
 				return nC;
 			}
@@ -46,8 +46,8 @@ public class NodeConnectorHandler {
 		return null;
 	}
 	
-	public NodeConnector getConnectorInbetween(Node from, Node to, List<NodeConnector> pool) {
-		for (NodeConnector nC : pool) {
+	public Connector getConnectorInbetween(Node from, Node to, List<Connector> pool) {
+		for (Connector nC : pool) {
 			if ((nC.getFrom() == from && nC.getTo() == to) || (nC.getTo() == from && nC.getFrom() == to)) {
 				return nC;
 			}
@@ -55,9 +55,9 @@ public class NodeConnectorHandler {
 		return null;
 	}
 	
-	public List<NodeConnector> getAllConnectorsToNode(Node n) {
-		List<NodeConnector> list = new ArrayList<NodeConnector>();
-		for (NodeConnector nC : connectors) {
+	public List<Connector> getAllConnectorsToNode(Node n) {
+		List<Connector> list = new ArrayList<Connector>();
+		for (Connector nC : connectors) {
 			if (nC.getFrom() == n || nC.getTo() == n) {
 				list.add(nC);
 			}
@@ -66,22 +66,22 @@ public class NodeConnectorHandler {
 	}
 	
 	public void removeAllPackagesInConnectors() {
-		for (NodeConnector nC : connectors) {
+		for (Connector nC : connectors) {
 			nC.removeAllPackages();
 		}
 	}
 	
 	public void drawAll(ShapeRenderer sR) {
-		for (NodeConnector nC : connectors) {
+		for (Connector nC : connectors) {
 			nC.draw(sR);
 		}
 	}
 	
-	public void draw(NodeConnector nC, ShapeRenderer sR) {
+	public void draw(Connector nC, ShapeRenderer sR) {
 		nC.draw(sR);
 	}
 	
-	public List<NodeConnector> getAllConnectors() {
+	public List<Connector> getAllConnectors() {
 		return connectors;
 	}
 	

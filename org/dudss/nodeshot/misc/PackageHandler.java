@@ -4,17 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.entities.Package;
 
 import com.badlogic.gdx.graphics.Color;
 
 public class PackageHandler {
 	
-	List<PackagePathHandler> pathHandlers;
+	List<PathHandler> pathHandlers;
 	
 	public PackageHandler() {
-		pathHandlers = new CopyOnWriteArrayList<PackagePathHandler>();
+		pathHandlers = new CopyOnWriteArrayList<PathHandler>();
 	}
 	
 	//To add a Path
@@ -30,20 +32,34 @@ public class PackageHandler {
 		pathHandlers.add(newPPH);
 		newPPH.start();
 	}
+
+	public void addPath(Node from, Node to, Package p) {
+		PackagePathHandler newPPH = new PackagePathHandler(from, to, p);
+		if (newPPH.failed != true) {
+			pathHandlers.add(newPPH);
+			newPPH.start();
+		}
+	}
+	
+	public void addIndefinitePath(Package p, Connector c) {
+		IndefinitePathHandler newIPH = new IndefinitePathHandler(p, c);
+		pathHandlers.add(newIPH);
+		newIPH.start();		
+	}
 	
 	public void clear() {
 		pathHandlers.clear();
-		BaseClass.packagelist.clear();
-		BaseClass.nodeConnectorHandler.removeAllPackagesInConnectors();
+		GameScreen.packagelist.clear();
+		GameScreen.nodeConnectorHandler.removeAllPackagesInConnectors();
 	}
 	
 	public void update() {
 		List<PackagePathHandler> toRemove = new ArrayList<PackagePathHandler>();
 		
 		//Cycle through pPHs, update them, and select ones that are done for removal (after iterating!)
-		for (PackagePathHandler pPH : pathHandlers) {
+		for (PathHandler pPH : pathHandlers) {
 			if (pPH.isDone() == true) {
-				toRemove.add(pPH);
+				toRemove.add((PackagePathHandler) pPH);
 			} else {
 				pPH.update();
 			}
@@ -52,7 +68,7 @@ public class PackageHandler {
 	
 	}
 	
-	public List<PackagePathHandler> getAllPackagePathHandlers() {
+	public List<PathHandler> getAllPathHandlers() {
 		return pathHandlers;
 	}
 	

@@ -1,22 +1,24 @@
 package org.dudss.nodeshot;
 
 import org.dudss.nodeshot.entities.Node;
-import static org.dudss.nodeshot.BaseClass.*;
+import org.dudss.nodeshot.screens.GameScreen;
 
 //SIMULATION THREAD
 public class SimulationThread implements Runnable {
     //double interpolation; //TODO: implement interpolation
-		int loops;
+	int loops;
  
-   	    final int TICKS_PER_SECOND = 30;
-   	    final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
-   	    final int MAX_FRAMESKIP = 15; //30 (15)
+   	final int TICKS_PER_SECOND = 30;
+   	final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+   	final int MAX_FRAMESKIP = 15; //30 (15)
     long next_game_tick = getTickCount() + SKIP_TICKS;
     
+    public static int simTick;
+    
     public void run() {
-    	System.out.println("Thread running!");    
+    	System.out.println("SimThread daemon running!");    
     	
-    	simFac = 1.0;
+    	GameScreen.simFac = 1.0;
     	
     	long remainder;
     	long t1;
@@ -27,7 +29,7 @@ public class SimulationThread implements Runnable {
    	    {
     		//long startTime = System.currentTimeMillis();		   	 	
    	        if(getTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {	
-   	        	next_game_tick += (SKIP_TICKS/simFac); //Set next expected sim calc, modify with simFactor
+   	        	next_game_tick += (SKIP_TICKS/GameScreen.simFac); //Set next expected sim calc, modify with simFactor
    	        	
    	        	t1 = getTickCount();
    	        	updateLogic();
@@ -39,25 +41,25 @@ public class SimulationThread implements Runnable {
    				//Cant keep up?
    				if (timeElapsed > SKIP_TICKS) {
    					//double prevSimFac = simFac;
-   					simFac = ((double)SKIP_TICKS/(double)timeElapsed);
+   					GameScreen.simFac = ((double)SKIP_TICKS/(double)timeElapsed);
    					/*System.out.println("Sim calculation thread: " + Thread.currentThread().getName() + " can't keep up! "
    							+ "(" + timeElapsed + " vs " + SKIP_TICKS +"),"
    							+ "decreasing simFac (" + prevSimFac + "->" + simFac + ")");
    					*/
-   				} else if (simFac < 1.0) {
+   				} else if (GameScreen.simFac < 1.0) {
    					System.out.println("Sim thread is keeping up.");
-   					simFac = 1.0;
+   					GameScreen.simFac = 1.0;
    				}
    				
    				loops++;  
    				
    				//sFPS calculation
-	   	        currentSimTimeTick = System.currentTimeMillis();
-	   	        simFrameCount++;	 
-	   	        if(currentSimTimeTick >= nextSimTimeTick) {
-		   	        nextSimTimeTick = currentSimTimeTick + 1000;
-		   	        sfps = simFrameCount;
-		   	        simFrameCount = 0;
+   				GameScreen.currentSimTimeTick = System.currentTimeMillis();
+   				GameScreen.simFrameCount++;	 
+	   	        if(GameScreen.currentSimTimeTick >= GameScreen.nextSimTimeTick) {
+	   	        	GameScreen.nextSimTimeTick = GameScreen.currentSimTimeTick + 1000;
+	   	        	GameScreen.sfps = GameScreen.simFrameCount;
+	   	        	GameScreen.simFrameCount = 0;
    	            }
 	   	        
 	   	        if (loops > 1) {
@@ -90,17 +92,21 @@ public class SimulationThread implements Runnable {
 	}
 	
 	void updateLogic() {
+		simTick++;
 		//Node movement
 		if (Base.randomMovement) {
-				for (Node n : BaseClass.nodelist) {
+				for (Node n : GameScreen.nodelist) {
 				n.move();		       
 			}
 		}
 		//Updating pathHandler logic
-		BaseClass.packageHandler.update();
+		GameScreen.packageHandler.update();
 		
 		//Updating connector logic
-		BaseClass.nodeConnectorHandler.update();		
+		GameScreen.nodeConnectorHandler.update();		
+		
+		//Updating buildings
+		GameScreen.buildingHandler.updateAll();
 	}
 
 }
