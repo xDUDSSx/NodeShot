@@ -8,13 +8,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.Selector;
-import org.dudss.nodeshot.algorithms.NodePathfindingAlgorithm;
+import org.dudss.nodeshot.utils.SpriteLoader;
+import org.dudss.nodeshot.algorithms.PathfindingStepAlgorithm;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * Node object that holds position, transform, state and connection data Extends
+ * Node object that holds position, transform, state and connection data, extends a
  * Gdx sprite
  * 
  * @author Dan
@@ -47,20 +48,19 @@ public class Node extends Sprite implements Entity {
 	public Point movementVector;
 
 	/**
-	 * Creates a node that passes arguments to a new Ellipse2D.Double
+	 * Creates a new Node that functions as a Sprite
 	 * 
-	 * @param x
-	 *            <x coordinate>
-	 * @param y
-	 *            <y coordinate>
-	 * @param radius
-	 *            <Node radius>
+	 * @param cx - the X center coordinate 
+	 * @param cy - the Y center coordinate
+	 * @param radius - the sprite radius (16 hardcoded TODO: fix)
 	 */
 	public Node(float cx, float cy, int radius) {
 		this.cx = cx;
 		this.cy = cy;
+		
 		// Hardcoded TODO: fix radius
 		this.radius = 16;
+		
 		this.id = java.lang.System.identityHashCode(this);
 
 		x = cx - (radius / 2);
@@ -71,7 +71,7 @@ public class Node extends Sprite implements Entity {
 
 		connectors = new CopyOnWriteArrayList<Connector>();
 
-		this.set(new Sprite(GameScreen.spriteSheet, 17, 0, 16, 16));
+		this.set(new Sprite(SpriteLoader.nodeSprite));
 		this.setPosition(x, y);
 	}
 
@@ -149,7 +149,7 @@ public class Node extends Sprite implements Entity {
 				}
 
 				Connector nC = new Connector(this, targetnode);
-				GameScreen.nodeConnectorHandler.addConnector(nC);
+				GameScreen.connectorHandler.addConnector(nC);
 				this.connectors.add(nC);
 				targetnode.connectors.add(nC);
 
@@ -174,8 +174,7 @@ public class Node extends Sprite implements Entity {
 		int rangeYto = 5;
 
 		if (this.movementVector == null) {
-			movementVector = new Point(Base.getRandomIntNumberInRange(rangeXfrom, rangeXto),
-					Base.getRandomIntNumberInRange(rangeYfrom, rangeYto));
+			movementVector = new Point(Base.getRandomIntNumberInRange(rangeXfrom, rangeXto), Base.getRandomIntNumberInRange(rangeYfrom, rangeYto));
 		}
 
 		vector = movementVector;
@@ -240,7 +239,7 @@ public class Node extends Sprite implements Entity {
 			}
 		}
 		if (toBeRemoved != null) {
-			GameScreen.nodeConnectorHandler.removeConnector(toBeRemoved);
+			GameScreen.connectorHandler.removeConnector(toBeRemoved);
 		}
 	}
 
@@ -261,8 +260,8 @@ public class Node extends Sprite implements Entity {
 		}
 
 		// Removing connectors to this node
-		for (Connector nC : GameScreen.nodeConnectorHandler.getAllConnectorsToNode(this)) {
-			GameScreen.nodeConnectorHandler.removeConnector(nC);
+		for (Connector nC : GameScreen.connectorHandler.getAllConnectorsToNode(this)) {
+			GameScreen.connectorHandler.removeConnector(nC);
 		}
 		// Highlight fix
 		if (GameScreen.selectedID == this.getID()) {
@@ -295,20 +294,20 @@ public class Node extends Sprite implements Entity {
 	}
 	
 	public int getStepsTo(Node target) {
-		NodePathfindingAlgorithm nPA = new NodePathfindingAlgorithm(this, target);
+		PathfindingStepAlgorithm nPA = new PathfindingStepAlgorithm(this, target);
 		return nPA.getSteps();
 	}
 
 	public void sendPackage(Node target) {
-		GameScreen.packageHandler.addPath(this, target); // TODO: Make PackageHandler handle the finish action
+		GameScreen.packageHandler.addPath(this, target);
 	}
 
 	public void sendPackage(Node target, Color c) {
-		GameScreen.packageHandler.addPath(this, target, c); // TODO: Make PackageHandler handle the finish action
+		GameScreen.packageHandler.addPath(this, target, c); 
 	}
 
 	public void sendPackage(Node target, Package p) {
-		GameScreen.packageHandler.addPath(this, target, p); // TODO: Make PackageHandler handle the finish action
+		GameScreen.packageHandler.addPath(this, target, p);
 	}
 	
 	public void sendPackage(Package p) {
@@ -321,6 +320,7 @@ public class Node extends Sprite implements Entity {
 		return this.id;
 	}
 
+	@Override
 	public int getIndex() {
 		return GameScreen.nodelist.indexOf(this);
 	}
@@ -332,11 +332,16 @@ public class Node extends Sprite implements Entity {
 	public void setClosed(Boolean closed) {
 		this.closed = closed;
 		if (closed == true) {
-			this.set(new Sprite(GameScreen.spriteSheet, 34, 0, 16, 16));
+			this.set(new Sprite(SpriteLoader.nodeClosedSprite));
 			this.setPosition(x, y);
 		} else {
-			this.set(new Sprite(GameScreen.spriteSheet, 17, 0, 16, 16));
+			this.set(new Sprite(SpriteLoader.nodeSprite));
 			this.setPosition(x, y);
 		}
+	}
+
+	@Override
+	public EntityType getType() {
+		return EntityType.NODE;
 	}
 }

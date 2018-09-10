@@ -14,8 +14,9 @@ public class BaseClass extends Game {
 	public void create() {
 		//Creating game screens
 		mainGameScreen = new GameScreen(this);
-		menuScreen = new MenuScreen(this);
+		//menuScreen = new MenuScreen(this);
 		//Setting game screen
-		setScreen(menuScreen);
+		//setScreen(menuScreen);
+		setScreen(new MenuScreen(this));	
 	}
 }

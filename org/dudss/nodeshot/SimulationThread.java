@@ -8,9 +8,9 @@ public class SimulationThread implements Runnable {
     //double interpolation; //TODO: implement interpolation
 	int loops;
  
-   	final int TICKS_PER_SECOND = 30;
-   	final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
-   	final int MAX_FRAMESKIP = 15; //30 (15)
+    public static int TICKS_PER_SECOND = 30;
+    static int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+    int MAX_FRAMESKIP = 15; //30 (15)
     long next_game_tick = getTickCount() + SKIP_TICKS;
     
     public static int simTick;
@@ -103,10 +103,17 @@ public class SimulationThread implements Runnable {
 		GameScreen.packageHandler.update();
 		
 		//Updating connector logic
-		GameScreen.nodeConnectorHandler.update();		
+		GameScreen.connectorHandler.update();		
 		
 		//Updating buildings
 		GameScreen.buildingHandler.updateAll();
+		
+		//Updating rightClickMenu text
+		GameScreen.rightClickMenuManager.update();
 	}
-
+	
+	public static void recalculateSpeed(int newTick) {
+	   	TICKS_PER_SECOND = newTick;
+	   	SKIP_TICKS = 1000 / newTick;
+	}
 }

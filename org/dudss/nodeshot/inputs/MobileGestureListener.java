@@ -1,10 +1,32 @@
 package org.dudss.nodeshot.inputs;
 
+import static org.dudss.nodeshot.screens.GameScreen.HEIGHT;
+import static org.dudss.nodeshot.screens.GameScreen.backButton;
+import static org.dudss.nodeshot.screens.GameScreen.buildButton;
+import static org.dudss.nodeshot.screens.GameScreen.oldNodeBuildMode;
+import static org.dudss.nodeshot.screens.GameScreen.cam;
+import static org.dudss.nodeshot.screens.GameScreen.debugMessage;
+import static org.dudss.nodeshot.screens.GameScreen.deleteButton;
+import static org.dudss.nodeshot.screens.GameScreen.draggingConnection;
+import static org.dudss.nodeshot.screens.GameScreen.lastCamePos;
+import static org.dudss.nodeshot.screens.GameScreen.lastMousePress;
+import static org.dudss.nodeshot.screens.GameScreen.lastMousePressType;
+import static org.dudss.nodeshot.screens.GameScreen.mousePos;
+import static org.dudss.nodeshot.screens.GameScreen.mouseX;
+import static org.dudss.nodeshot.screens.GameScreen.mouseY;
+import static org.dudss.nodeshot.screens.GameScreen.newConnectionFromIndex;
+import static org.dudss.nodeshot.screens.GameScreen.nodelist;
+import static org.dudss.nodeshot.screens.GameScreen.nodeshotGame;
+import static org.dudss.nodeshot.screens.GameScreen.selectedID;
+import static org.dudss.nodeshot.screens.GameScreen.selectedIndex;
+import static org.dudss.nodeshot.screens.GameScreen.selectedType;
+import static org.dudss.nodeshot.screens.GameScreen.zooming;
+
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.screens.GameScreen.EntityType;
 import org.dudss.nodeshot.screens.GameScreen.MouseType;
 import org.dudss.nodeshot.utils.Selector;
 
@@ -12,8 +34,6 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-
-import static org.dudss.nodeshot.screens.GameScreen.*;
 
 public class MobileGestureListener implements GestureDetector.GestureListener{
 
@@ -94,17 +114,17 @@ public class MobileGestureListener implements GestureDetector.GestureListener{
         //Build button detection
         if (buildButton.contains(mouseX, (HEIGHT - mouseY))) {
             buttonIntersected = true;
-            buildMode = !buildMode;
+            oldNodeBuildMode = !oldNodeBuildMode;
         }
 
         //Highlighting
-        if (!buttonIntersected) GameScreen.checkHighlights();
+        if (!buttonIntersected) GameScreen.checkHighlights(true);
 
-        if (selectedIndexo == -1 && buttonIntersected == false && buildMode == true) {
+        if (selectedIndex == -1 && buttonIntersected == false && oldNodeBuildMode == true) {
             //&& Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
             Node newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
             nodelist.add(newnode);
-            buildMode = false;
+            oldNodeBuildMode = false;
         }
 
         return true;
@@ -140,8 +160,8 @@ public class MobileGestureListener implements GestureDetector.GestureListener{
 
         Vector3 previousWorldPos = cam.unproject(new Vector3(previousMousePos.x, previousMousePos.y, 0));
 
-        if (selectedIndexo != -1 && draggingConnection == false) {
-          	Node highlightedNode = nodelist.get(selectedIndexo);
+        if (selectedIndex != -1 && draggingConnection == false) {
+          	Node highlightedNode = nodelist.get(selectedIndex);
 	        double distance = Math.hypot( highlightedNode.getCX() - lastMousePress.x,  highlightedNode.getCY() - lastMousePress.y);
             System.out.println("DISTANCE IS: " + distance);
 
@@ -153,7 +173,7 @@ public class MobileGestureListener implements GestureDetector.GestureListener{
                 draggingConnection = true;
             }
         } else
-        if (selectedIndexo != -1 && draggingConnection == true ) {
+        if (selectedIndex != -1 && draggingConnection == true ) {
             //Dragging a connection action //TODO: Maybe implement some info later
             System.out.println("drag action --");
         } else {
@@ -193,7 +213,7 @@ public class MobileGestureListener implements GestureDetector.GestureListener{
                 Boolean nodeIntersected = false;
                 for(int i = 0; i < nodelist.size(); i++) {
                     if(nodelist.get(i).getBoundingRectangle().overlaps(rect)) {
-                        if (nodelist.get(i) != nodelist.get(selectedIndexo)) {
+                        if (nodelist.get(i) != nodelist.get(selectedIndex)) {
                             nodelist.get(newConnectionFromIndex).connectTo(nodelist.get(i));
                         }
 
@@ -207,9 +227,9 @@ public class MobileGestureListener implements GestureDetector.GestureListener{
                 if (!nodeIntersected) {
                     Node newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
                     nodelist.add(newnode);
-                    nodelist.get(selectedIndexo).connectTo(newnode);
+                    nodelist.get(selectedIndex).connectTo(newnode);
                     Selector.selectNode(newnode);
-                    newConnectionFromIndex = selectedIndexo;
+                    newConnectionFromIndex = selectedIndex;
                 }
                 draggingConnection = false;
             }

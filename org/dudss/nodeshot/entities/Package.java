@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.misc.PathHandler;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.utils.SpriteLoader;
 
 public class Package extends Sprite implements Entity{
 
@@ -26,13 +28,12 @@ public class Package extends Sprite implements Entity{
 	
 	public Color color;
 	
-	public double distance;
-	
 	public Boolean going = false;
 	public Boolean finished = false;
-	public Node nextNode;
-	
+
 	public Vector2 currentMovePos;
+	
+	public PathHandler pathHandler;
 	
 	//Simple two node connection
 	public Package(Node from, Node to) {
@@ -44,18 +45,36 @@ public class Package extends Sprite implements Entity{
 		this.x = from.getCX() - radius/2;
 		this.y = from.getCY() - radius/2;
 		
-		this.distance = from.getDistance(to);
-		
 		currentMovePos = new Vector2(from.getCX(), from.getCY());
 		
 		System.out.println("Setting package sprite!");
-		this.set(new Sprite(GameScreen.spriteSheet, 0, 0, 16, 16));
+		this.set(new Sprite(SpriteLoader.packageSprite));
 		this.setPosition(x, y);
+		
+		GameScreen.packagelist.add(this);
 	}
 	//TODO: implement speed
-
+	
+	//No params
+	public Package(Node from) {
+		this.from = from;
+		this.to = null;
+		this.radius = Base.PACKAGE_RADIUS;
+		this.id = System.identityHashCode(this);
+		
+		this.x = from.getCX() - radius/2;
+		this.y = from.getCY() - radius/2;
+		
+		currentMovePos = new Vector2(from.getCX(), from.getCY());
+		
+		this.set(new Sprite(SpriteLoader.nodeSprite));
+		this.setPosition(x, y);
+		
+		GameScreen.packagelist.add(this);
+	}
+	
 	public void draw(SpriteBatch batch) {
-		Sprite packageSprite = new Sprite(GameScreen.spriteSheet, 0, 0, 16, 16);
+		Sprite packageSprite = SpriteLoader.packageSprite;
 
 		if (this.color != null) {
 			packageSprite.setColor(color);
@@ -79,12 +98,11 @@ public class Package extends Sprite implements Entity{
 		GameScreen.packagelist.remove(this); //wont be rendered anymore
 		going = false;
 		finished = true;
-		System.out.println("REMOVING PACKAGE");
+		this.pathHandler.finish();
 	}
 	
 	public void alert() {
 		going = false;
-		System.out.println("Package ALERT!");
 	}
 	
 	public void transform(float x, float y) {
@@ -95,18 +113,10 @@ public class Package extends Sprite implements Entity{
 	
 	public void go() {
 		going = true;
-		GameScreen.packagelist.add(this);
 	}
 	
 	public Boolean isFinished() {
 		return finished;
-	}
-	
-	public void setNextNode(Node n) {
-		nextNode = n;
-	}	
-	public Node getNextNode() {
-		return nextNode;
 	}
 	
 	public void setColor(Color color) {
@@ -116,6 +126,13 @@ public class Package extends Sprite implements Entity{
 		return color;
 	}
 	
+	public void setPathHandler(PathHandler pathHandler) {
+		this.pathHandler = pathHandler;
+	}
+	public PathHandler getPathHandler() {
+		return pathHandler;
+	}
+	
 	public int getID() {
 		return id;
 	}
@@ -123,5 +140,11 @@ public class Package extends Sprite implements Entity{
 	public int getIndex() {
 		return GameScreen.packagelist.indexOf(this);
 	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.PACKAGE;
+	}
+
 	
 }

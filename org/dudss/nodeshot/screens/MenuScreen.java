@@ -19,7 +19,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -30,7 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MenuScreen implements Screen {
@@ -81,11 +79,11 @@ public class MenuScreen implements Screen {
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
 
-        playButton = new TextButton("Play", skin, "font30");
-        sendButton = new TextButton("Send", skin, "font30");
-        exitButton = new TextButton("Exit", skin, "font30");
-        keepButton = new TextButton("Keep", skin, "font30");
-        closeButton = new TextButton("Close node", skin, "font30");
+        playButton = new TextButton("Play", skin, "hoverfont30");
+        sendButton = new TextButton("Send", skin, "hoverfont30");
+        exitButton = new TextButton("Exit", skin, "hoverfont30");
+        keepButton = new TextButton("Keep", skin, "hoverfont30");
+        closeButton = new TextButton("Close node", skin, "hoverfont30");
 
         textField1 = new TextField("", skin, "font30");
         textField2 = new TextField("", skin, "font30");
@@ -107,13 +105,13 @@ public class MenuScreen implements Screen {
         //mainTable.setFillParent(true);
         mainTable.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //Set alignment of contents in the table.
-        mainTable.center();
-        mainTable.debugAll();
+        mainTable.top();
+        //mainTable.debugAll();
         //Create buttons
 
         System.out.println("ww " + mainTable.getWidth() + mainTable.getHeight());
         
-        playButton.padLeft(100);
+        /*playButton.padLeft(100);
         playButton.padRight(100);
 
         sendButton.padLeft(100);
@@ -127,6 +125,7 @@ public class MenuScreen implements Screen {
 
         closeButton.padLeft(100);
         closeButton.padRight(100);
+         */
 
         //Add listeners to buttons
         playButton.addListener(new ClickListener(){
@@ -168,7 +167,7 @@ public class MenuScreen implements Screen {
                         }
 
                         Boolean isClear = true;
-                        for (Connector nC : GameScreen.nodeConnectorHandler.getAllConnectorsToNode(GameScreen.nodelist.get(from))) {
+                        for (Connector nC : GameScreen.connectorHandler.getAllConnectorsToNode(GameScreen.nodelist.get(from))) {
                             Boolean clear = nC.checkEntrance(GameScreen.nodelist.get(from), Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED);
                             if (clear == false) {
                                 isClear = false;

@@ -1,7 +1,10 @@
 {
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "default-font": {
-      "file": "helvetica120.fnt"
+      "file": "helvetica60.fnt"
+    },
+	"font15": {
+      "file": "helvetica15.fnt"
     },
 	"font30": {
       "file": "helvetica30.fnt"
@@ -76,12 +79,46 @@
       "fontColor": "white",
       "downFontColor": "red"
     },
+    "font15": {
+	  "down": "default-round-down",
+      "up": "default-round",
+      "font": "font15",
+      "fontColor": "white"
+	},
 	"font30": {
 	  "down": "default-round-down",
       "up": "default-round",
       "font": "font30",
       "fontColor": "white"
-	}
+	},
+	"hoverfont15": {
+        "down": "default-round-down", 
+        "up": "default-round",
+        "over": "default-round-hover",
+        "font": "font15",
+      	"fontColor": "white",
+    },
+    "hoverfont30": {
+        "down": "default-round-down", 
+        "up": "default-round",
+        "over": "default-round-hover",
+        "font": "font30",
+      	"fontColor": "white",
+    },
+    "hoverfont60": {
+        "down": "default-round-down", 
+        "up": "default-round",
+        "over": "default-round-hover",
+        "font": "font60",
+      	"fontColor": "white",
+    },
+    "hoverfont120": {
+        "down": "default-round-down", 
+        "up": "default-round",
+        "over": "default-round-hover",
+        "font": "font120",
+      	"fontColor": "white",
+    }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
     "default": {
@@ -114,12 +151,12 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
     "default": {
-      "titleFont": "default-font",
+      "titleFont": "font15",
       "background": "default-window",
       "titleFontColor": "white"
     },
     "dialog": {
-      "titleFont": "default-font",
+      "titleFont": "font30",
       "background": "default-window",
       "titleFontColor": "white",
       "stageBackground": "dialogDim"
@@ -150,6 +187,14 @@
       "font": "default-font",
       "fontColor": "white"
     }
+    "font15": {
+	  "font": "font15",
+      "fontColor": "white"
+	},
+	"font30": {
+	  "font": "font30",
+      "fontColor": "white"
+	}
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
     "default": {

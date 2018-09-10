@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.algorithms.GraphComponentsAlgorithm;
 
-public class NodePathfindingAlgorithm {
+public class PathfindingStepAlgorithm {
 	
 	int steps = -1;
 	int step;
@@ -24,7 +25,7 @@ public class NodePathfindingAlgorithm {
 	List<List<Node>> possiblePathways = new ArrayList<List<Node>>();
 	Map<Integer, ArrayList<Node[]>> nodeDuosMap; 
 	
-	public NodePathfindingAlgorithm(Node start, Node target) {
+	public PathfindingStepAlgorithm(Node start, Node target) {
 		this.start = target;	 
 		this.target = start;
 		exploredZoneNodes.add(this.start);
@@ -176,7 +177,21 @@ public class NodePathfindingAlgorithm {
 	}
 	
 	//Getter
-	public List<List<Node>> getPathway() {
+	public List<List<Node>> getPathways() {
 		return possiblePathways;
 	}
+	
+	public List<Node> getRandomPath() {	
+		List<Node> path;
+		//If there is only one possible pathway, use that one
+		if (possiblePathways.size() == 1) {
+			path = possiblePathways.get(0);
+		} else {
+			//Gets random path //TODO: additional distance calculations
+			path = possiblePathways.get(Base.getRandomIntNumberInRange(0, possiblePathways.size()-1));
+		}
+		
+		return path;
+	}
+	
 }

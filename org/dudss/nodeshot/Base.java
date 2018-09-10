@@ -1,15 +1,17 @@
 package org.dudss.nodeshot;
 
-import com.badlogic.gdx.Gdx;
-
-import org.dudss.nodeshot.entities.Entity;
-import org.dudss.nodeshot.entities.Node;
-import org.dudss.nodeshot.entities.Connector;
-import org.dudss.nodeshot.entities.Package;
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import org.dudss.nodeshot.entities.Connector;
+import org.dudss.nodeshot.entities.Entity;
+import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.entities.Package;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 
 public class Base {
 
@@ -100,6 +102,29 @@ public class Base {
 				public int getID() {
 					return n.getID();
 				}
+
+				@Override
+				public int getIndex() {
+					return 0;
+				}
+
+				@Override
+				public EntityType getType() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+
+				@Override
+				public float getX() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+
+				@Override
+				public float getY() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
 			});
 		}
 			return listToString(entityList);
@@ -111,6 +136,30 @@ public class Base {
 					@Override
 					public int getID() {
 						return n.getID();
+					}
+
+					@Override
+					public int getIndex() {
+						// TODO Auto-generated method stub
+						return 0;
+					}
+
+					@Override
+					public EntityType getType() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public float getX() {
+						// TODO Auto-generated method stub
+						return 0;
+					}
+
+					@Override
+					public float getY() {
+						// TODO Auto-generated method stub
+						return 0;
 					}
 				});
 			}
@@ -125,11 +174,49 @@ public class Base {
 					public int getID() {
 						return n.getID();
 					}
+
+					@Override
+					public int getIndex() {
+						// TODO Auto-generated method stub
+						return 0;
+					}
+
+					@Override
+					public EntityType getType() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public float getX() {
+						// TODO Auto-generated method stub
+						return 0;
+					}
+
+					@Override
+					public float getY() {
+						// TODO Auto-generated method stub
+						return 0;
+					}
 				});
 			}
 			return listToString(entityList);
 		}
-
+		
+		public static void enableGlBlend() {
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		}
+		
+		public static void disableGlBlend() {
+			Gdx.gl.glDisable(GL20.GL_BLEND);
+		}
+		
+		public static float round(float d, int decimalPlace) {
+	        BigDecimal bd = new BigDecimal(Float.toString(d));
+	        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+	        return bd.floatValue();
+		}
 	}
 /*
 class GraphNumbering {

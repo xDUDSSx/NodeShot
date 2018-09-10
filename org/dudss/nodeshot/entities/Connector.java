@@ -17,9 +17,13 @@ public class Connector implements Entity{
 	Node from;
 	Node to;
 	
+	Color red = new Color(255, 0, 0, 1f);
+	Color green = new Color(0, 255, 0, 1f);
+	
 	int id;
 	
 	double lenght;
+	boolean jammed = false;
 	
 	List<Package> packages;
 	
@@ -36,29 +40,39 @@ public class Connector implements Entity{
 		System.out.println("New connector lenght" + lenght);
 	}
 	
+	/**
+	* Draw the connector
+	*/
 	public void draw(ShapeRenderer sR) {
 		if (GameScreen.selectedID == this.getID()) {
 			sR.setColor(Color.WHITE);
 			sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth + 1);
 		}
-		
 		if (packages.size() == 0) {
-			sR.setColor(new Color(255, 0, 0, 0.8f));
+			sR.setColor(red);
 		} else {
-			sR.setColor(new Color(0, 255, 0, 0.8f));
+			sR.setColor(green);
 		}
-			
+		
+		if (jammed == true) {
+			sR.setColor(Color.YELLOW);
+		}
+		
 		sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth);
 		sR.setColor(Color.WHITE);	
 	} 
 		
 	/**
-	* Call a connector update, updating logic>
+	* Call a connector update, updating logic
 	*/
 	public void update() {
+		
+		//If any of the packages is moving within the connector during this update call, it means it's not jammed
+		boolean packageMovement = false;
+		
+		//For every package in the connector
        	for (Package packAge : packages) {
 	 		if(packAge.going == true) {
-	 			
 	 			Vector2 p1 = new Vector2(packAge.from.getCX(), packAge.from.getCY());
                 Vector2 p2 = new Vector2(packAge.to.getCX(), packAge.to.getCY());
                 Vector2 vector = new Vector2(p2.x - p1.x, p2.y - p1.y);
@@ -70,102 +84,69 @@ public class Connector implements Entity{
 	   	 		double ACTUAL_PACKAGE_SPEED = PACKAGE_SPEED * lenghtFactor;
 	   	 		double ACTUAL_PACKAGE_BLOCK_RANGE = PACKAGE_BLOCK_RANGE * lenghtFactor;
 	   	 		
+	   	 		//For every OTHER package in the connector
 	   	 		for (Package p : packages) {
 	   	 			if (p != packAge) {
+	   	 				//Checking the direction
 	   	 				if (p.from == packAge.from) {
-	   	 					//System.out.println("p.from: " + p.from.getID() + " p.to: " + p.to.getID() + " isFinished " + p.isFinished());	
-	   	 					//System.out.println("RIGHT WAY");
-		   	 				//if ((packAge.percentage == p.percentage && p.isFinished() == false) ) {
-			   	 				
-		   	 				//} 
-	   	 					
+	   	 					//Check all packages for colliding movement zones
 		   	 				if (((p.percentage <= (packAge.percentage + ACTUAL_PACKAGE_SPEED + ACTUAL_PACKAGE_BLOCK_RANGE)) && (packAge.percentage <= (p.percentage + ACTUAL_PACKAGE_BLOCK_RANGE))) && p.isFinished() == false) {		   	 				
+		   	 					/*- If the package we are currently checking IS colliding
+		   	 					  	check if the package its colliding with is AHEAD of BEHIND in the current package direction
+			   	 					  BEHIND -> keep going
+			   	 					  AHEAD -> stop (jam)
+			   	 					  
+		   	 					  - If the packages are colliding and both have the same percentages -> make the one created earlier jam
+		   	 					  (comes to play when spawning packages)
+		   	 					*/
 		   	 					if (packAge.percentage > p.percentage) {
 		   	 						packageJam = false;
 		   	 					} else 
 		   	 					if (packAge.percentage == p.percentage) {
 			   	 					if(!(this.packages.indexOf(packAge) > this.packages.indexOf(p))) {
-			   	 						//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " -- case!");
 			   	 						packageJam = true;
 				   	 				}	   	 					
 		   	 					} else {
 		   	 						packageJam = true;
 		   	 					}
-		   	 					//System.out.println("packageJam true p.percentage: " + p.percentage + " thisPacPercentage: " + packAge.percentage);
 		   	 				} 
 	   	 				} else {
-	   	 					//System.out.println("OPPOSITE WAY");
-	   	 					//if (((p.percentage + (PACKAGE_BLOCK_RANGE/2) + PACKAGE_SPEED) + (packAge.percentage + (PACKAGE_BLOCK_RANGE) + PACKAGE_SPEED) >= 100) && ((p.percentage + (PACKAGE_BLOCK_RANGE) + PACKAGE_SPEED) + (packAge.percentage + (PACKAGE_BLOCK_RANGE/2) + PACKAGE_SPEED) <= 110) && p.isFinished() == false) {
-		   	 					//packageJam = true;
-		   	 					//System.out.println("INVERSE - packageJam true p.percentage: " + p.percentage + " thisPacPercentage: " + packAge.percentage);
-		   	 				//}
-			 				//System.out.println("p.from: " + p.from.getID() + " p.to: " + p.to.getID() + " isFinished " + p.isFinished());	
-							//System.out.println("RIGHT WAY");
-			 				//if ((packAge.percentage == p.percentage && p.isFinished() == false) ) {
-			   	 				
-			 				//} 
-							
-			 				//**
-			 				/*if (((p.percentage <= (packAge.percentage + PACKAGE_SPEED + PACKAGE_BLOCK_RANGE)) && (packAge.percentage <= (p.percentage + PACKAGE_BLOCK_RANGE))) && p.isFinished() == false) {		   	 				
-		   	 					if (packAge.percentage > p.percentage) {
-		   	 						packageJam = false;
-		   	 					} else 
-		   	 					if (packAge.percentage == p.percentage) {
-			   	 					if(!(this.packages.indexOf(packAge) > this.packages.indexOf(p))) {
-			   	 						//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " -- case!");
-			   	 						packageJam = true;
-				   	 				}	   	 					
-		   	 					} else {
-		   	 						packageJam = true;
-		   	 					}
-		   	 					//System.out.println("packageJam true p.percentage: " + p.percentage + " thisPacPercentage: " + packAge.percentage);
-		   	 				} 
-			 				//**
-			 				*/
+	   	 					//TODO: Interaction with the packages in the opposite direction
 		   	 			}
 	   	 			}
 	   	 		}	   	
-	   	 		
-	   	 		if (!(packAge.percentage >= 95) && packageJam == false) {
-	   	 			//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " Percentage up " + packAge.percentage);
+	   	 		//Moving packages (when possible)
+	   	 		if (!(packAge.percentage >= 100) && packageJam == false) {
+	   	 			
 	 				packAge.percentage += ACTUAL_PACKAGE_SPEED;	 	
+	 				
+	 				//Entire connector jam indicator
+	 				packageMovement = true;
 	 				
 	 				Vector2 finalVector = new Vector2((float)(vector.x * (0.01 * packAge.percentage)), (float)(vector.y * (0.01 * packAge.percentage)));
 	 				
-	 				//System.out.println("Moving package " + packAge.getID() + " AT: " + System.currentTimeMillis());
 	 				packAge.transform((float)((p1.x - packAge.radius/2) + finalVector.x), (float)((p1.y - packAge.radius/2) + finalVector.y));
 	 				packAge.currentMovePos = new Vector2((float)((p1.x - packAge.radius/2) + finalVector.x),  (float)((p1.y - packAge.radius/2) + finalVector.y));
-	   	 		} else if (packAge.percentage >= 95 && packageJam == false && packAge.to.isClosed() == false) {
-	   	 			//Check if the path for the next pkg is free
-	   	 			Boolean nextPackageJam = false;
-	   	 			System.out.println("checking next node at " + System.currentTimeMillis());
-	   	 			if (packAge.getNextNode() != null) {
-	   	 				Connector nextConnector = GameScreen.nodeConnectorHandler.getConnectorInbetween(packAge.from, packAge.getNextNode(), packAge.to.connectors);
-	   	 				//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " packageTO: " + packAge.to.getID() + " packageNEXT: " + packAge.getNextNode().getID() + " nextConnector: " + nextConnector.getID());
-			   	 		if (nextConnector != null) {
-			   	 		System.out.println("nextConnector null");
-		   	 				for (Package p : nextConnector.packages) {			   	 			
-		   	 					//System.out.println("SAMEPKGinNextnode");
-			   	 				if (0 <= (p.percentage + ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 + ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
-			   	 					nextPackageJam = true;
-			   	 					//System.out.println(this.packages.indexOf(packAge) + " FROM: " + packAge.from.getID() + " nextPackageJam true p.percentage: " + p.percentage + " 0Percentage: " + 0);
-				   	 			}			
-				   	 		}
-			   	 		}
-	   	 			}
-	   	 			
-	   	 			if (!nextPackageJam) {
-		   	 			//packAge.destroy();
-	   	 				packAge.alert();
-		   	 			//packages.remove(packAge);
-		   	 		}
-		   	 	}
+	 			
+	 			//Handling finished packages
+	   	 		} else if (packAge.percentage >= 100 && packageJam == false && packAge.to.isClosed() == false) {  	 			
+	   	 			//Resetting package to a state picked up by the path handlers
+   	 				System.out.println("Package ALERT at: " + System.currentTimeMillis());
+   	 				packAge.alert();	   	 			
+	   	 		}
 	 		}
-	 	}
+       	}
+       	
+       	//Unless there are no packages. Was there any package movement? 
+       	if (packageMovement == false && packages.size() != 0) {
+       		this.jammed = true;
+       	} else {
+       		jammed = false;
+       	}
 	}
 	
 	/**
-	* Check if the area around {@link Node} n (0 to blockRange plus packageSpeed) is clear for a new {@link Package}
+	* Check if the area around {@link Node} n (0 to blockRange) is clear for a new {@link Package} to transfer
 	* @param n
 	*/
 	public Boolean checkEntrance(Node n, float blockRange, float packageSpeed) {
@@ -173,37 +154,54 @@ public class Connector implements Entity{
 		
 		double lenghtFactor = 100/lenght;
 	 		
-	 	double ACTUAL_PACKAGE_SPEED = PACKAGE_SPEED * lenghtFactor;
-	 	double ACTUAL_PACKAGE_BLOCK_RANGE = PACKAGE_BLOCK_RANGE * lenghtFactor;
+	 	double ACTUAL_PACKAGE_SPEED = packageSpeed * lenghtFactor;
+	 	double ACTUAL_PACKAGE_BLOCK_RANGE = blockRange * lenghtFactor;
 		
 		for (Package p : this.packages) {
-			if (this.from == n) {
-				if (p.from == this.from) {
-					if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
-						clear = false;				
-			 		}	
+			//Check direction (only packages in the same direction can block)
+			//Ignore the package in the other direction
+			if (n == p.from) {  
+				if (this.from == n) {
+					if (p.from == this.from) {
+						if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
+							clear = false;				
+				 		}	
+					} else {
+						if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
+							clear = false;				
+				 		}	
+					}
 				} else {
-					if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
-						clear = false;				
-			 		}	
-				}
-			} else {
-				if (p.from == this.from) {
-					if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
-						clear = false;				
-			 		}	
-				} else {
-					if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
-						clear = false;				
-			 		}	
-				}
-			}	
+					if (p.from == this.from) {
+						if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
+							clear = false;				
+				 		}	
+					} else {
+						if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
+							clear = false;				
+				 		}	
+					}
+				}	
+			}
 		}
-		
 		return clear;
 	}
 	
-	//Add pkg to connector
+	public Package recievePackage(Node n) {
+		Package recievedPackage = null;
+		
+		for (Package p : this.packages) {	
+			if (n == p.to) { 
+				if (p.percentage >= 100) {
+					recievedPackage = p;
+					break;
+				}	
+			}
+		}
+		return recievedPackage;
+	}
+	
+	/**Add pkg to connector*/
 	public void add(Package pkg) {
 		if (pkg.from == this.from) {
 			pkg.transform(from.getCX() - pkg.radius/2, from.getCY() - pkg.radius/2);
@@ -214,12 +212,12 @@ public class Connector implements Entity{
 		packages.add(pkg);
 	}
 	
-	//Remove pkg from connector
+	/**Remove pkg from connector*/
 	public void remove(Package pkg) {
 		packages.remove(pkg);
 	}
 	
-	//Remove all packages from connector
+	/**Remove all packages from connector*/
 	public void removeAllPackages() {
 		packages.clear();
 	}
@@ -236,11 +234,57 @@ public class Connector implements Entity{
 		return id;
 	}
 	
+	@Override
 	public int getIndex() {
-		return GameScreen.nodeConnectorHandler.getAllConnectors().indexOf(this);
+		return GameScreen.connectorHandler.getAllConnectors().indexOf(this);
+	}
+
+	public Node getFurtherNode(Node from) {
+		if (this.from == from) {
+			return this.to;
+		} else {
+			return this.from;
+		}
 	}
 	
 	public List<Package> getPackages() {
 		return packages;
 	}
+	
+	public double getLenght() {
+		return lenght;
+	}
+
+	public boolean isJammed() {
+		return this.jammed;	
+	}
+	@Override
+	public EntityType getType() {
+		return EntityType.CONNECTOR;
+	}
+	
+	@Override
+	public float getX() {
+		double x1, x2;
+		
+        x1 = from.getCX();
+        x2 = to.getCX();
+       
+        double vX = (x2 - x1) / 2;     
+
+        float fX = (float) (x1 + vX);
+		return fX;
+	}
+
+	@Override
+	public float getY() {
+		double y1, y2;
+        y1 = from.getCY();
+        y2 = to.getCY();
+
+        double vY = (y2 - y1) / 2;
+
+        float fY = (float) (y1 + vY);
+		return fY;
+	}	
 }
