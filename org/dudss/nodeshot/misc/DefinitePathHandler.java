@@ -42,7 +42,7 @@ public class DefinitePathHandler implements PathHandler {
 		try {
 			nodesToGo = calculatePath(from, to);
 		} catch (RuntimeException ex) {
-			System.out.println("Cannot create path!");
+			//System.out.println("Cannot create path!");
 			failed = true;
 		}
 	}
@@ -59,8 +59,6 @@ public class DefinitePathHandler implements PathHandler {
 	
 		if (nodesToGo == null) {
 			failed = true;
-		} else {
-			System.out.println(Base.nodeListToString(nodesToGo));
 		}
 	}
 	
@@ -86,17 +84,24 @@ public class DefinitePathHandler implements PathHandler {
 	
 	public void update() {
 		//Check if pathHandlern start method has executed, a "concurrency failsafe"
-		if(started) {
-			if (nodesToGo.size() <= 1) {
-				if (currentPackage.going == false) {
-					finish();
+		if(started && done == false) {
+			if (!(nodesToGo == null)) {	
+				if (nodesToGo.size() <= 1) {
+					if (currentPackage.going == false) {
+						finish();
+						return;
+					}
 				}
-			} else 
+			}
+			
 			if (currentPackage.going == false) {				
 				Node n1;
 				Node n2;
 				
 				nodesToGo = calculatePath(this.n2, to);
+				if (nodesToGo == null) {					
+					return;
+				}
 				
 				if (!removedFromQueue) {
 					n1 = nodesToGo.get(0);
@@ -114,7 +119,7 @@ public class DefinitePathHandler implements PathHandler {
 				
 				Connector nextConnector = GameScreen.connectorHandler.getConnectorInbetween(n1, n2, n1.getConnectors());
 				
-				boolean isNextConnectorClear = nextConnector.checkEntrance(n1, Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED);
+				boolean isNextConnectorClear = nextConnector.checkEntrance(n1, Base.PACKAGE_BLOCK_RANGE);
 				if (isNextConnectorClear) {
 					generatePackage(n1, n2);
 					removedFromQueue = false;
@@ -124,14 +129,14 @@ public class DefinitePathHandler implements PathHandler {
 			}
 		}
 	}
-	
+
 	private List<Node> calculatePath(Node from, Node to) {
 		//Creates new PathfindingDistanceAlgorithm
 		PathfindingDistanceAlgorithm pDA = new PathfindingDistanceAlgorithm(from, to);
 		
 		//(-> Nodes in different webs)
 		if (pDA.isFailed() == true) {
-			System.out.println("Cannot create path!");
+			//System.out.println("Cannot create path!");
 			return null;
 		}
 		
@@ -141,7 +146,6 @@ public class DefinitePathHandler implements PathHandler {
 	}
 	
 	private void generatePackage(Node from, Node to) {
-		System.out.println("Package created: at: " + System.currentTimeMillis());
 		if (currentPackage == null) {
 			Package p = new Package(from, to);	
 
@@ -158,8 +162,8 @@ public class DefinitePathHandler implements PathHandler {
 	}
 	
 	public void finish() {
-		done = true;
-		System.out.println("Path at |" + from.getIndex() + "| to |" + to.getIndex() + "| finished!");
+		GameScreen.packageHandler.getAllPathHandlers().remove(this);
+		done = true;		
 	}
 	
 	public Node getNextNode() {

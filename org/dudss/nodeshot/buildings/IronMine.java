@@ -4,9 +4,11 @@ import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
+import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.OutputNode;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.screens.GameScreen;
 
@@ -18,6 +20,10 @@ public class IronMine implements Building {
 	
 	//Building node - outputs Iron
 	OutputNode output;
+	//The iron mine boundary node
+	Node export;
+	//First and the only connector of the output node
+	Connector firstConnector;
 	//Target node - where is Iron sent
 	Node target;
 	
@@ -56,18 +62,13 @@ public class IronMine implements Building {
 	}
 
 	public void generate() {
-		System.out.println("IronMine generate! at " + System.currentTimeMillis());
+		//System.out.println("IronMine generate! at " + System.currentTimeMillis());
 		if (this.output.getAllConnectedNodes().size() > 0) {
-			/*for (Building b : GameScreen.buildingHandler.getAllBuildings()) {
-				if (b instanceof Storage) {
-					Iron Iron = new Iron(this.output, this.output.getAllConnectedNodes().get(0));
-					output.sendPackage(((Storage) b).getInputNode(), Iron);					
-					System.out.println("sending");
-				}
-			}*/
-			Iron iron = new Iron(this.output);
-			output.sendPackage(iron);
-			System.out.println("sending");
+			if (this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
+				Iron iron = new Iron(this.output);
+				output.sendPackage(iron);
+				//System.out.println("sending iron");
+			}
 		}
 	}
 	
@@ -91,8 +92,14 @@ public class IronMine implements Building {
 	@Override
 	public void build() {
 		init();
-		output = new OutputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
+		output = new OutputNode(x + (width/2), (float) (y + (height*0.75)), Base.RADIUS, this);
+		export = new Node(x + (width/2), (float) (y + height*0.15), Base.RADIUS);
+		output.connectTo(export);
+		
+		firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
+		
 		GameScreen.nodelist.add(output);
+		GameScreen.nodelist.add(export);
 		buildingHandler.addBuilding(this);
 	}
 
@@ -105,6 +112,7 @@ public class IronMine implements Building {
 	public void demolish() {
 		GameScreen.buildingHandler.removeBuilding(this);
 		this.output.remove();
+		this.export.remove();
 	}
 
 	@Override

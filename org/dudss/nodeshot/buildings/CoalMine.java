@@ -4,6 +4,7 @@ import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
+import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.OutputNode;
 import org.dudss.nodeshot.entities.Package;
@@ -18,6 +19,10 @@ public class CoalMine implements Building {
 	
 	//Building node - outputs coal
 	OutputNode output;
+	//The coal mine boundary node
+	Node export;
+	//First and the only connector of the output node
+	Connector firstConnector;
 	//Target node - where is coal sent
 	Node target;
 	
@@ -56,7 +61,7 @@ public class CoalMine implements Building {
 	}
 
 	public void generate() {
-		System.out.println("CoalMine generate! at " + System.currentTimeMillis());
+		//System.out.println("CoalMine generate! at " + System.currentTimeMillis());
 		if (this.output.getAllConnectedNodes().size() > 0) {
 			Storage storage = null;
 			double dist = 0;
@@ -64,7 +69,7 @@ public class CoalMine implements Building {
 			for (Building b : GameScreen.buildingHandler.getAllBuildings()) {
 				if (b instanceof Storage) {
 					storageFound = true;
-					double newDist = this.output.getDistance(((Storage) b).getInputNode());
+					double newDist = this.output.getShortestDistanceTo(((Storage) b).getInputNode());
 					if (newDist < dist || dist == 0) {
 						storage = (Storage) b;
 						dist = newDist;
@@ -72,10 +77,10 @@ public class CoalMine implements Building {
 				}
 			}
 			
-			if (storageFound) {
+			if (storageFound && this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
 				Coal coal = new Coal(this.output, this.output.getAllConnectedNodes().get(0));
 				output.sendPackage(storage.getInputNode(), coal);
-				System.out.println("sending");
+				//System.out.println("sending");
 			}
 		}
 	}
@@ -100,8 +105,15 @@ public class CoalMine implements Building {
 	@Override
 	public void build() {
 		init();
-		output = new OutputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
+		output = new OutputNode(x + (width/2), (float) (y + (height*0.75)), Base.RADIUS, this);
+		export = new Node(x + (width/2), (float) (y + height*0.15), Base.RADIUS);
+		output.connectTo(export);
+		
+		firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
+		
+		//TODO: make a dedicated method to enable node rendering (and nodelist inclusion)
 		GameScreen.nodelist.add(output);
+		GameScreen.nodelist.add(export);
 		buildingHandler.addBuilding(this);
 	}
 
@@ -113,6 +125,7 @@ public class CoalMine implements Building {
 	public void demolish() {
 		GameScreen.buildingHandler.removeBuilding(this);
 		this.output.remove();
+		this.export.remove();
 	}
 
 	@Override
@@ -123,7 +136,6 @@ public class CoalMine implements Building {
 
 	@Override
 	public void alert(Package p) {
-		// TODO Auto-generated method stub
 		
 	}
 }

@@ -26,14 +26,14 @@ public class InputNode extends Node {
 							if (ph.to == this) {
 								c.remove(p);
 								p.destroy();
-								System.out.println("Alerting building PPH");
+								//System.out.println("Alerting building PPH");
 								assignedBuilding.alert(p);
 							}
 							break;
 						case IndefinitePathHandler: 
 							c.remove(p);
 							p.destroy();
-							System.out.println("Alerting building");
+							//System.out.println("Alerting building");
 							assignedBuilding.alert(p);
 							break;
 					}

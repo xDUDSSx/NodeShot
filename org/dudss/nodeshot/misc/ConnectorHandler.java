@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.Connector;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -34,7 +35,10 @@ public class ConnectorHandler {
 	}
 	
 	public void removeConnector(Connector nC) {
-		connectors.remove(nC);
+		for (Package p : nC.getPackages()) {
+			p.destroy();
+		}
+		connectors.remove(nC); 
 	}
 	
 	public Connector getConnectorInbetween(Node from, Node to) {
@@ -55,6 +59,8 @@ public class ConnectorHandler {
 		return null;
 	}
 	
+
+	/**Deprecated, don't use anymore, ineffective*/
 	public List<Connector> getAllConnectorsToNode(Node n) {
 		List<Connector> list = new ArrayList<Connector>();
 		for (Connector nC : connectors) {

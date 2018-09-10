@@ -62,7 +62,7 @@ public class PathfindingDistanceAlgorithm {
 		}
 		
 		if(nodesInTheSameWeb == false) {
-			System.out.println("Start/Target aren't in the same web!");
+			//System.out.println("Start/Target aren't in the same web!");
 			steps = -1;
 			failed = true;
 			return;
@@ -232,6 +232,19 @@ public class PathfindingDistanceAlgorithm {
 		List<Node> shallowCopy = shortestPath.subList(0, shortestPath.size());
 		Collections.reverse(shallowCopy);	
 		return shallowCopy;
+	}
+	
+	public Double getShortestDistance() {
+		List<Node> shortestPath = null;
+		double dist = Double.MAX_VALUE;
+		for (List<Node> path : possiblePathways) {
+			double pathDist = distances.get(possiblePathways.indexOf(path));
+			if (pathDist < dist) {
+				shortestPath = path;
+				dist = pathDist;
+			}
+		}
+		return dist;
 	}
 	
 	public List<Node> getRandomPath() {

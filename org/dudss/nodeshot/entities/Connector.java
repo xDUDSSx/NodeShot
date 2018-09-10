@@ -131,7 +131,6 @@ public class Connector implements Entity{
 	 			//Handling finished packages
 	   	 		} else if (packAge.percentage >= 100 && packageJam == false && packAge.to.isClosed() == false) {  	 			
 	   	 			//Resetting package to a state picked up by the path handlers
-   	 				System.out.println("Package ALERT at: " + System.currentTimeMillis());
    	 				packAge.alert();	   	 			
 	   	 		}
 	 		}
@@ -149,12 +148,11 @@ public class Connector implements Entity{
 	* Check if the area around {@link Node} n (0 to blockRange) is clear for a new {@link Package} to transfer
 	* @param n
 	*/
-	public Boolean checkEntrance(Node n, float blockRange, float packageSpeed) {
+	public Boolean checkEntrance(Node n, float blockRange) {
 		Boolean clear = true;
 		
 		double lenghtFactor = 100/lenght;
 	 		
-	 	double ACTUAL_PACKAGE_SPEED = packageSpeed * lenghtFactor;
 	 	double ACTUAL_PACKAGE_BLOCK_RANGE = blockRange * lenghtFactor;
 		
 		for (Package p : this.packages) {

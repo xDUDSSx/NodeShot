@@ -9,9 +9,14 @@ public class OutputNode extends Node {
 	
 	public OutputNode(float cx, float cy, int radius, Building building) {
 		super(cx, cy, radius);
+		
 		assignedBuilding = building;
+		this.maxConnections = 1;
+		this.setConnectable(false);
+		
 		this.set(SpriteLoader.nodeOutputSprite);
 		this.setPosition(x, y);
+		
 	}
 
 	public Building getAssignedBuilding() {

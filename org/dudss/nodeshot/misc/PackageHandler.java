@@ -41,7 +41,7 @@ public class PackageHandler {
 		if (newPPH.failed != true) {
 			p.setPathHandler(newPPH);
 			Connector firstConnector = GameScreen.connectorHandler.getConnectorInbetween(from, newPPH.getNextNode(), from.getConnectors());
-			boolean clear = firstConnector.checkEntrance(from, Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED);
+			boolean clear = firstConnector.checkEntrance(from, Base.PACKAGE_BLOCK_RANGE);
 			if (clear) {
 				pathHandlers.add(newPPH);
 				newPPH.start();
@@ -66,7 +66,7 @@ public class PackageHandler {
 	public void update() {
 		List<PathHandler> toRemove = new ArrayList<PathHandler>();
 		
-		//Cycle through pPHs, update them, and select ones that are done for removal (after iterating!)
+		//Cycle through pHs, update them, and select ones that are done for removal (after iterating!)
 		for (PathHandler pH : pathHandlers) {
 			if (pH.isDone() == true) {
 				toRemove.add(pH);

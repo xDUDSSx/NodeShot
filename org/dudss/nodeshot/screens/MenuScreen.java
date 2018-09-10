@@ -152,7 +152,6 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 final Color color = new Color((Base.getRandomIntNumberInRange(0, 255) / 255f),(Base.getRandomFloatNumberInRange(0, 255) / 255f),(Base.getRandomFloatNumberInRange(0, 255) / 255f), 1.0f);
-                System.out.println("Color created r: " + color.r) ;
 
                 class generatePackages implements Runnable {
                     int loops = 0;
@@ -168,7 +167,7 @@ public class MenuScreen implements Screen {
 
                         Boolean isClear = true;
                         for (Connector nC : GameScreen.connectorHandler.getAllConnectorsToNode(GameScreen.nodelist.get(from))) {
-                            Boolean clear = nC.checkEntrance(GameScreen.nodelist.get(from), Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED);
+                            Boolean clear = nC.checkEntrance(GameScreen.nodelist.get(from), Base.PACKAGE_BLOCK_RANGE);
                             if (clear == false) {
                                 isClear = false;
                             }

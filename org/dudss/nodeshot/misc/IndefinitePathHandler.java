@@ -30,7 +30,7 @@ public class IndefinitePathHandler implements PathHandler {
 		medianNode = currentPackage.to;
 		currentConnector.add(currentPackage);	
 		currentPackage.go();
-		System.out.println("Indefinite package sent: at: " + System.currentTimeMillis());
+		//System.out.println("Indefinite package sent: at: " + System.currentTimeMillis());
 	}
 	
 	@Override
@@ -38,50 +38,38 @@ public class IndefinitePathHandler implements PathHandler {
 		if (currentPackage.going == false) {		
 			//Gets all possible connectors to go
 			List<Connector> connectors = new CopyOnWriteArrayList<Connector>(currentPackage.to.getConnectors());
-			System.out.println(" preremov of connectors: " + connectors.size());
+			
 			//Removing currentConnector (we wont go again)
 			connectors.remove(currentConnector);
 			
-			System.out.println("Handler handles at: " + System.currentTimeMillis() + " n of connectors: " + connectors.size());
-			
 			//Selecting route
 			if (connectors.size() != 0) {
-				System.out.println("Getting next connector");
 				//Selecting a random connector
 				Connector nextConnector = connectors.get(Base.getRandomIntNumberInRange(0, connectors.size() - 1));		
 				
 				//Directions
 				if (nextConnector.getFrom() == medianNode) {	
-					System.out.println("One WAY!!");
-					boolean isNextConnectorClear = nextConnector.checkEntrance(nextConnector.getFrom(), Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED);
-					System.out.println("nextConnectorClear: " + isNextConnectorClear);
+					boolean isNextConnectorClear = nextConnector.checkEntrance(nextConnector.getFrom(), Base.PACKAGE_BLOCK_RANGE);
 					if (isNextConnectorClear) {
-						System.out.println("Clear");
 						currentPackage.reset(nextConnector.getFrom(), nextConnector.getTo());	
-						System.out.println("nextNode set at " + System.currentTimeMillis() + " index: " + nextConnector.getTo().getIndex());
+
 						medianNode = nextConnector.getTo();
 						
 						currentConnector.remove(currentPackage);
 						nextConnector.add(currentPackage);
 						currentConnector = nextConnector;	
-						currentPackage.go();
-						System.out.println("Indefinite package sent: at: " + System.currentTimeMillis());				
+						currentPackage.go();			
 					}
 				} else {
-					System.out.println("Other WAY!!");
-					boolean isNextConnectorClear = nextConnector.checkEntrance(nextConnector.getTo(), Base.PACKAGE_BLOCK_RANGE, Base.PACKAGE_SPEED);
-					System.out.println("nextConnectorClear: " + isNextConnectorClear);
+					boolean isNextConnectorClear = nextConnector.checkEntrance(nextConnector.getTo(), Base.PACKAGE_BLOCK_RANGE);
 					if (isNextConnectorClear) {
-						System.out.println("Clear");
 						currentPackage.reset(nextConnector.getTo(), nextConnector.getFrom());	
-						System.out.println("nextNode set at " + System.currentTimeMillis());
 						medianNode = nextConnector.getFrom();
 						
 						currentConnector.remove(currentPackage);
 						nextConnector.add(currentPackage);
 						currentConnector = nextConnector;	
-						currentPackage.go();
-						System.out.println("Indefinite package sent: at: " + System.currentTimeMillis());				
+						currentPackage.go();			
 					}
 				}
 			//Dead end, no connectors to go

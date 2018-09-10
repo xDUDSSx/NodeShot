@@ -9,6 +9,7 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.SpriteLoader;
+import org.dudss.nodeshot.algorithms.PathfindingDistanceAlgorithm;
 import org.dudss.nodeshot.algorithms.PathfindingStepAlgorithm;
 
 import com.badlogic.gdx.graphics.Color;
@@ -36,6 +37,8 @@ public class Node extends Sprite implements Entity {
 	public int connections;
 	public Boolean connectable = true;
 
+	public int maxConnections;
+	
 	public Boolean closed = false;
 
 	public List<Node> connected_to;
@@ -60,6 +63,11 @@ public class Node extends Sprite implements Entity {
 		
 		// Hardcoded TODO: fix radius
 		this.radius = 16;
+		
+		this.maxConnections = Base.MAX_CONNECTIONS;
+		if (maxConnections == 1) {
+			this.setConnectable(false);
+		}
 		
 		this.id = java.lang.System.identityHashCode(this);
 
@@ -134,9 +142,9 @@ public class Node extends Sprite implements Entity {
 	}
 
 	public void connectTo(Node targetnode) {
-		if ((connected_to.size() + connected_by.size()) >= Base.MAX_CONNECTIONS) {
+		if ((connected_to.size() + connected_by.size()) >= this.maxConnections) {
 			// too many connections
-		} else if ((targetnode.connected_to.size() + targetnode.connected_by.size()) >= Base.MAX_CONNECTIONS) {
+		} else if ((targetnode.connected_to.size() + targetnode.connected_by.size()) >= targetnode.maxConnections) {
 			// too many connections
 		} else {
 			if (!connected_by.contains(targetnode) && !connected_to.contains(targetnode)) {
@@ -144,7 +152,7 @@ public class Node extends Sprite implements Entity {
 				targetnode.connected_by.add(this);
 				connections++;
 				targetnode.connections++;
-				if (targetnode.connections >= Base.MAX_CONNECTIONS) {
+				if (targetnode.connections >= targetnode.maxConnections) {
 					targetnode.setConnectable(false);
 				}
 
@@ -220,12 +228,12 @@ public class Node extends Sprite implements Entity {
 	public void disconnect(Node node) {
 		this.connected_to.remove(node);
 		this.connections -= 1;
-		if (this.connections < Base.MAX_CONNECTIONS) {
+		if (this.connections < this.maxConnections) {
 			this.setConnectable(true);
 		}
 		node.connected_by.remove(this);
 		node.connections -= 1;
-		if (node.connections < Base.MAX_CONNECTIONS) {
+		if (node.connections < node.maxConnections) {
 			node.setConnectable(true);
 		}
 
@@ -247,14 +255,14 @@ public class Node extends Sprite implements Entity {
 		for (Node n : connected_to) {
 			n.connected_by.remove(this);
 			n.connections -= 1;
-			if (n.connections < Base.MAX_CONNECTIONS) {
+			if (n.connections < n.maxConnections) {
 				n.setConnectable(true);
 			}
 		}
 		for (Node n : connected_by) {
 			n.connected_to.remove(this);
 			n.connections -= 1;
-			if (n.connections < Base.MAX_CONNECTIONS) {
+			if (n.connections < n.maxConnections) {
 				n.setConnectable(true);
 			}
 		}
@@ -294,8 +302,17 @@ public class Node extends Sprite implements Entity {
 	}
 	
 	public int getStepsTo(Node target) {
-		PathfindingStepAlgorithm nPA = new PathfindingStepAlgorithm(this, target);
-		return nPA.getSteps();
+		PathfindingStepAlgorithm pSA = new PathfindingStepAlgorithm(this, target);
+		return pSA.getSteps();
+	}
+	
+	public double getShortestDistanceTo(Node target) {
+		PathfindingDistanceAlgorithm pDA = new PathfindingDistanceAlgorithm(this, target);
+		if (!(pDA.isFailed())) {
+			return pDA.getShortestDistance();
+		} else {
+			return -1;
+		}
 	}
 
 	public void sendPackage(Node target) {
@@ -340,6 +357,10 @@ public class Node extends Sprite implements Entity {
 		}
 	}
 
+	public void setMaxConnections(int max) {
+		this.maxConnections = max;
+	} 
+	
 	@Override
 	public EntityType getType() {
 		return EntityType.NODE;

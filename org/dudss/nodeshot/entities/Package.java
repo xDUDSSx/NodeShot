@@ -47,7 +47,6 @@ public class Package extends Sprite implements Entity{
 		
 		currentMovePos = new Vector2(from.getCX(), from.getCY());
 		
-		System.out.println("Setting package sprite!");
 		this.set(new Sprite(SpriteLoader.packageSprite));
 		this.setPosition(x, y);
 		

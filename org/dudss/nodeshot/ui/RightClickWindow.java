@@ -51,6 +51,7 @@ public class RightClickWindow extends Window {
 	Label yLabel;	
 	Label radiusLabel;
 	Label connectionsLabel;
+	Label connectableLabel;
 	Label connectorsLabel ;
 	Label closedLabel;
 	
@@ -72,7 +73,7 @@ public class RightClickWindow extends Window {
 	public RightClickWindow(Skin skin, Entity entity) {
 		super(entity.getType().toString() + " - " + entity.getIndex() + " #" + entity.getID(), skin);
 		assignedEntity = entity;
-		this.setSize(160, 240);
+		this.setSize(160, 258);
 		this.setMovable(false);
 		this.setResizable(true);
 		
@@ -203,6 +204,7 @@ public class RightClickWindow extends Window {
 			    yLabel = new Label("Node Y: " + n.getY(), skin, "font15");
 			    radiusLabel = new Label("Radius: " + n.radius, skin, "font15");
 			    connectionsLabel = new Label("Connections: " + n.getNumberOfConnections(), skin, "font15");
+			    connectableLabel = new Label("Connectable: " + n.connectable, skin, "font15");
 			    connectorsLabel = new Label("Connectors: " + Base.nodeConnectorListToString(n.connectors), skin, "font15");
 			    connectorsLabel.setWrap(true);
 			    closedLabel = new Label("Closed: " + n.isClosed(), skin, "font15");
@@ -240,6 +242,8 @@ public class RightClickWindow extends Window {
 		        table.add(radiusLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
 		        table.add(connectionsLabel).pad(1).fill(true).padLeft(10);
+		        table.row();
+		        table.add(connectableLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
 		        table.add(connectorsLabel).pad(1).fill(true).padLeft(10);		       
 		        table.row();
@@ -335,6 +339,7 @@ public class RightClickWindow extends Window {
 			    yLabel = new Label("Node Y: " + out.getY(), skin, "font15");
 			    radiusLabel = new Label("Radius: " + out.radius, skin, "font15");
 			    connectionsLabel = new Label("Connections: " + out.getNumberOfConnections(), skin, "font15");
+			    connectableLabel = new Label("Connectable: " + out.connectable, skin, "font15");
 			    connectorsLabel = new Label("Connectors: " + Base.nodeConnectorListToString(out.connectors), skin, "font15");
 			    connectorsLabel.setWrap(true);
 			    closedLabel = new Label("Closed: " + out.isClosed(), skin, "font15");
@@ -373,6 +378,8 @@ public class RightClickWindow extends Window {
 		        table.row();
 		        table.add(connectionsLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
+		        table.add(connectableLabel).pad(1).fill(true).padLeft(10);
+		        table.row();
 		        table.add(connectorsLabel).pad(1).fill(true).padLeft(10);		       
 		        table.row();
 		        table.add(closedLabel).pad(1).fill(true).padLeft(10);
@@ -394,6 +401,7 @@ public class RightClickWindow extends Window {
 			    yLabel = new Label("Node Y: " + in.getY(), skin, "font15");
 			    radiusLabel = new Label("Radius: " + in.radius, skin, "font15");
 			    connectionsLabel = new Label("Connections: " + in.getNumberOfConnections(), skin, "font15");
+			    connectableLabel = new Label("Connectable: " + in.connectable, skin, "font15");
 			    connectorsLabel = new Label("Connectors: " + Base.nodeConnectorListToString(in.connectors), skin, "font15");
 			    connectorsLabel.setWrap(true);
 			    closedLabel = new Label("Closed: " + in.isClosed(), skin, "font15");
@@ -431,6 +439,8 @@ public class RightClickWindow extends Window {
 		        table.add(radiusLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
 		        table.add(connectionsLabel).pad(1).fill(true).padLeft(10);
+		        table.row();
+		        table.add(connectableLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
 		        table.add(connectorsLabel).pad(1).fill(true).padLeft(10);		       
 		        table.row();
