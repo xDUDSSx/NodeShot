@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Coal extends Package {
 	
-	Sprite coalSprite = SpriteLoader.coalSprite;
+	public Sprite coalSprite = SpriteLoader.coalSprite;
 	
 	//Package representing an item
 	public Coal(Node from, Node to) {
@@ -18,6 +18,7 @@ public class Coal extends Package {
 	
 	@Override
 	public void draw(SpriteBatch batch) {
+		packageSprite = coalSprite;
 		coalSprite.setScale(0.6f);
 		coalSprite.setPosition((float) x, (float) y); 
 		coalSprite.draw(batch);

@@ -51,7 +51,7 @@ public class SpriteLoader {
 		coalHighlightSprite = new Sprite(spriteSheet, 17, 17, 16, 16);
 		ironHighlightSprite = new Sprite(spriteSheet, 17, 34, 16, 16);
 		
-		nodeClosedSprite = new Sprite(spriteSheet, 17, 34, 16, 16);
+		nodeClosedSprite = new Sprite(spriteSheet, 34, 17, 16, 16);
 		nodeInputSprite = new Sprite(spriteSheet, 68, 17, 16, 16);
 		nodeOutputSprite = new Sprite(spriteSheet, 51, 17, 16, 16);
 		nodeCoalSprite = new Sprite(spriteSheet, 34, 34, 16, 16);

@@ -35,6 +35,8 @@ public class Package extends Sprite implements Entity{
 	
 	public PathHandler pathHandler;
 	
+	public Sprite packageSprite;
+	
 	//Simple two node connection
 	public Package(Node from, Node to) {
 		this.from = from;
@@ -73,7 +75,7 @@ public class Package extends Sprite implements Entity{
 	}
 	
 	public void draw(SpriteBatch batch) {
-		Sprite packageSprite = SpriteLoader.packageSprite;
+		packageSprite = SpriteLoader.packageSprite;
 
 		if (this.color != null) {
 			packageSprite.setColor(color);

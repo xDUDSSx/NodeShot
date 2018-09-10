@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Iron extends Package {
 	
-	Sprite ironSprite = SpriteLoader.ironSprite;
+	public Sprite ironSprite = SpriteLoader.ironSprite;
 	
 	//Package representing an item
 	public Iron(Node from, Node to) {
@@ -22,6 +22,7 @@ public class Iron extends Package {
 
 	@Override
 	public void draw(SpriteBatch batch) {
+		packageSprite = ironSprite;
 		ironSprite.setScale(0.6f);
 		ironSprite.setPosition((float) x, (float) y); 
 		ironSprite.draw(batch);

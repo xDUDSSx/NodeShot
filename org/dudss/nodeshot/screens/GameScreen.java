@@ -718,7 +718,6 @@ public class GameScreen implements Screen {
         	if (highlightedEntity == null) {
         		highlightedEntity = checkConnectors(rect, worldPos, select);
         		if (highlightedEntity == null) {
-        			System.out.println("Entity null");
         			return null;
         		}
         	}
@@ -754,7 +753,7 @@ public class GameScreen implements Screen {
     	if ((packagelist.size() > 0)) {
             for(int i = 0; i < packagelist.size(); i++) {
                 Package p = packagelist.get(i);
-                if(p.getBoundingRectangle().contains(new Vector2(worldPos.x, worldPos.y))) {
+                if(Intersector.intersectRectangles(new Rectangle((float)(p.x + (p.radius*0.2)) , (float)(p.y + (p.radius*0.2)), (float)(p.radius*0.6), (float)(p.radius*0.6)), new Rectangle(worldPos.x, worldPos.y, 1,1), new Rectangle()) == true) {
                 	if (select) Selector.selectPackage(p);
                     packageIntersected = true;
                     intersectedPackage = p;
@@ -792,7 +791,7 @@ public class GameScreen implements Screen {
                     (rect.getY()+8f)
             });
 
-            if (Intersector.intersectSegmentPolygon(new Vector2(x1,y1), new Vector2(x2,y2), p))
+            if (Intersector.distanceLinePoint(x1, y1, x2, y2, worldPos.x, worldPos.y) <= 3)
             {
                 if (select) Selector.selectNodeConnector(connectorHandler.getAllConnectors().get(i));
                

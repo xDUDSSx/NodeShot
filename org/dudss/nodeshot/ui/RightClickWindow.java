@@ -47,6 +47,7 @@ public class RightClickWindow extends Window {
 	         
 	//Node
 	TextButton deleteButton;
+	TextButton closeButton;
 	Label xLabel;
 	Label yLabel;	
 	Label radiusLabel;
@@ -73,7 +74,7 @@ public class RightClickWindow extends Window {
 	public RightClickWindow(Skin skin, Entity entity) {
 		super(entity.getType().toString() + " - " + entity.getIndex() + " #" + entity.getID(), skin);
 		assignedEntity = entity;
-		this.setSize(160, 258);
+		this.setSize(160, 270);
 		this.setMovable(false);
 		this.setResizable(true);
 		
@@ -227,13 +228,20 @@ public class RightClickWindow extends Window {
 							GameScreen.rightClickMenuManager.removeMenu();
 						}
 		            }
+		        });            
+		        closeButton = new TextButton("Close node", skin, "hoverfont15");			    
+		        closeButton.addListener(new ClickListener(){
+		            @Override
+		            public void clicked(InputEvent event, float x, float y) {				    
+		            	n.setClosed(!(n.isClosed()));
+		            }
 		        });             
 		        
 		        table.row();
 		        table.add(deleteButton).pad(1).fill(true).padLeft(10);
-		        
 		        table.row();
-		        table.add(emptyLabel);
+		        table.add(closeButton).pad(1).fill(true).padLeft(10);
+		        
 		        table.row();		        
 		        table.add(xLabel).pad(1).fill(true).padLeft(10);
 		        table.row();

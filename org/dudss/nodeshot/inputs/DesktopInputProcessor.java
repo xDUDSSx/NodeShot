@@ -88,10 +88,7 @@ public class DesktopInputProcessor implements InputProcessor {
 				lastMousePress = worldPos;
 				lastMousePressType = MouseType.MOUSE_3;
 
-				Entity clickedEntity = GameScreen.checkHighlights(true);	
-				System.out.println("INFO: " + (GameScreen.selectedID != -1 && clickedEntity == null));
-				System.out.println("sI: " + (GameScreen.selectedID != -1));
-				System.out.println("cE: " + (clickedEntity == null));
+				Entity clickedEntity = GameScreen.checkHighlights(true);				
 
 				GameScreen.buildMode = false;
 				GameScreen.builtBuilding = null;
@@ -99,12 +96,11 @@ public class DesktopInputProcessor implements InputProcessor {
 				if (clickedEntity == null && GameScreen.selectedID != -1){
 					Selector.deselect();
 					GameScreen.rightClickMenuManager.removeMenu();
-				} else {
-					System.out.println(rightClickMenuManager.rightClickMenu != null);
+				} else {					
 					if (rightClickMenuManager.rightClickMenu != null) {
-					if (!(clickedEntity == rightClickMenuManager.rightClickMenu.getAssignedEntity())) {
-						GameScreen.rightClickMenuManager.createMenu(clickedEntity);
-					}
+						if (!(clickedEntity == rightClickMenuManager.rightClickMenu.getAssignedEntity())) {
+							GameScreen.rightClickMenuManager.createMenu(clickedEntity);
+						}
 					} else {
 						GameScreen.rightClickMenuManager.createMenu(clickedEntity);
 					}

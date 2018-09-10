@@ -13,14 +13,14 @@ public class RightClickMenuManager {
 			}
 			rightClickMenu = new RightClickWindow(GameScreen.skin, e);
 	        GameScreen.stage.addActor(rightClickMenu);
-	        System.out.println("Added new rightClickMenu");
+	        //System.out.println("Added new rightClickMenu");
 		} else if (GameScreen.selectedID == -1){
 			if (rightClickMenu != null) {
 				rightClickMenu.remove();
 			}
 			rightClickMenu = new RightClickWindow(GameScreen.skin);
 	        GameScreen.stage.addActor(rightClickMenu);
-	        System.out.println("Added new null rightClickMenu");
+	        //System.out.println("Added new null rightClickMenu");
 		}
 	}
 	
