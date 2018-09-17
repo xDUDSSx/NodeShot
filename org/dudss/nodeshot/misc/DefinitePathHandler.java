@@ -26,9 +26,10 @@ public class DefinitePathHandler implements PathHandler {
 	
 	Boolean started = false;
 	Boolean done = false;
+	Boolean ended = false;
 	Boolean failed = false;
 	
-	Boolean removedFromQueue = false;	
+	Boolean removedFromQueue = false;
 	
 	Node n1;
 	Node n2;
@@ -84,22 +85,26 @@ public class DefinitePathHandler implements PathHandler {
 	
 	public void update() {
 		//Check if pathHandlern start method has executed, a "concurrency failsafe"
-		if(started && done == false) {
+		if(started == true && done == false) {
 			if (!(nodesToGo == null)) {	
 				if (nodesToGo.size() <= 1) {
 					if (currentPackage.going == false) {
-						finish();
-						return;
+						ended = true;
 					}
 				}
-			}
+			}			
 			
 			if (currentPackage.going == false) {				
 				Node n1;
 				Node n2;
+
+				if (ended == true) {
+					nodesToGo = calculatePath(this.n1, to);
+				} else {
+					nodesToGo = calculatePath(this.n2, to);
+				}
 				
-				nodesToGo = calculatePath(this.n2, to);
-				if (nodesToGo == null) {					
+				if (nodesToGo == null) {
 					return;
 				}
 				
@@ -120,6 +125,7 @@ public class DefinitePathHandler implements PathHandler {
 				Connector nextConnector = GameScreen.connectorHandler.getConnectorInbetween(n1, n2, n1.getConnectors());
 				
 				boolean isNextConnectorClear = nextConnector.checkEntrance(n1, Base.PACKAGE_BLOCK_RANGE);
+
 				if (isNextConnectorClear) {
 					generatePackage(n1, n2);
 					removedFromQueue = false;

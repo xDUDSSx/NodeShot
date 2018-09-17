@@ -2,6 +2,7 @@ package org.dudss.nodeshot.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 import org.dudss.nodeshot.Base;
@@ -40,10 +41,22 @@ public class Connector implements Entity{
 		System.out.println("New connector lenght" + lenght);
 	}
 	
+	public void reset(Node from, Node to) {
+		this.from = from;
+		this.to = to;
+		
+		this.id = java.lang.System.identityHashCode(this);
+
+		lenght = Math.hypot(from.getCX() - to.getCX(), from.getCY() - to.getCY());
+		
+		System.out.println("New connector lenght" + lenght);
+	}
+	
 	/**
 	* Draw the connector
 	*/
 	public void draw(ShapeRenderer sR) {
+		sR.begin(ShapeType.Filled);
 		if (GameScreen.selectedID == this.getID()) {
 			sR.setColor(Color.WHITE);
 			sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth + 1);
@@ -59,7 +72,7 @@ public class Connector implements Entity{
 		}
 		
 		sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth);
-		sR.setColor(Color.WHITE);	
+		sR.end();		
 	} 
 		
 	/**

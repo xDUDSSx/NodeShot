@@ -3,7 +3,7 @@ package org.dudss.nodeshot.entities;
 public interface Entity {
 	
 	public static enum EntityType {
-		NODE, CONNECTOR, PACKAGE, NONE, INPUTNODE, OUTPUTNODE
+		NODE, CONNECTOR, PACKAGE, NONE, INPUTNODE, OUTPUTNODE, CONVEYOR
 	}
 	
 	public int getID();

@@ -1,10 +1,12 @@
 package org.dudss.nodeshot.inputs;
 
+import org.dudss.nodeshot.entities.ConveyorNode;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.Selector;
+import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -57,6 +59,21 @@ public class DesktopInputProcessor implements InputProcessor {
 					GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y);
 					GameScreen.builtBuilding.build();
 					GameScreen.builtBuilding = null;
+					GameScreen.builtConnector = null;
+					GameScreen.buildMode = false;
+				} else if (GameScreen.builtConnector != null) {
+					Node newNode = null;
+					if (builtConnector instanceof ConveyorNode) {					
+						newNode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
+					} else {
+						newNode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
+					}					
+					Selector.selectNode(newNode);
+					nodelist.add(newNode);
+					newNode.recalculateCoords(worldPos.x, worldPos.y);
+					
+					GameScreen.builtBuilding = null;
+					GameScreen.builtConnector = null;
 					GameScreen.buildMode = false;
 				} else {
 					GameScreen.checkHighlights(true);	
@@ -166,7 +183,12 @@ public class DesktopInputProcessor implements InputProcessor {
 						}
 					}				
 					if (!nodeIntersected) {
-						Node newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
+						Node newnode = null;
+						if (nodelist.get(selectedIndex) instanceof ConveyorNode) {
+							newnode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
+						} else {
+							newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
+						}
 						nodelist.add(newnode);
 						nodelist.get(selectedIndex).connectTo(newnode);
 						

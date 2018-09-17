@@ -8,6 +8,7 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.entities.Connector;
+import org.dudss.nodeshot.entities.ConveyorNode;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.InputNode;
@@ -131,12 +132,13 @@ public class GameScreen implements Screen {
     
 	public static boolean buildMode = false;
 	public static Building builtBuilding = null;
+	public static Node builtConnector = null;
 	
     //libGDX
     SpriteBatch batch;
     Texture img;
     ShapeRenderer r;
-
+    
     BitmapFont font;
     GlyphLayout layout;
 
@@ -224,15 +226,15 @@ public class GameScreen implements Screen {
 
         InputMultiplexer multiplexer = new InputMultiplexer();       
         if (Gdx.app.getType() == ApplicationType.Android) {
-        	atlas = new TextureAtlas(Gdx.files.internal("data/uiskin.atlas"));
-        	skin = new Skin(Gdx.files.internal("data/uiskin.json"), atlas);
+        	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
+        	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
-        	atlas = new TextureAtlas("res/data/uiskin.atlas");
-        	skin = new Skin(Gdx.files.classpath("res/data/uiskin.json"), atlas);
+        	atlas = new TextureAtlas("res/uiskin.atlas");
+        	skin = new Skin(Gdx.files.classpath("res/uiskin.json"), atlas);
         }
     
         //FreeTypeFontGenerator 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Helvetica-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/Helvetica-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Base.HUD_FONT_SIZE;
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'()>?:%+-*/";
@@ -316,7 +318,7 @@ public class GameScreen implements Screen {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
         r.setProjectionMatrix(cam.combined);
-        
+          
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
@@ -333,11 +335,13 @@ public class GameScreen implements Screen {
         
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r);
-             
+        r.end();     
+        
         //grid rendering
         drawGrid(r);
         
-        if (buildMode) {
+        r.begin(ShapeType.Filled);
+        if (buildMode && builtBuilding != null) {
         	drawPrefab(r);
         }
         
@@ -345,12 +349,12 @@ public class GameScreen implements Screen {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         
         batch.begin();
-        //Drawing packages
+        //wing packages
         for(int i = 0; i < packagelist.size(); i++) {
             Package p = packagelist.get(i);
 
             if (selectedID == p.getID()) {
-                Sprite packageSprite = SpriteLoader.nodeHighlightSprite;
+                Sprite packageSprite = SpriteLoader.packageHighlightSprite;
                 if (packagelist.get(selectedIndex) instanceof Coal) {
                 	packageSprite = SpriteLoader.coalHighlightSprite;
                 }
@@ -375,6 +379,12 @@ public class GameScreen implements Screen {
             } else {
             	n.setScale(0.45f);
             }
+            
+            /*if (n instanceof ConveyorNode) {
+            	Sprite s = new Sprite(SpriteLoader.nodeInputSprite);
+            	n.setSprite(s);        	
+            }*/
+            
             n.draw(batch);
             
             if (n.getID() == selectedID) {
@@ -418,13 +428,15 @@ public class GameScreen implements Screen {
 
     void drawGrid(ShapeRenderer sR) {
 
+    	r.begin(ShapeType.Filled);
         r.setColor(Color.WHITE);
         //ConnectMode line
         if ((toggleConnectMode == true && activeNewConnection == true) || draggingConnection == true) {
             Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
             r.rectLine(nodelist.get(newConnectionFromIndex).getCX(), nodelist.get(newConnectionFromIndex).getCY(), worldPos.x, worldPos.y, Base.lineWidth);
         }
-
+        r.end();
+        
         if(!nodelist.isEmpty()) {
             connectorHandler.drawAll(sR);
         }
@@ -660,22 +672,24 @@ public class GameScreen implements Screen {
     }
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.PAGE_DOWN)) {
-            System.out.println("Wut+");
             cam.zoom += 0.08;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.PAGE_UP)) {
             cam.zoom -= 0.08;
-            System.out.println("Was-");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
         	if (prevTick != Integer.MAX_VALUE - 1) SimulationThread.recalculateSpeed(++prevTick);
-        	System.out.println("Wut+++");
+        	System.out.println("Increasing simSpeed! (+) current tick rate: " + SimulationThread.TICKS_PER_SECOND);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
         	if (prevTick != 1) {SimulationThread.recalculateSpeed(--prevTick);}
-            System.out.println("Was---");
+        	System.out.println("Decreasing simSpeed! (-) current tick rate: " + SimulationThread.TICKS_PER_SECOND);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_5)) {
+        	SimulationThread.recalculateSpeed(30);
+        	System.out.println("Resetting simSpeed! (reset) current tick rate: " + SimulationThread.TICKS_PER_SECOND);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             cam.translate(-3, 0, 0);
@@ -791,7 +805,7 @@ public class GameScreen implements Screen {
                     (rect.getY()+8f)
             });
 
-            if (Intersector.distanceLinePoint(x1, y1, x2, y2, worldPos.x, worldPos.y) <= 3)
+            if (Intersector.distanceSegmentPoint(x1, y1, x2, y2, worldPos.x, worldPos.y) <= 3)
             {
                 if (select) Selector.selectNodeConnector(connectorHandler.getAllConnectors().get(i));
                

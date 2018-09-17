@@ -83,7 +83,7 @@ public class Node extends Sprite implements Entity {
 		this.setPosition(x, y);
 	}
 
-	public void recalculateCoords(int cx, int cy) {
+	public void recalculateCoords(float cx, float cy) {
 		this.cx = cx;
 		this.cy = cy;
 		x = cx - (radius / 2);
@@ -156,7 +156,12 @@ public class Node extends Sprite implements Entity {
 					targetnode.setConnectable(false);
 				}
 
-				Connector nC = new Connector(this, targetnode);
+				Connector nC = null;
+				if (this instanceof ConveyorNode || targetnode instanceof ConveyorNode) {
+					nC = new Conveyor(this, targetnode);
+				} else {
+					nC = new Connector(this, targetnode);
+				}
 				GameScreen.connectorHandler.addConnector(nC);
 				this.connectors.add(nC);
 				targetnode.connectors.add(nC);
@@ -246,6 +251,10 @@ public class Node extends Sprite implements Entity {
 				break;
 			}
 		}
+		
+		this.connectors.remove(toBeRemoved);
+		node.connectors.remove(toBeRemoved);
+		
 		if (toBeRemoved != null) {
 			GameScreen.connectorHandler.removeConnector(toBeRemoved);
 		}

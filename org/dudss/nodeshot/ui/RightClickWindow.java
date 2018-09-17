@@ -6,7 +6,9 @@ import static org.dudss.nodeshot.screens.GameScreen.mouseY;
 import static org.dudss.nodeshot.screens.GameScreen.nodelist;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.buildings.Storage;
 import org.dudss.nodeshot.entities.Connector;
+import org.dudss.nodeshot.entities.Conveyor;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.InputNode;
@@ -65,11 +67,17 @@ public class RightClickWindow extends Window {
 	Label toLabel;
 	
 	//Connector	
+	TextButton deleteConnectorButton;
+	TextButton reverseButton;
 	Label packagesLabel;
 	Label jammedLabel;
 	
 	//NONE
 	TextButton createButton;
+	
+	//InputNode (Storage)
+	TextButton emptyButton;
+	Label level;
 	
 	public RightClickWindow(Skin skin, Entity entity) {
 		super(entity.getType().toString() + " - " + entity.getIndex() + " #" + entity.getID(), skin);
@@ -98,6 +106,11 @@ public class RightClickWindow extends Window {
 			break;
 		case CONNECTOR:	
 			populateConnector(skin, (Connector) entity);
+			this.setPosition(GameScreen.mouseX + 10, Gdx.graphics.getHeight() - GameScreen.mouseY - this.getHeight() - 10);
+			this.setMovable(false);
+			break;
+		case CONVEYOR:	
+			populateConveyor(skin, (Conveyor) entity);
 			this.setPosition(GameScreen.mouseX + 10, Gdx.graphics.getHeight() - GameScreen.mouseY - this.getHeight() - 10);
 			this.setMovable(false);
 			break;
@@ -164,6 +177,16 @@ public class RightClickWindow extends Window {
         table.setFillParent(true);       
         
         initalizeNewWindowComponents(EntityType.CONNECTOR, entity, table, skin);
+
+        this.addActor(table);   
+	}
+	
+	private void populateConveyor(Skin skin, Conveyor entity) {
+		table.top();
+        table.left();
+        table.setFillParent(true);       
+        
+        initalizeNewWindowComponents(EntityType.CONVEYOR, entity, table, skin);
 
         this.addActor(table);   
 	}
@@ -271,9 +294,17 @@ public class RightClickWindow extends Window {
 				idLabel = new Label("ID: " + entity.getID(), skin, "font15");
 			    indexLabel = new Label("Index: " + entity.getIndex(), skin, "font15");
 							  
-			    packagesLabel = new Label("Number of packages: " + c.getPackages().size(), skin, "font15");
+			    packagesLabel = new Label("Packages: " + c.getPackages().size(), skin, "font15");
 			    jammedLabel = new Label("Jammed: " + c.isJammed(), skin, "font15");
-			   
+			    
+			    deleteConnectorButton = new TextButton("Remove", skin, "hoverfont15");			    
+		        deleteConnectorButton.addListener(new ClickListener(){
+		            @Override
+		            public void clicked(InputEvent event, float x, float y) {
+		            	c.getFrom().disconnect(c.getTo());
+		            }
+		        });      	        
+			    
 		        table.add(emptyLabel);
 		        table.row();
 		        table.add(emptyLabel);
@@ -286,6 +317,56 @@ public class RightClickWindow extends Window {
 		        table.row();
 		        table.add(emptyLabel);
 		        
+		        table.row();
+		        table.add(deleteConnectorButton).pad(1).fill(true).padLeft(10);	      
+		        table.row();		        
+		        table.add(packagesLabel).pad(1).fill(true).padLeft(10);
+		        table.row();
+		        table.add(jammedLabel).pad(1).fill(true).padLeft(10);
+		                    		       		              								
+				break;
+			case CONVEYOR: 				     
+				Conveyor co = (Conveyor) entity;
+				emptyLabel = new Label("", skin, "font15");
+		        
+				idLabel = new Label("ID: " + entity.getID(), skin, "font15");
+			    indexLabel = new Label("Index: " + entity.getIndex(), skin, "font15");
+							  
+			    packagesLabel = new Label("Packages: " + co.getPackages().size(), skin, "font15");
+			    jammedLabel = new Label("Jammed: " + co.isJammed(), skin, "font15");
+			    
+			    deleteConnectorButton = new TextButton("Remove", skin, "hoverfont15");			    
+		        deleteConnectorButton.addListener(new ClickListener(){
+		            @Override
+		            public void clicked(InputEvent event, float x, float y) {
+		            	co.getFrom().disconnect(co.getTo());
+		            }
+		        });      	        
+			    
+		        reverseButton = new TextButton("Reverse", skin, "hoverfont15");			    
+		        reverseButton.addListener(new ClickListener(){
+		            @Override
+		            public void clicked(InputEvent event, float x, float y) {
+		            	co.reverse();
+		            }
+		        });  
+		        
+		        table.add(emptyLabel);
+		        table.row();
+		        table.add(emptyLabel);
+		        
+		        table.row();
+		        table.add(idLabel).pad(1).fill(true).padLeft(10);
+		        table.row();
+		        table.add(indexLabel).pad(1).fill(true).padLeft(10);
+		        
+		        table.row();
+		        table.add(emptyLabel);
+		        
+		        table.row();
+		        table.add(reverseButton).pad(1).fill(true).padLeft(10);
+		        table.row();
+		        table.add(deleteConnectorButton).pad(1).fill(true).padLeft(10);			     
 		        table.row();		        
 		        table.add(packagesLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
@@ -371,7 +452,7 @@ public class RightClickWindow extends Window {
 						}
 		            }
 		        });             
-		        
+		 
 		        table.row();
 		        table.add(deleteButton).pad(1).fill(true).padLeft(10);
 		        
@@ -414,6 +495,7 @@ public class RightClickWindow extends Window {
 			    connectorsLabel.setWrap(true);
 			    closedLabel = new Label("Closed: " + in.isClosed(), skin, "font15");
 			   
+			  		    
 		        table.add(emptyLabel);
 		        table.row();
 		        table.add(emptyLabel);
@@ -433,9 +515,33 @@ public class RightClickWindow extends Window {
 						}
 		            }
 		        });             
+		        		        
+		        emptyButton = new TextButton("Empty storage", skin, "hoverfont15");			    
+		        emptyButton.addListener(new ClickListener(){
+		            @Override
+		            public void clicked(InputEvent event, float x, float y) {
+		            	Storage s = (Storage) in.getAssignedBuilding();
+		            	s.empty();
+		            }
+		        });  
+		        
+		        
+		        if (in.getAssignedBuilding() instanceof Storage) {
+		        	  table.row();
+				      table.add(emptyButton).pad(1).fill(true).padLeft(10);
+				      
+				      Storage s = (Storage) in.getAssignedBuilding();
+				      s.empty();				     
+					  level = new Label("Amount: " + s.storage, skin, "font15");
+		        }
 		        
 		        table.row();
 		        table.add(deleteButton).pad(1).fill(true).padLeft(10);
+		        
+		        if (in.getAssignedBuilding() instanceof Storage) {		        	  
+		        	table.row();
+		        	table.add(level).pad(1).fill(true).padLeft(10);
+		        }
 		        
 		        table.row();
 		        table.add(emptyLabel);
@@ -517,7 +623,7 @@ public class RightClickWindow extends Window {
 				idLabel.setText("ID: " + entity.getID());
 				indexLabel.setText("Index: " + entity.getIndex());
 				                
-				packagesLabel.setText("Number of packages: " + c.getPackages().size());
+				packagesLabel.setText("Packages: " + c.getPackages().size());
 				jammedLabel.setText("Jammed: " + c.isJammed());
 				break;
 			case PACKAGE: 
@@ -533,8 +639,14 @@ public class RightClickWindow extends Window {
 			    goingLabel.setText("Going: " + p.going);
 			    finishedLabel.setText("Finished: " + p.finished);
 			    fromLabel.setText("From: " + p.from.getID());
-			    toLabel.setText("From: " + p.to.getID());
-			    
+			    toLabel.setText("From: " + p.to.getID());			    
+				break;
+			case INPUTNODE:
+				InputNode in = (InputNode) entity;
+				if (in.getAssignedBuilding() instanceof Storage) {		
+					Storage s = (Storage) in.getAssignedBuilding();
+					level.setText("Amount: " + s.storage);
+			    }				
 				break;
 			default: break;
 		}

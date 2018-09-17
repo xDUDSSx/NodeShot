@@ -61,13 +61,13 @@ public class MenuScreen implements Screen {
         Texture logoTex = null;
         
         if (Gdx.app.getType() == ApplicationType.Android) {
-        	atlas = new TextureAtlas(Gdx.files.internal("data/uiskin.atlas"));
-        	skin = new Skin(Gdx.files.internal("data/uiskin.json"), atlas);
+        	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
+        	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
         	
         	logoTex = new Texture(Gdx.files.internal("nodelogo.png"));
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
-        	atlas = new TextureAtlas("res/data/uiskin.atlas");
-        	skin = new Skin(Gdx.files.classpath("res/data/uiskin.json"), atlas);
+        	atlas = new TextureAtlas("res/uiskin.atlas");
+        	skin = new Skin(Gdx.files.classpath("res/uiskin.json"), atlas);
         	logoTex = new Texture(Gdx.files.classpath("res/nodelogo.png"));
         }
        

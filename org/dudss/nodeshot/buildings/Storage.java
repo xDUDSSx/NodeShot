@@ -20,7 +20,7 @@ public class Storage implements Building {
 	float width = 32;
 	float height = 32;
 	
-	float storage = 0;
+	public float storage = 0;
 	float maxStorage = 50;
 	
 	private Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
@@ -85,6 +85,10 @@ public class Storage implements Building {
 	public void demolish() {
 		GameScreen.buildingHandler.removeBuilding(this);
 		this.input.remove();
+	}
+	
+	public void empty() {
+		storage = 0;
 	}
 	
 	public Node getInputNode() {

@@ -1,8 +1,13 @@
 package org.dudss.nodeshot.ui;
 
+import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.CoalMine;
 import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.Storage;
+import org.dudss.nodeshot.entities.Connector;
+import org.dudss.nodeshot.entities.Conveyor;
+import org.dudss.nodeshot.entities.ConveyorNode;
+import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.Gdx;
@@ -51,46 +56,60 @@ public class BuildMenu extends Window {
 	}
 	
 	private void init() {
-		TextButton minesButton = new TextButton("Mines", skin, "hoverfont30");		
 		Label emptyLabel = new Label("", skin, "font30");
+		TextButton minesButton = new TextButton("Mines", skin, "hoverfont30");		
+		TextButton nodesButton = new TextButton("Nodes", skin, "hoverfont30");
 		TextButton otherButton = new TextButton("Other", skin, "hoverfont30");		
-		
+				
 		table.add(emptyLabel);
 		table.row();
 
 		VerticalGroup vG = new VerticalGroup();
 		vG.addActor(minesButton);
+		vG.addActor(nodesButton);
 		vG.addActor(otherButton);
 		
 		table.add(vG).pad(10);
 		
 		
 		HorizontalGroup mines = new HorizontalGroup();
+		HorizontalGroup connectors = new HorizontalGroup();
 		HorizontalGroup other = new HorizontalGroup();
 		
 		TextButton coalMineButton = new TextButton("Coal mine", skin, "hoverfont60");
 		TextButton ironMineButton = new TextButton("Iron mine", skin, "hoverfont60");
 		
+		TextButton connectorButton = new TextButton("Connector node", skin, "hoverfont60");
+		TextButton conveyorButton = new TextButton("Conveyor node", skin, "hoverfont60");
+		
 		TextButton storageButton = new TextButton("Storage", skin, "hoverfont60");		
 		
 		mines.addActor(coalMineButton);
 		mines.addActor(ironMineButton);
-				
+		
+		connectors.addActor(connectorButton);
+		connectors.addActor(conveyorButton);
+		
 		other.addActor(storageButton);
 		
 		other.setVisible(false);
+		connectors.setVisible(false);
 		mines.setVisible(false);
 		
 		Stack stack = new Stack();
 		stack.add(mines);
+		stack.add(connectors);
 		stack.add(other);	
 		
 		table.add(stack).pad(10);
 		
+		coalMineButton.setSize(200, 200);
+		
 		minesButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				other .setVisible(mines.isVisible());
+				other.setVisible(false);
+				connectors.setVisible(false);
 				mines.setVisible(!mines.isVisible());
 		    }
 	    });
@@ -98,8 +117,18 @@ public class BuildMenu extends Window {
 		otherButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
-				mines.setVisible(other.isVisible());
+				mines.setVisible(false);
+				connectors.setVisible(false);
 				other.setVisible(!other.isVisible());				
+		    }
+	    });
+		
+		nodesButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				mines.setVisible(false);
+				other.setVisible(false);
+				connectors.setVisible(!connectors.isVisible());
 		    }
 	    });
 		
@@ -122,7 +151,27 @@ public class BuildMenu extends Window {
 				}		
 		    }
 	    });
-
+		
+		conveyorButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null && GameScreen.builtConnector == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtConnector = new ConveyorNode(0 ,0 , Base.RADIUS);
+				}		
+		    }
+	    });
+		
+		connectorButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null && GameScreen.builtConnector == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtConnector = new Node(0 ,0 , Base.RADIUS);
+				}	
+		    }
+	    });
+		
 		storageButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		

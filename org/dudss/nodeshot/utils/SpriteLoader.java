@@ -23,6 +23,7 @@ public class SpriteLoader {
 	public static Sprite nodeOutputSprite;
 	public static Sprite nodeCoalSprite;
 	public static Sprite nodeIronSprite;                                         
+	public static Sprite nodeConveyorSprite;
 	
 	public SpriteLoader() {
 	}
@@ -56,6 +57,8 @@ public class SpriteLoader {
 		nodeOutputSprite = new Sprite(spriteSheet, 51, 17, 16, 16);
 		nodeCoalSprite = new Sprite(spriteSheet, 34, 34, 16, 16);
 		nodeIronSprite = new Sprite(spriteSheet, 51, 34, 16, 16);	
+		nodeConveyorSprite = new Sprite(spriteSheet, 68, 34, 16, 16);
+		
 		double nextTime = System.currentTimeMillis();	
 		System.out.println("Loading finished (time: " + (nextTime - currentTime) + " ms)");
 	}

@@ -116,4 +116,15 @@ public class SimulationThread implements Runnable {
 	   	TICKS_PER_SECOND = newTick;
 	   	SKIP_TICKS = 1000 / newTick;
 	}
+	
+	public static void pause() {
+		System.out.println("SimThread - Pausing at tick: " + simTick);
+		Base.running = false;
+	}
+	 
+	public static void resume() {
+		System.out.println("SimThread - Resuming ...");
+		Base.running = true;
+	}
+	
 }

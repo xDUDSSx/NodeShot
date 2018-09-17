@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.Connector;
+import org.dudss.nodeshot.entities.Conveyor;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
 
@@ -60,17 +61,26 @@ public class IndefinitePathHandler implements PathHandler {
 						currentConnector = nextConnector;	
 						currentPackage.go();			
 					}
+				//next connector is facing the opposite direction
 				} else {
-					boolean isNextConnectorClear = nextConnector.checkEntrance(nextConnector.getTo(), Base.PACKAGE_BLOCK_RANGE);
-					if (isNextConnectorClear) {
-						currentPackage.reset(nextConnector.getTo(), nextConnector.getFrom());	
-						medianNode = nextConnector.getFrom();
+					//If the next connector is a Conveyor that is faced in the opposite direction, redo this update
+					if (nextConnector instanceof Conveyor) {
+						//this.update();
 						
-						currentConnector.remove(currentPackage);
-						nextConnector.add(currentPackage);
-						currentConnector = nextConnector;	
-						currentPackage.go();			
+					//If its a regular connector, proceed in the opposite direction
+					} else {
+						boolean isNextConnectorClear = nextConnector.checkEntrance(nextConnector.getTo(), Base.PACKAGE_BLOCK_RANGE);
+						if (isNextConnectorClear) {
+							currentPackage.reset(nextConnector.getTo(), nextConnector.getFrom());	
+							medianNode = nextConnector.getFrom();
+							
+							currentConnector.remove(currentPackage);
+							nextConnector.add(currentPackage);
+							currentConnector = nextConnector;	
+							currentPackage.go();			
+						}
 					}
+					
 				}
 			//Dead end, no connectors to go
 			} else {

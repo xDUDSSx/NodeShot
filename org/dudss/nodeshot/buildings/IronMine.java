@@ -5,6 +5,7 @@ import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.Connector;
+import org.dudss.nodeshot.entities.ConveyorNode;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.OutputNode;
 import org.dudss.nodeshot.entities.Package;
@@ -93,7 +94,7 @@ public class IronMine implements Building {
 	public void build() {
 		init();
 		output = new OutputNode(x + (width/2), (float) (y + (height*0.75)), Base.RADIUS, this);
-		export = new Node(x + (width/2), (float) (y + height*0.15), Base.RADIUS);
+		export = new ConveyorNode(x + (width/2), (float) (y + height*0.15), Base.RADIUS);
 		output.connectTo(export);
 		
 		firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());

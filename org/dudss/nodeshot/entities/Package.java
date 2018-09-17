@@ -68,7 +68,7 @@ public class Package extends Sprite implements Entity{
 		
 		currentMovePos = new Vector2(from.getCX(), from.getCY());
 		
-		this.set(new Sprite(SpriteLoader.nodeSprite));
+		this.set(new Sprite(SpriteLoader.packageSprite));
 		this.setPosition(x, y);
 		
 		GameScreen.packagelist.add(this);
