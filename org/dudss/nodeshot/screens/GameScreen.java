@@ -144,6 +144,7 @@ public class GameScreen implements Screen {
 
     public static OrthographicCamera cam;
     public static Vector3 lastCamePos;
+    public float lastZoom;
     public static Boolean zooming = false;
 
     TextureAtlas atlas;
@@ -250,9 +251,11 @@ public class GameScreen implements Screen {
             cam.position.set(WORLD_SIZE / 2f, WORLD_SIZE / 2f, 0);
         } else {
             cam.position.set(lastCamePos);
+            cam.zoom = lastZoom;
         }
         cam.update();
         lastCamePos = cam.position;
+        lastZoom = cam.zoom;
         
         //UI STAGE INIT
         stageViewport = new StretchViewport(WIDTH, HEIGHT);
@@ -705,6 +708,7 @@ public class GameScreen implements Screen {
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        	lastZoom = cam.zoom;
         	lastCamePos = cam.position;
         	nodeshotGame.setScreen(new MenuScreen(nodeshotGame));
         }

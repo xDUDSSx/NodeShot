@@ -12,22 +12,28 @@ import org.dudss.nodeshot.entities.Connector;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -42,6 +48,8 @@ public class MenuScreen implements Screen {
     private TextureAtlas atlas;
     protected Skin skin;
 
+    Label version;
+    
     TextButton playButton;
     TextButton sendButton;
     TextButton exitButton;
@@ -52,8 +60,15 @@ public class MenuScreen implements Screen {
     final TextField textField2;
     final TextField textField5;
 
+    ShapeRenderer sR;
+    SpriteBatch b;
+    
+    Sprite background;
+    
     Image logo;
 
+    Color semi = new Color(Color.rgba8888(0, 0, 0, 0.3f));
+    
     public MenuScreen(Game game)
     {
         this.nodeshotGame = game;
@@ -79,9 +94,11 @@ public class MenuScreen implements Screen {
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
 
-        playButton = new TextButton("Play", skin, "hoverfont30");
+        version = new Label("v1.0 - ALPHA", skin, "font30");
+        
+        playButton = new TextButton("Play", skin, "hoverfont120");
         sendButton = new TextButton("Send", skin, "hoverfont30");
-        exitButton = new TextButton("Exit", skin, "hoverfont30");
+        exitButton = new TextButton("Exit", skin, "hoverfont120");
         keepButton = new TextButton("Keep", skin, "hoverfont30");
         closeButton = new TextButton("Close node", skin, "hoverfont30");
 
@@ -99,33 +116,24 @@ public class MenuScreen implements Screen {
         //Stage should controll input:
         Gdx.input.setInputProcessor(stage);
 
+        sR = new ShapeRenderer();
+        sR.setColor(Color.DARK_GRAY);
+        
+        b = new SpriteBatch();
+        
+        background = new Sprite(new Texture("res/nodeintro.png"));
+        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        background.setPosition(0, 0);
+        
         //Create Table
         Table mainTable = new Table();
-        //Set table to fill stage
-        //mainTable.setFillParent(true);
-        mainTable.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //Set alignment of contents in the table.
+  
+        mainTable.setSize((float)(Gdx.graphics.getWidth()) * 0.7f, Gdx.graphics.getHeight() * 0.9f);
         mainTable.top();
-        //mainTable.debugAll();
-        //Create buttons
-
-        System.out.println("ww " + mainTable.getWidth() + mainTable.getHeight());
+        //mainTable.debugAll();        
+        mainTable.setPosition((Gdx.graphics.getWidth()) * 0.15f, 25);
         
-        /*playButton.padLeft(100);
-        playButton.padRight(100);
-
-        sendButton.padLeft(100);
-        sendButton.padRight(100);
-
-        exitButton.padLeft(100);
-        exitButton.padRight(100);
-
-        keepButton.padLeft(100);
-        keepButton.padRight(100);
-
-        closeButton.padLeft(100);
-        closeButton.padRight(100);
-         */
+        System.out.println("ww " + mainTable.getWidth() + mainTable.getHeight());
 
         //Add listeners to buttons
         playButton.addListener(new ClickListener(){
@@ -212,19 +220,21 @@ public class MenuScreen implements Screen {
 
         //Add buttons to table
         logo.setScaling(Scaling.fit);
-        mainTable.add(logo).expand().fill().colspan(2);
+        mainTable.add(logo).fill().colspan(2);
         mainTable.row();
-        mainTable.add(playButton).pad(10).colspan(2).fill(true);
+        mainTable.add(version).pad(10).center().fill(true);
         mainTable.row();
-        mainTable.add(textField1).pad(10).fill(true);
-        mainTable.add(textField2).pad(10).fill(true);
-        mainTable.row();
-        mainTable.add(sendButton).pad(10).fill(true);
-        mainTable.add(keepButton).pad(10).fill(true);
-        mainTable.row();
-        mainTable.add(textField5).pad(10).fill(true).colspan(2);
-        mainTable.row();
-        mainTable.add(closeButton).pad(10).colspan(2).fill(true);
+        mainTable.add(playButton).pad(10).colspan(2).fill(true).padTop(60);
+        //mainTable.row();
+        //mainTable.add(textField1).pad(10).fill(true);
+        //mainTable.add(textField2).pad(10).fill(true);
+        //mainTable.row();
+        //mainTable.add(sendButton).pad(10).fill(true);
+        //mainTable.add(keepButton).pad(10).fill(true);
+        //mainTable.row();
+        //mainTable.add(textField5).pad(10).fill(true).colspan(2);
+        //mainTable.row();
+        //mainTable.add(closeButton).pad(10).colspan(2).fill(true);
         mainTable.row();
         mainTable.add(exitButton).pad(10).colspan(2).fill(true);
 
@@ -237,6 +247,19 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        b.begin();
+        background.draw(b);
+        b.end();
+        
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        
+        sR.begin(ShapeType.Filled);
+        sR.rect((Gdx.graphics.getWidth()) * 0.15f - 25, 0,((float)(Gdx.graphics.getWidth()) * 0.7f) + 50 , Gdx.graphics.getHeight(), semi, semi, Color.BLACK, Color.BLACK);
+        sR.end();
+        
+        Gdx.gl.glDisable(GL20.GL_BLEND);   
+        
         stage.act();
         stage.draw();
     }
@@ -250,12 +273,12 @@ public class MenuScreen implements Screen {
 
     @Override
     public void pause() {
-
+    	
     }
 
     @Override
     public void resume() {
-
+    	
     }
 
     @Override
@@ -267,5 +290,7 @@ public class MenuScreen implements Screen {
     public void dispose() {
         skin.dispose();
         atlas.dispose();
+        sR.dispose();
+        b.dispose();
     }
 }

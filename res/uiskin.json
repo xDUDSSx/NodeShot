@@ -191,6 +191,14 @@
 	  "font": "font15",
       "fontColor": "white"
 	},
+	"font60": {
+	  "font": "font60",
+      "fontColor": "white"
+	},
+	"font120": {
+	  "font": "font120",
+      "fontColor": "white"
+	},
 	"font30": {
 	  "font": "font30",
       "fontColor": "white"
