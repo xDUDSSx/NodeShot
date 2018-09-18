@@ -172,7 +172,39 @@ public class Node extends Sprite implements Entity {
 			}
 		}
 	}
+	
+	public void connectTo(Node targetnode, EntityType eT) {
+		if ((connected_to.size() + connected_by.size()) >= this.maxConnections) {
+			// too many connections
+		} else if ((targetnode.connected_to.size() + targetnode.connected_by.size()) >= targetnode.maxConnections) {
+			// too many connections
+		} else {
+			if (!connected_by.contains(targetnode) && !connected_to.contains(targetnode)) {
+				connected_to.add(targetnode);
+				targetnode.connected_by.add(this);
+				connections++;
+				targetnode.connections++;
+				if (targetnode.connections >= targetnode.maxConnections) {
+					targetnode.setConnectable(false);
+				}
 
+				Connector nC = null;
+				if (eT == EntityType.CONVEYOR) {
+					nC = new Conveyor(this, targetnode);
+				} else {
+					nC = new Connector(this, targetnode);
+				}
+				GameScreen.connectorHandler.addConnector(nC);
+				this.connectors.add(nC);
+				targetnode.connectors.add(nC);
+
+			} else {
+				System.out.println("Nodes - " + this.getX() + ":" + this.getY() + " and " + targetnode.getX() + ":"
+						+ targetnode.getY() + " are already connected");
+			}
+		}
+	}
+	
 	public int getNumberOfConnections() {
 		return connections;
 	}
@@ -317,7 +349,7 @@ public class Node extends Sprite implements Entity {
 	
 	public double getShortestDistanceTo(Node target) {
 		PathfindingDistanceAlgorithm pDA = new PathfindingDistanceAlgorithm(this, target);
-		if (!(pDA.isFailed())) {
+		if (!(pDA.failed())) {
 			return pDA.getShortestDistance();
 		} else {
 			return -1;

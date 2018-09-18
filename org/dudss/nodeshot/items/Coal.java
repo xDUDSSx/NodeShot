@@ -2,6 +2,7 @@ package org.dudss.nodeshot.items;
 
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,6 +17,10 @@ public class Coal extends Package {
 		super(from, to);
 	}
 	
+	public Coal(Node from) {
+		super(from);
+	}
+	
 	@Override
 	public void draw(SpriteBatch batch) {
 		packageSprite = coalSprite;
@@ -24,4 +29,8 @@ public class Coal extends Package {
 		coalSprite.draw(batch);
 	}
 	
+	@Override
+	public ItemType getItemType() {
+		return ItemType.COAL;
+	}
 }

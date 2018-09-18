@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.misc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -8,6 +9,7 @@ import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Conveyor;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 
 public class IndefinitePathHandler implements PathHandler {
 
@@ -45,6 +47,26 @@ public class IndefinitePathHandler implements PathHandler {
 			
 			//Selecting route
 			if (connectors.size() != 0) {
+				
+				//Check if there is at least one conveyor
+				boolean atLeastOneConveyor = false;
+				for (Connector c : connectors) {
+					if (c instanceof Conveyor) {
+						atLeastOneConveyor = true;
+					}
+				}
+				
+				//if so, remove all regular connectors from the connector list, (leave only conveyors)
+				if (atLeastOneConveyor) {
+					List<Connector> toBeRemoved = new ArrayList<Connector>();
+					for (Connector c : connectors) {
+						if (c.getType() == EntityType.CONNECTOR) {
+							toBeRemoved.add(c);
+						}
+					}
+					connectors.removeAll(toBeRemoved);
+				}
+				
 				//Selecting a random connector
 				Connector nextConnector = connectors.get(Base.getRandomIntNumberInRange(0, connectors.size() - 1));		
 				

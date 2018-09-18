@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.misc.PathHandler;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -73,7 +74,7 @@ public class Package extends Sprite implements Entity{
 		
 		GameScreen.packagelist.add(this);
 	}
-	
+
 	public void draw(SpriteBatch batch) {
 		packageSprite = SpriteLoader.packageSprite;
 
@@ -146,6 +147,9 @@ public class Package extends Sprite implements Entity{
 	public EntityType getType() {
 		return EntityType.PACKAGE;
 	}
-
+	
+	public ItemType getItemType() {
+		return ItemType.PACKAGE;
+	}
 	
 }

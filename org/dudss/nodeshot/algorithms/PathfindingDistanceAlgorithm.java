@@ -38,7 +38,12 @@ public class PathfindingDistanceAlgorithm {
 		nodeDuosMap = new HashMap<Integer, ArrayList<Node[]>>(); 
 		
 		//Does all the calculations and makes Path and Steps accessible on init
-		this.process();
+		if (start != null && target != null) {
+			this.process();
+		} else {
+			failed = true;
+			steps = -1;
+		}
 	}
 	
 	void process() {
@@ -260,7 +265,7 @@ public class PathfindingDistanceAlgorithm {
 		return path;
 	}
 	
-	public boolean isFailed() {
+	public boolean failed() {
 		return failed;
 	}
 }

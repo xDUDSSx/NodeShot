@@ -22,7 +22,7 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.ManualCoalMine;
-import org.dudss.nodeshot.buildings.Storage;
+import org.dudss.nodeshot.buildings.BasicStorage;
 
 public class DesktopInputProcessor implements InputProcessor {
 	@Override
@@ -75,7 +75,7 @@ public class DesktopInputProcessor implements InputProcessor {
 					GameScreen.builtBuilding = null;
 					GameScreen.builtConnector = null;
 					GameScreen.buildMode = false;
-				} else {
+				} else if (draggingConnection != true){
 					GameScreen.checkHighlights(true);	
 				}
 				
@@ -110,14 +110,12 @@ public class DesktopInputProcessor implements InputProcessor {
 				GameScreen.buildMode = false;
 				GameScreen.builtBuilding = null;
 				
-				if (clickedEntity == null && GameScreen.selectedID != -1){
+				if (clickedEntity == null && GameScreen.selectedID != -1) {
 					Selector.deselect();
 					GameScreen.rightClickMenuManager.removeMenu();
 				} else {					
-					if (rightClickMenuManager.rightClickMenu != null) {
-						if (!(clickedEntity == rightClickMenuManager.rightClickMenu.getAssignedEntity())) {
-							GameScreen.rightClickMenuManager.createMenu(clickedEntity);
-						}
+					if (rightClickMenuManager.rightClickMenu != null && (!(clickedEntity == rightClickMenuManager.rightClickMenu.getAssignedEntity()))) {
+						GameScreen.rightClickMenuManager.createMenu(clickedEntity);
 					} else {
 						GameScreen.rightClickMenuManager.createMenu(clickedEntity);
 					}
@@ -128,7 +126,7 @@ public class DesktopInputProcessor implements InputProcessor {
 					}
 				}			
 				if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
-					Building coalStorage = new Storage(worldPos.x, worldPos.y);
+					Building coalStorage = new BasicStorage(worldPos.x, worldPos.y);
 					coalStorage.build();
 				}
 			break;
@@ -255,7 +253,10 @@ public class DesktopInputProcessor implements InputProcessor {
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		mouseX = screenX;
-		mouseY = screenY;
+		mouseY = screenY;	
+		
+		mousePos.x = mouseX;
+		mousePos.y = mouseY;
 		
 		return false;
 	}

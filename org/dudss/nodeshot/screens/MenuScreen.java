@@ -41,6 +41,8 @@ public class MenuScreen implements Screen {
 
     Game nodeshotGame;
 
+    public static String ver;
+     
     private SpriteBatch batch;
     protected Stage stage;
     private Viewport viewport;
@@ -94,7 +96,7 @@ public class MenuScreen implements Screen {
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
 
-        version = new Label("v1.0 - ALPHA", skin, "font30");
+        version = new Label(ver + " - ALPHA", skin, "font30");
         
         playButton = new TextButton("Play", skin, "hoverfont120");
         sendButton = new TextButton("Send", skin, "hoverfont30");

@@ -6,7 +6,8 @@ import static org.dudss.nodeshot.screens.GameScreen.mouseY;
 import static org.dudss.nodeshot.screens.GameScreen.nodelist;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.buildings.Storage;
+import org.dudss.nodeshot.buildings.BasicStorage;
+import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Conveyor;
 import org.dudss.nodeshot.entities.Entity;
@@ -175,6 +176,8 @@ public class RightClickWindow extends Window {
 		table.top();
         table.left();
         table.setFillParent(true);       
+        this.setSize(180, 270);
+        
         
         initalizeNewWindowComponents(EntityType.CONNECTOR, entity, table, skin);
 
@@ -185,6 +188,7 @@ public class RightClickWindow extends Window {
 		table.top();
         table.left();
         table.setFillParent(true);       
+        this.setSize(180, 270);
         
         initalizeNewWindowComponents(EntityType.CONVEYOR, entity, table, skin);
 
@@ -305,6 +309,18 @@ public class RightClickWindow extends Window {
 		            }
 		        });      	        
 			    
+			    TextButton convertConnectorButton = new TextButton("Convert to conveyor", skin, "hoverfont15");			    
+		        convertConnectorButton.addListener(new ClickListener(){
+		            @Override
+		            public void clicked(InputEvent event, float x, float y) {
+		            	Node n1 = c.getFrom();
+		            	Node n2 = c.getTo();
+		            	c.getFrom().disconnect(c.getTo());
+		            	n1.connectTo(n2, EntityType.CONVEYOR);
+		            	GameScreen.rightClickMenuManager.removeMenu();
+		            }
+		        });  
+			    
 		        table.add(emptyLabel);
 		        table.row();
 		        table.add(emptyLabel);
@@ -312,14 +328,12 @@ public class RightClickWindow extends Window {
 		        table.row();
 		        table.add(idLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
-		        table.add(indexLabel).pad(1).fill(true).padLeft(10);
-		        
+		        table.add(indexLabel).pad(1).fill(true).padLeft(10);		       
 		        table.row();
-		        table.add(emptyLabel);
-		        
-		        table.row();
-		        table.add(deleteConnectorButton).pad(1).fill(true).padLeft(10);	      
-		        table.row();		        
+		        table.add(convertConnectorButton).pad(1).fill(true).padLeft(10);	     
+		        table.row();				    
+		        table.add(deleteConnectorButton).pad(1).fill(true).padLeft(10);	    
+		        table.row();		               
 		        table.add(packagesLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
 		        table.add(jammedLabel).pad(1).fill(true).padLeft(10);
@@ -342,7 +356,19 @@ public class RightClickWindow extends Window {
 		            	co.getFrom().disconnect(co.getTo());
 		            }
 		        });      	        
-			    
+
+		        TextButton convertConveyorButton = new TextButton("Convert to connector", skin, "hoverfont15");			    
+		        convertConveyorButton.addListener(new ClickListener(){
+		            @Override
+		            public void clicked(InputEvent event, float x, float y) {
+		            	Node n1 = co.getFrom();
+		            	Node n2 = co.getTo();
+		            	co.getFrom().disconnect(co.getTo());
+		            	n1.connectTo(n2, EntityType.CONNECTOR);
+		            	GameScreen.rightClickMenuManager.removeMenu();
+		            }
+		        });  
+		        
 		        reverseButton = new TextButton("Reverse", skin, "hoverfont15");			    
 		        reverseButton.addListener(new ClickListener(){
 		            @Override
@@ -359,12 +385,10 @@ public class RightClickWindow extends Window {
 		        table.add(idLabel).pad(1).fill(true).padLeft(10);
 		        table.row();
 		        table.add(indexLabel).pad(1).fill(true).padLeft(10);
-		        
-		        table.row();
-		        table.add(emptyLabel);
-		        
 		        table.row();
 		        table.add(reverseButton).pad(1).fill(true).padLeft(10);
+		        table.row();
+		        table.add(convertConveyorButton).pad(1).fill(true).padLeft(10);	
 		        table.row();
 		        table.add(deleteConnectorButton).pad(1).fill(true).padLeft(10);			     
 		        table.row();		        
@@ -391,6 +415,14 @@ public class RightClickWindow extends Window {
 			    fromLabel = new Label("From: " + p.from.getID(), skin, "font15");
 			    toLabel = new Label("From: " + p.to.getID(), skin, "font15");
 			   
+			    TextButton destroyPackageButton = new TextButton("Destroy", skin, "hoverfont15");			    
+			    destroyPackageButton.addListener(new ClickListener(){
+		            @Override
+		            public void clicked(InputEvent event, float x, float y) {
+		            	p.destroy();
+		            }
+		        });  
+			    
 		        table.add(emptyLabel);
 		        table.row();
 		        table.add(emptyLabel);
@@ -402,6 +434,9 @@ public class RightClickWindow extends Window {
 		        
 		        table.row();
 		        table.add(emptyLabel);
+		        
+		        table.row();
+		        table.add(destroyPackageButton).pad(1).fill(true).padLeft(10);
 		        
 		        table.row();		        
 		        table.add(typeLabel).pad(1).fill(true).padLeft(10);
@@ -510,7 +545,7 @@ public class RightClickWindow extends Window {
 		            @Override
 		            public void clicked(InputEvent event, float x, float y) {				    
 		            	if(nodelist.size() != 0) {
-							in.getAssignedBuilding().demolish();
+							((Building) in.getAssignedStorage()).demolish();
 							GameScreen.rightClickMenuManager.removeMenu();
 						}
 		            }
@@ -520,25 +555,24 @@ public class RightClickWindow extends Window {
 		        emptyButton.addListener(new ClickListener(){
 		            @Override
 		            public void clicked(InputEvent event, float x, float y) {
-		            	Storage s = (Storage) in.getAssignedBuilding();
+		            	BasicStorage s = (BasicStorage) in.getAssignedStorage();
 		            	s.empty();
 		            }
 		        });  
 		        
 		        
-		        if (in.getAssignedBuilding() instanceof Storage) {
+		        if (in.getAssignedStorage() instanceof BasicStorage) {
 		        	  table.row();
 				      table.add(emptyButton).pad(1).fill(true).padLeft(10);
 				      
-				      Storage s = (Storage) in.getAssignedBuilding();
-				      s.empty();				     
+				      BasicStorage s = (BasicStorage) in.getAssignedStorage();			     
 					  level = new Label("Amount: " + s.storage, skin, "font15");
 		        }
 		        
 		        table.row();
 		        table.add(deleteButton).pad(1).fill(true).padLeft(10);
 		        
-		        if (in.getAssignedBuilding() instanceof Storage) {		        	  
+		        if (in.getAssignedStorage() instanceof BasicStorage) {		        	  
 		        	table.row();
 		        	table.add(level).pad(1).fill(true).padLeft(10);
 		        }
@@ -643,8 +677,8 @@ public class RightClickWindow extends Window {
 				break;
 			case INPUTNODE:
 				InputNode in = (InputNode) entity;
-				if (in.getAssignedBuilding() instanceof Storage) {		
-					Storage s = (Storage) in.getAssignedBuilding();
+				if (in.getAssignedStorage() instanceof BasicStorage) {		
+					BasicStorage s = (BasicStorage) in.getAssignedStorage();
 					level.setText("Amount: " + s.storage);
 			    }				
 				break;
@@ -656,28 +690,3 @@ public class RightClickWindow extends Window {
 		return assignedEntity;
 	}
 }
-/*
-"ID: " + n.getID(), (int)x, (int)y);                          
-"Index: " + nodelist.indexOf(n), (int)x, (int)y - textheight);
-"Node X: " + n.getX(), (int)x, (int)y - textheight*2);        
-"Node Y: " + n.getY(), (int)x, (int)y - textheight*3);        
-"Radius: " + n.radius, (int)x, (int)y - textheight*4);        
-"Connections: " + n.getNumberOfConnections(), (int)x, (int)y -
-"Connectable: " + n.connectable, (int)x, (int)y - textheight*6
-"Connected To: " + Base.nodeListToString(n.connected_to), (int
-"Connected By: " + Base.nodeListToString(n.connected_by), (int
-"Connectors: " + Base.nodeConnectorListToString(n.connectors),
-"Closed: " + n.isClosed(), (int)x, (int)y - textheight*10);   
-
-
-"ID: " + p.getID(), (int)x + 35, (int
-Coal) font.draw(batch, "COAL", (int)x
-Iron) font.draw(batch, "IRON", (int)x
-"Percentage: " + p.percentage + " %",
-"Going: " + p.going, (int)x + 35, (in
-"Finished: " + p.finished, (int)x + 3
-"From: " + p.from.getID(), (int)x + 3
-"To: " + p.to.getID(), (int)x + 35, (  
-		
-"pN: " + nC.getPackages().size()
-*/

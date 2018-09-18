@@ -8,7 +8,6 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.entities.Connector;
-import org.dudss.nodeshot.entities.ConveyorNode;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.InputNode;
@@ -290,8 +289,6 @@ public class GameScreen implements Screen {
         }  
         Gdx.input.setInputProcessor(multiplexer);
         
-        recalculateWindow();
-        
         //Ingame HUD buttons (Android) (//TODO: remove, utilize proper scene UI)
         if (Gdx.app.getType() == ApplicationType.Android) {
 	        backButton.set( 10, 10, 180, 180);
@@ -312,7 +309,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-    	recalculateWindow();
+
     }
 
     @Override
@@ -355,9 +352,10 @@ public class GameScreen implements Screen {
         //wing packages
         for(int i = 0; i < packagelist.size(); i++) {
             Package p = packagelist.get(i);
-
+            p.set(new Sprite(SpriteLoader.packageSprite));
+            
             if (selectedID == p.getID()) {
-                Sprite packageSprite = SpriteLoader.packageHighlightSprite;
+                Sprite packageSprite = SpriteLoader.packageSprite;
                 if (packagelist.get(selectedIndex) instanceof Coal) {
                 	packageSprite = SpriteLoader.coalHighlightSprite;
                 }
@@ -369,8 +367,8 @@ public class GameScreen implements Screen {
                 packageSprite.setOrigin(p.radius/2, p.radius/2);
                 packageSprite.setScale(0.65f);
                 packageSprite.draw(batch);
-            }
-
+            }          
+          
             p.draw(batch);
         }
 
@@ -849,20 +847,5 @@ public class GameScreen implements Screen {
         batch.dispose();
         //img.dispose();
         r.dispose();
-    }
-    
-    private void recalculateWindow() {
-    	/*WIDTH = Gdx.graphics.getWidth();
-		HEIGHT = Gdx.graphics.getHeight();
-		System.out.println("recalculate: " + WIDTH + " - " + HEIGHT);
-
-		cam.viewportWidth = viewportWidth;
-		cam.viewportHeight = viewportWidth * HEIGHT/WIDTH;
-		//cam.setToOrtho(false, cam.viewportWidth, cam.viewportHeight);
-		cam.update();
-    
-		stageViewport.update(WIDTH , HEIGHT);
-		*/
-    }
-    
+    }  
 }

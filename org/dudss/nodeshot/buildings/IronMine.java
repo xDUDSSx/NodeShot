@@ -117,12 +117,6 @@ public class IronMine implements Building {
 	}
 
 	@Override
-	public void alert() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void alert(Package p) {
 		// TODO Auto-generated method stub
 		

@@ -2,8 +2,10 @@ package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.CoalMine;
+import org.dudss.nodeshot.buildings.Furnace;
 import org.dudss.nodeshot.buildings.IronMine;
-import org.dudss.nodeshot.buildings.Storage;
+import org.dudss.nodeshot.buildings.IronMineDuplicate;
+import org.dudss.nodeshot.buildings.BasicStorage;
 import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Conveyor;
 import org.dudss.nodeshot.entities.ConveyorNode;
@@ -78,19 +80,23 @@ public class BuildMenu extends Window {
 		
 		TextButton coalMineButton = new TextButton("Coal mine", skin, "hoverfont60");
 		TextButton ironMineButton = new TextButton("Iron mine", skin, "hoverfont60");
+		TextButton mine2Button = new TextButton("Mine2", skin, "hoverfont60");
 		
 		TextButton connectorButton = new TextButton("Connector node", skin, "hoverfont60");
 		TextButton conveyorButton = new TextButton("Conveyor node", skin, "hoverfont60");
 		
-		TextButton storageButton = new TextButton("Storage", skin, "hoverfont60");		
+		TextButton storageButton = new TextButton("Basic storage", skin, "hoverfont60");	
+		TextButton furnaceButton = new TextButton("Furnace", skin, "hoverfont60");		
 		
 		mines.addActor(coalMineButton);
 		mines.addActor(ironMineButton);
+		mines.addActor(mine2Button);
 		
 		connectors.addActor(connectorButton);
 		connectors.addActor(conveyorButton);
 		
 		other.addActor(storageButton);
+		other.addActor(furnaceButton);
 		
 		other.setVisible(false);
 		connectors.setVisible(false);
@@ -102,8 +108,6 @@ public class BuildMenu extends Window {
 		stack.add(other);	
 		
 		table.add(stack).pad(10);
-		
-		coalMineButton.setSize(200, 200);
 		
 		minesButton.addListener(new ClickListener(){
 			@Override
@@ -177,7 +181,27 @@ public class BuildMenu extends Window {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new Storage(0, 0);
+					GameScreen.builtBuilding = new BasicStorage(0, 0);
+				}		
+		    }
+	    });
+		
+		furnaceButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new Furnace(0, 0);
+				}		
+		    }
+	    });
+		
+		mine2Button.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new IronMineDuplicate(0, 0);
 				}		
 		    }
 	    });

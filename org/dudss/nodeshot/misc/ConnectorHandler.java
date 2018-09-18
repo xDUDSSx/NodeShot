@@ -38,6 +38,10 @@ public class ConnectorHandler {
 		for (Package p : nC.getPackages()) {
 			p.destroy();
 		}
+		
+		nC.getTo().connectors.remove(nC);
+		nC.getFrom().connectors.remove(nC);
+		
 		connectors.remove(nC); 
 	}
 	
@@ -60,7 +64,7 @@ public class ConnectorHandler {
 	}
 	
 
-	/**Deprecated, don't use anymore, ineffective*/
+	/**Deprecated, don't use anymore, ineffective*/ //TODO: ?? still used, solve
 	public List<Connector> getAllConnectorsToNode(Node n) {
 		List<Connector> list = new ArrayList<Connector>();
 		for (Connector nC : connectors) {
