@@ -232,10 +232,10 @@ public class Node extends Sprite implements Entity {
 		if (currentPoint.x <= 0) {
 			vector.setLocation(-vector.x, vector.y);
 		}
-		if (currentPoint.y >= GameScreen.WORLD_SIZE - radius) {
+		if (currentPoint.y >= Base.WORLD_SIZE - radius) {
 			vector.setLocation(vector.x, -vector.y);
 		}
-		if (currentPoint.x >= GameScreen.WORLD_SIZE - radius) {
+		if (currentPoint.x >= Base.WORLD_SIZE - radius) {
 			vector.setLocation(-vector.x, vector.y);
 		}
 

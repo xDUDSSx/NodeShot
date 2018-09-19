@@ -1,5 +1,8 @@
 package org.dudss.nodeshot.buildings;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.InputNode;
 import org.dudss.nodeshot.entities.Node;
@@ -26,16 +29,18 @@ public class BasicStorage implements Building, Storage{
 	
 	public boolean full = false;
 	
+	List<ItemType> accepted;
+	
 	private Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
 	
 	public BasicStorage(float cx, float cy) {
 		this.cx = cx;
 		this.cy = cy;
-		
+
 		x = cx - (width/2);
 		y = cy - (height/2);
-		
-		System.out.println((float)MathUtils.clamp(218, 0.0, 1.0));
+				
+		accepted = new ArrayList<ItemType>();			
 	}
 	
 	public void setLocation(float cx, float cy) {
@@ -111,5 +116,15 @@ public class BasicStorage implements Building, Storage{
 	@Override
 	public boolean canStore(ItemType type) {
 		return true;
+	}
+	
+	@Override
+	public void setAccepted(List<ItemType> accepted) {
+		this.accepted = accepted;
+	}
+	
+	@Override	
+	public List<ItemType> getAccepted() {
+		return this.accepted;
 	}
 }

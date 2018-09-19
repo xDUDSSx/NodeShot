@@ -90,7 +90,7 @@ public class Benchmark implements Runnable{
 		
 		for (int x = 0; x < n1; x++) {
 			for (int y = 0; y < n2; y++) {
-				Node n = new Node((GameScreen.WORLD_SIZE/10)*x, (GameScreen.WORLD_SIZE/100)*y, Base.RADIUS);
+				Node n = new Node((Base.WORLD_SIZE/10)*x, (Base.WORLD_SIZE/100)*y, Base.RADIUS);
 				GameScreen.nodelist.add(n);
 			}
 		}

@@ -5,6 +5,7 @@ import org.dudss.nodeshot.buildings.CoalMine;
 import org.dudss.nodeshot.buildings.Furnace;
 import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.IronMineDuplicate;
+import org.dudss.nodeshot.buildings.AmmoStorage;
 import org.dudss.nodeshot.buildings.BasicStorage;
 import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Conveyor;
@@ -87,6 +88,7 @@ public class BuildMenu extends Window {
 		
 		TextButton storageButton = new TextButton("Basic storage", skin, "hoverfont60");	
 		TextButton furnaceButton = new TextButton("Furnace", skin, "hoverfont60");		
+		TextButton ammoStorageButton  = new TextButton("Ammo storage", skin, "hoverfont60");	
 		
 		mines.addActor(coalMineButton);
 		mines.addActor(ironMineButton);
@@ -96,6 +98,7 @@ public class BuildMenu extends Window {
 		connectors.addActor(conveyorButton);
 		
 		other.addActor(storageButton);
+		other.addActor(ammoStorageButton);
 		other.addActor(furnaceButton);
 		
 		other.setVisible(false);
@@ -202,6 +205,16 @@ public class BuildMenu extends Window {
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtBuilding = new IronMineDuplicate(0, 0);
+				}		
+		    }
+	    });
+		
+		ammoStorageButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new AmmoStorage(0, 0);
 				}		
 		    }
 	    });

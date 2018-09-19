@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.buildings;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class Furnace implements Building, Storage {
 		x = cx - (width/2);
 		y = cy - (height/2);
 		
-		System.out.println((float)MathUtils.clamp(218, 0.0, 1.0));
+		accepted = Arrays.asList(ItemType.COAL, ItemType.IRON);
 	}
 		
 	@Override
@@ -131,10 +132,6 @@ public class Furnace implements Building, Storage {
 		
 		firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
 		
-		accepted = Arrays.asList(ItemType.IRON, ItemType.COAL);
-		input1.setAccepted(accepted);
-		input2.setAccepted(accepted);
-		
 		GameScreen.nodelist.add(input1);
 		GameScreen.nodelist.add(input2);
 		GameScreen.nodelist.add(output);
@@ -153,18 +150,29 @@ public class Furnace implements Building, Storage {
 
 	@Override
 	public boolean canStore(ItemType type) {
-		if (type == ItemType.COAL) {			
-			if (coalStorage < maxCoalStorage) {
-				return true;
+		if (accepted.contains(type)) {
+			if (type == ItemType.COAL) {			
+				if (coalStorage < maxCoalStorage) {
+					return true;
+				}
+			}
+			
+			if (type == ItemType.IRON) {			
+				if (ironStorage < maxIronStorage) {
+					return true;
+				}
 			}
 		}
-		
-		if (type == ItemType.IRON) {			
-			if (ironStorage < maxIronStorage) {
-				return true;
-			}
-		}
-		
 		return false;
+	}
+
+	@Override
+	public void setAccepted(List<ItemType> accepted) {
+		this.accepted = accepted;
+	}
+
+	@Override
+	public List<ItemType> getAccepted() {
+		return accepted;
 	}
 }

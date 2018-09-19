@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
+import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
 import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Entity;
@@ -21,6 +22,7 @@ import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.misc.BuildingHandler;
 import org.dudss.nodeshot.misc.ConnectorHandler;
 import org.dudss.nodeshot.misc.PackageHandler;
+import org.dudss.nodeshot.terrain.Chunks;
 import org.dudss.nodeshot.ui.BuildMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
 import org.dudss.nodeshot.utils.Selector;
@@ -35,6 +37,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -119,13 +123,16 @@ public class GameScreen implements Screen {
 
 	static Boolean drawString = false;
 	static String stringToWrite = "";
-
+	
 	public static Sprite mapSprite;
 	public static Sprite[] mapTiles;
 
+	public static Chunks chunks;
+	static Pixmap pixmap;
+	static Texture pixtex;
+	static Sprite pixsprite;
+	
 	public static Sprite toolSprite;
-
-	public static int WORLD_SIZE;
 
 	public static float viewportWidth = 300f;
     
@@ -167,13 +174,15 @@ public class GameScreen implements Screen {
         connectorHandler = new ConnectorHandler();
         buildingHandler = new BuildingHandler();
         
+        chunks = new Chunks();
+        
         rightClickMenuManager = new RightClickMenuManager();
              
         //Map generation
         int size_x = 3;
         int size_y = 3;
-        WORLD_SIZE = (size_x > size_y ? size_x : size_y) * 1000;
-
+        //WORLD_SIZE = (size_x > size_y ? size_x : size_y) * 1000;
+	
         mapTiles = new Sprite[size_x*size_y];
 
         if (Gdx.app.getType() == ApplicationType.Android) {
@@ -202,6 +211,55 @@ public class GameScreen implements Screen {
             }
         }
         System.out.println("lenght: " + mapTiles.length);
+        
+        //Terrain generation
+        SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
+        float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.5f, 0.015f);
+        sn.randomizeMutatorTable();
+        float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.5f, 0.015f);
+        
+        pixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
+        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {   
+        		//Sometimes values extend beyond the accepted [-1.0,1.0] range, correct that
+        		if (coalMap[x][y] > 1) {
+        			coalMap[x][y] = 1.0f;
+        	    }
+        	    if (coalMap[x][y] < -1) {
+        	    	coalMap[x][y] = -1.0f;
+        	    }
+        	    
+        	    //Converting [-1.0,1.0] to [0,1]
+        	    float val = (((coalMap[x][y] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
+        	    pixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
+        		pixmap.drawPixel(x, y);
+        	}
+        }
+        
+        Pixmap pixmap2 = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
+        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {   
+        		//Sometimes values extend beyond the accepted [-1.0,1.0] range, correct that
+        		if (ironMap[x][y] > 1) {
+        			ironMap[x][y] = 1.0f;
+        	    }
+        	    if (ironMap[x][y] < -1) {
+        	    	ironMap[x][y] = -1.0f;
+        	    }
+        	    
+        	    //Converting [-1.0,1.0] to [0,1]
+        	    float val = (((ironMap[x][y] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
+        	    pixmap2.setColor(Color.rgba8888(val, val, val, 1.0f));
+        		pixmap2.drawPixel(x, y);
+        	}
+        }
+        
+        pixtex = new Texture(pixmap);
+        pixsprite = new Sprite(pixtex);
+        
+        chunks.create();
+        chunks.generateCoalPatches(pixmap);
+        chunks.generateIronPatches(pixmap2);
         
         //Simulation thread
         Thread simulationThread = new Thread(new SimulationThread());
@@ -247,7 +305,8 @@ public class GameScreen implements Screen {
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
         if (lastCamePos == null) {
-            cam.position.set(WORLD_SIZE / 2f, WORLD_SIZE / 2f, 0);
+            cam.position.set(Base.WORLD_SIZE / 2f, Base.WORLD_SIZE / 2f, 0);
+            cam.zoom = 3f;
         } else {
             cam.position.set(lastCamePos);
             cam.zoom = lastZoom;
@@ -295,6 +354,7 @@ public class GameScreen implements Screen {
 	        deleteButton.set( 10 , (200)*1 + 10, 180, 180);
 	        buildButton.set( 10, (200)*2 + 10, 180, 180);
         }
+
     }
 
     @Override
@@ -329,10 +389,14 @@ public class GameScreen implements Screen {
             s.draw(batch);
         }
         batch.end();
-        
-    	Gdx.gl.glEnable(GL20.GL_BLEND);
+             
+        Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+     
+        chunks.draw(r, batch);
         
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+          
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r);
         r.end();     
@@ -346,16 +410,14 @@ public class GameScreen implements Screen {
         }
         
         r.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-        
+
         batch.begin();
         //wing packages
         for(int i = 0; i < packagelist.size(); i++) {
             Package p = packagelist.get(i);
-            p.set(new Sprite(SpriteLoader.packageSprite));
             
             if (selectedID == p.getID()) {
-                Sprite packageSprite = SpriteLoader.packageSprite;
+                Sprite packageSprite = SpriteLoader.packageHighlightSprite;
                 if (packagelist.get(selectedIndex) instanceof Coal) {
                 	packageSprite = SpriteLoader.coalHighlightSprite;
                 }
@@ -368,10 +430,13 @@ public class GameScreen implements Screen {
                 packageSprite.setScale(0.65f);
                 packageSprite.draw(batch);
             }          
-          
+            
             p.draw(batch);
         }
-
+        
+        pixsprite.setSize(512, 512);
+        batch.draw(pixtex, Base.WORLD_SIZE/2 - pixsprite.getWidth()/2, Base.WORLD_SIZE/2 - pixsprite.getHeight()/2);
+        
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
             Node n = nodelist.get(i);  
@@ -712,14 +777,14 @@ public class GameScreen implements Screen {
         }
 
         //Zoom clamping, min max
-        cam.zoom = MathUtils.clamp(cam.zoom, 0.2f, WORLD_SIZE/cam.viewportWidth);
+        cam.zoom = MathUtils.clamp(cam.zoom, 0.2f, Base.WORLD_SIZE/cam.viewportWidth);
 
         float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
         float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
 
         //Making sure the camera doesnt go beyond the world limit
-        cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f, WORLD_SIZE - effectiveViewportWidth / 2f);
-        cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f, WORLD_SIZE - effectiveViewportHeight / 2f);
+        cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f, Base.WORLD_SIZE - effectiveViewportWidth / 2f);
+        cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f, Base.WORLD_SIZE - effectiveViewportHeight / 2f);
     }
 
     public static Entity checkHighlights(boolean select) {

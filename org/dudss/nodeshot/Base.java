@@ -9,6 +9,7 @@ import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -41,18 +42,20 @@ public class Base {
 	public static int HUD_FONT_SIZE = 16;  //Mobile 32
 
 	static int paint_spacing = 2;
+	
+	//TERRAIN
 
-	//static Controls controls;
-	//static JButton btnSet;
 
-	//private JTextField textField_radius;
-	//private JTextField textField_connections;
-	//private JTextField textField_connectDistance;
-
+	public static int WORLD_SIZE = 3072*2;
+	
+	public static float COAL_THRESHOLD = 0.96f;
+	public static float IRON_THRESHOLD = 0.96f;
+	
+	public static int CHUNK_SIZE = 16;
+	
+	public static int CHUNK_AMOUNT = WORLD_SIZE / CHUNK_SIZE;
+	
 	Base() {
-		//This off
-		//basePanel.gameLoop();
-
 		//Getting screen (monitor) resolution
 		SCREEN_WIDTH = (int) Gdx.graphics.getWidth();
 		SCREEN_HEIGHT = (int) Gdx.graphics.getHeight();
@@ -216,6 +219,10 @@ public class Base {
 	        BigDecimal bd = new BigDecimal(Float.toString(d));
 	        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
 	        return bd.floatValue();
+		}
+		
+		public static float range(float OldValue, float OldMin, float OldMax, float NewMin, float NewMax) {
+			return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin;
 		}
 	}
 /*

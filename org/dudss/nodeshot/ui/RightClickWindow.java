@@ -433,9 +433,6 @@ public class RightClickWindow extends Window {
 		        table.add(indexLabel).pad(1).fill(true).padLeft(10);
 		        
 		        table.row();
-		        table.add(emptyLabel);
-		        
-		        table.row();
 		        table.add(destroyPackageButton).pad(1).fill(true).padLeft(10);
 		        
 		        table.row();		        

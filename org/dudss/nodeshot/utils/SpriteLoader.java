@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class SpriteLoader {
 	
 	public static Texture spriteSheet;
+	public static Texture savanaTex;
+	
+	public static Texture ironTex;
+	public static Texture coalTex;
 	
 	public static Sprite packageSprite;
 	public static Sprite packageHighlightSprite;
@@ -25,6 +29,12 @@ public class SpriteLoader {
 	public static Sprite nodeIronSprite;                                         
 	public static Sprite nodeConveyorSprite;
 	
+	public static Sprite dirtTileSprite;
+	public static Sprite bigdirtTileSprite;
+	
+	public static Sprite coalTileSprite;
+	public static Sprite ironTileSprite;
+	
 	public SpriteLoader() {
 	}
 	
@@ -33,8 +43,14 @@ public class SpriteLoader {
 		double currentTime = System.currentTimeMillis();
 		if (Gdx.app.getType() == ApplicationType.Android) {
         	spriteSheet = new Texture(Gdx.files.internal("spritesheet16x16.png"));
+        	savanaTex = new Texture(Gdx.files.internal("savanadirt128.png"));
+        	ironTex = new Texture(Gdx.files.internal("tiledCoal.png"));
+        	coalTex = new Texture(Gdx.files.internal("tiledIron.png"));
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
         	spriteSheet = new Texture("res/spritesheet16x16.png");
+        	savanaTex = new Texture("res/savanadirt128.png");
+        	ironTex = new Texture("res/tiledCoal.png");
+        	coalTex = new Texture("res/tiledIron.png");
         }
 				
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
@@ -42,8 +58,6 @@ public class SpriteLoader {
 		
 		nodeSprite = new Sprite(spriteSheet, 34, 0, 16, 16);
 		nodeHighlightSprite = new Sprite(spriteSheet, 51, 0, 16, 16);
-		
-		packageSprite = new Sprite(spriteSheet, 17, 0, 16, 16);
 		
 		highlightSprite = new Sprite(spriteSheet, 68, 0, 16, 16);
 		
@@ -58,6 +72,12 @@ public class SpriteLoader {
 		nodeCoalSprite = new Sprite(spriteSheet, 34, 34, 16, 16);
 		nodeIronSprite = new Sprite(spriteSheet, 51, 34, 16, 16);	
 		nodeConveyorSprite = new Sprite(spriteSheet, 68, 34, 16, 16);
+		
+		dirtTileSprite = new Sprite(spriteSheet, 85, 0, 16, 16);
+		bigdirtTileSprite = new Sprite(savanaTex);
+		
+		coalTileSprite = new Sprite(coalTex);		
+		ironTileSprite = new Sprite(ironTex);
 		
 		double nextTime = System.currentTimeMillis();	
 		System.out.println("Loading finished (time: " + (nextTime - currentTime) + " ms)");
