@@ -49,7 +49,7 @@ public class Base {
 	public static int WORLD_SIZE = 3072*2;
 	
 	public static float COAL_THRESHOLD = 0.96f;
-	public static float IRON_THRESHOLD = 0.96f;
+	public static float IRON_THRESHOLD = 0.98f;
 	
 	public static int CHUNK_SIZE = 16;
 	

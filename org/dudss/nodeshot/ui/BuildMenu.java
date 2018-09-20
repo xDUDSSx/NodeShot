@@ -1,10 +1,10 @@
 package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.buildings.CoalMine;
+import org.dudss.nodeshot.buildings.CustomMine;
 import org.dudss.nodeshot.buildings.Furnace;
 import org.dudss.nodeshot.buildings.IronMine;
-import org.dudss.nodeshot.buildings.IronMineDuplicate;
+import org.dudss.nodeshot.buildings.CoalMine;
 import org.dudss.nodeshot.buildings.AmmoStorage;
 import org.dudss.nodeshot.buildings.BasicStorage;
 import org.dudss.nodeshot.entities.Connector;
@@ -81,7 +81,7 @@ public class BuildMenu extends Window {
 		
 		TextButton coalMineButton = new TextButton("Coal mine", skin, "hoverfont60");
 		TextButton ironMineButton = new TextButton("Iron mine", skin, "hoverfont60");
-		TextButton mine2Button = new TextButton("Mine2", skin, "hoverfont60");
+		TextButton mine2Button = new TextButton("ConnectorMine", skin, "hoverfont60");
 		
 		TextButton connectorButton = new TextButton("Connector node", skin, "hoverfont60");
 		TextButton conveyorButton = new TextButton("Conveyor node", skin, "hoverfont60");
@@ -204,7 +204,7 @@ public class BuildMenu extends Window {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new IronMineDuplicate(0, 0);
+					GameScreen.builtBuilding = new CustomMine(0, 0);
 				}		
 		    }
 	    });

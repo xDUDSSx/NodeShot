@@ -56,7 +56,7 @@ public class DesktopInputProcessor implements InputProcessor {
 				
 				//Building
 				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {
-					GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y);
+					GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true);
 					GameScreen.builtBuilding.build();
 					GameScreen.builtBuilding = null;
 					GameScreen.builtConnector = null;

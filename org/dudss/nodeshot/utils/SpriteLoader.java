@@ -12,7 +12,9 @@ public class SpriteLoader {
 	
 	public static Texture ironTex;
 	public static Texture coalTex;
-	
+	public static Texture coalLowerTex;
+	public static Texture coalLowTex;
+
 	public static Sprite packageSprite;
 	public static Sprite packageHighlightSprite;
 	public static Sprite nodeSprite;
@@ -33,6 +35,9 @@ public class SpriteLoader {
 	public static Sprite bigdirtTileSprite;
 	
 	public static Sprite coalTileSprite;
+	public static Sprite coalTileLowSprite;
+	public static Sprite coalTileLowerSprite;
+	
 	public static Sprite ironTileSprite;
 	
 	public SpriteLoader() {
@@ -43,16 +48,20 @@ public class SpriteLoader {
 		double currentTime = System.currentTimeMillis();
 		if (Gdx.app.getType() == ApplicationType.Android) {
         	spriteSheet = new Texture(Gdx.files.internal("spritesheet16x16.png"));
-        	savanaTex = new Texture(Gdx.files.internal("savanadirt128.png"));
-        	ironTex = new Texture(Gdx.files.internal("tiledCoal.png"));
-        	coalTex = new Texture(Gdx.files.internal("tiledIron.png"));
+        	savanaTex = new Texture(Gdx.files.internal("res/seamlesssand32.png"));
+        	ironTex = new Texture(Gdx.files.internal("tiledTex.png"));
+        	coalTex = new Texture(Gdx.files.internal("tiledCoal.png"));
+        	coalLowerTex = new Texture(Gdx.files.internal("tiledCoalLower.png"));
+        	coalLowTex = new Texture(Gdx.files.internal("tiledCoalLow.png"));
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
         	spriteSheet = new Texture("res/spritesheet16x16.png");
-        	savanaTex = new Texture("res/savanadirt128.png");
-        	ironTex = new Texture("res/tiledCoal.png");
-        	coalTex = new Texture("res/tiledIron.png");
+        	savanaTex = new Texture("res/seamlesssand32.png");
+        	ironTex = new Texture("res/tiledIron.png");
+        	coalTex = new Texture("res/tiledCoal.png");
+        	coalLowerTex = new Texture("res/tiledCoalLower.png");
+        	coalLowTex = new Texture("res/tiledCoalLow.png");       	
         }
-				
+		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);
 		
@@ -77,6 +86,9 @@ public class SpriteLoader {
 		bigdirtTileSprite = new Sprite(savanaTex);
 		
 		coalTileSprite = new Sprite(coalTex);		
+		coalTileLowerSprite = new Sprite(coalLowerTex);	
+		coalTileLowSprite = new Sprite(coalLowTex);
+		
 		ironTileSprite = new Sprite(ironTex);
 		
 		double nextTime = System.currentTimeMillis();	

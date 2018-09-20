@@ -2,6 +2,7 @@ package org.dudss.nodeshot.buildings;
 
 import java.util.Arrays;
 
+import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.items.Item.ItemType;
 
 import com.badlogic.gdx.graphics.Color;
@@ -16,14 +17,14 @@ public class AmmoStorage extends BasicStorage  {
 	public AmmoStorage(float cx, float cy) {
 		super(cx, cy);
 		// TODO Auto-generated constructor stub
-		accepted = Arrays.asList(ItemType.PACKAGE);
+		accepted = Arrays.asList(ItemType.AMMO);
 	}
 
 	@Override
 	public boolean canStore(ItemType type) {
 		if (accepted.contains(type)) {
 			System.out.println("canStore ammo");
-			if (type == ItemType.PACKAGE) {
+			if (type == ItemType.AMMO) {
 				System.out.println("can store");
 				return true;
 			}
@@ -47,12 +48,23 @@ public class AmmoStorage extends BasicStorage  {
 	}
 
 	@Override
-	public void drawPrefab(ShapeRenderer r, float cx, float cy) {
-		float x = cx - (width/2);
-		float y = cy - (height/2);
+	public void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap) {		
+		float prefX;
+		float prefY;
+		
+		if (snap) {
+			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
+			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
+			
+			prefX = nx - (width/2);
+			prefY= ny - (height/2);	
+		} else {
+			prefX = cx - (width/2);
+			prefY = cy - (height/2);
+		}
 		
 		r.set(ShapeType.Filled);
 		r.setColor(prefabColor);
-		r.rect(x, y, width, height);
+		r.rect(prefX, prefY, width, height);
 	}
 }

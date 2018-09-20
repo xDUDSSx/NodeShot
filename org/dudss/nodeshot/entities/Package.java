@@ -37,6 +37,7 @@ public class Package extends Sprite implements Entity{
 	public PathHandler pathHandler;
 	
 	public Sprite packageSprite;
+	public Sprite highlightSprite;
 	
 	//Simple two node connection
 	public Package(Node from, Node to) {
@@ -86,6 +87,14 @@ public class Package extends Sprite implements Entity{
 		packageSprite.setScale(0.6f);
 		packageSprite.setPosition((float) x, (float) y); 
 		packageSprite.draw(batch);
+	}
+	
+	public void drawHighlight(SpriteBatch batch) {
+		highlightSprite = SpriteLoader.packageHighlightSprite;
+		highlightSprite.setPosition(x, y);
+		highlightSprite.setOrigin(radius/2, radius/2);
+		highlightSprite.setScale(0.65f);
+		highlightSprite.draw(batch);
 	}
 	
 	public void reset(Node from, Node to) {

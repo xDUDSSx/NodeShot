@@ -129,6 +129,7 @@ public class GameScreen implements Screen {
 
 	public static Chunks chunks;
 	static Pixmap pixmap;
+	static Pixmap pixmap2;
 	static Texture pixtex;
 	static Sprite pixsprite;
 	
@@ -202,7 +203,6 @@ public class GameScreen implements Screen {
 
         //Creates a grid with size_x, size_y dimensions, stores sprites into a tile field
         for (int i = 0; i < size_y; i++) {
-            System.out.println("OuterL: " + i);
             for (int y = 0; y < size_x; y++) {
                 Sprite s = new Sprite(mapTex);
                 s.setSize(1000, 1000);
@@ -210,7 +210,6 @@ public class GameScreen implements Screen {
                 mapTiles[i+y+((size_x-1)*i)] = s;
             }
         }
-        System.out.println("lenght: " + mapTiles.length);
         
         //Terrain generation
         SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
@@ -236,7 +235,7 @@ public class GameScreen implements Screen {
         	}
         }
         
-        Pixmap pixmap2 = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
+        pixmap2 = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
         for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
         	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {   
         		//Sometimes values extend beyond the accepted [-1.0,1.0] range, correct that
@@ -257,10 +256,6 @@ public class GameScreen implements Screen {
         pixtex = new Texture(pixmap);
         pixsprite = new Sprite(pixtex);
         
-        chunks.create();
-        chunks.generateCoalPatches(pixmap);
-        chunks.generateIronPatches(pixmap2);
-        
         //Simulation thread
         Thread simulationThread = new Thread(new SimulationThread());
         simulationThread.setDaemon(true);
@@ -274,23 +269,12 @@ public class GameScreen implements Screen {
     public void show() {
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
-        
-        System.out.println("WIDTH: " + WIDTH + " -- HEIGHT: " + HEIGHT);
 
         batch = new SpriteBatch();
         r = new ShapeRenderer();
         font = new BitmapFont();
         layout = new GlyphLayout();  
-
-        InputMultiplexer multiplexer = new InputMultiplexer();       
-        if (Gdx.app.getType() == ApplicationType.Android) {
-        	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
-        	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
-        } else if (Gdx.app.getType() == ApplicationType.Desktop) {
-        	atlas = new TextureAtlas("res/uiskin.atlas");
-        	skin = new Skin(Gdx.files.classpath("res/uiskin.json"), atlas);
-        }
-    
+        
         //FreeTypeFontGenerator 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/Helvetica-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -316,14 +300,18 @@ public class GameScreen implements Screen {
         lastZoom = cam.zoom;
         
         //UI STAGE INIT
+        if (Gdx.app.getType() == ApplicationType.Android) {
+        	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
+        	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
+        } else if (Gdx.app.getType() == ApplicationType.Desktop) {
+        	atlas = new TextureAtlas("res/uiskin.atlas");
+        	skin = new Skin(Gdx.files.classpath("res/uiskin.json"), atlas);
+        }
         stageViewport = new StretchViewport(WIDTH, HEIGHT);
         stage = new Stage(stageViewport);         
              
         //UI
         buildMenu = new BuildMenu("Build menu", skin);
-        
-        //TextureRegion textureRegion = new TextureRegion(toolSprite);
-        //TextureRegionDrawable texRegionDrawable = new TextureRegionDrawable(textureRegion);
         TextButton imgButton = new TextButton("Build", skin, "hoverfont15");
         imgButton.addListener(new ClickListener(){
             @Override
@@ -332,12 +320,19 @@ public class GameScreen implements Screen {
             }
         });
         imgButton.setSize(64, 64);
-        imgButton.setPosition(10, 25);
-        
+        imgButton.setPosition(10, 25);        
         stage.addActor(imgButton);
         stage.addActor(buildMenu);
         
+        //Ingame HUD buttons (Android) (//TODO: remove, utilize proper scene UI)
+        if (Gdx.app.getType() == ApplicationType.Android) {
+	        backButton.set( 10, 10, 180, 180);
+	        deleteButton.set( 10 , (200)*1 + 10, 180, 180);
+	        buildButton.set( 10, (200)*2 + 10, 180, 180);
+        }
+        
         //Input processors
+        InputMultiplexer multiplexer = new InputMultiplexer();       
         multiplexer.addProcessor(stage);
         if (Gdx.app.getType() == ApplicationType.Android) {
         	MobileGestureListener mgl = new MobileGestureListener();
@@ -346,15 +341,12 @@ public class GameScreen implements Screen {
         	DesktopInputProcessor dip = new DesktopInputProcessor();
         	multiplexer.addProcessor(dip);
         }  
-        Gdx.input.setInputProcessor(multiplexer);
+        Gdx.input.setInputProcessor(multiplexer); 
         
-        //Ingame HUD buttons (Android) (//TODO: remove, utilize proper scene UI)
-        if (Gdx.app.getType() == ApplicationType.Android) {
-	        backButton.set( 10, 10, 180, 180);
-	        deleteButton.set( 10 , (200)*1 + 10, 180, 180);
-	        buildButton.set( 10, (200)*2 + 10, 180, 180);
+        //Generate terrain if not generated already
+        if (chunks.created == false) {
+        	chunks.generateAll();
         }
-
     }
 
     @Override
@@ -383,12 +375,12 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         //Map
-        batch.begin();
+        //batch.begin();
         //mapSprite.draw(batch);
         for (Sprite s : mapTiles) {
-            s.draw(batch);
+            //s.draw(batch);
         }
-        batch.end();
+        //batch.end();
              
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -417,25 +409,14 @@ public class GameScreen implements Screen {
             Package p = packagelist.get(i);
             
             if (selectedID == p.getID()) {
-                Sprite packageSprite = SpriteLoader.packageHighlightSprite;
-                if (packagelist.get(selectedIndex) instanceof Coal) {
-                	packageSprite = SpriteLoader.coalHighlightSprite;
-                }
-                if (packagelist.get(selectedIndex) instanceof Iron) {
-                	packageSprite = SpriteLoader.ironHighlightSprite;
-                }
-                
-                packageSprite.setPosition(p.getX(), p.getY());
-                packageSprite.setOrigin(p.radius/2, p.radius/2);
-                packageSprite.setScale(0.65f);
-                packageSprite.draw(batch);
+            	packagelist.get(selectedIndex).drawHighlight(batch);
             }          
             
             p.draw(batch);
         }
         
-        pixsprite.setSize(512, 512);
-        batch.draw(pixtex, Base.WORLD_SIZE/2 - pixsprite.getWidth()/2, Base.WORLD_SIZE/2 - pixsprite.getHeight()/2);
+        //pixsprite.setSize(512, 512);
+        //batch.draw(pixtex, Base.WORLD_SIZE/2 - pixsprite.getWidth()/2, Base.WORLD_SIZE/2 - pixsprite.getHeight()/2);
         
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
@@ -510,7 +491,7 @@ public class GameScreen implements Screen {
 
     void drawPrefab(ShapeRenderer sR) {
     	Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
-    	builtBuilding.drawPrefab(r, worldPos.x, worldPos.y);
+    	builtBuilding.drawPrefab(r, worldPos.x, worldPos.y, true);
     }
     
     void drawStats(SpriteBatch batch) {
@@ -785,6 +766,8 @@ public class GameScreen implements Screen {
         //Making sure the camera doesnt go beyond the world limit
         cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f, Base.WORLD_SIZE - effectiveViewportWidth / 2f);
         cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f, Base.WORLD_SIZE - effectiveViewportHeight / 2f);
+        
+        chunks.updateCam(cam);
     }
 
     public static Entity checkHighlights(boolean select) {

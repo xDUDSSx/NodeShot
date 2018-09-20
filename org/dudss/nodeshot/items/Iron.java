@@ -8,17 +8,21 @@ import org.dudss.nodeshot.utils.SpriteLoader;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Iron extends Package {
+public class Iron extends Package implements Item{
 	
 	public Sprite ironSprite = SpriteLoader.ironSprite;
 	
 	//Package representing an item
 	public Iron(Node from, Node to) {
 		super(from, to);
+		
+		highlightSprite = SpriteLoader.ironHighlightSprite;
 	}
 	
 	public Iron(Node from) {
 		super(from);
+		
+		highlightSprite = SpriteLoader.ironHighlightSprite;
 	}
 
 	@Override
@@ -27,6 +31,14 @@ public class Iron extends Package {
 		ironSprite.setScale(0.6f);
 		ironSprite.setPosition((float) x, (float) y); 
 		ironSprite.draw(batch);
+	}
+	
+	@Override
+	public void drawHighlight(SpriteBatch batch) {
+		highlightSprite.setPosition(x, y);
+		highlightSprite.setOrigin(radius/2, radius/2);
+		highlightSprite.setScale(0.65f);
+		highlightSprite.draw(batch);	
 	}
 	
 	@Override

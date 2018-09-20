@@ -12,6 +12,7 @@ import org.dudss.nodeshot.entities.InputNode;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.OutputNode;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.items.Ammo;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.items.Item.ItemType;
@@ -77,20 +78,31 @@ public class Furnace implements Building, Storage {
 		System.out.println("Factory generate! at " + System.currentTimeMillis());
 		if (this.output.getAllConnectedNodes().size() > 0) {
 			if (this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
-				Package p = new Package(this.output);
+				Ammo p = new Ammo(this.output);
 				output.sendPackage(p);
 				System.out.println("sending product");
 			}
 		}
 	}
 	
-	@Override
-	public void setLocation(float cx, float cy) {
-		this.cx = cx;
-		this.cy = cy;
+	public void setLocation(float cx, float cy, boolean snap) {
+		if (snap) {
+			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
+			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
+			
+			x = nx - (width/2);
+			y = ny - (height/2);
+			
+			this.cx = nx;
+			this.cy = ny;
+		} else {
+			this.cx = cx;
+			this.cy = cy;
+			
+			x = cx - (width/2);
+			y = cy - (height/2);
+		}
 		
-		x = cx - (width/2);
-		y = cy - (height/2);
 	}
 
 	@Override
@@ -101,13 +113,24 @@ public class Furnace implements Building, Storage {
 	}
 
 	@Override
-	public void drawPrefab(ShapeRenderer r, float cx, float cy) {		
-		float x = cx - (width/2);
-		float y = cy - (height/2);
+	public void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap) {		
+		float prefX;
+		float prefY;
+		
+		if (snap) {
+			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
+			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
+			
+			prefX = nx - (width/2);
+			prefY= ny - (height/2);	
+		} else {
+			prefX = cx - (width/2);
+			prefY = cy - (height/2);
+		}
 		
 		r.set(ShapeType.Filled);
-		r.setColor(this.prefabColor);
-		r.rect(x, y, width, height);	
+		r.setColor(prefabColor);
+		r.rect(prefX, prefY, width, height);
 	}
 
 	@Override

@@ -12,11 +12,9 @@ public class BaseClass extends Game {
 
 	@Override
 	public void create() {
-		//Creating game screens
+		//Creating game screen
 		mainGameScreen = new GameScreen(this);
-		//menuScreen = new MenuScreen(this);
-		//Setting game screen
-		//setScreen(menuScreen);
+		
 		setScreen(new MenuScreen(this));	
 	}
 }

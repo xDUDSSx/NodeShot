@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-public class ManualCoalMine extends CoalMine {
+public class ManualCoalMine extends CustomMine {
 
 	Rectangle clickRect;
 	
