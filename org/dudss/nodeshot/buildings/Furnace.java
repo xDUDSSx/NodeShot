@@ -67,10 +67,12 @@ public class Furnace implements Building, Storage {
 			input2.update();
 		}
 	
-		if (coalStorage >= maxCoalStorage && ironStorage >= maxIronStorage) {			
-			generate();
-			coalStorage--;
-			ironStorage--;
+		if (coalStorage >= maxCoalStorage && ironStorage >= maxIronStorage) {		
+			if (this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
+				generate();
+				coalStorage--;
+				ironStorage--;
+			}
 		}
 	}
 

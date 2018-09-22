@@ -1,6 +1,8 @@
 package org.dudss.nodeshot.terrain;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.terrain.Chunks.OreType;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.Color;
@@ -52,13 +54,13 @@ public class Chunk {
 		}		
 		
 		if (coalOre != 0) {	
-			if (coalOre <= 0.5) {
+			if (coalOre <= 0.25) {
 				drawTile(coalLowTr, batch);
 			} else 
-			if (coalOre <= 0.7) {
+			if (coalOre <= 0.5) {
 				drawTile(coalLowerTr, batch);
 			} else
-			if (coalOre > 0.7) {
+			if (coalOre > 0.5) {
 				drawTile(coalTr, batch);
 			}		
 		} else
@@ -120,7 +122,7 @@ public class Chunk {
 		if (level == -1) {
 			ironOre = 0;
 		} else {
-			ironOre = level;
+			ironOre = Base.range(level, Base.IRON_THRESHOLD, 1.0f, 0f, 1.0f);
 		}
 	}
 	
@@ -130,5 +132,37 @@ public class Chunk {
 	
 	public float getIronLevel() {
 		return ironOre;
+	}
+	
+	public OreType getOreType() {
+		if (this.coalOre != 0) {
+			return OreType.COAL;
+		} else 
+		if (this.ironOre != 0) { 
+			return OreType.IRON;
+		} else {
+			return OreType.NONE;
+		}
+	}
+	
+	public float getOreLevel() {
+		if (coalOre > 0) {
+			return this.coalOre;
+		} else 
+		if (ironOre > 0) { 
+			return this.ironOre;
+		} else {
+			return 0;
+		}
+	}
+	
+	public float getX() {
+		return x;
+	}
+	public float getY() {
+		return y;
+	}	
+	public float getSize() {
+		return size;
 	}
 }

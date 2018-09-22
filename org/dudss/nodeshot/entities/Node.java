@@ -82,12 +82,37 @@ public class Node extends Sprite implements Entity {
 		this.set(new Sprite(SpriteLoader.nodeSprite));
 		this.setPosition(x, y);
 	}
-
-	public void recalculateCoords(float cx, float cy) {
+	
+	public void setLocation(float cx, float cy) {
 		this.cx = cx;
 		this.cy = cy;
 		x = cx - (radius / 2);
 		y = cy - (radius / 2);
+		this.setPosition(x, y);
+	}
+	
+	
+	public void setLocation(float cx, float cy, Boolean snap) {
+		if (snap) {
+			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
+			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
+			
+			x = nx - (radius/2) + Base.CHUNK_SIZE/2;
+			y = ny - (radius/2) + Base.CHUNK_SIZE/2;
+			
+			this.cx = nx;
+			this.cy = ny;
+			
+			//Placing the node in the grid center
+			this.setPosition(x , y );
+		} else {
+			this.cx = cx;
+			this.cy = cy;
+			x = cx - (radius / 2);
+			y = cy - (radius / 2);
+			
+			this.setPosition(x, y);
+		}	
 	}
 
 	// Draw replaced by Sprite.draw();
@@ -258,7 +283,7 @@ public class Node extends Sprite implements Entity {
 		}
 
 		// Positioning the Node
-		recalculateCoords(newPoint.x, newPoint.y);
+		setLocation(newPoint.x, newPoint.y);
 		this.setPosition(x, y);
 	}
 

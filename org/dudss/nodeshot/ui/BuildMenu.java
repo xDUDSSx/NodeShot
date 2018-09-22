@@ -55,7 +55,7 @@ public class BuildMenu extends Window {
 	}
 	
 	private void setSize() {
-		this.setBounds(64 + 10 + 10, 25, Gdx.graphics.getWidth() - (64*1) - (10*2) - 10, (float) (Gdx.graphics.getHeight() * 0.2));
+		this.setBounds(64 + 10 + 10, 10, Gdx.graphics.getWidth() - (64*1) - (10*2) - 10, (float) (Gdx.graphics.getHeight() * 0.2));
 	}
 	
 	private void init() {
@@ -71,9 +71,9 @@ public class BuildMenu extends Window {
 		vG.addActor(minesButton);
 		vG.addActor(nodesButton);
 		vG.addActor(otherButton);
+		vG.fill();
 		
-		table.add(vG).pad(10);
-		
+		table.add(vG).pad(10).fill(true);
 		
 		HorizontalGroup mines = new HorizontalGroup();
 		HorizontalGroup connectors = new HorizontalGroup();
@@ -90,6 +90,7 @@ public class BuildMenu extends Window {
 		TextButton furnaceButton = new TextButton("Furnace", skin, "hoverfont60");		
 		TextButton ammoStorageButton  = new TextButton("Ammo storage", skin, "hoverfont60");	
 		
+		coalMineButton.setSize(500, 150);
 		mines.addActor(coalMineButton);
 		mines.addActor(ironMineButton);
 		mines.addActor(mine2Button);
@@ -108,9 +109,9 @@ public class BuildMenu extends Window {
 		Stack stack = new Stack();
 		stack.add(mines);
 		stack.add(connectors);
-		stack.add(other);	
+		stack.add(other);
 		
-		table.add(stack).pad(10);
+		table.add(stack).pad(10).fill(true);
 		
 		minesButton.addListener(new ClickListener(){
 			@Override

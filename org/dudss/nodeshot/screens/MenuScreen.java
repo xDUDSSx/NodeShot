@@ -177,10 +177,10 @@ public class MenuScreen implements Screen {
             	//Terrain generation
                 SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
                 System.out.println("\nGenerating noise (1/2)");
-                float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.5f, 0.015f);
+                float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.35f, 0.018f);
                 sn.randomizeMutatorTable();
                 System.out.println("Generating noise (2/2)");
-                float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.5f, 0.015f);
+                float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.35f, 0.018f);
                 
                 System.out.println("Creating pixmaps");
                 Pixmap pixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
@@ -193,7 +193,7 @@ public class MenuScreen implements Screen {
                 	    if (coalMap[x1][y1] < -1) {
                 	    	coalMap[x1][y1] = -1.0f;
                 	    }
-                	    
+
                 	    //Converting [-1.0,1.0] to [0,1]
                 	    float val = (((coalMap[x1][y1] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
                 	    pixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
@@ -213,12 +213,12 @@ public class MenuScreen implements Screen {
                 	    }
                 	    
                 	    //Converting [-1.0,1.0] to [0,1]
-                	    float val = (((ironMap[x2][y2] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
+                	    float val = Base.range(ironMap[x2][y2], -1, 1, 0, 1);
                 	    pixmap2.setColor(Color.rgba8888(val, val, val, 1.0f));
                 		pixmap2.drawPixel(x2, y2);
                 	}
                 }
-
+                Texture pixtexiron = new Texture(pixmap);
                 //CHUNK GEN
                 System.out.println("Generating chunks (n. " + Base.CHUNK_AMOUNT*Base.CHUNK_AMOUNT + ")");
                 GameScreen.chunks.create();
@@ -228,7 +228,7 @@ public class MenuScreen implements Screen {
                 pixmap2 = GameScreen.chunks.generateIronPatches(pixmap2);
                 
                 Texture pixtexcoal = new Texture(pixmap);
-                Texture pixtexiron = new Texture(pixmap2);  
+                //Texture pixtexiron = new Texture(pixmap2);  
                 
                 Sprite coalsprite = new Sprite(pixtexcoal);
                 coalsprite.flip(false, true);

@@ -60,13 +60,13 @@ public class Conveyor extends Connector {
 			verts[index++] = new Float(lPX)- connectorNormalVector.x * (linePerc/100) - connectorVector.x * (linePerc/100);
 			verts[index++] = new Float(lPY) - connectorNormalVector.y * (linePerc/100) - connectorVector.y * (linePerc/100);
 		}
-		
-		sR.begin(ShapeType.Line);
+
+		sR.set(ShapeType.Line);
 		Color c = sR.getColor();;
 		Color newColor = new Color(c.r * 0.6f, c.g * 0.6f, c.b * 0.6f,1.0f);
 		sR.setColor(newColor);	
 		sR.polyline(verts);
-		sR.end();
+		sR.set(ShapeType.Filled);
 	}
 	
 	public void reverse() {

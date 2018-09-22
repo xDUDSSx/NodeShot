@@ -56,7 +56,6 @@ public class Connector implements Entity{
 	* Draw the connector
 	*/
 	public void draw(ShapeRenderer sR) {
-		sR.begin(ShapeType.Filled);
 		if (GameScreen.selectedID == this.getID()) {
 			sR.setColor(Color.WHITE);
 			sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth + 1);
@@ -71,8 +70,7 @@ public class Connector implements Entity{
 			sR.setColor(Color.YELLOW);
 		}
 		
-		sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth);
-		sR.end();		
+		sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth);	
 	} 
 		
 	/**

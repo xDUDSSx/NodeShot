@@ -70,7 +70,7 @@ public class DesktopInputProcessor implements InputProcessor {
 					}					
 					Selector.selectNode(newNode);
 					nodelist.add(newNode);
-					newNode.recalculateCoords(worldPos.x, worldPos.y);
+					newNode.setLocation(worldPos.x, worldPos.y, true);
 					
 					GameScreen.builtBuilding = null;
 					GameScreen.builtConnector = null;
@@ -181,16 +181,17 @@ public class DesktopInputProcessor implements InputProcessor {
 						}
 					}				
 					if (!nodeIntersected) {
-						Node newnode = null;
+						Node newNode = null;
 						if (nodelist.get(selectedIndex) instanceof ConveyorNode) {
-							newnode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
+							newNode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
 						} else {
-							newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
+							newNode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
 						}
-						nodelist.add(newnode);
-						nodelist.get(selectedIndex).connectTo(newnode);
+						nodelist.add(newNode);
+						nodelist.get(selectedIndex).connectTo(newNode);
 						
-						Selector.selectNode(newnode);
+						Selector.selectNode(newNode);
+						newNode.setLocation(worldPos.x, worldPos.y, true);
 						
 						newConnectionFromIndex = selectedIndex;				
 					}
@@ -245,6 +246,12 @@ public class DesktopInputProcessor implements InputProcessor {
 				float yPos = previousWorldPos.y - worldPos.y;
 				cam.translate(xPos, yPos, 0);		
 			}
+		} else if (Gdx.input.isButtonPressed(Buttons.MIDDLE)) {
+			if (draggingConnection == false) {
+				float xPos = previousWorldPos.x - worldPos.x;
+				float yPos = previousWorldPos.y - worldPos.y;
+				cam.translate(xPos, yPos, 0);		
+			}
 		}
 		
 		return false;
@@ -257,6 +264,15 @@ public class DesktopInputProcessor implements InputProcessor {
 		
 		mousePos.x = mouseX;
 		mousePos.y = mouseY;
+		
+		Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
+		
+		float nx = Math.round((worldPos.x - (worldPos.x % Base.CHUNK_SIZE)) / Base.CHUNK_SIZE);
+		float ny = Math.round((worldPos.y - (worldPos.y % Base.CHUNK_SIZE)) / Base.CHUNK_SIZE);
+		
+			
+		GameScreen.hoverChunk = GameScreen.chunks.getChunk((int)nx, (int)ny);
+		GameScreen.hudMenu.update();
 		
 		return false;
 	}

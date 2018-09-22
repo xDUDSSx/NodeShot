@@ -9,6 +9,7 @@ import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.Connector;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class ConnectorHandler {
 	List<Connector> connectors;
@@ -82,13 +83,17 @@ public class ConnectorHandler {
 	}
 	
 	public void drawAll(ShapeRenderer sR) {
+		sR.begin(ShapeType.Filled);
 		for (Connector nC : connectors) {
 			nC.draw(sR);
 		}
+		sR.end();
 	}
 	
 	public void draw(Connector nC, ShapeRenderer sR) {
+		sR.begin(ShapeType.Filled);
 		nC.draw(sR);
+		sR.end();
 	}
 	
 	public List<Connector> getAllConnectors() {

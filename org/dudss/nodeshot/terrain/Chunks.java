@@ -22,6 +22,10 @@ public class Chunks {
 	
 	Color transparent = new Color(0, 0, 0, 0.0f);
 	
+	public enum OreType {
+		COAL, IRON, NONE
+	}
+	
 	Rectangle viewBounds;
 	Rectangle imageBounds = new Rectangle();
 	
@@ -78,7 +82,7 @@ public class Chunks {
 			}
 		}
 	}
-	
+				
 	public void draw(ShapeRenderer sR, SpriteBatch batch) {
 		batch.begin();
 		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
@@ -156,10 +160,10 @@ public class Chunks {
 	public void generateAll() {
 		 SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
          System.out.println("\nGenerating noise (1/2)");
-         float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.5f, 0.015f);
+         float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.35f, 0.018f);
          sn.randomizeMutatorTable();
          System.out.println("Generating noise (2/2)");
-         float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.5f, 0.015f);
+         float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.35f, 0.018f);
          
          System.out.println("Creating pixmaps");
          Pixmap pixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);

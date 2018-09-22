@@ -1,5 +1,7 @@
 package org.dudss.nodeshot.screens;
 
+import static org.dudss.nodeshot.screens.GameScreen.hoverChunk;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -22,8 +24,10 @@ import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.misc.BuildingHandler;
 import org.dudss.nodeshot.misc.ConnectorHandler;
 import org.dudss.nodeshot.misc.PackageHandler;
+import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
 import org.dudss.nodeshot.ui.BuildMenu;
+import org.dudss.nodeshot.ui.HudMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -123,20 +127,23 @@ public class GameScreen implements Screen {
 
 	static Boolean drawString = false;
 	static String stringToWrite = "";
-	
-	public static Sprite mapSprite;
-	public static Sprite[] mapTiles;
 
+	//Terrain
 	public static Chunks chunks;
 	static Pixmap pixmap;
 	static Pixmap pixmap2;
 	static Texture pixtex;
 	static Sprite pixsprite;
+	public static Chunk hoverChunk = null;
+
+	public static Rectangle viewBounds;	
+	public static Rectangle imageBounds;
 	
 	public static Sprite toolSprite;
 
 	public static float viewportWidth = 300f;
-    
+    FreeTypeFontGenerator generator;
+	
 	public static boolean buildMode = false;
 	public static Building builtBuilding = null;
 	public static Node builtConnector = null;
@@ -146,7 +153,7 @@ public class GameScreen implements Screen {
     Texture img;
     ShapeRenderer r;
     
-    BitmapFont font;
+    public static BitmapFont font;
     GlyphLayout layout;
 
     public static OrthographicCamera cam;
@@ -166,6 +173,7 @@ public class GameScreen implements Screen {
     public static Viewport stageViewport;
     public static RightClickMenuManager rightClickMenuManager;
     public static BuildMenu buildMenu;
+    public static HudMenu hudMenu;
     
     public GameScreen(Game game)
     {
@@ -173,19 +181,10 @@ public class GameScreen implements Screen {
 
         packageHandler = new PackageHandler();
         connectorHandler = new ConnectorHandler();
-        buildingHandler = new BuildingHandler();
-        
-        chunks = new Chunks();
-        
-        rightClickMenuManager = new RightClickMenuManager();
-             
-        //Map generation
-        int size_x = 3;
-        int size_y = 3;
-        //WORLD_SIZE = (size_x > size_y ? size_x : size_y) * 1000;
+        buildingHandler = new BuildingHandler();       
+        chunks = new Chunks();        
+        rightClickMenuManager = new RightClickMenuManager();             
 	
-        mapTiles = new Sprite[size_x*size_y];
-
         if (Gdx.app.getType() == ApplicationType.Android) {
         	Texture tooltex = new Texture(Gdx.files.internal("res/tools_icon_button64.png"));
         	toolSprite = new Sprite(tooltex);
@@ -194,22 +193,11 @@ public class GameScreen implements Screen {
         	toolSprite = new Sprite(tooltex);
         }
         
+        //Loading item sprites
         SpriteLoader.loadAll();
         
-        Texture mapTex = new Texture("res/4Kmap.png");
-        mapSprite = new Sprite(mapTex);
-        mapSprite.setPosition(0, 0);
-        mapSprite.setSize(1000, 1000);
-
-        //Creates a grid with size_x, size_y dimensions, stores sprites into a tile field
-        for (int i = 0; i < size_y; i++) {
-            for (int y = 0; y < size_x; y++) {
-                Sprite s = new Sprite(mapTex);
-                s.setSize(1000, 1000);
-                s.setPosition(1000*y, 1000*i);
-                mapTiles[i+y+((size_x-1)*i)] = s;
-            }
-        }
+        //LineWidth
+        Gdx.gl.glLineWidth(2);
         
         //Terrain generation
         SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
@@ -272,19 +260,16 @@ public class GameScreen implements Screen {
 
         batch = new SpriteBatch();
         r = new ShapeRenderer();
-        font = new BitmapFont();
-        layout = new GlyphLayout();  
         
-        //FreeTypeFontGenerator 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/Helvetica-Regular.ttf"));
+        //font generation
+        font = new BitmapFont();
+        layout = new GlyphLayout();         
+        generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/Helvetica-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Base.HUD_FONT_SIZE;
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'()>?:%+-*/";
+        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'()>?:%+-*/";        
         font = generator.generateFont(parameter);
         generator.dispose();
-    
-        //LineWidth
-        Gdx.gl.glLineWidth(2);
 
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
@@ -299,7 +284,7 @@ public class GameScreen implements Screen {
         lastCamePos = cam.position;
         lastZoom = cam.zoom;
         
-        //UI STAGE INIT
+        //User Interface
         if (Gdx.app.getType() == ApplicationType.Android) {
         	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
         	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
@@ -309,20 +294,23 @@ public class GameScreen implements Screen {
         }
         stageViewport = new StretchViewport(WIDTH, HEIGHT);
         stage = new Stage(stageViewport);         
-             
-        //UI
+
         buildMenu = new BuildMenu("Build menu", skin);
         TextButton imgButton = new TextButton("Build", skin, "hoverfont15");
         imgButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
             	buildMenu.setVisible(!(buildMenu.isVisible()));
+            	GameScreen.hudMenu.setVisible(!(buildMenu.isVisible()));
             }
         });
         imgButton.setSize(64, 64);
-        imgButton.setPosition(10, 25);        
+        imgButton.setPosition(10, 10);        
         stage.addActor(imgButton);
         stage.addActor(buildMenu);
+        
+        hudMenu = new HudMenu("HUD menu", skin);
+        stage.addActor(hudMenu);
         
         //Ingame HUD buttons (Android) (//TODO: remove, utilize proper scene UI)
         if (Gdx.app.getType() == ApplicationType.Android) {
@@ -347,6 +335,15 @@ public class GameScreen implements Screen {
         if (chunks.created == false) {
         	chunks.generateAll();
         }
+        viewBounds = new Rectangle();
+        imageBounds = new Rectangle();
+        
+        //A render optimization rectangle that tells the renderer which objects are out of sight
+        float width = cam.viewportWidth * cam.zoom;
+		float height = cam.viewportHeight * cam.zoom;
+		float w = width * Math.abs(cam.up.y) + height * Math.abs(cam.up.x);
+		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
+        viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
     }
 
     @Override
@@ -373,38 +370,88 @@ public class GameScreen implements Screen {
           
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-        //Map
-        //batch.begin();
-        //mapSprite.draw(batch);
-        for (Sprite s : mapTiles) {
-            //s.draw(batch);
-        }
-        //batch.end();
              
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
      
-        chunks.draw(r, batch);
+        chunks.draw(r, batch);       
         
         Gdx.gl.glDisable(GL20.GL_BLEND);
-          
+        
+        r.setAutoShapeType(true);
+        
+        if (buildMode == true) {
+	        r.begin(ShapeType.Filled);
+	        r.setColor(Color.WHITE);
+	        for (int i = 0; i < Base.CHUNK_AMOUNT; i++) {
+	        	r.rectLine(i * Base.CHUNK_SIZE, 0, i * Base.CHUNK_SIZE, Base.WORLD_SIZE, 0.5f);
+	        	r.rectLine(0, i * Base.CHUNK_SIZE, Base.WORLD_SIZE, i * Base.CHUNK_SIZE, 0.5f);
+	        }
+	        r.set(ShapeType.Filled);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	   
+	        		float width = cam.viewportWidth * cam.zoom;
+	        		float height = cam.viewportHeight * cam.zoom;
+	        		float w = width * Math.abs(cam.up.y) + height * Math.abs(cam.up.x);
+	        		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
+	        	    viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
+	        		imageBounds.set(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());	
+	        		if (viewBounds.contains(imageBounds) || viewBounds.overlaps(imageBounds)) {	 
+		        		if (chunks.getChunk(x, y).getOreLevel() > 0) {
+		        			float n = chunks.getChunk(x, y).getOreLevel() * 100;
+		        			//System.out.println(n);
+		        			if (n == 100) {
+		        				n = 99;
+		        			}
+		        			float rc = (255 * n) / 100;
+		        			float g = (255 * (100 - n)) / 100 ;
+		        			float b = 0;
+		        			//System.out.println(rc + " " + g + " " + b);
+		        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));
+		        			r.setColor(c);
+		        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+		        		}
+		        	}
+	        	}
+	        }
+	        r.end();
+	    }
+        
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r);
-        r.end();     
+        r.end();
         
+        //Highlight of the chunk the mouse is hovering on
+        if (hoverChunk != null) {
+        	if (buildMode == true && builtConnector != null) {
+        		r.begin(ShapeType.Filled);
+	        	r.setColor(Color.WHITE);
+	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
+	        	r.end();
+        	} else if ((hoverChunk.getCoalLevel() > 0 || hoverChunk.getIronLevel() > 0)) {
+	        	r.begin(ShapeType.Line);
+	        	r.setColor(Color.WHITE);
+	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
+	        	r.end();
+        	}
+        }
+      
         //grid rendering
-        drawGrid(r);
+        drawConnectors(r);
+     
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         
         r.begin(ShapeType.Filled);
         if (buildMode && builtBuilding != null) {
         	drawPrefab(r);
         }
+        r.end();    
         
-        r.end();
-
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+       
         batch.begin();
-        //wing packages
+        //Drawing packages
         for(int i = 0; i < packagelist.size(); i++) {
             Package p = packagelist.get(i);
             
@@ -415,9 +462,6 @@ public class GameScreen implements Screen {
             p.draw(batch);
         }
         
-        //pixsprite.setSize(512, 512);
-        //batch.draw(pixtex, Base.WORLD_SIZE/2 - pixsprite.getWidth()/2, Base.WORLD_SIZE/2 - pixsprite.getHeight()/2);
-        
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
             Node n = nodelist.get(i);  
@@ -426,11 +470,6 @@ public class GameScreen implements Screen {
             } else {
             	n.setScale(0.45f);
             }
-            
-            /*if (n instanceof ConveyorNode) {
-            	Sprite s = new Sprite(SpriteLoader.nodeInputSprite);
-            	n.setSprite(s);        	
-            }*/
             
             n.draw(batch);
             
@@ -473,7 +512,7 @@ public class GameScreen implements Screen {
         stage.draw();
     }
 
-    void drawGrid(ShapeRenderer sR) {
+    void drawConnectors(ShapeRenderer sR) {
 
     	r.begin(ShapeType.Filled);
         r.setColor(Color.WHITE);

@@ -17,70 +17,20 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class IronMine implements Building {
-	
-	//Building node - outputs Iron
-	OutputNode output;
-	//The iron mine boundary node
-	Node export;
-	//First and the only connector of the output node
-	Connector firstConnector;
-	//Target node - where is Iron sent
-	Node target;
-	
-	float x,y;
-	float cx,cy;
-	float width = 32;
-	float height = 32;
-	
-	public int productionRate = 200;
-	public int nextSimTick = -1;
-	
-	Color prefabColor = new Color(0, 0, 1, 0.5f);
+public class IronMine extends BasicMine {
 	
 	public IronMine(float cx, float cy) {
-		this.cx = cx;
-		this.cy = cy;
-		
-		x = cx - (width/2);
-		y = cy - (height/2);
-	}
-	
-	public void setLocation(float cx, float cy, boolean snap) {
-		if (snap) {
-			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			
-			x = nx - (width/2);
-			y = ny - (height/2);
-			
-			this.cx = nx;
-			this.cy = ny;
-		} else {
-			this.cx = cx;
-			this.cy = cy;
-			
-			x = cx - (width/2);
-			y = cy - (height/2);
-		}
-		
-	}
-	
-	@Override
-	public void update() {
-		if (nextSimTick <= SimulationThread.simTick) {
-			nextSimTick = SimulationThread.simTick + productionRate; 
-			generate();
-		}
+		super(cx, cy);
+		prefabColor = new Color(0, 0, 1, 0.5f);
 	}
 
 	public void generate() {
-		//System.out.println("IronMine generate! at " + System.currentTimeMillis());
-		if (this.output.getAllConnectedNodes().size() > 0) {
-			if (this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
-				Iron iron = new Iron(this.output);
-				output.sendPackage(iron);
-				//System.out.println("sending iron");
+		if (canGenerate) {
+			if (this.output.getAllConnectedNodes().size() > 0 ) {
+				if (this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
+					Iron coal = new Iron(this.output);
+					output.sendPackage(coal);
+				}
 			}
 		}
 	}
@@ -94,7 +44,7 @@ public class IronMine implements Building {
 	
 	@Override
 	public void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap) {		
-		float prefX;
+		float prefX; 
 		float prefY;
 		
 		if (snap) {
@@ -115,7 +65,6 @@ public class IronMine implements Building {
 	
 	@Override
 	public void build() {
-		init();
 		output = new OutputNode(x + (width/2), (float) (y + (height*0.75)), Base.RADIUS, this);
 		export = new ConveyorNode(x + (width/2), (float) (y + height*0.15), Base.RADIUS);
 		output.connectTo(export);
@@ -125,24 +74,22 @@ public class IronMine implements Building {
 		GameScreen.nodelist.add(output);
 		GameScreen.nodelist.add(export);
 		buildingHandler.addBuilding(this);
-	}
-
-	private void init() {
-		//Sets the inital production time
-		nextSimTick = SimulationThread.simTick + productionRate;			
-	}
-	
-	@Override
-	public void demolish() {
-		GameScreen.buildingHandler.removeBuilding(this);
-		this.output.remove();
-		this.export.remove();
-	}
-
-	@Override
-	public void alert(Package p) {
-		// TODO Auto-generated method stub
 		
+		int tileX = (int) (this.x / Base.CHUNK_SIZE);
+		int tileY = (int) (this.y / Base.CHUNK_SIZE);
+		
+		float totalOreLevel = 
+				GameScreen.chunks.getChunk(tileX, tileY).getIronLevel() + 
+				GameScreen.chunks.getChunk(tileX + 1, tileY).getIronLevel() +
+				GameScreen.chunks.getChunk(tileX, tileY + 1).getIronLevel() + 
+				GameScreen.chunks.getChunk(tileX + 1, tileY + 1).getIronLevel();
+		
+		if (totalOreLevel > 0) {
+			canGenerate = true;
+			productionRate = Math.round((productionRate / totalOreLevel));
+		}
+			
+		nextSimTick = SimulationThread.simTick + productionRate;		
 	}
 }
 
