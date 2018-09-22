@@ -2,6 +2,7 @@ package org.dudss.nodeshot.screens;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -160,8 +161,12 @@ public class MenuScreen implements Screen {
         //Add listeners to buttons
         playButton.addListener(new ClickListener(){
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {           	
                 nodeshotGame.setScreen(BaseClass.mainGameScreen);
+                if (GameScreen.startedOnce == false) {
+                	GameScreen.startSim();
+                	GameScreen.startedOnce = true;
+                }
             }
         });
         sendButton.addListener(new ClickListener(){
@@ -218,7 +223,6 @@ public class MenuScreen implements Screen {
                 		pixmap2.drawPixel(x2, y2);
                 	}
                 }
-                Texture pixtexiron = new Texture(pixmap);
                 //CHUNK GEN
                 System.out.println("Generating chunks (n. " + Base.CHUNK_AMOUNT*Base.CHUNK_AMOUNT + ")");
                 GameScreen.chunks.create();
@@ -228,15 +232,12 @@ public class MenuScreen implements Screen {
                 pixmap2 = GameScreen.chunks.generateIronPatches(pixmap2);
                 
                 Texture pixtexcoal = new Texture(pixmap);
-                //Texture pixtexiron = new Texture(pixmap2);  
+                Texture pixtexiron = new Texture(pixmap2);  
                 
                 Sprite coalsprite = new Sprite(pixtexcoal);
                 coalsprite.flip(false, true);
                 Sprite ironsprite = new Sprite(pixtexiron);
                 ironsprite.flip(false, true);
-                
-                //ironsprite.setOriginCenter();
-                //coalsprite.setOriginCenter();
                 
                 coalheightmap.setDrawable(new SpriteDrawable(coalsprite));
                 ironheightmap.setDrawable(new SpriteDrawable(ironsprite));                

@@ -24,6 +24,8 @@ public class Chunk {
 	//TODO: implement
 	float creeper = 0;
 
+	boolean toExpand = false;
+	
 	TextureRegion dirtTr;
 	TextureRegion coalTr;
 	TextureRegion coalLowerTr;
@@ -45,7 +47,16 @@ public class Chunk {
 	}
 	
 	public void update() {
+		if (toExpand) {
+			this.creeper = 1;
+			toExpand = false;
+		}
 		
+		if (this.x != 0 && this.y != 0) {
+			if (GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) - 1, (int)(this.y/Base.CHUNK_SIZE)).getCreeperLevel() > 0) {
+				toExpand = true;
+			}
+		}
 	}
 	
 	public void draw(SpriteBatch batch, int column, int row) {
@@ -154,6 +165,13 @@ public class Chunk {
 		} else {
 			return 0;
 		}
+	}
+	
+	public void setCreeperLevel(float level) {
+		creeper = level;
+	}
+	public float getCreeperLevel() {
+		return creeper;
 	}
 	
 	public float getX() {

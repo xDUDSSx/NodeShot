@@ -80,7 +80,7 @@ public class Chunks {
 			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
 				chunks[x][y].update();
 			}
-		}
+		}	
 	}
 				
 	public void draw(ShapeRenderer sR, SpriteBatch batch) {

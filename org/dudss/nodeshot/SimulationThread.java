@@ -8,7 +8,7 @@ public class SimulationThread implements Runnable {
     //double interpolation; //TODO: implement interpolation
 	int loops;
  
-    public static int TICKS_PER_SECOND = 30;
+    public static int TICKS_PER_SECOND = 1;
     static int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     int MAX_FRAMESKIP = 15; //30 (15)
     long next_game_tick = getTickCount() + SKIP_TICKS;
@@ -99,6 +99,10 @@ public class SimulationThread implements Runnable {
 				n.move();		       
 			}
 		}
+		
+		//Updating all chunks
+		GameScreen.chunks.updateAll();
+		
 		//Updating pathHandler logic
 		GameScreen.packageHandler.update();
 		
@@ -117,12 +121,12 @@ public class SimulationThread implements Runnable {
 	   	SKIP_TICKS = 1000 / newTick;
 	}
 	
-	public static void pause() {
+	public static void pauseSim() {
 		System.out.println("SimThread - Pausing at tick: " + simTick);
 		Base.running = false;
 	}
 	 
-	public static void resume() {
+	public static void resumeSim() {
 		System.out.println("SimThread - Resuming ...");
 		Base.running = true;
 	}

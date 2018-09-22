@@ -1,7 +1,5 @@
 package org.dudss.nodeshot.screens;
 
-import static org.dudss.nodeshot.screens.GameScreen.hoverChunk;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -79,6 +77,8 @@ public class GameScreen implements Screen {
     
     public static String debugMessage = "Debug message";
 
+    public static boolean startedOnce = false;
+    
 	public static long currentSimTimeTick;
 	public static long nextSimTimeTick;
 
@@ -243,11 +243,6 @@ public class GameScreen implements Screen {
         
         pixtex = new Texture(pixmap);
         pixsprite = new Sprite(pixtex);
-        
-        //Simulation thread
-        Thread simulationThread = new Thread(new SimulationThread());
-        simulationThread.setDaemon(true);
-        simulationThread.start();
     }
 
     public static int getWidth() {return WIDTH;}
@@ -344,6 +339,8 @@ public class GameScreen implements Screen {
 		float w = width * Math.abs(cam.up.y) + height * Math.abs(cam.up.x);
 		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
         viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
+        
+        chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2).setCreeperLevel(1);
     }
 
     @Override
@@ -395,7 +392,8 @@ public class GameScreen implements Screen {
 	        		float w = width * Math.abs(cam.up.y) + height * Math.abs(cam.up.x);
 	        		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
 	        	    viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
-	        		imageBounds.set(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());	
+	        		imageBounds.set(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());		                
+
 	        		if (viewBounds.contains(imageBounds) || viewBounds.overlaps(imageBounds)) {	 
 		        		if (chunks.getChunk(x, y).getOreLevel() > 0) {
 		        			float n = chunks.getChunk(x, y).getOreLevel() * 100;
@@ -410,13 +408,30 @@ public class GameScreen implements Screen {
 		        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));
 		        			r.setColor(c);
 		        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-		        		}
+		        		}	      		
 		        	}
 	        	}
 	        }
 	        r.end();
 	    }
         
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        r.begin(ShapeType.Filled);
+        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	   
+		        if (chunks.getChunk(x, y).getCreeperLevel() > 0) {
+					Color c = new Color(Color.rgba8888(0/255f, 255/255f, 0/255f, 0.5f));
+					r.setColor(c);
+					r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+				}
+        	}
+        }
+        r.end();
+        
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+       
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r);
         r.end();
@@ -913,6 +928,14 @@ public class GameScreen implements Screen {
         return intersectedConnector;
     }
    
+    public static void startSim() {
+        //Simulation thread
+        SimulationThread sT = new SimulationThread();      
+        Thread simulationThread = new Thread(sT);
+        simulationThread.setDaemon(true);
+        simulationThread.start();  
+    }
+    
     @Override
     public void resize(int width, int height) {
         WIDTH = width;
