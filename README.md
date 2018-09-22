@@ -5,14 +5,14 @@ A prototype engine for a possible WIP towerdefense/RTS game.
 
 OpenGL renderer Java adaptation and some basic game functionality stands on the LibGdx framework (Low-level opengl calls based on LWJGL)
 
-![intro](img/intro.png)
-
-![screen1](img/scr1.PNG)
+![intro](img/intro.PNG)
 
 ![screen2](img/scr2.PNG)
 
+![screen1](img/scr1.PNG)
+
 ![different production rates](img/differentproductionrates.PNG)
 
-![buildings](img/nodeshotscreen101.png)
+![buildings](img/nodeshotscreen101.PNG
 
-![connections](img/idk.png)
+![connections](img/idk.PNG)
