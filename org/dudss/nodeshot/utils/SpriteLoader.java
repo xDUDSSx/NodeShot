@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class SpriteLoader {
 	
@@ -40,6 +41,8 @@ public class SpriteLoader {
 	
 	public static Sprite ironTileSprite;
 	
+	public static TextureAtlas tileAtlas;
+	
 	public SpriteLoader() {
 	}
 	
@@ -53,14 +56,18 @@ public class SpriteLoader {
         	coalTex = new Texture(Gdx.files.internal("tiledCoal.png"));
         	coalLowerTex = new Texture(Gdx.files.internal("tiledCoalLower.png"));
         	coalLowTex = new Texture(Gdx.files.internal("tiledCoalLow.png"));
+        	tileAtlas = new TextureAtlas(Gdx.files.internal("tiles.atlas"));
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
         	spriteSheet = new Texture("res/spritesheet16x16.png");
         	savanaTex = new Texture("res/seamlesssand32.png");
         	ironTex = new Texture("res/tiledIron.png");
         	coalTex = new Texture("res/tiledCoal.png");
-        	coalLowerTex = new Texture("res/tiledCoalLower.png");
-        	coalLowTex = new Texture("res/tiledCoalLow.png");       	
+        	coalLowerTex = new Texture("res/tiledCoallower.png");
+        	coalLowTex = new Texture("res/tiledCoallow.png");       	
+        	tileAtlas = new TextureAtlas("res/tiles.atlas");
         }
+		
+		
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);

@@ -22,6 +22,8 @@ public class HudMenu extends Window {
 	
 	Label oreLevel;
 	Label oreType;
+	Label corruptionLevel;
+	Label plagueLevel;
 	
 	public HudMenu(String title, Skin skin) {
 		super(title, skin);
@@ -38,10 +40,16 @@ public class HudMenu extends Window {
         table.setSize(this.getPrefWidth(), this.getPrefWidth());
 
         oreLevel = new Label("Ore level: 0.0", skin, "font15");
-        table.add(oreLevel).fill().left().padLeft(10).padRight(10).padTop(5).padBottom(5);
-        oreType = new Label("Ore type: NONE", skin, "font15");
+        table.add(oreLevel).fill().left().padLeft(10).padRight(10).padTop(17).padBottom(2);
         table.row();
-        table.add(oreType).fill().left().padLeft(10).padRight(10).padTop(5).padBottom(5);
+        oreType = new Label("Ore type: NONE", skin, "font15");
+        table.add(oreType).fill().left().padLeft(10).padRight(10).padTop(2).padBottom(2);
+        table.row();
+        corruptionLevel = new Label("Corruption: 0.0", skin, "font15");     
+        table.add(corruptionLevel).fill().left().padLeft(10).padRight(10).padTop(2).padBottom(2);
+        table.row();
+        plagueLevel = new Label("Plague: 0.0", skin, "font15");     
+        table.add(plagueLevel).fill().left().padLeft(10).padRight(10).padTop(2).padBottom(2);
         
         this.setResizable(false);
         this.setMovable(false);
@@ -59,9 +67,8 @@ public class HudMenu extends Window {
 	
 	public void update() {
 		if (GameScreen.hoverChunk != null) {
-			if (GameScreen.hoverChunk.getCoalLevel() > 0) {
-				oreLevel.setText("Ore level: " + GameScreen.hoverChunk.getCoalLevel());
-				oreType.setText("Ore level: " + GameScreen.hoverChunk.getOreType().toString());
+			/*if (GameScreen.hoverChunk.getCoalLevel() > 0) {
+				
 			} else 
 			if (GameScreen.hoverChunk.getIronLevel() > 0) { 
 				oreLevel.setText("Ore level: " + GameScreen.hoverChunk.getIronLevel());
@@ -70,6 +77,11 @@ public class HudMenu extends Window {
 				oreLevel.setText("Ore level: " + 0 );
 				oreType.setText("Ore type: " + OreType.NONE);
 			}
+			*/
+			oreLevel.setText("Ore level: " + GameScreen.hoverChunk.getOreLevel());
+			oreType.setText("Ore level: " + GameScreen.hoverChunk.getOreType().toString());
+			corruptionLevel.setText("Corruption: " + GameScreen.hoverChunk.getCreeperLevel());
+			plagueLevel.setText("Plague: " + GameScreen.hoverChunk.getPlagueLevel());
 		}
 	}
 	

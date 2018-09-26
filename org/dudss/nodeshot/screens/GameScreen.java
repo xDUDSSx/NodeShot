@@ -37,6 +37,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -50,7 +51,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
@@ -174,11 +177,11 @@ public class GameScreen implements Screen {
     public static RightClickMenuManager rightClickMenuManager;
     public static BuildMenu buildMenu;
     public static HudMenu hudMenu;
-    
+
     public GameScreen(Game game)
     {
         nodeshotGame = game;
-
+        
         packageHandler = new PackageHandler();
         connectorHandler = new ConnectorHandler();
         buildingHandler = new BuildingHandler();       
@@ -307,7 +310,7 @@ public class GameScreen implements Screen {
         hudMenu = new HudMenu("HUD menu", skin);
         stage.addActor(hudMenu);
         
-        //Ingame HUD buttons (Android) (//TODO: remove, utilize proper scene UI)
+        //Ingame HUD buttons (Android) (//TODO: remove, utilize proper scene UI) //Kinda finished, not for mobile tho
         if (Gdx.app.getType() == ApplicationType.Android) {
 	        backButton.set( 10, 10, 180, 180);
 	        deleteButton.set( 10 , (200)*1 + 10, 180, 180);
@@ -340,7 +343,28 @@ public class GameScreen implements Screen {
 		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
         viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
         
-        chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2).setCreeperLevel(1);
+        //chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2).setCreeperLevel(1f);
+        //chunks.getChunk(Base.CHUNK_AMOUNT/2 - 1, Base.CHUNK_AMOUNT/2).setCreeperLevel(1f);
+        //chunks.getChunk(Base.CHUNK_AMOUNT/2 + 1, Base.CHUNK_AMOUNT/2).setCreeperLevel(1f);
+        //chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2 + 1).setCreeperLevel(1f);
+        //chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2 - 1).setCreeperLevel(1f);
+        
+        /*for (int i = 0; i < 24; i++) {
+        	for (int ii = 0; ii < 24; ii++) {
+        		chunks.getChunk(Base.CHUNK_AMOUNT/2 + i, Base.CHUNK_AMOUNT/2 + ii ).setCreeperLevel(1f);
+            }
+        }
+        */
+        Circle c = new Circle(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.WORLD_SIZE/2 - 200);
+        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+    		for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
+    			Rectangle rect = new Rectangle(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());    			
+        		if (!(Intersector.overlaps(c, rect))) {
+        			chunks.getChunk(x, y ).setCreeperLevel(1f);
+        			chunks.getChunk(x, y ).setPlagueLevel(0f);
+        		}
+            }
+        }
     }
 
     @Override
@@ -361,6 +385,7 @@ public class GameScreen implements Screen {
     @Override
     public void render (float delta) {
         handleInput();
+        hudMenu.update();
         cam.update();
         batch.setProjectionMatrix(cam.combined);
         r.setProjectionMatrix(cam.combined);
@@ -422,7 +447,7 @@ public class GameScreen implements Screen {
         for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
         	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	   
 		        if (chunks.getChunk(x, y).getCreeperLevel() > 0) {
-					Color c = new Color(Color.rgba8888(0/255f, 255/255f, 0/255f, 0.5f));
+					Color c = new Color(Color.rgba8888(0/255f, 255/255f, 0/255f, chunks.getChunk(x, y).getCreeperLevel()));
 					r.setColor(c);
 					r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
 				}
@@ -950,6 +975,7 @@ public class GameScreen implements Screen {
         stage.getViewport().update(width, height, true);
         
         buildMenu.resize();
+        hudMenu.resize();
     }
 
     @Override

@@ -46,7 +46,7 @@ public class Base {
 	//TERRAIN
 
 
-	public static int WORLD_SIZE = 3072*2;
+	public static int WORLD_SIZE = 3072;
 	
 	public static float COAL_THRESHOLD = 0.94f;
 	public static float IRON_THRESHOLD = 0.93f;

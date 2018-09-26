@@ -8,7 +8,7 @@ public class SimulationThread implements Runnable {
     //double interpolation; //TODO: implement interpolation
 	int loops;
  
-    public static int TICKS_PER_SECOND = 1;
+    public static int TICKS_PER_SECOND = 24;
     static int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     int MAX_FRAMESKIP = 15; //30 (15)
     long next_game_tick = getTickCount() + SKIP_TICKS;

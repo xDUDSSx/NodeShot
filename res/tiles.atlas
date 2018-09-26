@@ -1,0 +1,41 @@
+
+tiles.png
+size: 64,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+seamlesssand32
+  rotate: false
+  xy: 1, 21
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tiledCoal
+  rotate: false
+  xy: 19, 3
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tiledCoallow
+  rotate: false
+  xy: 1, 3
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tiledCoallower
+  rotate: false
+  xy: 37, 19
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tiledIron
+  rotate: false
+  xy: 35, 37
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
