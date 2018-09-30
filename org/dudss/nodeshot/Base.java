@@ -46,14 +46,17 @@ public class Base {
 	//TERRAIN
 
 
-	public static int WORLD_SIZE = 3072;
+	public static int WORLD_SIZE = 3072*2;
 	
 	public static float COAL_THRESHOLD = 0.94f;
 	public static float IRON_THRESHOLD = 0.93f;
 	
 	public static int CHUNK_SIZE = 16;
+	public static int SECTION_SIZE = 16;
 	
 	public static int CHUNK_AMOUNT = WORLD_SIZE / CHUNK_SIZE;
+	public static int SECTION_AMOUNT = CHUNK_AMOUNT / SECTION_SIZE;
+	
 	
 	Base() {
 		//Getting screen (monitor) resolution
@@ -132,186 +135,97 @@ public class Base {
 		}
 			return listToString(entityList);
 	}
-		public static String nodeConnectorListToString (List < Connector > list) {
-			List<Entity> entityList = new ArrayList<Entity>();
-			for (final Connector n : list) {
-				entityList.add(new Entity() {
-					@Override
-					public int getID() {
-						return n.getID();
-					}
+	public static String nodeConnectorListToString (List < Connector > list) {
+		List<Entity> entityList = new ArrayList<Entity>();
+		for (final Connector n : list) {
+			entityList.add(new Entity() {
+				@Override
+				public int getID() {
+					return n.getID();
+				}
 
-					@Override
-					public int getIndex() {
-						// TODO Auto-generated method stub
-						return 0;
-					}
+				@Override
+				public int getIndex() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
 
-					@Override
-					public EntityType getType() {
-						// TODO Auto-generated method stub
-						return null;
-					}
+				@Override
+				public EntityType getType() {
+					// TODO Auto-generated method stub
+					return null;
+				}
 
-					@Override
-					public float getX() {
-						// TODO Auto-generated method stub
-						return 0;
-					}
+				@Override
+				public float getX() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
 
-					@Override
-					public float getY() {
-						// TODO Auto-generated method stub
-						return 0;
-					}
-				});
-			}
-			return listToString(entityList);
+				@Override
+				public float getY() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+			});
 		}
-
-		public static String packageListToString (List < Package > list) {
-			List<Entity> entityList = new ArrayList<Entity>();
-			for (final Package n : list) {
-				entityList.add(new Entity() {
-					@Override
-					public int getID() {
-						return n.getID();
-					}
-
-					@Override
-					public int getIndex() {
-						// TODO Auto-generated method stub
-						return 0;
-					}
-
-					@Override
-					public EntityType getType() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-
-					@Override
-					public float getX() {
-						// TODO Auto-generated method stub
-						return 0;
-					}
-
-					@Override
-					public float getY() {
-						// TODO Auto-generated method stub
-						return 0;
-					}
-				});
-			}
-			return listToString(entityList);
-		}
-		
-		public static void enableGlBlend() {
-			Gdx.gl.glEnable(GL20.GL_BLEND);
-	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		}
-		
-		public static void disableGlBlend() {
-			Gdx.gl.glDisable(GL20.GL_BLEND);
-		}
-		
-		public static float round(float d, int decimalPlace) {
-	        BigDecimal bd = new BigDecimal(Float.toString(d));
-	        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
-	        return bd.floatValue();
-		}
-		
-		public static float range(float OldValue, float OldMin, float OldMax, float NewMin, float NewMax) {
-			return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin;
-		}
+		return listToString(entityList);
 	}
-/*
-class GraphNumbering {
-	ArrayList<String> state = new ArrayList<String>();
-	
-	public void getNumberOfGraphs() {
 
-		class WebWorker extends SwingWorker<Void, Void> {
+	public static String packageListToString (List < Package > list) {
+		List<Entity> entityList = new ArrayList<Entity>();
+		for (final Package n : list) {
+			entityList.add(new Entity() {
+				@Override
+				public int getID() {
+					return n.getID();
+				}
 
-			int webs = 0;
-			
-		    protected Void doInBackground() throws Exception {
-		    	for (int i = 0; i < BasePanel.nodelist.size(); i++) {		
-					try {
-						Thread.sleep(10);
-						//repaint();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
-					state.add("FRESH");
-					BasePanel.nodelist.get(i).setState("FRESH");
+				@Override
+				public int getIndex() {
+					// TODO Auto-generated method stub
+					return 0;
 				}
-				int counter = 0;
-				for (Node n : BasePanel.nodelist) {			
-					if (state.get(BasePanel.nodelist.indexOf(n)).equals("FRESH")) {
-						counter++;
-						
-						try {
-							Thread.sleep(100);
-							//repaint();
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						
-						try {
-							goThrough(n);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
+
+				@Override
+				public EntityType getType() {
+					// TODO Auto-generated method stub
+					return null;
 				}
-				
-				webs = counter;
-				System.out.println("Number of webs: " + counter);
-				state.clear();
-				return null;
-		    }
-		    
-		    protected void done() {
-		    	for (Node n : BasePanel.nodelist) {
-					n.setState("");
+
+				@Override
+				public float getX() {
+					// TODO Auto-generated method stub
+					return 0;
 				}
-		    	
-		    	Thread t = new Thread(new Runnable() {
-		    	    public void run() {
-		    	    	BasePanel.stringToWrite = String.valueOf(webs);
-				    	BasePanel.drawString = true;
-				    	try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-				    	BasePanel.drawString = false;
-				    	BasePanel.stringToWrite = "";
-		    	    }
-		    	});  			
-		    	t.start(); 	
-		    }
-		}							
-		new WebWorker().execute();	
+
+				@Override
+				public float getY() {
+					// TODO Auto-generated method stub
+					return 0;
+				}
+			});
+		}
+		return listToString(entityList);
 	}
 	
-	void goThrough(Node n) throws InterruptedException {
-		if(state.get(BasePanel.nodelist.indexOf(n)).equals("FRESH")) {
-			Thread.sleep(50);
-			//repaint();
-			state.set(BasePanel.nodelist.indexOf(n), "OPENED");
-			n.setState("OPENED");
-			for (Node conNode : n.getAllConnectedNodes()) {
-				goThrough(conNode);
-			}
-			state.set(BasePanel.nodelist.indexOf(n), "CLOSED");
-			n.setState("CLOSED");
-			Thread.sleep(50);
-			//repaint();
-		}
+	public static void enableGlBlend() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+	}
+	
+	public static void disableGlBlend() {
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+	}
+	
+	public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+	}
+	
+	public static float range(float OldValue, float OldMin, float OldMax, float NewMin, float NewMax) {
+		return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin;
 	}
 }
-*/
 

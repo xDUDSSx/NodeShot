@@ -3,6 +3,7 @@ package org.dudss.nodeshot.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -42,6 +43,7 @@ public class SpriteLoader {
 	public static Sprite ironTileSprite;
 	
 	public static TextureAtlas tileAtlas;
+	public static Texture corrTex;
 	
 	public SpriteLoader() {
 	}
@@ -65,9 +67,10 @@ public class SpriteLoader {
         	coalLowerTex = new Texture("res/tiledCoallower.png");
         	coalLowTex = new Texture("res/tiledCoallow.png");       	
         	tileAtlas = new TextureAtlas("res/tiles.atlas");
+        	corrTex = new Texture("res/corr16.png");
         }
-		
-		
+	
+		corrTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);
