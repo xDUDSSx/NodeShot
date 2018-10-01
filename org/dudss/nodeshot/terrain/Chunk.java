@@ -36,7 +36,7 @@ public class Chunk {
 	protected float vertices[] = new float[NUM_VERTICES];
 	
 	enum TriangleOrientation {
-		BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT
+		BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT, END_LEFT, END_RIGHT, END_TOP, END_BOTTOM, SINGLE
 	}
 	
 	Chunk(float x, float y) {
@@ -222,30 +222,92 @@ public class Chunk {
 			boolean triangleDrawn = false;
 			
 			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) + 1).getOreLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) + 1, Math.round(y/16)).getOreLevel() == 0) 
+				int ax = Math.round(x/16);
+				int ay = Math.round(y/16);
+				
+				Chunk minusx = GameScreen.chunks.getChunk(ax - 1, ay);
+				Chunk plusx = GameScreen.chunks.getChunk(ax + 1, ay);
+				Chunk minusy = GameScreen.chunks.getChunk(ax, ay - 1);
+				Chunk plusy = GameScreen.chunks.getChunk(ax, ay + 1);
+				
+				/*Chunk cornerTopLeft = GameScreen.chunks.getChunk(ax - 1, ay + 1);
+				Chunk cornerTopRight = GameScreen.chunks.getChunk(ax + 1, ay + 1);
+				Chunk corneBottomLeft = GameScreen.chunks.getChunk(ax - 1, ay - 1);
+				Chunk cornerBottomRight = GameScreen.chunks.getChunk(ax + 1, ay - 1);
+				*/
+				
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 &&
+					minusx.getOreLevel() > 0 && 
+					minusy.getOreLevel() > 0)
 				{
 					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch);
 					triangleDrawn = true;
-				}
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) + 1).getOreLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) - 1, Math.round(y/16)).getOreLevel() == 0) 
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusx.getOreLevel() > 0 &&
+				    minusy.getOreLevel() > 0)  
 				{
 					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch);
 					triangleDrawn = true;
-				}			
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) - 1).getOreLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) + 1, Math.round(y/16)).getOreLevel() == 0) 
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 &&
+				    plusy.getOreLevel() > 0 &&
+				    minusx.getOreLevel() > 0)  
 				{
 					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch);
 					triangleDrawn = true;
-				}
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) - 1).getOreLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) - 1, Math.round(y/16)).getOreLevel() == 0) 
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 && 
+				    plusx.getOreLevel() > 0 &&
+				    plusy.getOreLevel() > 0)  
 				{
 					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch);
 					triangleDrawn = true;
-				}	
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusy.getOreLevel() == 0 &&
+					minusx.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch);
+					triangleDrawn = true;			
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 && 
+					minusy.getOreLevel() == 0 &&
+					plusx.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch);
+					triangleDrawn = true;			
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					minusy.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch);
+					triangleDrawn = true;			
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusy.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch);
+					triangleDrawn = true;			
+				} else 
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusy.getOreLevel() == 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch);
+					triangleDrawn = true;			
+				}
 			}
 		
 			if (!triangleDrawn) {
@@ -254,32 +316,94 @@ public class Chunk {
 		} else
 		if (ironOre != 0) {
 			boolean triangleDrawn = false;
-			
+			TextureRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledIron");
 			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) + 1).getOreLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) + 1, Math.round(y/16)).getOreLevel() == 0) 
+				int ax = Math.round(x/16);
+				int ay = Math.round(y/16);
+				
+				Chunk minusx = GameScreen.chunks.getChunk(ax - 1, ay);
+				Chunk plusx = GameScreen.chunks.getChunk(ax + 1, ay);
+				Chunk minusy = GameScreen.chunks.getChunk(ax, ay - 1);
+				Chunk plusy = GameScreen.chunks.getChunk(ax, ay + 1);
+				
+				/*Chunk cornerTopLeft = GameScreen.chunks.getChunk(ax - 1, ay + 1);
+				Chunk cornerTopRight = GameScreen.chunks.getChunk(ax + 1, ay + 1);
+				Chunk corneBottomLeft = GameScreen.chunks.getChunk(ax - 1, ay - 1);
+				Chunk cornerBottomRight = GameScreen.chunks.getChunk(ax + 1, ay - 1);
+				*/
+				
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 &&
+					minusx.getOreLevel() > 0 && 
+					minusy.getOreLevel() > 0)
 				{
-					drawTileTriangle(SpriteLoader.tileAtlas.findRegion("tiledIron"), TriangleOrientation.BOTTOM_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch);
 					triangleDrawn = true;
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusx.getOreLevel() > 0 &&
+				    minusy.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch);
+					triangleDrawn = true;
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 &&
+				    plusy.getOreLevel() > 0 &&
+				    minusx.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch);
+					triangleDrawn = true;
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 && 
+				    plusx.getOreLevel() > 0 &&
+				    plusy.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch);
+					triangleDrawn = true;
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusy.getOreLevel() == 0 &&
+					minusx.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch);
+					triangleDrawn = true;			
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 && 
+					minusy.getOreLevel() == 0 &&
+					plusx.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch);
+					triangleDrawn = true;			
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					minusy.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch);
+					triangleDrawn = true;			
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusy.getOreLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch);
+					triangleDrawn = true;			
+				} else 
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusy.getOreLevel() == 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch);
+					triangleDrawn = true;			
 				}
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) + 1).getOreLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) - 1, Math.round(y/16)).getOreLevel() == 0) 
-				{
-					drawTileTriangle(SpriteLoader.tileAtlas.findRegion("tiledIron"), TriangleOrientation.BOTTOM_RIGHT, batch);
-					triangleDrawn = true;
-				}			
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) - 1).getOreLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) + 1, Math.round(y/16)).getOreLevel() == 0) 
-				{
-					drawTileTriangle(SpriteLoader.tileAtlas.findRegion("tiledIron"), TriangleOrientation.TOP_LEFT, batch);
-					triangleDrawn = true;
-				}
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) - 1).getOreLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) - 1, Math.round(y/16)).getOreLevel() == 0) 
-				{
-					drawTileTriangle(SpriteLoader.tileAtlas.findRegion("tiledIron"), TriangleOrientation.TOP_RIGHT, batch);
-					triangleDrawn = true;
-				}	
 			}
 		
 			if (!triangleDrawn) {
@@ -289,32 +413,94 @@ public class Chunk {
 		
 		if (creeper != 0) {
 			boolean triangleDrawn = false;
-			
+			TextureRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("corr16");
 			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) + 1).getCreeperLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) + 1, Math.round(y/16)).getCreeperLevel() == 0) 
+				int ax = Math.round(x/16);
+				int ay = Math.round(y/16);
+				
+				Chunk minusx = GameScreen.chunks.getChunk(ax - 1, ay);
+				Chunk plusx = GameScreen.chunks.getChunk(ax + 1, ay);
+				Chunk minusy = GameScreen.chunks.getChunk(ax, ay - 1);
+				Chunk plusy = GameScreen.chunks.getChunk(ax, ay + 1);
+				
+				/*Chunk cornerTopLeft = GameScreen.chunks.getChunk(ax - 1, ay + 1);
+				Chunk cornerTopRight = GameScreen.chunks.getChunk(ax + 1, ay + 1);
+				Chunk corneBottomLeft = GameScreen.chunks.getChunk(ax - 1, ay - 1);
+				Chunk cornerBottomRight = GameScreen.chunks.getChunk(ax + 1, ay - 1);
+				*/
+				
+				if (plusy.getCreeperLevel() == 0 && 
+					plusx.getCreeperLevel() == 0 &&
+					minusx.getCreeperLevel() > 0 && 
+					minusy.getCreeperLevel() > 0)
 				{
-					drawTileTriangle(SpriteLoader.tileAtlas.findRegion("corr16"), TriangleOrientation.BOTTOM_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch);
 					triangleDrawn = true;
+				} else
+				if (plusy.getCreeperLevel() == 0 && 
+					minusx.getCreeperLevel() == 0 &&
+					plusx.getCreeperLevel() > 0 &&
+				    minusy.getCreeperLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch);
+					triangleDrawn = true;
+				} else
+				if (minusy.getCreeperLevel() == 0 && 
+					plusx.getCreeperLevel() == 0 &&
+				    plusy.getCreeperLevel() > 0 &&
+				    minusx.getCreeperLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch);
+					triangleDrawn = true;
+				} else
+				if (minusy.getCreeperLevel() == 0 && 
+					minusx.getCreeperLevel() == 0 && 
+				    plusx.getCreeperLevel() > 0 &&
+				    plusy.getCreeperLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch);
+					triangleDrawn = true;
+				} else
+				if (plusy.getCreeperLevel() == 0 && 
+					plusx.getCreeperLevel() == 0 && 
+					minusy.getCreeperLevel() == 0 &&
+					minusx.getCreeperLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch);
+					triangleDrawn = true;			
+				} else
+				if (plusy.getCreeperLevel() == 0 && 
+					minusx.getCreeperLevel() == 0 && 
+					minusy.getCreeperLevel() == 0 &&
+					plusx.getCreeperLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch);
+					triangleDrawn = true;			
+				} else
+				if (plusy.getCreeperLevel() == 0 && 
+					plusx.getCreeperLevel() == 0 && 
+					minusx.getCreeperLevel() == 0 &&
+					minusy.getCreeperLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch);
+					triangleDrawn = true;			
+				} else
+				if (minusy.getCreeperLevel() == 0 && 
+					plusx.getCreeperLevel() == 0 && 
+					minusx.getCreeperLevel() == 0 &&
+					plusy.getCreeperLevel() > 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch);
+					triangleDrawn = true;			
+				} else 
+				if (minusy.getCreeperLevel() == 0 && 
+					plusx.getCreeperLevel() == 0 && 
+					minusx.getCreeperLevel() == 0 &&
+					plusy.getCreeperLevel() == 0)  
+				{
+					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch);
+					triangleDrawn = true;			
 				}
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) + 1).getCreeperLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) - 1, Math.round(y/16)).getCreeperLevel() == 0) 
-				{
-					drawTileTriangle(SpriteLoader.tileAtlas.findRegion("corr16"), TriangleOrientation.BOTTOM_RIGHT, batch);
-					triangleDrawn = true;
-				}			
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) - 1).getCreeperLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) + 1, Math.round(y/16)).getCreeperLevel() == 0) 
-				{
-					drawTileTriangle(SpriteLoader.tileAtlas.findRegion("corr16"), TriangleOrientation.TOP_LEFT, batch);
-					triangleDrawn = true;
-				}
-				if (GameScreen.chunks.getChunk(Math.round(x/16), Math.round(y/16) - 1).getCreeperLevel() == 0 && 
-					GameScreen.chunks.getChunk(Math.round(x/16) - 1, Math.round(y/16)).getCreeperLevel() == 0) 
-				{
-					drawTileTriangle(SpriteLoader.tileAtlas.findRegion("corr16"), TriangleOrientation.TOP_RIGHT, batch);
-					triangleDrawn = true;
-				}	
 			}
 		
 			if (!triangleDrawn) {
@@ -474,6 +660,131 @@ public class Chunk {
 			vertices[Batch.C4] = 0;
 			vertices[Batch.U4] = u2;
 			vertices[Batch.V4] = v1;
+			break;
+		case END_LEFT: 
+			vertices[Batch.X1] = x2;
+			vertices[Batch.Y1] = y1;
+			vertices[Batch.C1] = 0;
+			vertices[Batch.U1] = u1;
+			vertices[Batch.V1] = v1;
+
+			vertices[Batch.X2] = x1 + (Base.CHUNK_SIZE/2);
+			vertices[Batch.Y2] = y1 + (Base.CHUNK_SIZE/2);
+			vertices[Batch.C2] = 0;
+			vertices[Batch.U2] = u1 + ((u2-u1)/2);
+			vertices[Batch.V2] = v1 + ((v2-v1)/2);
+			
+			vertices[Batch.X3] = x1;
+			vertices[Batch.Y3] = y2;
+			vertices[Batch.C3] = 0;
+			vertices[Batch.U3] = u1;
+			vertices[Batch.V3] = v2;		
+			
+			vertices[Batch.X4] = x2;
+			vertices[Batch.Y4] = y1;
+			vertices[Batch.C4] = 0;
+			vertices[Batch.U4] = u2;
+			vertices[Batch.V4] = v1;
+			break;
+		case END_RIGHT: 
+			vertices[Batch.X1] = x1;
+			vertices[Batch.Y1] = y1;
+			vertices[Batch.C1] = 0;
+			vertices[Batch.U1] = u1;
+			vertices[Batch.V1] = v1;
+
+			vertices[Batch.X2] = x1;
+			vertices[Batch.Y2] = y2;
+			vertices[Batch.C2] = 0;
+			vertices[Batch.U2] = u1;
+			vertices[Batch.V2] = v2;
+
+			vertices[Batch.X3] = x1 + (Base.CHUNK_SIZE/2);
+			vertices[Batch.Y3] = y1 + (Base.CHUNK_SIZE/2);
+			vertices[Batch.C3] = 0;
+			vertices[Batch.U3] = u1 + ((u2-u1)/2);
+			vertices[Batch.V3] = v1 + ((v2-v1)/2);
+			
+			vertices[Batch.X4] = x1;
+			vertices[Batch.Y4] = y1;
+			vertices[Batch.C4] = 0;
+			vertices[Batch.U4] = u1;
+			vertices[Batch.V4] = v1;
+			break;
+		case END_TOP: 
+			vertices[Batch.X1] = x1;
+			vertices[Batch.Y1] = y1;
+			vertices[Batch.C1] = 0;
+			vertices[Batch.U1] = u1;
+			vertices[Batch.V1] = v1;
+
+			vertices[Batch.X2] = x1 + (Base.CHUNK_SIZE/2);  
+			vertices[Batch.Y2] = y1 + (Base.CHUNK_SIZE/2);  
+			vertices[Batch.C2] = 0;                         
+			vertices[Batch.U2] = u1 + ((u2-u1)/2);          
+			vertices[Batch.V2] = v1 + ((v2-v1)/2);          
+
+			vertices[Batch.X3] = x2; 
+			vertices[Batch.Y3] = y1; 
+			vertices[Batch.C3] = 0;  
+			vertices[Batch.U3] = u2; 
+			vertices[Batch.V3] = v1; 
+			
+			vertices[Batch.X4] = x1;
+			vertices[Batch.Y4] = y1;
+			vertices[Batch.C4] = 0;
+			vertices[Batch.U4] = u1;
+			vertices[Batch.V4] = v1;
+			break;
+		case END_BOTTOM: 
+			vertices[Batch.X1] = x1;
+			vertices[Batch.Y1] = y2;
+			vertices[Batch.C1] = 0;
+			vertices[Batch.U1] = u1;
+			vertices[Batch.V1] = v1;         
+
+			vertices[Batch.X2] = x2; 
+			vertices[Batch.Y2] = y2; 
+			vertices[Batch.C2] = 0;  
+			vertices[Batch.U2] = u2; 
+			vertices[Batch.V2] = v2; 
+			
+			vertices[Batch.X3] = x1 + (Base.CHUNK_SIZE/2);  
+			vertices[Batch.Y3] = y1 + (Base.CHUNK_SIZE/2);  
+			vertices[Batch.C3] = 0;                         
+			vertices[Batch.U3] = u1 + ((u2-u1)/2);          
+			vertices[Batch.V3] = v1 + ((v2-v1)/2); 
+			
+			vertices[Batch.X4] = x1;
+			vertices[Batch.Y4] = y2;
+			vertices[Batch.C4] = 0;
+			vertices[Batch.U4] = u1;
+			vertices[Batch.V4] = v2;
+			break;
+		case SINGLE: 
+			vertices[Batch.X1] = x1 + (Base.CHUNK_SIZE/2);;
+			vertices[Batch.Y1] = y1;
+			vertices[Batch.C1] = 0;
+			vertices[Batch.U1] = u1 + ((u2-u1)/2) ;
+			vertices[Batch.V1] = v1;         
+
+			vertices[Batch.X2] = x2; 
+			vertices[Batch.Y2] = y1 + (Base.CHUNK_SIZE/2);; 
+			vertices[Batch.C2] = 0;  
+			vertices[Batch.U2] = u2; 
+			vertices[Batch.V2] = v1 + ((v2-v1)/2); 
+			
+			vertices[Batch.X3] = x1 + (Base.CHUNK_SIZE/2);
+			vertices[Batch.Y3] = y2;  
+			vertices[Batch.C3] = 0;                         
+			vertices[Batch.U3] = u1 + ((u2-u1)/2);          
+			vertices[Batch.V3] = v2; 
+			
+			vertices[Batch.X4] = x1;
+			vertices[Batch.Y4] = y1 + (Base.CHUNK_SIZE/2);;
+			vertices[Batch.C4] = 0;
+			vertices[Batch.U4] = u1;
+			vertices[Batch.V4] = v1 + ((v2-v1)/2);
 			break;
 		}
 		
