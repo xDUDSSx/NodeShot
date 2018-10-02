@@ -13,6 +13,8 @@ public class SimulationThread implements Runnable {
     int MAX_FRAMESKIP = 15; //30 (15)
     long next_game_tick = getTickCount() + SKIP_TICKS;
     
+    int next_chunk_tick = 10;
+    
     public static int simTick;
     
     public void run() {
@@ -94,14 +96,19 @@ public class SimulationThread implements Runnable {
 	void updateLogic() {
 		simTick++;
 		//Node movement
-		if (Base.randomMovement) {
+		/*if (Base.randomMovement) {
 				for (Node n : GameScreen.nodelist) {
 				n.move();		       
 			}
 		}
+		*/
 		
 		//Updating all chunks
-		GameScreen.chunks.updateAll();
+		if (simTick >= next_chunk_tick) {
+			next_chunk_tick += 10;
+			System.out.println("update");
+			GameScreen.chunks.updateAll();
+		}		
 		
 		//Updating pathHandler logic
 		GameScreen.packageHandler.update();

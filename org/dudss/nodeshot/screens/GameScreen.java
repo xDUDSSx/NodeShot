@@ -3,7 +3,6 @@ package org.dudss.nodeshot.screens;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
@@ -34,7 +33,6 @@ import org.dudss.nodeshot.ui.RightClickMenuManager;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
-
 import org.poly2tri.Poly2Tri;
 import org.poly2tri.geometry.polygon.PolygonPoint;
 import org.poly2tri.triangulation.TriangulationPoint;
@@ -48,14 +46,11 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -63,6 +58,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
@@ -194,6 +190,10 @@ public class GameScreen implements Screen {
     public static BuildMenu buildMenu;
     public static HudMenu hudMenu;
     
+    public static FrameBuffer corrBuffer;
+    public static FrameBuffer fboA;
+    public static FrameBuffer blurBuffer;
+    
     public GameScreen(Game game)
     {
         nodeshotGame = game;
@@ -273,20 +273,7 @@ public class GameScreen implements Screen {
     public void show() {
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
-
-        batch = new SpriteBatch();
-        r = new ShapeRenderer();
-        
-        //font generation
-        font = new BitmapFont();
-        layout = new GlyphLayout();         
-        generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/Helvetica-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = Base.HUD_FONT_SIZE;
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'()>?:%+-*/";        
-        font = generator.generateFont(parameter);
-        generator.dispose();
-
+               
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
         if (lastCamePos == null) {
@@ -300,6 +287,26 @@ public class GameScreen implements Screen {
         lastCamePos = cam.position;
         lastZoom = cam.zoom;
         
+        Shaders.blurShader.begin();
+        Shaders.blurShader.setUniformf("resolution", cam.zoom * 100);
+        Shaders.blurShader.end();
+
+		blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false);
+		corrBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false);
+		
+        batch = new SpriteBatch();
+        r = new ShapeRenderer();
+        
+        //font generation
+        font = new BitmapFont();
+        layout = new GlyphLayout();         
+        generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/Helvetica-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = Base.HUD_FONT_SIZE;
+        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'()>?:%+-*/";        
+        font = generator.generateFont(parameter);
+        generator.dispose();
+       
         //User Interface
         if (Gdx.app.getType() == ApplicationType.Android) {
         	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
@@ -361,26 +368,13 @@ public class GameScreen implements Screen {
 		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
         viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
         
-        /*chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2).setCreeperLevel(1f);
-        chunks.getChunk(Base.CHUNK_AMOUNT/2 + 1, Base.CHUNK_AMOUNT/2).setCreeperLevel(1f);
-        chunks.getChunk(Base.CHUNK_AMOUNT/2 + 1, Base.CHUNK_AMOUNT/2 + 1).setCreeperLevel(1f);
-        chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2 + 1).setCreeperLevel(1f);
-        */
-        
-        /*for (int i = 0; i < 24; i++) {
-        	for (int ii = 0; ii < 24; ii++) {
-        		chunks.getChunk(Base.CHUNK_AMOUNT/2 + i, Base.CHUNK_AMOUNT/2 + ii ).setCreeperLevel(1f);
-            }
-        }
-        */
-        
         Circle c = new Circle(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.WORLD_SIZE/2 - 200);
         for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
     		for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
     			Rectangle rect = new Rectangle(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());    			
         		if (!(Intersector.overlaps(c, rect))) {
-        			chunks.getChunk(x, y ).setCreeperLevel(1f);
-        			chunks.getChunk(x, y ).setPlagueLevel(0f);
+        			chunks.getChunk(x, y).setCreeperLevel(1f);
+        			chunks.getChunk(x, y).setPlagueLevel(0f);
         		}
             }
         }
@@ -401,7 +395,70 @@ public class GameScreen implements Screen {
     public void hide() {
 
     }
+    
+    private void drawTexture(FrameBuffer fboA, FrameBuffer fboB, Texture texture, float x, float y) {
+    	fboB.begin();
+    	Shaders.blurShader.begin();
+    	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
+    	Shaders.blurShader.setUniformf("radius", 1f);
+        Shaders.blurShader.setUniformf("resolution", cam.zoom * 50);
+    	Shaders.blurShader.end();
+		batch.setShader(Shaders.blurShader);   	
+				
+		Sprite s = new Sprite(texture);
+		Matrix4 m = new Matrix4();
+		m.setToOrtho2D(0, 0, fboA.getWidth(), fboA.getHeight());
+		batch.setProjectionMatrix(m);	
 
+		s.flip(false, true);
+		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		s.draw(batch);
+		batch.end();
+		fboB.end();
+		
+		Shaders.blurShader.begin();
+    	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
+    	Shaders.blurShader.setUniformf("radius", 1f);
+    	Shaders.blurShader.setUniformf("resolution", cam.zoom * 50);
+    	Shaders.blurShader.end();
+		batch.setShader(Shaders.blurShader);   	
+		s = new Sprite(fboB.getColorBufferTexture());
+		m.setToOrtho2D(0, 0, fboB.getWidth(), fboB.getHeight());		
+		batch.setProjectionMatrix(m);
+		
+		s.flip(false, true);
+		batch.begin();
+		s.draw(batch);
+		batch.end();
+		
+		batch.setProjectionMatrix(cam.combined);
+	}   
+    
+    void drawCorruption(SpriteBatch batch) {
+    	corrBuffer.begin();
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+ 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        chunks.drawCorruption(batch);
+ 		batch.end();
+ 		corrBuffer.end();
+ 						
+		/*Sprite s = new Sprite(corrBuffer.getColorBufferTexture());
+		Matrix4 m = new Matrix4();
+		m.setToOrtho2D(0, 0, corrBuffer.getWidth(), corrBuffer.getHeight());		
+		batch.setProjectionMatrix(m);
+		
+		s.flip(false, true);
+		batch.begin();
+		s.draw(batch);
+ 		batch.end();
+ 		*/
+ 		
+ 		drawTexture(corrBuffer, blurBuffer, corrBuffer.getColorBufferTexture(), 0, 0);
+    }
+    
     @Override
     public void render (float delta) {
         handleInput();
@@ -412,18 +469,20 @@ public class GameScreen implements Screen {
         
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
      
-        glProfiler.reset();
+        glProfiler.reset();        
         
+        batch.begin();
         drawBackgroundSand(batch);      
-        chunks.draw(r, batch);       
-        //drawCorruptionMesh(batch);
+        batch.end();
         
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-        
+        batch.begin();
+		chunks.draw(r, batch); 
+		batch.end();
+		
+		drawCorruption(batch);
+		
+		batch.setShader(Shaders.defaultShader);
         
         LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
         			"\nCalls: " + glProfiler.getCalls() +
@@ -471,26 +530,9 @@ public class GameScreen implements Screen {
 	        }
 	        r.end();
 	    }
-        
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
 
         r.begin(ShapeType.Filled);
-        /*for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	   
-		        if (chunks.getChunk(x, y).getCreeperLevel() > 0) {
-					Color c = new Color(Color.rgba8888(0/255f, 255/255f, 0/255f, chunks.getChunk(x, y).getCreeperLevel()));
-					r.setColor(c);
-					r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-				}
-        	}
-        }
-        */
-        //r.end();
-        
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-       
-        //r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r);
         r.end();
         
@@ -511,17 +553,17 @@ public class GameScreen implements Screen {
       
         //grid rendering
         drawConnectors(r);
-     
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        
-        r.begin(ShapeType.Filled);
+    
         if (buildMode && builtBuilding != null) {
+        	r.begin(ShapeType.Filled);
+        	Gdx.gl.glEnable(GL20.GL_BLEND);       
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);                  	
         	drawPrefab(r);
+        	r.end();         	 
+            Gdx.gl.glDisable(GL20.GL_BLEND);
         }
-        r.end();    
-        
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+         
+       
        
         batch.begin();
         //Drawing packages
@@ -912,9 +954,9 @@ public class GameScreen implements Screen {
 		}
 		
 		batch.setShader(Shaders.defaultShader);
-		batch.begin();	
+		//batch.begin();	
 		batch.draw(sandTex, verts, 0, numberOfTiles*numberOfVerts);
-		batch.end();		
+		//batch.end();		
     }
     
     void drawConnectors(ShapeRenderer sR) {
@@ -1348,5 +1390,7 @@ public class GameScreen implements Screen {
         batch.dispose();
         //img.dispose();
         r.dispose();
+        fboA.dispose();
+		blurBuffer.dispose();
     }  
 }

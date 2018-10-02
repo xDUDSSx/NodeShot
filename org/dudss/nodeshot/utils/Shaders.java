@@ -42,5 +42,10 @@ public class Shaders {
 		String vertShader = Gdx.files.internal("res/testVertex.glsl").readString();
 		
 		testShader = new ShaderProgram(vertShader, fragShader);
+		
+		String blurfragShader = Gdx.files.internal("res/blurFragment.glsl").readString();
+		String blurvertShader = Gdx.files.internal("res/blurVertex.glsl").readString();
+		
+		blurShader = new ShaderProgram(blurvertShader, blurfragShader);
 	}
 }

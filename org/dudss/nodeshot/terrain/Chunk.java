@@ -241,7 +241,7 @@ public class Chunk {
 					minusx.getOreLevel() > 0 && 
 					minusy.getOreLevel() > 0)
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch, false);
 					triangleDrawn = true;
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -249,7 +249,7 @@ public class Chunk {
 					plusx.getOreLevel() > 0 &&
 				    minusy.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch, false);
 					triangleDrawn = true;
 				} else
 				if (minusy.getOreLevel() == 0 && 
@@ -257,7 +257,7 @@ public class Chunk {
 				    plusy.getOreLevel() > 0 &&
 				    minusx.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch, false);
 					triangleDrawn = true;
 				} else
 				if (minusy.getOreLevel() == 0 && 
@@ -265,7 +265,7 @@ public class Chunk {
 				    plusx.getOreLevel() > 0 &&
 				    plusy.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch, false);
 					triangleDrawn = true;
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -273,7 +273,7 @@ public class Chunk {
 					minusy.getOreLevel() == 0 &&
 					minusx.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch, false);
 					triangleDrawn = true;			
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -281,7 +281,7 @@ public class Chunk {
 					minusy.getOreLevel() == 0 &&
 					plusx.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch, false);
 					triangleDrawn = true;			
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -289,7 +289,7 @@ public class Chunk {
 					minusx.getOreLevel() == 0 &&
 					minusy.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch, false);
 					triangleDrawn = true;			
 				} else
 				if (minusy.getOreLevel() == 0 && 
@@ -297,7 +297,7 @@ public class Chunk {
 					minusx.getOreLevel() == 0 &&
 					plusy.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch, false);
 					triangleDrawn = true;			
 				} else 
 				if (minusy.getOreLevel() == 0 && 
@@ -305,13 +305,13 @@ public class Chunk {
 					minusx.getOreLevel() == 0 &&
 					plusy.getOreLevel() == 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch, false);
 					triangleDrawn = true;			
 				}
 			}
 		
 			if (!triangleDrawn) {
-				drawTile(desiredRegion, batch);
+				drawTile(desiredRegion, batch, false);
 			}
 		} else
 		if (ironOre != 0) {
@@ -337,7 +337,7 @@ public class Chunk {
 					minusx.getOreLevel() > 0 && 
 					minusy.getOreLevel() > 0)
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch, false);
 					triangleDrawn = true;
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -345,7 +345,7 @@ public class Chunk {
 					plusx.getOreLevel() > 0 &&
 				    minusy.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch, false);
 					triangleDrawn = true;
 				} else
 				if (minusy.getOreLevel() == 0 && 
@@ -353,7 +353,7 @@ public class Chunk {
 				    plusy.getOreLevel() > 0 &&
 				    minusx.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch, false);
 					triangleDrawn = true;
 				} else
 				if (minusy.getOreLevel() == 0 && 
@@ -361,7 +361,7 @@ public class Chunk {
 				    plusx.getOreLevel() > 0 &&
 				    plusy.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch, false);
 					triangleDrawn = true;
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -369,7 +369,7 @@ public class Chunk {
 					minusy.getOreLevel() == 0 &&
 					minusx.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch, false);
 					triangleDrawn = true;			
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -377,7 +377,7 @@ public class Chunk {
 					minusy.getOreLevel() == 0 &&
 					plusx.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch, false);
 					triangleDrawn = true;			
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -385,7 +385,7 @@ public class Chunk {
 					minusx.getOreLevel() == 0 &&
 					minusy.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch, false);
 					triangleDrawn = true;			
 				} else
 				if (minusy.getOreLevel() == 0 && 
@@ -393,7 +393,7 @@ public class Chunk {
 					minusx.getOreLevel() == 0 &&
 					plusy.getOreLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch, false);
 					triangleDrawn = true;			
 				} else 
 				if (minusy.getOreLevel() == 0 && 
@@ -401,13 +401,13 @@ public class Chunk {
 					minusx.getOreLevel() == 0 &&
 					plusy.getOreLevel() == 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch, false);
 					triangleDrawn = true;			
 				}
 			}
 		
 			if (!triangleDrawn) {
-				drawTile(SpriteLoader.tileAtlas.findRegion("tiledIron"), batch);
+				drawTile(SpriteLoader.tileAtlas.findRegion("tiledIron"), batch, false);
 			}
 		}
 		
@@ -434,7 +434,7 @@ public class Chunk {
 					minusx.getCreeperLevel() > 0 && 
 					minusy.getCreeperLevel() > 0)
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch, true);
 					triangleDrawn = true;
 				} else
 				if (plusy.getCreeperLevel() == 0 && 
@@ -442,7 +442,7 @@ public class Chunk {
 					plusx.getCreeperLevel() > 0 &&
 				    minusy.getCreeperLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch, true);
 					triangleDrawn = true;
 				} else
 				if (minusy.getCreeperLevel() == 0 && 
@@ -450,7 +450,7 @@ public class Chunk {
 				    plusy.getCreeperLevel() > 0 &&
 				    minusx.getCreeperLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch, true);
 					triangleDrawn = true;
 				} else
 				if (minusy.getCreeperLevel() == 0 && 
@@ -458,7 +458,7 @@ public class Chunk {
 				    plusx.getCreeperLevel() > 0 &&
 				    plusy.getCreeperLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch, true);
 					triangleDrawn = true;
 				} else
 				if (plusy.getCreeperLevel() == 0 && 
@@ -466,7 +466,7 @@ public class Chunk {
 					minusy.getCreeperLevel() == 0 &&
 					minusx.getCreeperLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch, true);
 					triangleDrawn = true;			
 				} else
 				if (plusy.getCreeperLevel() == 0 && 
@@ -474,7 +474,7 @@ public class Chunk {
 					minusy.getCreeperLevel() == 0 &&
 					plusx.getCreeperLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch, true);
 					triangleDrawn = true;			
 				} else
 				if (plusy.getCreeperLevel() == 0 && 
@@ -482,7 +482,7 @@ public class Chunk {
 					minusx.getCreeperLevel() == 0 &&
 					minusy.getCreeperLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch, true);
 					triangleDrawn = true;			
 				} else
 				if (minusy.getCreeperLevel() == 0 && 
@@ -490,7 +490,7 @@ public class Chunk {
 					minusx.getCreeperLevel() == 0 &&
 					plusy.getCreeperLevel() > 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch, true);
 					triangleDrawn = true;			
 				} else 
 				if (minusy.getCreeperLevel() == 0 && 
@@ -498,18 +498,18 @@ public class Chunk {
 					minusx.getCreeperLevel() == 0 &&
 					plusy.getCreeperLevel() == 0)  
 				{
-					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch);
+					drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch, true);
 					triangleDrawn = true;			
 				}
 			}
 		
 			if (!triangleDrawn) {
-				drawTile(SpriteLoader.tileAtlas.findRegion("corr16"), batch);
+				drawTile(SpriteLoader.tileAtlas.findRegion("corr16"), batch, true);
 			}
 		}
 	}
 	
-	protected void drawTile(TextureRegion region, SpriteBatch batch) {
+	protected void drawTile(TextureRegion region, SpriteBatch batch, boolean corr) {
 		final float u1 = region.getU();
 		final float v1 = region.getV2();
 		final float u2 = region.getU2();
@@ -544,11 +544,14 @@ public class Chunk {
 		vertices[Batch.C4] = 0;
 		vertices[Batch.U4] = u2;
 		vertices[Batch.V4] = v1;
-
-		batch.draw(region.getTexture(), vertices, 0, NUM_VERTICES);
+		if (!corr) {
+			batch.draw(region.getTexture(), vertices, 0, NUM_VERTICES);
+		} else {
+			GameScreen.chunks.corruptionQuads.add(new Quad(vertices));
+		}
 	}
 	
-	protected void drawTileTriangle(TextureRegion region, TriangleOrientation orientation, SpriteBatch batch) {
+	protected void drawTileTriangle(TextureRegion region, TriangleOrientation orientation, SpriteBatch batch, boolean corr) {
 		final float u1 = region.getU();
 		final float v1 = region.getV2();
 		final float u2 = region.getU2();
@@ -788,7 +791,11 @@ public class Chunk {
 			break;
 		}
 		
-		batch.draw(region.getTexture(), vertices, 0, NUM_VERTICES);
+		if (!corr) {
+			batch.draw(region.getTexture(), vertices, 0, NUM_VERTICES);
+		} else {
+			GameScreen.chunks.corruptionQuads.add(new Quad(vertices));
+		}
 	}
 	
 	public void setCoalLevel(float level) {
