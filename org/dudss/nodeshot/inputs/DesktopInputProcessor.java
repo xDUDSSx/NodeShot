@@ -12,6 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -239,7 +240,18 @@ public class DesktopInputProcessor implements InputProcessor {
 				//Dragging a connection action //TODO: Maybe implement some info later
 				//System.out.println("drag action --");
 			} 			
-			
+		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.C)) {
+			if (draggingConnection == false) {
+				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE), (int)(worldPos.y/Base.CHUNK_SIZE)).setCreeperLevel(1);
+			}
+		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
+			if (draggingConnection == false) {
+				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) - 1, (int)(worldPos.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
+				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) + 1, (int)(worldPos.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
+				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE), (int)(worldPos.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
+				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE), (int)(worldPos.y/Base.CHUNK_SIZE) + 1).setCreeperLevel(0);
+				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE), (int)(worldPos.y/Base.CHUNK_SIZE) - 1).setCreeperLevel(0);
+			}
 		} else if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			if (draggingConnection == false) {
 				float xPos = previousWorldPos.x - worldPos.x;

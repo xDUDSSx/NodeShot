@@ -29,9 +29,10 @@ public class BasicStorage implements Building, Storage{
 	
 	public boolean full = false;
 	
-	List<ItemType> accepted;
+	   List<ItemType> accepted;
 	
-	private Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
+	protected Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
+	protected Color color = Color.GOLDENROD;
 	
 	public BasicStorage(float cx, float cy) {
 		this.cx = cx;
@@ -76,7 +77,7 @@ public class BasicStorage implements Building, Storage{
 	@Override
 	public void draw(ShapeRenderer r) {	
 		r.set(ShapeType.Filled);
-		r.setColor(Color.GOLDENROD);
+		r.setColor(color);
 		r.rect(x, y, width, height);
 		 
 		if (storage < maxStorage) {
@@ -122,7 +123,6 @@ public class BasicStorage implements Building, Storage{
 	}
 	
 	public void empty() {
-		System.out.println("emtpying");
 		storage = 0;
 		full = false;
 	}

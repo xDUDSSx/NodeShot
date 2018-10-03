@@ -401,7 +401,7 @@ public class GameScreen implements Screen {
     	Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
     	Shaders.blurShader.setUniformf("radius", 1f);
-        Shaders.blurShader.setUniformf("resolution", cam.zoom * 50);
+        Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
     	Shaders.blurShader.end();
 		batch.setShader(Shaders.blurShader);   	
 				
@@ -421,7 +421,7 @@ public class GameScreen implements Screen {
 		Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
     	Shaders.blurShader.setUniformf("radius", 1f);
-    	Shaders.blurShader.setUniformf("resolution", cam.zoom * 50);
+    	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
     	Shaders.blurShader.end();
 		batch.setShader(Shaders.blurShader);   	
 		s = new Sprite(fboB.getColorBufferTexture());
@@ -484,12 +484,12 @@ public class GameScreen implements Screen {
 		
 		batch.setShader(Shaders.defaultShader);
         
-        LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
+        /*LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
         			"\nCalls: " + glProfiler.getCalls() +
         			"\nTexture binding " + glProfiler.getTextureBindings() + 
         			"\nShaderSwitches: " + glProfiler.getShaderSwitches()
         );
-        
+        */
 
         r.setAutoShapeType(true);
         

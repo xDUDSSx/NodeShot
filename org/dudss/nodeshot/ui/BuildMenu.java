@@ -4,11 +4,10 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.CustomMine;
 import org.dudss.nodeshot.buildings.Furnace;
 import org.dudss.nodeshot.buildings.IronMine;
+import org.dudss.nodeshot.buildings.Turret;
 import org.dudss.nodeshot.buildings.CoalMine;
 import org.dudss.nodeshot.buildings.AmmoStorage;
 import org.dudss.nodeshot.buildings.BasicStorage;
-import org.dudss.nodeshot.entities.Connector;
-import org.dudss.nodeshot.entities.Conveyor;
 import org.dudss.nodeshot.entities.ConveyorNode;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -79,16 +78,18 @@ public class BuildMenu extends Window {
 		HorizontalGroup connectors = new HorizontalGroup();
 		HorizontalGroup other = new HorizontalGroup();
 		
-		TextButton coalMineButton = new TextButton("Coal mine", skin, "hoverfont60");
-		TextButton ironMineButton = new TextButton("Iron mine", skin, "hoverfont60");
-		TextButton mine2Button = new TextButton("ConnectorMine", skin, "hoverfont60");
+		TextButton coalMineButton = new TextButton("Coal mine", skin, "hoverfont30");
+		TextButton ironMineButton = new TextButton("Iron mine", skin, "hoverfont30");
+		TextButton mine2Button = new TextButton("ConnectorMine", skin, "hoverfont30");
 		
-		TextButton connectorButton = new TextButton("Connector node", skin, "hoverfont60");
-		TextButton conveyorButton = new TextButton("Conveyor node", skin, "hoverfont60");
+		TextButton connectorButton = new TextButton("Connector node", skin, "hoverfont30");
+		TextButton conveyorButton = new TextButton("Conveyor node", skin, "hoverfont30");
 		
-		TextButton storageButton = new TextButton("Basic storage", skin, "hoverfont60");	
-		TextButton furnaceButton = new TextButton("Furnace", skin, "hoverfont60");		
-		TextButton ammoStorageButton  = new TextButton("Ammo storage", skin, "hoverfont60");	
+		TextButton storageButton = new TextButton("Basic storage", skin, "hoverfont30");	
+		TextButton furnaceButton = new TextButton("Furnace", skin, "hoverfont30");		
+		TextButton ammoStorageButton  = new TextButton("Ammo storage", skin, "hoverfont30");	
+		TextButton turretButton = new TextButton("Turret", skin, "hoverfont30");	
+		storageButton.setSize(100,100);
 		
 		coalMineButton.setSize(500, 150);
 		mines.addActor(coalMineButton);
@@ -101,7 +102,8 @@ public class BuildMenu extends Window {
 		other.addActor(storageButton);
 		other.addActor(ammoStorageButton);
 		other.addActor(furnaceButton);
-		
+		other.addActor(turretButton);
+
 		other.setVisible(false);
 		connectors.setVisible(false);
 		mines.setVisible(false);
@@ -111,7 +113,7 @@ public class BuildMenu extends Window {
 		stack.add(connectors);
 		stack.add(other);
 		
-		table.add(stack).pad(10).fill(true);
+		table.add(stack).pad(10).fill(true);		
 		
 		minesButton.addListener(new ClickListener(){
 			@Override
@@ -216,6 +218,15 @@ public class BuildMenu extends Window {
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtBuilding = new AmmoStorage(0, 0);
+				}		
+		    }
+	    });
+		turretButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new Turret(0, 0);
 				}		
 		    }
 	    });
