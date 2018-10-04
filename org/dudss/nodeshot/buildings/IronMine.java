@@ -4,16 +4,13 @@ import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.ConveyorNode;
-import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.OutputNode;
-import org.dudss.nodeshot.entities.Package;
-import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -36,7 +33,7 @@ public class IronMine extends BasicMine {
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r) {	
+	public void draw(ShapeRenderer r, SpriteBatch batch) {	
 		r.set(ShapeType.Filled);
 		r.setColor(Color.BLUE);
 		r.rect(x, y, width, height);

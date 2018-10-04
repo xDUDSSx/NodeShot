@@ -1,12 +1,10 @@
 package org.dudss.nodeshot.buildings;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.Connector;
-import org.dudss.nodeshot.entities.Conveyor;
 import org.dudss.nodeshot.entities.ConveyorNode;
 import org.dudss.nodeshot.entities.InputNode;
 import org.dudss.nodeshot.entities.Node;
@@ -19,9 +17,9 @@ import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
 
 public class Furnace implements Building, Storage {
 
@@ -108,7 +106,7 @@ public class Furnace implements Building, Storage {
 	}
 
 	@Override
-	public void draw(ShapeRenderer r) {
+	public void draw(ShapeRenderer r, SpriteBatch batch) {
 		r.set(ShapeType.Filled);
 		r.setColor(this.color);
 		r.rect(x, y, width, height);	

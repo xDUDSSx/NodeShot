@@ -11,9 +11,9 @@ import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
 
 public class BasicStorage implements Building, Storage{
 	
@@ -75,7 +75,7 @@ public class BasicStorage implements Building, Storage{
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r) {	
+	public void draw(ShapeRenderer r, SpriteBatch batch) {	
 		r.set(ShapeType.Filled);
 		r.setColor(color);
 		r.rect(x, y, width, height);

@@ -45,6 +45,9 @@ public class SpriteLoader {
 	public static TextureAtlas tileAtlas;
 	public static Texture corrTex;
 	
+	public static Sprite turret;
+	public static Sprite turretHead;
+	
 	public SpriteLoader() {
 	}
 	
@@ -100,6 +103,9 @@ public class SpriteLoader {
 		coalTileLowSprite = new Sprite(coalLowTex);
 		
 		ironTileSprite = new Sprite(ironTex);
+		
+		turret = new Sprite(spriteSheet, 0, 68, 48, 48);
+		turretHead = new Sprite(spriteSheet, 49, 68, 64, 32);
 		
 		double nextTime = System.currentTimeMillis();	
 		System.out.println("Loading finished (time: " + (nextTime - currentTime) + " ms)");

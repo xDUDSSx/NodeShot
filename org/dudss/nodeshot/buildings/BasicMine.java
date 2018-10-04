@@ -9,11 +9,10 @@ import org.dudss.nodeshot.entities.ConveyorNode;
 import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.OutputNode;
 import org.dudss.nodeshot.entities.Package;
-import org.dudss.nodeshot.items.Coal;
-import org.dudss.nodeshot.items.Item;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -80,7 +79,7 @@ public abstract class BasicMine implements Building {
 		}
 		
 		@Override
-		public void draw(ShapeRenderer r) {	
+		public void draw(ShapeRenderer r, SpriteBatch batch) {	
 			r.set(ShapeType.Filled);
 			r.setColor(new Color(Color.argb8888(0.2f, 0.2f, 0.2f, 1f)));
 			r.rect(x, y, width, height);

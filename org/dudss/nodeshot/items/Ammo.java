@@ -7,7 +7,7 @@ import org.dudss.nodeshot.utils.SpriteLoader;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Ammo extends Package implements Item{
+public class Ammo extends Package implements Item {
 	
 	public Sprite ammoSprite = SpriteLoader.packageSprite;
 	

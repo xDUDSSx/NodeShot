@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.buildings.Building;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class BuildingHandler {
@@ -21,9 +22,9 @@ public class BuildingHandler {
 		}
 	}
 	
-	public void drawAll(ShapeRenderer r) {
+	public void drawAll(ShapeRenderer r, SpriteBatch batch) {
 		for (Building b : buildings) {
-			b.draw(r);
+			b.draw(r, batch);
 		}
 	}
 	

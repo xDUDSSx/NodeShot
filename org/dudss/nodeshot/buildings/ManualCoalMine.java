@@ -5,6 +5,7 @@ import org.dudss.nodeshot.screens.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -28,7 +29,7 @@ public class ManualCoalMine extends CustomMine {
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r) {
+	public void draw(ShapeRenderer r, SpriteBatch batch) {
 		r.set(ShapeType.Filled);
 		r.setColor(Color.BLACK);
 		r.rect(x, y, width, height);

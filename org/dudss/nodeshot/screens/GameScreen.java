@@ -533,7 +533,7 @@ public class GameScreen implements Screen {
 
 
         r.begin(ShapeType.Filled);
-        buildingHandler.drawAll(r);
+        buildingHandler.drawAll(r, batch);
         r.end();
         
         //Highlight of the chunk the mouse is hovering on

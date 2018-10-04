@@ -7,9 +7,13 @@ import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
+import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class Turret extends BasicStorage {
@@ -23,12 +27,21 @@ public class Turret extends BasicStorage {
 	
 	int radius = 32;
 	
+	TurretHead head;
+	Sprite turretSprite;
 	
 	public Turret(float cx, float cy) {
 		super(cx, cy);
 		accepted = Arrays.asList(ItemType.AMMO);
 		color = new Color(255/255f, 144/255f, 0, 1.0f);
 		prefabColor = new Color(255/255f, 144/255f, 0, 0.5f);
+		head = new TurretHead(this);
+		turretSprite = new Sprite(SpriteLoader.turret);
+		turretSprite.setPosition(x, y);
+		
+		height = 48;
+		width = 48;
+		
 		maxStorage = 5;
 	}
 
@@ -43,13 +56,35 @@ public class Turret extends BasicStorage {
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r) {	
-		super.draw(r);
+	public void draw(ShapeRenderer r, SpriteBatch batch) {	
+		if (storage < maxStorage) {
+			r.setColor(Color.GREEN);
+		} else {
+			r.setColor(Color.RED);
+		}	
+		r.rectLine(this.x, this.y - 2, this.x + (this.width*((float) (storage/maxStorage))), this.y - 2, 3);
 		
-		if (this.lastShot > SimulationThread.simTick - 8 && storage > 0) {
+		if (this.lastShot > SimulationThread.simTick - 8) {
 			r.setColor(Color.YELLOW);
 			r.rectLine(this.cx, this.cy, lastTarget.x, lastTarget.y, 1f);
 		}
+		
+		r.end();
+		batch.begin();
+		turretSprite.setPosition(x, y); 
+		turretSprite.draw(batch);
+		head.setPosition(cx - 55, cy - 15);
+		head.setOrigin(55, 17);
+		//head.setRotation((float) head.rotation); 
+		head.setRotation((float) head.rotation); 
+		head.draw(batch);
+		/*System.out.println();
+		System.out.println((cx - 55) + "and" + (cy - 15));
+		System.out.println("or: " + cx + "/" + cy);
+		System.out.println((float) head.rotation);
+		*/
+		batch.end();
+		r.begin(ShapeType.Filled);
 	}
 	
 	protected void shoot() {
@@ -57,6 +92,9 @@ public class Turret extends BasicStorage {
 		target = findTarget();
 		if (target != null) {
 			System.out.println("shooting at " + target.x + " " + target.y);
+			System.out.println("aiming...");
+			head.aim(target);
+			
 			lastShot = SimulationThread.simTick;
 			lastTarget = target;			
 			GameScreen.chunks.getChunk((int)(target.x/Base.CHUNK_SIZE) - 1, (int)(target.y/Base.CHUNK_SIZE)).setCreeperLevel(0);

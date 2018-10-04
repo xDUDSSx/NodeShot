@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.buildings;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import org.dudss.nodeshot.entities.Package;
@@ -9,7 +10,7 @@ public interface Building {
 	public void setLocation(float cx, float cy, boolean snap);
 
 	//Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)
-	void draw(ShapeRenderer r);
+	void draw(ShapeRenderer r, SpriteBatch batch);
 	void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap);	
 	
 	//Method used by InputNodes used to alert the building that a following package had been accepted
