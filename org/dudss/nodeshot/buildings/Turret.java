@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
+import org.dudss.nodeshot.entities.Bullet;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
@@ -18,7 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Turret extends BasicStorage {
 
-	int rechargeRate = 16;
+	int rechargeRate = 8;
 	int nextShot = SimulationThread.simTick += rechargeRate;
 	
 	int lastShot = 0;
@@ -26,9 +27,12 @@ public class Turret extends BasicStorage {
 	Vector2 target;
 	
 	int radius = 32;
+	float minStorage = 0.1f;
 	
 	TurretHead head;
 	Sprite turretSprite;
+	
+	Bullet b;
 	
 	public Turret(float cx, float cy) {
 		super(cx, cy);
@@ -37,7 +41,6 @@ public class Turret extends BasicStorage {
 		prefabColor = new Color(255/255f, 144/255f, 0, 0.5f);
 		head = new TurretHead(this);
 		turretSprite = new Sprite(SpriteLoader.turret);
-		turretSprite.setPosition(x, y);
 		
 		height = 48;
 		width = 48;
@@ -45,13 +48,23 @@ public class Turret extends BasicStorage {
 		maxStorage = 5;
 	}
 
+	@Override 
+	public void setLocation(float cx, float cy, boolean snap) {
+		super.setLocation(cx, cy, snap);
+		turretSprite.setPosition(x, y);
+		head.setPosition(this.cx - 56, this.cy - 12);
+	}
+	
 	@Override
 	public void update() {
 		super.update();
-		
-		if (SimulationThread.simTick >= nextShot) {
-			nextShot = SimulationThread.simTick + rechargeRate;
-			shoot();
+
+		if (SimulationThread.simTick >= nextShot && storage >= minStorage) {			
+			boolean shotSuccessful = shoot();
+			if (shotSuccessful) {
+				storage -= minStorage; 
+				nextShot = SimulationThread.simTick + rechargeRate;
+			}			
 		}
 	}
 	
@@ -71,39 +84,29 @@ public class Turret extends BasicStorage {
 		
 		r.end();
 		batch.begin();
-		turretSprite.setPosition(x, y); 
 		turretSprite.draw(batch);
-		head.setPosition(cx - 55, cy - 15);
-		head.setOrigin(55, 17);
-		//head.setRotation((float) head.rotation); 
+		input.draw(batch);
 		head.setRotation((float) head.rotation); 
 		head.draw(batch);
-		/*System.out.println();
-		System.out.println((cx - 55) + "and" + (cy - 15));
-		System.out.println("or: " + cx + "/" + cy);
-		System.out.println((float) head.rotation);
-		*/
 		batch.end();
 		r.begin(ShapeType.Filled);
 	}
 	
-	protected void shoot() {
-		//System.out.println("Shooting!");
+	protected boolean shoot() {
 		target = findTarget();
 		if (target != null) {
-			System.out.println("shooting at " + target.x + " " + target.y);
-			System.out.println("aiming...");
+			
 			head.aim(target);
 			
+			Bullet b = new Bullet(this.cx, this.cy, target);
+			GameScreen.bulletHandler.addBullet(b);
+			
 			lastShot = SimulationThread.simTick;
-			lastTarget = target;			
-			GameScreen.chunks.getChunk((int)(target.x/Base.CHUNK_SIZE) - 1, (int)(target.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
-			GameScreen.chunks.getChunk((int)(target.x/Base.CHUNK_SIZE) + 1, (int)(target.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
-			GameScreen.chunks.getChunk((int)(target.x/Base.CHUNK_SIZE), (int)(target.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
-			GameScreen.chunks.getChunk((int)(target.x/Base.CHUNK_SIZE), (int)(target.y/Base.CHUNK_SIZE) + 1).setCreeperLevel(0);
-			GameScreen.chunks.getChunk((int)(target.x/Base.CHUNK_SIZE), (int)(target.y/Base.CHUNK_SIZE) - 1).setCreeperLevel(0);
+			lastTarget = target;						
 			target = null;
+			return true;
 		}
+		return false;
 	}
 	
 	protected Vector2 findTarget() {
@@ -119,13 +122,13 @@ public class Turret extends BasicStorage {
 	}
 	
 	protected Chunk getClosestChunk() {
-		// (dx, dy) is a vector - direction in which we move right now
+		//(dx, dy) is a vector - direction in which we move right now
         int dx = 0;
         int dy = 1;
         // length of current segment
         int segment_length = 1;
 
-        // current position (x, y) and how much of current segment we passed
+        //current position (x, y) and how much of current segment we passed
         int x = (Math.round(this.x)/Base.CHUNK_SIZE) - 1;
         int y = Math.round(this.y)/Base.CHUNK_SIZE;
         int segment_passed = 0;
@@ -133,22 +136,25 @@ public class Turret extends BasicStorage {
         Chunk chunk;
         
         for (int n = 0; n < radius*radius; ++n) {
-            // make a step, add 'direction' vector (dx, dy) to current position (x, y)
+            //make a step, add "direction" vector (dx, dy) to current position (x, y)
             x += dx;
             y += dy;
             ++segment_passed;
             
-            //System.out.println("Checking chunk at: " + x + "/" + y + " rx: " + GameScreen.chunks.getChunk(x, y).getX() + " ry: " + GameScreen.chunks.getChunk(x, y).getY());
-            if (GameScreen.chunks.getChunk(x, y).getCreeperLevel() > 0) {
-            	chunk = GameScreen.chunks.getChunk(x, y);
-            	return chunk;
+            //Check if the chunk has any corruption in it (Since we are sprialing outwards from the turrets cx, cy, the first corrupted chunk
+            //we encounter is going to be the closest as well (No guarantee that this is the only closest one)
+            chunk = GameScreen.chunks.getChunk(x, y);
+            if (chunk != null) {
+	            if (GameScreen.chunks.getChunk(x, y).getCreeperLevel() > 0) {
+	            	return chunk;
+	            }
             }
             
             if (segment_passed == segment_length) {
-                // done with current segment
+                //done with current segment
                 segment_passed = 0;
 
-                // 'rotate' directions
+                //"rotate" directions
                 int buffer = dy;
                 dy = -dx;
                 dx = buffer;

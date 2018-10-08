@@ -1,22 +1,29 @@
 package org.dudss.nodeshot.terrain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
+import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Chunks {
@@ -24,11 +31,18 @@ public class Chunks {
 	Chunk[][] chunks;
 	public Section[][] sections;
 	
-	List<Quad> corruptionQuads;
-	
+	/**All Section instances that are currently visible by the camera.
+	 * Updated by the updateView() method.
+	 */
 	public List<Section> sectionsInView;
 	
+	/**Time of the last updateView(), used to prevent unnecessary view updates*/
+	public long lastViewPoll = System.currentTimeMillis();
+	/**Minimum delay(ms) inbetween updateView() calls*/
+	public long pollRate = 2;
+	
 	public boolean created = false;
+	public boolean generated = false;
 	
 	Color transparent = new Color(0, 0, 0, 0.0f);
 	
@@ -40,52 +54,112 @@ public class Chunks {
 	Rectangle imageBounds = new Rectangle();
 	
 	//No viewport set, needs to have updateCam() called
-	public void create() {
-		
-		chunks = new Chunk[Base.CHUNK_AMOUNT][Base.CHUNK_AMOUNT];
-		corruptionQuads = new ArrayList<Quad>();		
+	public void create() {		
+		chunks = new Chunk[Base.CHUNK_AMOUNT][Base.CHUNK_AMOUNT];		
 		sections = new Section[Base.CHUNK_AMOUNT/Base.SECTION_SIZE][Base.CHUNK_AMOUNT/Base.SECTION_SIZE];
-		sectionsInView = new ArrayList<Section>();
+		sectionsInView = new CopyOnWriteArrayList<Section>();
 		
+		//Initializing chunks
 		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
 				chunks[x][y] = new Chunk(x * Base.CHUNK_SIZE, y * Base.CHUNK_SIZE);
 			}
 		}
 		
+		//Camera view bounds
 		viewBounds = new Rectangle();
 		imageBounds = new Rectangle();
+		
+		//Initializing sections
+        generateSections();
+        
 		created = true;
 	}
 	
 	public void create(OrthographicCamera cam) {		
 		create();		
-		updateCam(cam);	
+		updateView(cam);	
 	}
 	
-	public void update(Chunk ch) {
+	public void updateChunk(Chunk ch) {
 		ch.update();
 	}
 	
-	public void updateCam(OrthographicCamera cam) {
-		float width = cam.viewportWidth * cam.zoom;
-		float height = cam.viewportHeight * cam.zoom;
-		float w = width * Math.abs(cam.up.y) + height * Math.abs(cam.up.x);
-		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
-		
-		viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
-		sectionsInView.clear();
-		for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
-			for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
-				imageBounds.set(sections[x][y].sectionChunks[0][0].x, sections[x][y].sectionChunks[0][0].y, Base.SECTION_SIZE*Base.CHUNK_SIZE, Base.SECTION_SIZE*Base.CHUNK_SIZE);	
-				if (viewBounds.contains(imageBounds) || viewBounds.overlaps(imageBounds)) {
-					sectionsInView.add(sections[x][y]);
-				}						 
+	public void updateView(OrthographicCamera cam) {
+		if ((lastViewPoll + pollRate) < System.currentTimeMillis()) {
+			float width = cam.viewportWidth * cam.zoom;
+			float height = cam.viewportHeight * cam.zoom;
+			float w = width * Math.abs(cam.up.y) + height * Math.abs(cam.up.x);
+			float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
+			
+			viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
+			
+			//Making a set that will be used later to define if the new view includes new (not yet updated) sections
+			//I can use a Set here since the sectionsInView ArrayList is guaranteed to have no duplicates
+			Set<Section> previousSectionsInView = new HashSet(sectionsInView);
+			
+			sectionsInView.clear();
+			
+			//Checking which sections are in the current view
+			for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
+				for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
+					imageBounds.set(sections[x][y].sectionChunks[0][0].x, sections[x][y].sectionChunks[0][0].y, Base.SECTION_SIZE*Base.CHUNK_SIZE, Base.SECTION_SIZE*Base.CHUNK_SIZE);	
+					if (viewBounds.contains(imageBounds) || viewBounds.overlaps(imageBounds)) {
+						sectionsInView.add(sections[x][y]);
+					}						 
+				}
 			}
-		}		
+			
+			//Getting only the sections that are new in the view and need to be updated
+			Set<Section> differenceSections = new HashSet<Section>(previousSectionsInView);
+			for (Section s : sectionsInView) {
+				if (!differenceSections.add(s) || !sectionsInView.contains(s)) {
+					differenceSections.remove(s);
+				}
+			}
+
+			//All the new sections get updated (just the ones that weren't in the view before}
+			for (Section s : differenceSections) {
+				updateSectionMesh(s, true);	
+				updateSectionMesh(s, false);	
+			}
+						
+			lastViewPoll = System.currentTimeMillis();			
+		}
+	}
+
+	public void updateSectionMesh(Section s, boolean corr) {      
+    	if (!corr) {
+        	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false);
+        	s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
+    	} else {
+        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true);
+        	s.updateCorruptionMesh(mvdCorruption.getVerts(), mvdCorruption.getIndices());
+    	}
 	}
 	
-	public void updateAll() {
+	public void updateSectionMeshes() {
+        for (Section s : sectionsInView) {
+        	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false);
+        	s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
+        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true);
+        	s.updateCorruptionMesh(mvdCorruption.getVerts(), mvdCorruption.getIndices());
+        }
+	}
+	
+	public void updateSectionMeshes(boolean corr) {
+        for (Section s : sectionsInView) {
+        	if (!corr) {
+	        	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false);
+	        	s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
+        	} else {
+	        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true);
+	        	s.updateCorruptionMesh(mvdCorruption.getVerts(), mvdCorruption.getIndices());
+        	}
+        }
+	}
+	
+	public void updateAllChunks() {
 		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
 				chunks[x][y].update();
@@ -93,32 +167,194 @@ public class Chunks {
 		}
 	}
 				
-	public void draw(ShapeRenderer sR, SpriteBatch batch) {
-		corruptionQuads.clear();
-		for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
-			for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
-				imageBounds.set(sections[x][y].sectionChunks[0][0].x, sections[x][y].sectionChunks[0][0].y, Base.SECTION_SIZE*Base.CHUNK_SIZE, Base.SECTION_SIZE*Base.CHUNK_SIZE);	
-				if (viewBounds.contains(imageBounds) || viewBounds.overlaps(imageBounds)) {
-					sections[x][y].draw(batch);		 
-				}						
-			}
-		}	
+	public void drawTerrain() {
+			SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
+		    Shaders.defaultShader.begin();
+		    Shaders.defaultShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
+		    Shaders.defaultShader.setUniformi("u_texture", 0);
+		    for (Section s : sectionsInView) {
+		    	s.getTerrainMesh().setVertices(s.getTerrainVerts());
+		    	s.getTerrainMesh().setIndices(s.getTerrainIndices());	    	
+		    	s.getTerrainMesh().render(Shaders.defaultShader, GL20.GL_TRIANGLES);
+		    }
+		    Shaders.defaultShader.end();	
+	}	
+	
+	public void drawCorruption() {
+		 	Gdx.gl.glEnable(GL20.GL_BLEND);
+	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+	       			
+		    GameScreen.corrBuffer.begin();
+	        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	 		SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
+		    Shaders.defaultShader.begin();
+		    Shaders.defaultShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
+		    Shaders.defaultShader.setUniformi("u_texture", 0);
+	 		for (Section s : sectionsInView) {	    	
+		    	s.getCorruptionMesh().setVertices(s.getCorruptionVerts());
+		    	s.getCorruptionMesh().setIndices(s.getCorruptionIndices());
+		    	s.getCorruptionMesh().render(Shaders.defaultShader, GL20.GL_TRIANGLES);
+		    }
+	 		Shaders.defaultShader.end();
+	 		GameScreen.corrBuffer.end();	
+	 		GameScreen.blurBuffer(GameScreen.corrBuffer, GameScreen.blurBuffer, GameScreen.corrBuffer.getColorBufferTexture(), 0, 0);
+			Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 	
-	public void drawCorruption(SpriteBatch batch) {
-		/*for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
-			for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
-				imageBounds.set(sections[x][y].sectionChunks[0][0].x, sections[x][y].sectionChunks[0][0].y, Base.SECTION_SIZE*Base.CHUNK_SIZE, Base.SECTION_SIZE*Base.CHUNK_SIZE);	
-				if (viewBounds.contains(imageBounds) || viewBounds.overlaps(imageBounds)) {
-					sections[x][y].drawCorruption(batch);		 
-				}						
-			}
-		}	
-		*/
-		for (int i = 0; i < GameScreen.chunks.corruptionQuads.size(); i++) {				
-			batch.draw(SpriteLoader.tileAtlas.findRegion("corr16").getTexture(), GameScreen.chunks.corruptionQuads.get(i).getVertices(), 0, 20);
-		}
-	}	
+	public Mesh generateMesh(Section s, boolean corr) {		
+	    int numberOfRectangles = Base.SECTION_SIZE*Base.SECTION_SIZE;
+	       
+	    int numberOfVertices = 4 * numberOfRectangles;
+	    Mesh mesh = new Mesh(true, numberOfVertices, numberOfRectangles * 6, 
+				new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
+				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+
+	    int vertexPositionValue = 2;
+	    int vertexColorValue = 1;
+	    int vertexTexCordsValue = 2;
+	    
+	    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue;
+
+	    short[] vertexIndices = new short[numberOfRectangles * 6];
+	    float[] verticesWithColor = new float[numberOfVertices * valuesPerVertex];
+
+	    int i = 0;
+	    for (int y = 0; y < Math.sqrt(numberOfRectangles); y++) {
+	    	 for (int x = 0; x < Math.sqrt(numberOfRectangles); x++) {
+	    		Chunk c = s.sectionChunks[x][y];
+	    		 
+				float tileX = c.getX();
+				float tileY = c.getY();						
+				
+	  	        int rectangleOffsetInArray = i * valuesPerVertex * 4;  	        
+	  	        
+	  	        float u = 0;
+	  	        float v = 0;
+	  	        float u2 = 1;
+	  	        float v2 = 1;
+	  	        
+	  	        TextureRegion t = c.getAppropriateTexture(corr);
+	  	        u = t.getU();
+	  	        v = t.getV();
+	  	        u2 = t.getU2();
+	  	        v2 = t.getV2();
+	  	        
+	  	        float f = 0;
+	  	        if (corr) {
+	  	        	f = Color.toFloatBits(1f, 1f, 1f, 0.96f);
+	  	        } else {
+	  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
+	  	        }
+
+	  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY, f, rectangleOffsetInArray, 0);
+	  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY, f, rectangleOffsetInArray, 1);
+	  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 2);
+	  	        setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 3);
+	  	        
+	  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
+	  	        vertexIndices[i * 6 + 1] = (short) (i * 4 + 1);
+	  	        vertexIndices[i * 6 + 2] = (short) (i * 4 + 3);
+	  	        vertexIndices[i * 6 + 3] = (short) (i * 4 + 3);
+	  	        vertexIndices[i * 6 + 4] = (short) (i * 4 + 2);
+	  	        vertexIndices[i * 6 + 5] = (short) (i * 4 + 1);
+	  	        
+	  	        i++;
+	    	 }
+	    }	    
+	    mesh.setVertices(verticesWithColor);
+	    mesh.setIndices(vertexIndices);
+	    if (corr) {
+	    	s.updateCorruptionMesh(verticesWithColor, vertexIndices);
+	    } else {
+	    	s.updateTerrainMesh(verticesWithColor, vertexIndices);
+	    }
+	    
+	    return mesh;
+	}
+	
+	public MeshVertexData generateMeshVertexData(Section s, boolean corr) {		
+	    int numberOfRectangles = Base.SECTION_SIZE*Base.SECTION_SIZE;	       
+	    int numberOfVertices = 4 * numberOfRectangles;
+	    int vertexPositionValue = 2;
+	    int vertexColorValue = 1;
+	    int vertexTexCordsValue = 2;
+	    
+	    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue;
+
+	    short[] vertexIndices = new short[numberOfRectangles * 6];
+	    float[] verticesWithColor = new float[numberOfVertices * valuesPerVertex];
+
+	    int i = 0;
+	    for (int y = 0; y < Math.sqrt(numberOfRectangles); y++) {
+	    	 for (int x = 0; x < Math.sqrt(numberOfRectangles); x++) {
+	    		Chunk c = s.sectionChunks[x][y];
+	    		 
+				float tileX = c.getX();
+				float tileY = c.getY();						
+				
+	  	        int rectangleOffsetInArray = i * valuesPerVertex * 4;  	        
+	  	        
+	  	        float u = 0;
+	  	        float v = 0;
+	  	        float u2 = 1;
+	  	        float v2 = 1;
+	  	        
+	  	        TextureRegion t = c.getAppropriateTexture(corr);
+	  	        u = t.getU();
+	  	        v = t.getV();
+	  	        u2 = t.getU2();
+	  	        v2 = t.getV2();
+	  	        
+	  	        float f = 0;
+	  	        if (corr) {
+	  	        	f = Color.toFloatBits(1f, 1f, 1f, 0.96f);
+	  	        } else {
+	  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
+	  	        }
+
+	  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY, f, rectangleOffsetInArray, 0);
+	  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY, f, rectangleOffsetInArray, 1);
+	  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 2);
+	  	        setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 3);
+	  	        
+	  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
+	  	        vertexIndices[i * 6 + 1] = (short) (i * 4 + 1);
+	  	        vertexIndices[i * 6 + 2] = (short) (i * 4 + 3);
+	  	        vertexIndices[i * 6 + 3] = (short) (i * 4 + 3);
+	  	        vertexIndices[i * 6 + 4] = (short) (i * 4 + 2);
+	  	        vertexIndices[i * 6 + 5] = (short) (i * 4 + 1);
+	  	        
+	  	        i++;
+	    	 }
+	    }	    
+	    
+	    return new MeshVertexData(verticesWithColor, vertexIndices);
+	}
+
+	private void setValuesInArrayForVertex(float[] verticesWithColor, float u, float v, float x, float y, float c, int rectangleOffsetInArray, int vertexNumberInRect) {
+	    int vertexOffsetInArray = rectangleOffsetInArray + vertexNumberInRect * 5;
+
+	    //Can use this to implement fog of war
+	    /*switch (vertexNumberInRect) {
+	    	case 0:
+	    	case 1: c = Color.toFloatBits(1f, 1f, 1f, 1f); break; 
+	    	case 2:  
+	    	case 3: c = Color.toFloatBits(0.5f, 0.5f, 0.5f, 1f);break;
+	    }*/
+	    // x position
+	    verticesWithColor[vertexOffsetInArray + 0] = x;
+	    // y position
+	    verticesWithColor[vertexOffsetInArray + 1] = y;
+	    // color 
+	    verticesWithColor[vertexOffsetInArray + 2] = c;  	    
+	    // u texture coord
+	    verticesWithColor[vertexOffsetInArray + 3] = u;
+	    // v texture coord
+	    verticesWithColor[vertexOffsetInArray + 4] = v;
+	}
+
 	
 	public void setCoalLevel(float level, int x, int y) {
 		chunks[x][y].setCoalLevel(level);
@@ -142,19 +378,65 @@ public class Chunks {
 	public void generateSections() {
 		for (int y = 0; y < Base.CHUNK_AMOUNT; y+=Base.SECTION_SIZE) {
 			for (int x = 0; x < Base.CHUNK_AMOUNT; x+=Base.SECTION_SIZE) {
-
 				Chunk[][] sectionChunks = new Chunk[Base.SECTION_SIZE][Base.SECTION_SIZE];
 				for(int y1 = 0; y1 < Base.SECTION_SIZE; y1++) {
 					for (int x1 = 0; x1 < Base.SECTION_SIZE; x1++) {
-						sectionChunks[x1][y1] = chunks[x + x1][y + y1];
+						sectionChunks[x1][y1] = chunks[x + x1][y + y1]; 
 					}
 				}
 
-				sections[x/Base.SECTION_SIZE][y/Base.SECTION_SIZE] = new Section(sectionChunks);
+				Section s = new Section(sectionChunks);
+				s.terrainMesh = generateMesh(s, false);
+				s.corruptionMesh = generateMesh(s, true);
+				sections[x/Base.SECTION_SIZE][y/Base.SECTION_SIZE] = s;
+				
 			}
 		}
 	}
 
+	public void generateAll() {
+		SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
+		System.out.println("\nGenerating noise (1/2)");
+		float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.5f, 0.018f);
+		sn.randomizeMutatorTable();
+		System.out.println("Generating noise (2/2)");
+		float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.5f, 0.018f);
+		
+		System.out.println("Creating pixmaps");
+		Pixmap coalPixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
+		for (int x1 = 0; x1 < Base.CHUNK_AMOUNT; x1++) {
+			for (int y1 = 0; y1 < Base.CHUNK_AMOUNT; y1++) {   			
+				float newVal = Base.range(coalMap[x1][y1], -1.4f, 1.4f, -1.0f, 1.0f);    
+				
+	    	    //Converting [-1.0,1.0] to [0,1]
+	    	    float val = (((newVal - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
+	     	    coalPixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
+	     		coalPixmap.drawPixel(x1, y1);
+         	}
+		}
+		
+ 	   	Pixmap ironPixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
+ 	   	for (int x2 = 0; x2 < Base.CHUNK_AMOUNT; x2++) {
+ 	   		for (int y2 = 0; y2 < Base.CHUNK_AMOUNT; y2++) {   
+	    		float newVal = Base.range(ironMap[x2][y2], -1.4f, 1.4f, -1.0f, 1.0f);    
+	    		
+	    	    //Converting [-1.0,1.0] to [0,1]
+	    	    float val = (((newVal - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;	    	    
+	     	    ironPixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
+	     		ironPixmap.drawPixel(x2, y2);
+ 	   		}
+ 	   	}
+
+		//CHUNK GEN
+		System.out.println("Generating chunks (n. " + Base.CHUNK_AMOUNT*Base.CHUNK_AMOUNT + ")");
+		System.out.println("Generating coal ore");
+		coalPixmap = generateCoalPatches(coalPixmap);
+		System.out.println("Generating iron ore");
+		ironPixmap = generateIronPatches(ironPixmap);
+		System.out.println("Generating sections");
+		generateSections();
+		generated = true;
+	}
 	
 	public Pixmap generateCoalPatches(Pixmap pixmap) {
 		Pixmap patchPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.RGBA8888);
@@ -162,8 +444,12 @@ public class Chunks {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
 				Color c = new Color(pixmap.getPixel(x, y));
 				//System.out.println("Color val: " + c.r);
-				if (c.r > Base.COAL_THRESHOLD && c.r <= 1.0) {
-					chunks[x][y].setCoalLevel(c.r);
+				if (c.r > Base.COAL_THRESHOLD && c.r <= 1f) {
+					float level = Base.range(c.r, Base.COAL_THRESHOLD, 1f, 0.2f, 1.0f);
+					chunks[x][y].setCoalLevel(level);
+					patchPixmap.drawPixel(x, y, Color.WHITE.toIntBits());
+				} else if (c.r > 1f) {
+					chunks[x][y].setCoalLevel(1.0f);
 					patchPixmap.drawPixel(x, y, Color.WHITE.toIntBits());
 				} else {
 					chunks[x][y].setCoalLevel(-1);
@@ -173,14 +459,19 @@ public class Chunks {
 		}
 		return patchPixmap;
 	}
+	
 	public Pixmap generateIronPatches(Pixmap pixmap) {
 		Pixmap patchPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.RGBA8888);
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
 				Color c = new Color(pixmap.getPixel(x, y));
 				//System.out.println("Color val: " + c.r);
-				if (c.r > Base.IRON_THRESHOLD && c.r <= 1.0) {
-					chunks[x][y].setIronLevel(c.r);
+				if (c.r > Base.IRON_THRESHOLD && c.r <= 1f) {
+					float level = Base.range(c.r, Base.IRON_THRESHOLD, 1f, 0.2f, 1.0f);
+					chunks[x][y].setIronLevel(level);
+					patchPixmap.drawPixel(x, y, Color.WHITE.toIntBits());
+				} else if (c.r > 1f) {
+					chunks[x][y].setIronLevel(1.0f);
 					patchPixmap.drawPixel(x, y, Color.WHITE.toIntBits());
 				} else {
 					chunks[x][y].setIronLevel(-1);
@@ -189,61 +480,5 @@ public class Chunks {
 			}
 		}
 		return patchPixmap;
-	}
-	
-	public void generateAll() {
-		 SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
-         System.out.println("\nGenerating noise (1/2)");
-         float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.35f, 0.018f);
-         sn.randomizeMutatorTable();
-         System.out.println("Generating noise (2/2)");
-         float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.35f, 0.018f);
-         
-         System.out.println("Creating pixmaps");
-         Pixmap pixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
-         for (int x1 = 0; x1 < Base.CHUNK_AMOUNT; x1++) {
-         	for (int y1 = 0; y1 < Base.CHUNK_AMOUNT; y1++) {   
-         		//Sometimes values extend beyond the accepted [-1.0,1.0] range, correct that
-         		if (coalMap[x1][y1] > 1) {
-         			coalMap[x1][y1] = 1.0f;
-         	    }
-         	    if (coalMap[x1][y1] < -1) {
-         	    	coalMap[x1][y1] = -1.0f;
-         	    }
-         	    
-         	    //Converting [-1.0,1.0] to [0,1]
-         	    float val = (((coalMap[x1][y1] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
-         	    pixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
-         		pixmap.drawPixel(x1, y1);
-         	}
-         }
-         
-         Pixmap pixmap2 = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
-         for (int x2 = 0; x2 < Base.CHUNK_AMOUNT; x2++) {
-         	for (int y2 = 0; y2 < Base.CHUNK_AMOUNT; y2++) {   
-         		//Sometimes values extend beyond the accepted [-1.0,1.0] range, correct that
-         		if (ironMap[x2][y2] > 1) {
-         			ironMap[x2][y2] = 1.0f;
-         	    }
-         	    if (ironMap[x2][y2] < -1) {
-         	    	ironMap[x2][y2] = -1.0f;
-         	    }
-         	    
-         	    //Converting [-1.0,1.0] to [0,1]
-         	    float val = (((ironMap[x2][y2] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
-         	    pixmap2.setColor(Color.rgba8888(val, val, val, 1.0f));
-         		pixmap2.drawPixel(x2, y2);
-         	}
-         }
-
-         //CHUNK GEN
-         System.out.println("Generating chunks (n. " + Base.CHUNK_AMOUNT*Base.CHUNK_AMOUNT + ")");
-         create();
-         System.out.println("Generating coal ore");
-         pixmap = generateCoalPatches(pixmap);
-         System.out.println("Generating iron ore");
-         pixmap2 = generateIronPatches(pixmap2);
-         System.out.println("Generating sections");
-         generateSections();
 	}
 }

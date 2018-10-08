@@ -7,8 +7,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.entities.Node;
 
 import com.badlogic.gdx.Gdx;
 

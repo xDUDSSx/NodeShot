@@ -1,4 +1,4 @@
-package org.dudss.nodeshot.terrain;
+package org.dudss.nodeshot.terrain.datasubsets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 

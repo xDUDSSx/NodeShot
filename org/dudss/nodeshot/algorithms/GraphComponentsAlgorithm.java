@@ -3,8 +3,8 @@ package org.dudss.nodeshot.algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.entities.Node;
 
 public class GraphComponentsAlgorithm {
 	

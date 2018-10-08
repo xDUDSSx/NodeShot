@@ -2,8 +2,10 @@ package org.dudss.nodeshot.terrain;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.terrain.datasubsets.Quad;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -19,16 +21,19 @@ public class Section {
 	SubSection nw;
 	SubSection ne;
 	
-	/*int width = size;
-	int height = size;
-	int numberOfTiles = width * height;
-	int numberOfVerticesPerTile = 4;
-	int numberOfVerts = 5 * numberOfVerticesPerTile;
+	Mesh terrainMesh;
+	Mesh corruptionMesh;
 	
-	float verts[] = new float[numberOfTiles*numberOfVerts];	
-	private int n = 0;
-	*/
+	float[] terrainVerts;
+	short[] terrainIndices;
 	
+	float[] corrVerts;
+	short[] corrIndices;
+	
+	/**Section is an object representing a square grid of chunks with a fixed size.
+	 * It also holds vertex info about underlaying chunk terrain and corruption
+	 * @param chunks
+	 */
 	public Section(Chunk[][] chunks) {
 		sectionChunks = chunks;
 		
@@ -37,19 +42,20 @@ public class Section {
 		Chunk[][] nwChunks = new Chunk[size/2][size/2];
 		Chunk[][] neChunks = new Chunk[size/2][size/2];
 		
+		int h = (int)size/2;
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {	
 				if (y < size/2 && x < size/2) {
 					swChunks[x][y] = sectionChunks[x][y];
 				}
 				if (y < size/2 && x >= size/2) {
-					seChunks[x-8][y] = sectionChunks[x][y];
+					seChunks[x-h][y] = sectionChunks[x][y];
 				}
 				if (y >= size/2 && x < size/2) {
-					nwChunks[x][y-8] = sectionChunks[x][y];
+					nwChunks[x][y-h] = sectionChunks[x][y];
 				}
 				if (y >= size/2 && x >= size/2) {
-					neChunks[x-8][y-8] = sectionChunks[x][y];
+					neChunks[x-h][y-h] = sectionChunks[x][y];
 				}
 			}
 		}
@@ -60,7 +66,7 @@ public class Section {
 		ne = new SubSection(neChunks, size/2);
 	}
 	
-	public void draw(SpriteBatch batch) {		
+	/*public void draw(SpriteBatch batch) {		
 		
 		boolean swFull = sw.isFull();
 		boolean seFull = se.isFull();
@@ -113,118 +119,43 @@ public class Section {
 			}
 		}
 	}
+	*/ 	
 	
-	private void drawFullTile() {
-		float[] vertices = new float[20];
-		
-		float x1 = sectionChunks[0][0].getX();
-		float y1 = sectionChunks[0][0].getY();
-		float x2 = sectionChunks[0][0].getX() + this.size*Base.CHUNK_SIZE;
-		float y2 = sectionChunks[0][0].getY() + this.size*Base.CHUNK_SIZE;
-		
-		float u1 = SpriteLoader.tileAtlas.findRegion("corr16").getU();
-		float u2 = SpriteLoader.tileAtlas.findRegion("corr16").getU2();
-		float v1 = SpriteLoader.tileAtlas.findRegion("corr16").getV();
-		float v2 = SpriteLoader.tileAtlas.findRegion("corr16").getV2();
-		
-		vertices[Batch.X1] = x1;
-		vertices[Batch.Y1] = y1;
-		vertices[Batch.C1] = 0;
-		vertices[Batch.U1] = u1;
-		vertices[Batch.V1] = v1;
-
-		vertices[Batch.X2] = x1;
-		vertices[Batch.Y2] = y2;
-		vertices[Batch.C2] = 0;
-		vertices[Batch.U2] = u1;
-		vertices[Batch.V2] = v2;
-
-		vertices[Batch.X3] = x2;
-		vertices[Batch.Y3] = y2;
-		vertices[Batch.C3] = 0;
-		vertices[Batch.U3] = u2;
-		vertices[Batch.V3] = v2;
-
-		vertices[Batch.X4] = x2;
-		vertices[Batch.Y4] = y1;
-		vertices[Batch.C4] = 0;
-		vertices[Batch.U4] = u2;
-		vertices[Batch.V4] = v1;
-		
-		GameScreen.chunks.corruptionQuads.add(new Quad(vertices));
+	public Chunk getChunk(int x, int y) {
+		return sectionChunks[x][y];
 	}
 	
-	/**
-	int i =>
-	+-----+-----+
-	| nw3 | ne4 |
-	+-----+-----+
-	| sw1 | se2 |
-	+-----+-----+
-	*/
-	private void drawFullSubTile(int i) {
-		float[] vertices = new float[20];
-		float x1 = 0;
-		float x2 = 0;
-		float y1 = 0;
-		float y2 = 0;
-		
-		switch(i) {
-			case 1: 
-				x1 = sectionChunks[0][0].getX();
-				y1 = sectionChunks[0][0].getY();
-				x2 = sectionChunks[0][0].getX() + (this.size/2)*Base.CHUNK_SIZE;
-				y2 = sectionChunks[0][0].getY() + (this.size/2)*Base.CHUNK_SIZE;		
-				break;
-			case 2: 
-				x1 = sectionChunks[8][0].getX();
-				y1 = sectionChunks[8][0].getY();
-				x2 = sectionChunks[8][0].getX() + (this.size/2)*Base.CHUNK_SIZE;
-				y2 = sectionChunks[8][0].getY() + (this.size/2)*Base.CHUNK_SIZE;		
-				break;
-			case 3: 
-				x1 = sectionChunks[0][8].getX();
-				y1 = sectionChunks[0][8].getY();
-				x2 = sectionChunks[0][8].getX() + (this.size/2)*Base.CHUNK_SIZE;
-				y2 = sectionChunks[0][8].getY() + (this.size/2)*Base.CHUNK_SIZE;		
-				break;
-			case 4: 
-				x1 = sectionChunks[8][8].getX();
-				y1 = sectionChunks[8][8].getY();
-				x2 = sectionChunks[8][8].getX() + (this.size/2)*Base.CHUNK_SIZE;
-				y2 = sectionChunks[8][8].getY() + (this.size/2)*Base.CHUNK_SIZE;		
-				break;
-		}
-		
-		float u1 = SpriteLoader.tileAtlas.findRegion("corr16").getU();
-		float u2 = SpriteLoader.tileAtlas.findRegion("corr16").getU2();
-		float v1 = SpriteLoader.tileAtlas.findRegion("corr16").getV();
-		float v2 = SpriteLoader.tileAtlas.findRegion("corr16").getV2();
-		
-		vertices[Batch.X1] = x1;
-		vertices[Batch.Y1] = y1;
-		vertices[Batch.C1] = 0;
-		vertices[Batch.U1] = u1;
-		vertices[Batch.V1] = v1;
-
-		vertices[Batch.X2] = x1;
-		vertices[Batch.Y2] = y2;
-		vertices[Batch.C2] = 0;
-		vertices[Batch.U2] = u1;
-		vertices[Batch.V2] = v2;
-
-		vertices[Batch.X3] = x2;
-		vertices[Batch.Y3] = y2;
-		vertices[Batch.C3] = 0;
-		vertices[Batch.U3] = u2;
-		vertices[Batch.V3] = v2;
-
-		vertices[Batch.X4] = x2;
-		vertices[Batch.Y4] = y1;
-		vertices[Batch.C4] = 0;
-		vertices[Batch.U4] = u2;
-		vertices[Batch.V4] = v1;
-		
-		GameScreen.chunks.corruptionQuads.add(new Quad(vertices));
+	public void updateTerrainMesh(float[] verts, short[] indices) {
+		this.terrainVerts = verts;
+		this.terrainIndices = indices;
+	}
+	
+	public float[] getTerrainVerts() {
+		return terrainVerts;
+	}
+	
+	public short[] getTerrainIndices() {
+		return terrainIndices;
+	}
+	
+	public Mesh getTerrainMesh() {
+		return terrainMesh;
+	}
+	
+	public void updateCorruptionMesh(float[] verts, short[] indices) {
+		this.corrVerts = verts;
+		this.corrIndices = indices;
+	}
+	
+	public float[] getCorruptionVerts() {
+		return corrVerts;
+	}
+	
+	public short[] getCorruptionIndices() {
+		return corrIndices;
+	}
+	
+	public Mesh getCorruptionMesh() {
+		return corruptionMesh;
 	}
 }

@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class SpriteLoader {
 	
 	public static Texture spriteSheet;
+	public static Texture gridOverlay;
+	public static Texture gridOverlay2;
+	
+	
 	public static Texture savanaTex;
 	
 	public static Texture ironTex;
@@ -47,6 +51,7 @@ public class SpriteLoader {
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
+	public static Sprite bullet;
 	
 	public SpriteLoader() {
 	}
@@ -56,6 +61,7 @@ public class SpriteLoader {
 		double currentTime = System.currentTimeMillis();
 		if (Gdx.app.getType() == ApplicationType.Android) {
         	spriteSheet = new Texture(Gdx.files.internal("spritesheet16x16.png"));
+        	gridOverlay = new Texture(Gdx.files.internal("res/sectionGridOverlay.png"));
         	savanaTex = new Texture(Gdx.files.internal("res/seamlesssand32.png"));
         	ironTex = new Texture(Gdx.files.internal("tiledTex.png"));
         	coalTex = new Texture(Gdx.files.internal("tiledCoal.png"));
@@ -64,6 +70,8 @@ public class SpriteLoader {
         	tileAtlas = new TextureAtlas(Gdx.files.internal("tiles.atlas"));
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
         	spriteSheet = new Texture("res/spritesheet16x16.png");
+        	gridOverlay = new Texture("res/sectionGridOverlay.png");
+        	gridOverlay2 = new Texture("res/sectionGridOverlay2.png");
         	savanaTex = new Texture("res/seamlesssand32.png");
         	ironTex = new Texture("res/tiledIron.png");
         	coalTex = new Texture("res/tiledCoal.png");
@@ -105,7 +113,8 @@ public class SpriteLoader {
 		ironTileSprite = new Sprite(ironTex);
 		
 		turret = new Sprite(spriteSheet, 0, 68, 48, 48);
-		turretHead = new Sprite(spriteSheet, 49, 68, 64, 32);
+		turretHead = new Sprite(spriteSheet, 49, 68, 64, 23);
+		bullet = new Sprite(spriteSheet, 49, 92, 7, 3);
 		
 		double nextTime = System.currentTimeMillis();	
 		System.out.println("Loading finished (time: " + (nextTime - currentTime) + " ms)");

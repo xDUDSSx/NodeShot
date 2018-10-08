@@ -25,7 +25,7 @@ import static org.dudss.nodeshot.screens.GameScreen.zooming;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.entities.Entity.EntityType;
-import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.screens.GameScreen.MouseType;
 import org.dudss.nodeshot.utils.Selector;

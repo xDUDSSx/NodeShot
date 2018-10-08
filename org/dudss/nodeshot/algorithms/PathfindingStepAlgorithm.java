@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.algorithms.GraphComponentsAlgorithm;
+import org.dudss.nodeshot.entities.nodes.Node;
 
 public class PathfindingStepAlgorithm {
 	

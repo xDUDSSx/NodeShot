@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.InputNode;
-import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.nodes.InputNode;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.screens.GameScreen;
 
@@ -112,8 +112,9 @@ public class BasicStorage implements Building, Storage{
 	@Override
 	public void build() {
 		input = new InputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
-		GameScreen.nodelist.add(input);
+		//GameScreen.nodelist.add(input);
 		GameScreen.buildingHandler.addBuilding(this);
+		GameScreen.nodelist.add(input);
 	}
 
 	@Override

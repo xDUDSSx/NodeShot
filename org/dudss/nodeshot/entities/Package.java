@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.misc.PathHandler;
 import org.dudss.nodeshot.screens.GameScreen;

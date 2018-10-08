@@ -4,8 +4,8 @@ import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.entities.ConveyorNode;
-import org.dudss.nodeshot.entities.OutputNode;
+import org.dudss.nodeshot.entities.nodes.ConveyorNode;
+import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.screens.GameScreen;
 

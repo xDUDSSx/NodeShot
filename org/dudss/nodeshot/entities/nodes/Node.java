@@ -1,4 +1,4 @@
-package org.dudss.nodeshot.entities;
+package org.dudss.nodeshot.entities.nodes;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -11,6 +11,11 @@ import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.SpriteLoader;
 import org.dudss.nodeshot.algorithms.PathfindingDistanceAlgorithm;
 import org.dudss.nodeshot.algorithms.PathfindingStepAlgorithm;
+import org.dudss.nodeshot.entities.Entity;
+import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.Entity.EntityType;
+import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -301,7 +306,7 @@ public class Node extends Sprite implements Entity {
 
 		Connector toBeRemoved = null;
 		for (Connector nC : this.connectors) {
-			if (nC.to == node) {
+			if (nC.getTo() == node) {
 				toBeRemoved = nC;
 			}
 			if (toBeRemoved != null) {

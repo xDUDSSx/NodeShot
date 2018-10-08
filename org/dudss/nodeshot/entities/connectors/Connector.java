@@ -1,4 +1,4 @@
-package org.dudss.nodeshot.entities;
+package org.dudss.nodeshot.entities.connectors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.entities.Entity;
+import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.Entity.EntityType;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import java.util.List;

@@ -2,14 +2,15 @@ package org.dudss.nodeshot;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
-import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Entity;
-import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
-import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.nodes.Node;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,12 +45,10 @@ public class Base {
 	static int paint_spacing = 2;
 	
 	//TERRAIN
-
-
-	public static int WORLD_SIZE = 3072*2;
+	public static int WORLD_SIZE = 4096;
 	
-	public static float COAL_THRESHOLD = 0.94f;
-	public static float IRON_THRESHOLD = 0.93f;
+	public static float COAL_THRESHOLD = 0.85f;
+	public static float IRON_THRESHOLD = 0.85f;
 	
 	public static int CHUNK_SIZE = 16;
 	public static int SECTION_SIZE = 16;

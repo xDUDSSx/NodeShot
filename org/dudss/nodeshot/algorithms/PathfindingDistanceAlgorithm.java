@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.Connector;
-import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
 public class PathfindingDistanceAlgorithm {

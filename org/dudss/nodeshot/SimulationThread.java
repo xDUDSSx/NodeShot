@@ -1,6 +1,6 @@
 package org.dudss.nodeshot;
 
-import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
 //SIMULATION THREAD
@@ -8,7 +8,7 @@ public class SimulationThread implements Runnable {
     //double interpolation; //TODO: implement interpolation
 	int loops;
  
-    public static int TICKS_PER_SECOND = 24;
+    public static int TICKS_PER_SECOND = 30;
     static int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     int MAX_FRAMESKIP = 15; //30 (15)
     long next_game_tick = getTickCount() + SKIP_TICKS;
@@ -49,7 +49,7 @@ public class SimulationThread implements Runnable {
    							+ "decreasing simFac (" + prevSimFac + "->" + simFac + ")");
    					*/
    				} else if (GameScreen.simFac < 1.0) {
-   					System.out.println("Sim thread is keeping up.");
+   					//System.out.println("Sim thread is keeping up.");
    					GameScreen.simFac = 1.0;
    				}
    				
@@ -103,11 +103,14 @@ public class SimulationThread implements Runnable {
 		}
 		*/
 		
+		//Updating projectiles
+		GameScreen.bulletHandler.updateAll();
+		
 		//Updating all chunks
 		if (simTick >= next_chunk_tick) {
 			next_chunk_tick += 10;
-			System.out.println("update");
-			GameScreen.chunks.updateAll();
+			GameScreen.chunks.updateAllChunks();
+			GameScreen.chunks.updateSectionMeshes(true);
 		}		
 		
 		//Updating pathHandler logic

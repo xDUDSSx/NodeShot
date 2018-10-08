@@ -1,7 +1,9 @@
-package org.dudss.nodeshot.entities;
+package org.dudss.nodeshot.entities.connectors;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
+import org.dudss.nodeshot.entities.nodes.Node;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

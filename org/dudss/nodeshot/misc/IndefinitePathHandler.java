@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.Connector;
-import org.dudss.nodeshot.entities.Conveyor;
-import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.Entity.EntityType;
+import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
+import org.dudss.nodeshot.entities.nodes.Node;
 
 public class IndefinitePathHandler implements PathHandler {
 

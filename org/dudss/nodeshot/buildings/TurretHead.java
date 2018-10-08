@@ -18,8 +18,8 @@ public class TurretHead extends Sprite  {
 		cx = turret.cx;
 		cy = turret.cy;
 		this.set(new Sprite(SpriteLoader.turretHead));
-		this.setPosition(cx - 55, cy - 15);
-		this.setOrigin(cx, cy);
+		this.setPosition(cx - 56, cy - 12);
+		this.setOrigin(56, 12);
 	}
 	
 	public boolean inPosition() {

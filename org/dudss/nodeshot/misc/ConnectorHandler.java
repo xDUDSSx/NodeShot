@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
-import org.dudss.nodeshot.entities.Connector;
+import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.nodes.Node;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;

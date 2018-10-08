@@ -1,4 +1,4 @@
-package org.dudss.nodeshot.entities;
+package org.dudss.nodeshot.entities.nodes;
 
 import org.dudss.nodeshot.utils.SpriteLoader;
 

@@ -5,11 +5,12 @@ import org.dudss.nodeshot.buildings.CustomMine;
 import org.dudss.nodeshot.buildings.Furnace;
 import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.Turret;
+import org.dudss.nodeshot.buildings.TurretCheat;
 import org.dudss.nodeshot.buildings.CoalMine;
 import org.dudss.nodeshot.buildings.AmmoStorage;
 import org.dudss.nodeshot.buildings.BasicStorage;
-import org.dudss.nodeshot.entities.ConveyorNode;
-import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.entities.nodes.ConveyorNode;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.Gdx;
@@ -54,11 +55,11 @@ public class BuildMenu extends Window {
 	}
 	
 	private void setSize() {
-		this.setBounds(64 + 10 + 10, 10, Gdx.graphics.getWidth() - (64*1) - (10*2) - 10, (float) (Gdx.graphics.getHeight() * 0.2));
+		this.setBounds(64 + 10 + 10, 10, Gdx.graphics.getWidth() - (64*1) - (10*2) - 10, (float) (Gdx.graphics.getHeight() * 0.16));
 	}
 	
 	private void init() {
-		Label emptyLabel = new Label("", skin, "font30");
+		Label emptyLabel = new Label("", skin, "font15");
 		TextButton minesButton = new TextButton("Mines", skin, "hoverfont30");		
 		TextButton nodesButton = new TextButton("Nodes", skin, "hoverfont30");
 		TextButton otherButton = new TextButton("Other", skin, "hoverfont30");		
@@ -89,6 +90,7 @@ public class BuildMenu extends Window {
 		TextButton furnaceButton = new TextButton("Furnace", skin, "hoverfont30");		
 		TextButton ammoStorageButton  = new TextButton("Ammo storage", skin, "hoverfont30");	
 		TextButton turretButton = new TextButton("Turret", skin, "hoverfont30");	
+		TextButton turretCheatButton = new TextButton("Turret Unlimited", skin, "hoverfont30");	
 		storageButton.setSize(100,100);
 		
 		coalMineButton.setSize(500, 150);
@@ -103,6 +105,7 @@ public class BuildMenu extends Window {
 		other.addActor(ammoStorageButton);
 		other.addActor(furnaceButton);
 		other.addActor(turretButton);
+		other.addActor(turretCheatButton);
 
 		other.setVisible(false);
 		connectors.setVisible(false);
@@ -227,6 +230,15 @@ public class BuildMenu extends Window {
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtBuilding = new Turret(0, 0);
+				}		
+		    }
+	    });
+		turretCheatButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new TurretCheat(0, 0);
 				}		
 		    }
 	    });

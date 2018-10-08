@@ -1,9 +1,9 @@
 package org.dudss.nodeshot.inputs;
 
-import org.dudss.nodeshot.entities.ConveyorNode;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
-import org.dudss.nodeshot.entities.Node;
+import org.dudss.nodeshot.entities.nodes.ConveyorNode;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -19,7 +19,11 @@ import com.badlogic.gdx.math.Vector3;
 
 import static org.dudss.nodeshot.screens.GameScreen.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.ManualCoalMine;
@@ -59,9 +63,25 @@ public class DesktopInputProcessor implements InputProcessor {
 				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {
 					GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true);
 					GameScreen.builtBuilding.build();
-					GameScreen.builtBuilding = null;
-					GameScreen.builtConnector = null;
-					GameScreen.buildMode = false;
+					
+					if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
+						try {
+							builtBuilding.getClass();						
+							Class<? extends Building> buildingClass = GameScreen.builtBuilding.getClass();
+							Constructor buildingConstructor;
+							buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
+							Object[]    buildingArgs             = new Object[] { new Float(0), new Float(0) };
+							GameScreen.builtBuilding = (Building) buildingConstructor.newInstance(buildingArgs);		
+						} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
+								| InvocationTargetException e) {
+							e.printStackTrace();
+						}
+											
+					} else {
+						GameScreen.builtBuilding = null;
+						GameScreen.builtConnector = null;
+						GameScreen.buildMode = false;
+					}
 				} else if (GameScreen.builtConnector != null) {
 					Node newNode = null;
 					if (builtConnector instanceof ConveyorNode) {					
@@ -126,10 +146,6 @@ public class DesktopInputProcessor implements InputProcessor {
 						nodelist.get(nodelist.size() - 1).remove();
 					}
 				}			
-				if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
-					Building coalStorage = new BasicStorage(worldPos.x, worldPos.y);
-					coalStorage.build();
-				}
 			break;
 				case Input.Buttons.MIDDLE: mouseX = Gdx.input.getX();
 				mouseY = Gdx.input.getY();		
@@ -139,11 +155,6 @@ public class DesktopInputProcessor implements InputProcessor {
 				worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
 				lastMousePress = worldPos;
 				lastMousePressType = MouseType.MOUSE_2;
-				
-				if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
-					Building ironMine = new IronMine(worldPos.x, worldPos.y);
-					ironMine.build();
-				}
 		}
 		return false;
 	}
@@ -196,7 +207,8 @@ public class DesktopInputProcessor implements InputProcessor {
 						
 						newConnectionFromIndex = selectedIndex;				
 					}
-						draggingConnection = false;
+					draggingConnection = false;
+					buildMode = false;
 					}
 				}
 			break;
@@ -235,6 +247,7 @@ public class DesktopInputProcessor implements InputProcessor {
 	            if (distance <= highlightedNode.radius) {
 	                newConnectionFromIndex = highlightedNode.getIndex();
 	                draggingConnection = true;
+	                buildMode = true;
 	            }
 			} else if (selectedIndex != -1 && draggingConnection == true ) {
 				//Dragging a connection action //TODO: Maybe implement some info later
@@ -256,13 +269,15 @@ public class DesktopInputProcessor implements InputProcessor {
 			if (draggingConnection == false) {
 				float xPos = previousWorldPos.x - worldPos.x;
 				float yPos = previousWorldPos.y - worldPos.y;
-				cam.translate(xPos, yPos, 0);		
+				cam.translate(xPos, yPos, 0);					
+				GameScreen.chunks.updateView(cam);
 			}
 		} else if (Gdx.input.isButtonPressed(Buttons.MIDDLE)) {
 			if (draggingConnection == false) {
 				float xPos = previousWorldPos.x - worldPos.x;
 				float yPos = previousWorldPos.y - worldPos.y;
-				cam.translate(xPos, yPos, 0);		
+				cam.translate(xPos, yPos, 0);	
+				GameScreen.chunks.updateView(cam);
 			}
 		}
 		
@@ -295,9 +310,13 @@ public class DesktopInputProcessor implements InputProcessor {
 		GameScreen.rightClickMenuManager.removeMenu();
 		
 		if (amount == 1) {
-			cam.zoom += 0.08;
+			cam.zoom += 0.2f;
+			cam.zoom = Base.round(cam.zoom, 2);
+			GameScreen.chunks.updateView(cam);
 		} else {
-			cam.zoom -= 0.08;
+			cam.zoom -= 0.2f;
+			cam.zoom = Base.round(cam.zoom, 2);
+			GameScreen.chunks.updateView(cam);
 		}
 		return false;
 	}

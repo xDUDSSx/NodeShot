@@ -18,7 +18,7 @@ public class Shaders {
                 "varying vec2 v_texCoords;" + 
                 "void main()                  \n" + 
                 "{                            \n" + 
-                "   v_color = vec4(1, 1, 1, 1); \n" + 
+                "   v_color = a_color; \n" + 
                 "   v_texCoords = a_texCoord0; \n" + 
                 "   gl_Position =  u_projTrans * a_position;  \n"      + 
                 "}                            \n" ;

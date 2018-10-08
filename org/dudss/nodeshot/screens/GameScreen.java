@@ -1,5 +1,7 @@
 package org.dudss.nodeshot.screens;
 
+import static org.dudss.nodeshot.screens.GameScreen.cam;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -11,28 +13,31 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
 import org.dudss.nodeshot.buildings.Building;
-import org.dudss.nodeshot.entities.Connector;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
-import org.dudss.nodeshot.entities.InputNode;
-import org.dudss.nodeshot.entities.Node;
-import org.dudss.nodeshot.entities.OutputNode;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.nodes.InputNode;
+import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.inputs.DesktopInputProcessor;
 import org.dudss.nodeshot.inputs.MobileGestureListener;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.misc.BuildingHandler;
+import org.dudss.nodeshot.misc.BulletHandler;
 import org.dudss.nodeshot.misc.ConnectorHandler;
 import org.dudss.nodeshot.misc.PackageHandler;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
+import org.dudss.nodeshot.terrain.Section;
 import org.dudss.nodeshot.ui.BuildMenu;
 import org.dudss.nodeshot.ui.HudMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
+
 import org.poly2tri.Poly2Tri;
 import org.poly2tri.geometry.polygon.PolygonPoint;
 import org.poly2tri.triangulation.TriangulationPoint;
@@ -46,6 +51,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -108,8 +114,11 @@ public class GameScreen implements Screen {
 
 	//Handlers
 	public static PackageHandler packageHandler;
+	
+	//Handlers with internal collections
 	public static ConnectorHandler connectorHandler;
 	public static BuildingHandler buildingHandler;
+	public static BulletHandler bulletHandler;
 
 	static Boolean NodeInfoHidden = false;
 	public static Boolean NodeSelectiveInfo = true;
@@ -144,17 +153,8 @@ public class GameScreen implements Screen {
 
 	//Terrain
 	public static Chunks chunks;
-	static Pixmap pixmap;
-	static Pixmap pixmap2;
-	static Texture pixtex;
-	static Sprite pixsprite;
 	public static Chunk hoverChunk = null;
-
-	public static Rectangle viewBounds;	
-	public static Rectangle imageBounds;
 	
-	public static Sprite toolSprite;
-
 	public static float viewportWidth = 300f;
     FreeTypeFontGenerator generator;
 	
@@ -163,7 +163,7 @@ public class GameScreen implements Screen {
 	public static Node builtConnector = null;
 	
     //libGDX
-    SpriteBatch batch;
+    static SpriteBatch batch;
     Texture img;
     ShapeRenderer r;
     
@@ -174,7 +174,6 @@ public class GameScreen implements Screen {
     public static Vector3 lastCamePos;
     public float lastZoom;
     public static Boolean zooming = false;
-    public static GLProfiler glProfiler;
     
     TextureAtlas atlas;
     
@@ -190,6 +189,8 @@ public class GameScreen implements Screen {
     public static BuildMenu buildMenu;
     public static HudMenu hudMenu;
     
+    public static GLProfiler glProfiler;
+    
     public static FrameBuffer corrBuffer;
     public static FrameBuffer fboA;
     public static FrameBuffer blurBuffer;
@@ -202,16 +203,9 @@ public class GameScreen implements Screen {
         packageHandler = new PackageHandler();
         connectorHandler = new ConnectorHandler();
         buildingHandler = new BuildingHandler();       
+        bulletHandler = new BulletHandler();  
         chunks = new Chunks();        
         rightClickMenuManager = new RightClickMenuManager();             
-	
-        if (Gdx.app.getType() == ApplicationType.Android) {
-        	Texture tooltex = new Texture(Gdx.files.internal("res/tools_icon_button64.png"));
-        	toolSprite = new Sprite(tooltex);
-        } else if (Gdx.app.getType() == ApplicationType.Desktop) {
-        	Texture tooltex = new Texture("res/tools_icon_button64.png");
-        	toolSprite = new Sprite(tooltex);
-        }
         
         //Loading item sprites
         Shaders.load();
@@ -219,51 +213,6 @@ public class GameScreen implements Screen {
         
         //LineWidth
         Gdx.gl.glLineWidth(2);
-        
-        //Terrain generation
-        SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
-        float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.5f, 0.015f);
-        sn.randomizeMutatorTable();
-        float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.5f, 0.015f);
-        
-        pixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
-        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {   
-        		//Sometimes values extend beyond the accepted [-1.0,1.0] range, correct that
-        		if (coalMap[x][y] > 1) {
-        			coalMap[x][y] = 1.0f;
-        	    }
-        	    if (coalMap[x][y] < -1) {
-        	    	coalMap[x][y] = -1.0f;
-        	    }
-        	    
-        	    //Converting [-1.0,1.0] to [0,1]
-        	    float val = (((coalMap[x][y] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
-        	    pixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
-        		pixmap.drawPixel(x, y);
-        	}
-        }
-        
-        pixmap2 = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
-        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {   
-        		//Sometimes values extend beyond the accepted [-1.0,1.0] range, correct that
-        		if (ironMap[x][y] > 1) {
-        			ironMap[x][y] = 1.0f;
-        	    }
-        	    if (ironMap[x][y] < -1) {
-        	    	ironMap[x][y] = -1.0f;
-        	    }
-        	    
-        	    //Converting [-1.0,1.0] to [0,1]
-        	    float val = (((ironMap[x][y] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;
-        	    pixmap2.setColor(Color.rgba8888(val, val, val, 1.0f));
-        		pixmap2.drawPixel(x, y);
-        	}
-        }
-        
-        pixtex = new Texture(pixmap);
-        pixsprite = new Sprite(pixtex);
     }
 
     public static int getWidth() {return WIDTH;}
@@ -273,7 +222,7 @@ public class GameScreen implements Screen {
     public void show() {
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
-               
+              
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
         if (lastCamePos == null) {
@@ -354,21 +303,13 @@ public class GameScreen implements Screen {
         }  
         Gdx.input.setInputProcessor(multiplexer); 
         
+        chunks.create(cam);
         //Generate terrain if not generated already
-        if (chunks.created == false) {
+        if (chunks.generated == false) {       	
         	chunks.generateAll();
         }
-        viewBounds = new Rectangle();
-        imageBounds = new Rectangle();
-        
-        //A render optimization rectangle that tells the renderer which objects are out of sight
-        float width = cam.viewportWidth * cam.zoom;
-		float height = cam.viewportHeight * cam.zoom;
-		float w = width * Math.abs(cam.up.y) + height * Math.abs(cam.up.x);
-		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
-        viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
-        
-        Circle c = new Circle(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.WORLD_SIZE/2 - 200);
+      
+        Circle c = new Circle(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.WORLD_SIZE/2 + 200);
         for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
     		for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
     			Rectangle rect = new Rectangle(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());    			
@@ -395,70 +336,7 @@ public class GameScreen implements Screen {
     public void hide() {
 
     }
-    
-    private void drawTexture(FrameBuffer fboA, FrameBuffer fboB, Texture texture, float x, float y) {
-    	fboB.begin();
-    	Shaders.blurShader.begin();
-    	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
-    	Shaders.blurShader.setUniformf("radius", 1f);
-        Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
-    	Shaders.blurShader.end();
-		batch.setShader(Shaders.blurShader);   	
-				
-		Sprite s = new Sprite(texture);
-		Matrix4 m = new Matrix4();
-		m.setToOrtho2D(0, 0, fboA.getWidth(), fboA.getHeight());
-		batch.setProjectionMatrix(m);	
 
-		s.flip(false, true);
-		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		s.draw(batch);
-		batch.end();
-		fboB.end();
-		
-		Shaders.blurShader.begin();
-    	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
-    	Shaders.blurShader.setUniformf("radius", 1f);
-    	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
-    	Shaders.blurShader.end();
-		batch.setShader(Shaders.blurShader);   	
-		s = new Sprite(fboB.getColorBufferTexture());
-		m.setToOrtho2D(0, 0, fboB.getWidth(), fboB.getHeight());		
-		batch.setProjectionMatrix(m);
-		
-		s.flip(false, true);
-		batch.begin();
-		s.draw(batch);
-		batch.end();
-		
-		batch.setProjectionMatrix(cam.combined);
-	}   
-    
-    void drawCorruption(SpriteBatch batch) {
-    	corrBuffer.begin();
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
- 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        chunks.drawCorruption(batch);
- 		batch.end();
- 		corrBuffer.end();
- 						
-		/*Sprite s = new Sprite(corrBuffer.getColorBufferTexture());
-		Matrix4 m = new Matrix4();
-		m.setToOrtho2D(0, 0, corrBuffer.getWidth(), corrBuffer.getHeight());		
-		batch.setProjectionMatrix(m);
-		
-		s.flip(false, true);
-		batch.begin();
-		s.draw(batch);
- 		batch.end();
- 		*/
- 		
- 		drawTexture(corrBuffer, blurBuffer, corrBuffer.getColorBufferTexture(), 0, 0);
-    }
-    
     @Override
     public void render (float delta) {
         handleInput();
@@ -471,16 +349,17 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
      
         glProfiler.reset();        
-        
-        batch.begin();
-        drawBackgroundSand(batch);      
-        batch.end();
-        
-        batch.begin();
-		chunks.draw(r, batch); 
-		batch.end();
 		
-		drawCorruption(batch);
+        chunks.drawTerrain();
+        
+		if (buildMode == true) {
+			batch.begin();    	        
+	        for (Section s : chunks.sectionsInView) {	   
+	        	Chunk c = s.getChunk(0, 0);	        	
+	        	batch.draw(SpriteLoader.gridOverlay2, c.getX() , c.getY(), 256, 256);	
+	        }
+	        batch.end();
+		}
 		
 		batch.setShader(Shaders.defaultShader);
         
@@ -488,49 +367,33 @@ public class GameScreen implements Screen {
         			"\nCalls: " + glProfiler.getCalls() +
         			"\nTexture binding " + glProfiler.getTextureBindings() + 
         			"\nShaderSwitches: " + glProfiler.getShaderSwitches()
-        );
-        */
+        );*/
 
-        r.setAutoShapeType(true);
-        
+        r.setAutoShapeType(true);      
         if (buildMode == true) {
 	        r.begin(ShapeType.Filled);
 	        r.setColor(Color.WHITE);
-	        for (int i = 0; i < Base.CHUNK_AMOUNT; i++) {
-	        	r.rectLine(i * Base.CHUNK_SIZE, 0, i * Base.CHUNK_SIZE, Base.WORLD_SIZE, 0.5f);
-	        	r.rectLine(0, i * Base.CHUNK_SIZE, Base.WORLD_SIZE, i * Base.CHUNK_SIZE, 0.5f);
-	        }
-	        r.set(ShapeType.Filled);
 	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	   
-	        		float width = cam.viewportWidth * cam.zoom;
-	        		float height = cam.viewportHeight * cam.zoom;
-	        		float w = width * Math.abs(cam.up.y) + height * Math.abs(cam.up.x);
-	        		float h = height * Math.abs(cam.up.y) + width * Math.abs(cam.up.x);
-	        	    viewBounds.set(cam.position.x - w / 2 - 50, cam.position.y - h / 2 - 50, w + 100, h + 100);
-	        		imageBounds.set(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());		                
-
-	        		if (viewBounds.contains(imageBounds) || viewBounds.overlaps(imageBounds)) {	 
-		        		if (chunks.getChunk(x, y).getOreLevel() > 0) {
-		        			float n = chunks.getChunk(x, y).getOreLevel() * 100;
-		        			//System.out.println(n);
-		        			if (n == 100) {
-		        				n = 99;
-		        			}
-		        			float rc = (255 * n) / 100;
-		        			float g = (255 * (100 - n)) / 100 ;
-		        			float b = 0;
-		        			//System.out.println(rc + " " + g + " " + b);
-		        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));
-		        			r.setColor(c);
-		        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-		        		}	      		
-		        	}
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunk(x, y).getOreLevel() > 0) {
+	        			float n = chunks.getChunk(x, y).getOreLevel() * 100;
+	        			//System.out.println(n);
+	        			if (n == 100) {
+	        				n = 99;
+	        			}
+	        			float rc = (255 * n) / 100;
+	        			float g = (255 * (100 - n)) / 100 ;
+	        			float b = 0;
+	        			//System.out.println(rc + " " + g + " " + b);
+	        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));
+	        			r.setColor(c);
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        		}	      
 	        	}
 	        }
 	        r.end();
 	    }
-
+        
 
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r, batch);
@@ -584,10 +447,9 @@ public class GameScreen implements Screen {
             	n.setScale(0.8f);
             } else {
             	n.setScale(0.45f);
+            	n.draw(batch);
             }
-            
-            n.draw(batch);
-            
+   
             if (n.getID() == selectedID) {
                 Sprite s = new Sprite(SpriteLoader.highlightSprite);              
                 s.setPosition(n.getX(), n.getY());
@@ -602,11 +464,26 @@ public class GameScreen implements Screen {
             }
            
         }
+        batch.end();
+        
+        bulletHandler.drawAll(r, batch);
+        
+        chunks.drawCorruption();
+        
+        /*batch.begin();    	        
+        for (Section s : chunks.sectionsInView) {	   
+        	Chunk c = s.getChunk(0, 0);	        	
+        	batch.draw(SpriteLoader.highlightSprite, c.getX() , c.getY(), 256, 256);	
+        }
+        batch.end();
+        */
+        
         //HUD, draw last
         //setting UI matrix
         setHudProjectionMatrix(batch);
         setHudProjectionMatrix(r);
         
+        batch.begin();
         if (Gdx.app.getType() == ApplicationType.Android) {
 	        batch.end();
 	        drawButtons(batch, r);
@@ -625,339 +502,50 @@ public class GameScreen implements Screen {
         stage.draw();
         
         glProfiler.reset();
-    }
+    }   
+    
+    public static void blurBuffer(FrameBuffer fboA, FrameBuffer fboB, Texture texture, float x, float y) {
+    	float aspectRatio = (float)WIDTH/(float)HEIGHT;
+    	
+    	fboB.begin();
+    	Shaders.blurShader.begin();
+    	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
+    	Shaders.blurShader.setUniformf("radius", 1f);
+        Shaders.blurShader.setUniformf("resolution", (cam.zoom * 200) * aspectRatio);
+    	Shaders.blurShader.end();
+		batch.setShader(Shaders.blurShader);   	
+				
+		Sprite s = new Sprite(texture);
+		Matrix4 m = new Matrix4();
+		m.setToOrtho2D(0, 0, fboA.getWidth(), fboA.getHeight());
+		batch.setProjectionMatrix(m);	
 
-    void drawCorruptionMesh(SpriteBatch batch) {
-    	TextureRegion corrReg = SpriteLoader.tileAtlas.findRegion("corr16");
-		Texture corrTex = corrReg.getTexture();
-		corrTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
-		
-		/*int n = 0;
-		
-		int width = Base.CHUNK_AMOUNT;
-		int height = Base.CHUNK_AMOUNT;
-		
-		int numberOfTiles = width * height;
-		int numberOfVerticesPerTile = 4;
-		int numberOfVerts = 5 * numberOfVerticesPerTile;
-		
-		//new float array with the maximum number of verts
-		float verts[] = new float[numberOfTiles*numberOfVerts];
-		
-		for (int i = 0; i < height; i++) {
-			for (int ii = 0; ii < width; ii++) {
-				Chunk c = chunks.getChunk(0 + ii, 0 + i);
-				
-				if (c.getCreeperLevel() > 0) {
-					final float x1 = c.getX();
-					final float y1 = c.getY();
-					
-					final int cx = (int) (x1/c.getSize());
-					final int cy = (int) (y1/c.getSize());
-					
-					final float x2 = x1 + corrReg.getRegionWidth() * 1;
-					final float y2 = y1 + corrReg.getRegionHeight() * 1;
-					
-					if (cx >= Base.CHUNK_AMOUNT && cy >= Base.CHUNK_AMOUNT) {
-						if (chunks.getChunk(cx + 1, cy).getCreeperLevel() == 0 && chunks.getChunk(cx, cy + 1).getCreeperLevel() == 0) {
-							verts[n++] = x1;
-							verts[n++] = y1;
-							verts[n++] = 0;
-							verts[n++] = 0;
-							verts[n++] = 0;
-				
-							verts[n++] = x2;
-							verts[n++] = y1;
-							verts[n++] = 0;
-							verts[n++] = 0;
-							verts[n++] = 1;
-				
-							verts[n++] = x1;
-							verts[n++] = y2;
-							verts[n++] = 0;
-							verts[n++] = 1;
-							verts[n++] = 1;
-						
-							verts[n++] = x1;
-							verts[n++] = y1;
-							verts[n++] = 0;
-							verts[n++] = 0;
-							verts[n++] = 0;
-						}
-					} else {					
-						verts[n++] = x1;
-						verts[n++] = y1;
-						verts[n++] = 0;
-						verts[n++] = 0;
-						verts[n++] = 0;
-			
-						verts[n++] = x1;
-						verts[n++] = y2;
-						verts[n++] = 0;
-						verts[n++] = 0;
-						verts[n++] = 1;
-			
-						verts[n++] = x2;
-						verts[n++] = y2;
-						verts[n++] = 0;
-						verts[n++] = 1;
-						verts[n++] = 1;
-					
-						verts[n++] = x2;
-						verts[n++] = y1;
-						verts[n++] = 0;
-						verts[n++] = 0;
-						verts[n++] = 0;
-					}
-				}
-			}
-		}
-		*/
-		Shaders.testShader.begin();
-		Shaders.testShader.pedantic = false;
-		//System.out.println("isCompiled: " + Shaders.testShader.isCompiled());
-		//System.out.println("log: " + Shaders.testShader.getLog());
-		Shaders.testShader.setUniformf("newColor", 0f, 1f, 0f, 0.8f);
-		Shaders.testShader.end();
-
-		//TODO: finalize
-		float[] verts = generateCorruptionMesh();
-		
-		List<PolygonPoint> points = new ArrayList<PolygonPoint>();
-		for (int i = 0; i < verts.length; i+=2) {
-			points.add(new PolygonPoint(verts[i], verts[i+1]));
-		}
-	    		
-		//Create the polygon passing a List of PolygonPoints
-		org.poly2tri.geometry.polygon.Polygon polygon = new org.poly2tri.geometry.polygon.Polygon(points);
-		//Here you could add holes as needed, passing them as Polygons
-		//polygon.addHole(someHoleYouCreated);
-		
-		//Next, proceed to calculate the triangulation of the polygon 
-		Poly2Tri.triangulate(polygon);
-		//Finally, obtain the resulting triangles
-		
-		List<DelaunayTriangle> triangles = polygon.getTriangles();
-		float[] tVerts = new float[triangles.size() * 6];
-		
-		//System.out.println("TRIANGLES: --");	
-		
-		int k = 0;
-		for (DelaunayTriangle d : triangles) {
-			for (TriangulationPoint p : d.points) {
-				//System.out.println(p.getXf());		
-				//System.out.println(p.getYf());	
-				tVerts[k++] = p.getXf();
-				tVerts[k++] = p.getYf();
-			}
-		}
-		//System.out.println("-- END");
-		
-		
-		int n = 0;
-		int m = 0;	
-		
-		float[] glVerts = new float[((tVerts.length/2)*5)];
-		//System.out.println("vert: size " + tVerts.length + " glV: " + ((tVerts.length/2)*5));
-		for (int i = 0; i < glVerts.length ; i += 5) {
-			glVerts[n++] = tVerts[m++];
-			glVerts[n++] = tVerts[m++];
-			glVerts[n++] = 0;
-			glVerts[n++] = 0;
-			glVerts[n++] = 0;
-		}		
-	
-		batch.setShader(Shaders.testShader);
-		batch.begin();	
-		batch.draw(corrTex, glVerts, 0, glVerts.length);
+		s.flip(false, true);
+		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		s.draw(batch);
 		batch.end();
+		fboB.end();
+		
+		Shaders.blurShader.begin();
+    	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
+    	Shaders.blurShader.setUniformf("radius", 1f);
+    	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
+    	Shaders.blurShader.end();
+		batch.setShader(Shaders.blurShader);   	
+		s = new Sprite(fboB.getColorBufferTexture());
+		m.setToOrtho2D(0, 0, fboB.getWidth(), fboB.getHeight());		
+		batch.setProjectionMatrix(m);
+		
+		s.flip(false, true);
+		batch.begin();
+		s.draw(batch);
+		batch.end();
+		
+		batch.setProjectionMatrix(cam.combined);
 		batch.setShader(Shaders.defaultShader);
-		
-		System.out.println("\n");
-		float[] lines = generateCorruptionMesh();
-		for (float f : lines) {
-			//System.out.println(f);
-		}
-    }
-    
-    float[] generateCorruptionMesh() {
-    	//Generating border vertices (for every tile)
-    	//array with the maximum size
-    	float[] lines = new float[25*25*4*4];
-    	
-    	//line index
-    	int li = 0;
-    	
-    	for(int y = 0; y < 25; y++) {
-    		for(int x = 0; x < 25; x++) {   	    	
-    	    	Chunk c = chunks.getChunk(Base.CHUNK_AMOUNT/2 + x, Base.CHUNK_AMOUNT/2 + y);
-    	    	if (c.getCreeperLevel() > 0) {
-    	    		final float x1 = c.getX();
-					final float y1 = c.getY();
-					
-					final int cx = (int) (x1/c.getSize());
-					final int cy = (int) (y1/c.getSize());
-					
-					final float x2 = x1 + c.getSize();
-					final float y2 = y1 + c.getSize();
-					
-    	    		if (chunks.getChunk(cx + 1, cy).getCreeperLevel() == 0) {
-    	    			//Create right vertices
-    	    			lines[li++] = x2;
-    	    			lines[li++] = y2;
-    	    			lines[li++] = x2;
-    	    			lines[li++] = y1;
-    	    		} else {
-    	    			lines[li++] = -1;
-    	    			li += 3;
-    	    		}
-    	    		if (chunks.getChunk(cx - 1, cy).getCreeperLevel() == 0) {
-    	    			//Create left vertices
-    	    			lines[li++] = x1;
-    	    			lines[li++] = y1;
-    	    			lines[li++] = x1;
-    	    			lines[li++] = y2;
-    	    		} else {
-    	    			lines[li++] = -1;
-    	    			li += 3;
-    	    		}
-    	    		if (chunks.getChunk(cx, cy + 1).getCreeperLevel() == 0) {
-    	    			//Create top vertices
-    	    			lines[li++] = x1;
-    	    			lines[li++] = y2;
-    	    			lines[li++] = x2;
-    	    			lines[li++] = y2;
-    	    		} else {
-    	    			lines[li++] = -1;
-    	    			li += 3;
-    	    		}	
-    	    		if (chunks.getChunk(cx, cy - 1).getCreeperLevel() == 0) {
-    	    			//Create bottom vertices
-    	    			lines[li++] = x2;
-    	    			lines[li++] = y1;
-    	    			lines[li++] = x1;
-    	    			lines[li++] = y1;
-    	    		} else {
-    	    			lines[li++] = -1;
-    	    			li += 3;
-    	    		}
-    	    	}
-    		}
-    	}
-    	
-    	float[] verts = new float[25*25*4*4];
-    	int index = 0;
-    	
-    	boolean first = false;
-    	
-    	//Constructing mesh vertices
-    	for (int i = 0; i < li; i += 4) {
-    		//x1 lines[i]
-    		//y1 lines[i+1]
-    		//x2 lines[i+2]
-    		//y2 lines[i+3]
-    		
-    		//Skipping 4 steps
-    		if (lines[i] == -1) {
-    			continue;
-    		}
-    		
-    		if (first == false) { 			
-	    		verts[index++] = lines[i];
-	    		verts[index++] = lines[i+1];
-	    		verts[index++] = lines[i+2];
-	    		verts[index++] = lines[i+3];
-    		
-	    		lines[i] = -1;
-    		    lines[i+1] = -1; 
-    		    lines[i+2] = -1; 
-    		    lines[i+3] = -1; 
-    		    first = true;
-    		}
-    		
-    		for (int e = 0; e < lines.length; e += 4) {
-    			if (lines[e] != -1) {
-    				if (verts[index - 2] == lines[e] && verts[index - 1] == lines[e + 1]) {
-    					//verts[index++] = lines[e]; 
-    					//verts[index++] = lines[e+1]; 
-    					verts[index++] = lines[e+2]; 
-    					verts[index++] = lines[e+3]; 
-    					
-    					lines[e] = -1;
-    	    		    lines[e+1] = -1; 
-    	    		    lines[e+2] = -1; 
-    	    		    lines[e+3] = -1; 
-    				}
-    			}
-    		}
-    	}
-    	
-    	float finalVerts[] = new float[index];
-    	int k = 0;
-    	for(float f : verts) {
-    		if (f != 0) {
-    			finalVerts[k++] = f;
-    		}
-    	}
-    	
-    	return finalVerts;
-    }
-    
-    void drawBackgroundSand(SpriteBatch batch) {
-		Texture sandTex = new Texture(SpriteLoader.savanaTex.getTextureData());
-		sandTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
-		
-		int n = 0;
-		
-		int width = 1;
-		int height = 1;
-		
-		int numberOfTiles = width * height;
-		int numberOfVerticesPerTile = 4;
-		int numberOfVerts = 5 * numberOfVerticesPerTile;
-		
-		float verts[] = new float[numberOfTiles*numberOfVerts];
-		
-		for (int i = 0; i < height; i++) {
-			for (int ii = 0; ii < width; ii++) {
-				float x1 = 0;
-				float y1 = 0;
-				
-				float x2 = x1 + Base.WORLD_SIZE;
-				float y2 = y1 + Base.WORLD_SIZE;
-				
-				verts[n++] = x1;
-				verts[n++] = y1;
-				verts[n++] = 0;
-				verts[n++] = 0;
-				verts[n++] = 0;
-	
-				verts[n++] = x1;
-				verts[n++] = y2;
-				verts[n++] = 0;
-				verts[n++] = 0;
-				verts[n++] = Base.WORLD_SIZE/32;
-	
-				verts[n++] = x2;
-				verts[n++] = y2;
-				verts[n++] = 0;
-				verts[n++] = Base.WORLD_SIZE/32;
-				verts[n++] = Base.WORLD_SIZE/32;
-			
-				verts[n++] = x2;
-				verts[n++] = y1;
-				verts[n++] = 0;
-				verts[n++] = Base.WORLD_SIZE/32;
-				verts[n++] = 0;
-				
-			}
-		}
-		
-		batch.setShader(Shaders.defaultShader);
-		//batch.begin();	
-		batch.draw(sandTex, verts, 0, numberOfTiles*numberOfVerts);
-		//batch.end();		
-    }
+	}   
     
     void drawConnectors(ShapeRenderer sR) {
 
@@ -1205,10 +793,12 @@ public class GameScreen implements Screen {
     }
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.PAGE_DOWN)) {
-            cam.zoom += 0.08;
+            cam.zoom += 0.1f;
+			GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.PAGE_UP)) {
-            cam.zoom -= 0.08;
+            cam.zoom -= 0.1f;
+			GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
@@ -1226,15 +816,19 @@ public class GameScreen implements Screen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             cam.translate(-3, 0, 0);
+			GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            cam.translate(3, 0, 0);
+            cam.translate(3, 0, 0);            
+			GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            cam.translate(0, -3, 0);
+            cam.translate(0, -3, 0);          
+			GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            cam.translate(0, 3, 0);
+            cam.translate(0, 3, 0);         
+			GameScreen.chunks.updateView(cam);
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -1243,6 +837,11 @@ public class GameScreen implements Screen {
         	nodeshotGame.setScreen(new MenuScreen(nodeshotGame));
         }
 
+        //Initial clamping fix TODO: resolve
+        if (SimulationThread.simTick < 1) {
+        	chunks.updateView(cam);
+        }
+        
         //Zoom clamping, min max
         cam.zoom = MathUtils.clamp(cam.zoom, 0.2f, Base.WORLD_SIZE/cam.viewportWidth - 3f);
 
@@ -1252,8 +851,6 @@ public class GameScreen implements Screen {
         //Making sure the camera doesnt go beyond the world limit
         cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f, Base.WORLD_SIZE - effectiveViewportWidth / 2f);
         cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f, Base.WORLD_SIZE - effectiveViewportHeight / 2f);
-        
-        chunks.updateCam(cam);
     }
 
     public static Entity checkHighlights(boolean select) {

@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.Connector;
-import org.dudss.nodeshot.entities.ConveyorNode;
-import org.dudss.nodeshot.entities.InputNode;
-import org.dudss.nodeshot.entities.Node;
-import org.dudss.nodeshot.entities.OutputNode;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.nodes.ConveyorNode;
+import org.dudss.nodeshot.entities.nodes.InputNode;
+import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.items.Ammo;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;

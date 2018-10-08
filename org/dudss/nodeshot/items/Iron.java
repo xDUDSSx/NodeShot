@@ -1,7 +1,7 @@
 package org.dudss.nodeshot.items;
 
-import org.dudss.nodeshot.entities.Node;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
