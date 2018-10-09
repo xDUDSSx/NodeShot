@@ -25,8 +25,8 @@ public class Furnace implements Building, Storage {
 
 	float x,y;
 	float cx,cy;
-	float width = 64;
-	float height = 64;
+	float width = 48;
+	float height = 48;
 	
 	private Color prefabColor = new Color(244f/255f, 100f/255f, 17f/255f, 0.5f);
 	private Color color = new Color(244f/255f, 100f/255f, 17f/255f, 1f);
@@ -90,19 +90,18 @@ public class Furnace implements Building, Storage {
 			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
 			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
 			
-			x = nx - (width/2);
-			y = ny - (height/2);
+			x = nx - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
+			y = ny - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
 			
-			this.cx = nx;
-			this.cy = ny;
+			this.cx = nx + Base.CHUNK_SIZE/2;
+			this.cy = ny + Base.CHUNK_SIZE/2;
 		} else {
 			this.cx = cx;
 			this.cy = cy;
 			
 			x = cx - (width/2);
 			y = cy - (height/2);
-		}
-		
+		}	
 	}
 
 	@Override
@@ -121,8 +120,8 @@ public class Furnace implements Building, Storage {
 			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
 			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
 			
-			prefX = nx - (width/2);
-			prefY= ny - (height/2);	
+			prefX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
+			prefY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
 		} else {
 			prefX = cx - (width/2);
 			prefY = cy - (height/2);
@@ -146,11 +145,11 @@ public class Furnace implements Building, Storage {
 
 	@Override
 	public void build() {
-		input1 = new InputNode(x + (width/6), y + (height * 0.15f), Base.RADIUS, this);
-		input2 = new InputNode(x + ((width/6) * 5), y + (height * 0.15f), Base.RADIUS, this);
+		input1 = new InputNode(x + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);
+		input2 = new InputNode(x + 2*Base.CHUNK_SIZE + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);
 		output = new OutputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
 		
-		export = new ConveyorNode(x + (width/2), y + (height * 0.9f), Base.RADIUS);
+		export = new ConveyorNode(x + (width/2), y + Base.CHUNK_SIZE*2 + Base.CHUNK_SIZE/2, Base.RADIUS);
 		output.connectTo(export);
 		
 		firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());

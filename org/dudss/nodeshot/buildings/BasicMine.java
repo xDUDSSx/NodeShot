@@ -29,8 +29,8 @@ public abstract class BasicMine implements Building {
 		
 		float x,y;
 		float cx,cy;
-		float width = 32;
-		float height = 32;
+		float width = 48;
+		float height = 48;
 		
 		public int productionRate = 600;
 		public int nextSimTick = -1;
@@ -52,18 +52,18 @@ public abstract class BasicMine implements Building {
 				float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
 				float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
 				
-				x = nx - (width/2);
-				y = ny - (height/2);
+				x = nx - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
+				y = ny - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
 				
-				this.cx = nx;
-				this.cy = ny;
+				this.cx = nx + Base.CHUNK_SIZE/2;
+				this.cy = ny + Base.CHUNK_SIZE/2;
 			} else {
 				this.cx = cx;
 				this.cy = cy;
 				
 				x = cx - (width/2);
 				y = cy - (height/2);
-			}		
+			}
 		}
 		
 		@Override
@@ -94,8 +94,8 @@ public abstract class BasicMine implements Building {
 				float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
 				float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
 				
-				prefX = nx - (width/2);
-				prefY= ny - (height/2);	
+				prefX = nx - ((int)(width/2)/16) * 16;
+				prefY = ny - ((int)(width/2)/16) * 16;	
 			} else {
 				prefX = cx - (width/2);
 				prefY = cy - (height/2);

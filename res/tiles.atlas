@@ -6,154 +6,217 @@ filter: Nearest,Nearest
 repeat: none
 corr16
   rotate: false
-  xy: 2, 42
+  xy: 110, 170
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 corr16section
   rotate: false
-  xy: 2, 118
+  xy: 2, 190
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-seamlesssand16
+corr32
   rotate: false
-  xy: 262, 358
-  size: 16, 16
-  orig: 16, 16
+  xy: 262, 414
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
-seamlesssand32
+corrBL
   rotate: false
   xy: 2, 82
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+corrBR
+  rotate: false
+  xy: 262, 342
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+corrSB
+  rotate: false
+  xy: 74, 154
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+corrSL
+  rotate: false
+  xy: 2, 154
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+corrSR
+  rotate: false
+  xy: 2, 118
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+corrST
+  rotate: false
+  xy: 38, 154
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+corrTL
+  rotate: false
+  xy: 262, 378
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+corrTR
+  rotate: false
+  xy: 298, 414
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+seamlesssand16
+  rotate: false
+  xy: 298, 394
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+seamlesssand32
+  rotate: false
+  xy: 38, 118
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 tiledCoal
   rotate: false
-  xy: 322, 358
+  xy: 150, 170
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalBL
   rotate: false
-  xy: 2, 62
+  xy: 334, 430
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalBR
   rotate: false
-  xy: 58, 98
+  xy: 262, 322
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalEB
   rotate: false
-  xy: 282, 358
+  xy: 74, 134
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalEL
   rotate: false
-  xy: 262, 318
+  xy: 298, 374
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalER
   rotate: false
-  xy: 302, 358
+  xy: 2, 42
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalET
   rotate: false
-  xy: 98, 98
+  xy: 394, 430
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalS
   rotate: false
-  xy: 38, 98
+  xy: 2, 62
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalTL
   rotate: false
-  xy: 262, 298
+  xy: 298, 354
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalTR
   rotate: false
-  xy: 302, 338
+  xy: 2, 22
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoallow
   rotate: false
-  xy: 262, 338
+  xy: 38, 98
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoallower
   rotate: false
-  xy: 78, 98
+  xy: 262, 302
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIron
   rotate: false
-  xy: 282, 298
+  xy: 170, 170
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronBL
   rotate: false
-  xy: 282, 318
+  xy: 374, 430
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronBR
   rotate: false
-  xy: 2, 2
+  xy: 262, 282
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronTL
   rotate: false
-  xy: 282, 338
+  xy: 354, 430
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronTR
   rotate: false
-  xy: 2, 22
+  xy: 130, 170
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 transparent16
   rotate: false
-  xy: 262, 278
+  xy: 2, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

@@ -360,8 +360,6 @@ public class GameScreen implements Screen {
 	        }
 	        batch.end();
 		}
-		
-		batch.setShader(Shaders.defaultShader);
         
         /*LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
         			"\nCalls: " + glProfiler.getCalls() +
@@ -393,8 +391,9 @@ public class GameScreen implements Screen {
 	        }
 	        r.end();
 	    }
+           
+        drawDebug(batch);
         
-
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r, batch);
         r.end();
@@ -470,14 +469,6 @@ public class GameScreen implements Screen {
         
         chunks.drawCorruption();
         
-        /*batch.begin();    	        
-        for (Section s : chunks.sectionsInView) {	   
-        	Chunk c = s.getChunk(0, 0);	        	
-        	batch.draw(SpriteLoader.highlightSprite, c.getX() , c.getY(), 256, 256);	
-        }
-        batch.end();
-        */
-        
         //HUD, draw last
         //setting UI matrix
         setHudProjectionMatrix(batch);
@@ -503,6 +494,15 @@ public class GameScreen implements Screen {
         
         glProfiler.reset();
     }   
+    
+    public static void drawDebug(SpriteBatch batch) {
+    	batch.begin();    	        
+        for (Section s : chunks.sectionsInView) {	   
+        	Chunk c = s.getChunk(0, 0);	        	
+        	batch.draw(SpriteLoader.sectionOutline, c.getX() , c.getY(), 256, 256);	
+        }
+        batch.end();
+    }
     
     public static void blurBuffer(FrameBuffer fboA, FrameBuffer fboB, Texture texture, float x, float y) {
     	float aspectRatio = (float)WIDTH/(float)HEIGHT;
@@ -533,8 +533,10 @@ public class GameScreen implements Screen {
     	Shaders.blurShader.setUniformf("radius", 1f);
     	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
     	Shaders.blurShader.end();
-		batch.setShader(Shaders.blurShader);   	
-		s = new Sprite(fboB.getColorBufferTexture());
+		
+    	batch.setShader(Shaders.defaultShader);   	
+		s = new Sprite(fboA.getColorBufferTexture());
+		
 		m.setToOrtho2D(0, 0, fboB.getWidth(), fboB.getHeight());		
 		batch.setProjectionMatrix(m);
 		

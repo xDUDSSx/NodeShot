@@ -1,7 +1,6 @@
 package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.buildings.CustomMine;
 import org.dudss.nodeshot.buildings.Furnace;
 import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.Turret;
@@ -81,8 +80,7 @@ public class BuildMenu extends Window {
 		
 		TextButton coalMineButton = new TextButton("Coal mine", skin, "hoverfont30");
 		TextButton ironMineButton = new TextButton("Iron mine", skin, "hoverfont30");
-		TextButton mine2Button = new TextButton("ConnectorMine", skin, "hoverfont30");
-		
+
 		TextButton connectorButton = new TextButton("Connector node", skin, "hoverfont30");
 		TextButton conveyorButton = new TextButton("Conveyor node", skin, "hoverfont30");
 		
@@ -96,7 +94,6 @@ public class BuildMenu extends Window {
 		coalMineButton.setSize(500, 150);
 		mines.addActor(coalMineButton);
 		mines.addActor(ironMineButton);
-		mines.addActor(mine2Button);
 		
 		connectors.addActor(connectorButton);
 		connectors.addActor(conveyorButton);
@@ -203,17 +200,7 @@ public class BuildMenu extends Window {
 					GameScreen.builtBuilding = new Furnace(0, 0);
 				}		
 		    }
-	    });
-		
-		mine2Button.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new CustomMine(0, 0);
-				}		
-		    }
-	    });
+	    });		
 		
 		ammoStorageButton.addListener(new ClickListener(){
 			@Override

@@ -31,10 +31,6 @@ public class TurretHead extends Sprite  {
 		Vector2 aimVector = new Vector2(target.x - assignedTurret.cx, target.y - assignedTurret.cy);
 		double aimLenght = Math.hypot(aimVector.x, aimVector.y);
 		double alpha = Math.asin(aimVector.y/aimLenght);
-		System.out.println("alh: " + alpha);
-		System.out.println("ALPHA: " + Math.toDegrees(alpha));
-		
-		System.out.println("targetX: " + target.x + " thisX: " + assignedTurret.cx);
 		
 		if (target.x <= assignedTurret.cx) {
 			rotation = 360 - Math.toDegrees(alpha);

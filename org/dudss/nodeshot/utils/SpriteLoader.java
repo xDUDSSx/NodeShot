@@ -12,7 +12,7 @@ public class SpriteLoader {
 	public static Texture spriteSheet;
 	public static Texture gridOverlay;
 	public static Texture gridOverlay2;
-	
+	public static Texture sectionOutline;
 	
 	public static Texture savanaTex;
 	
@@ -79,6 +79,7 @@ public class SpriteLoader {
         	coalLowTex = new Texture("res/tiledCoallow.png");       	
         	tileAtlas = new TextureAtlas("res/tiles.atlas");
         	corrTex = new Texture("res/corr16.png");
+        	sectionOutline = new Texture("res/sectionOutline.png");
         }
 	
 		corrTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);

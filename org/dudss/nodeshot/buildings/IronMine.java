@@ -40,30 +40,9 @@ public class IronMine extends BasicMine {
 	}
 	
 	@Override
-	public void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap) {		
-		float prefX; 
-		float prefY;
-		
-		if (snap) {
-			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			
-			prefX = nx - (width/2);
-			prefY= ny - (height/2);	
-		} else {
-			prefX = cx - (width/2);
-			prefY = cy - (height/2);
-		}
-		
-		r.set(ShapeType.Filled);
-		r.setColor(prefabColor);
-		r.rect(prefX, prefY, width, height);
-	}
-	
-	@Override
 	public void build() {
-		output = new OutputNode(x + (width/2), (float) (y + (height*0.75)), Base.RADIUS, this);
-		export = new ConveyorNode(x + (width/2), (float) (y + height*0.15), Base.RADIUS);
+		output = new OutputNode(x + (width/2), (float) (y + (height/2)), Base.RADIUS, this);
+		export = new ConveyorNode(x + (width/2), (float) (y + Base.CHUNK_SIZE/2), Base.RADIUS);
 		output.connectTo(export);
 		
 		firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
@@ -72,14 +51,18 @@ public class IronMine extends BasicMine {
 		GameScreen.nodelist.add(export);
 		buildingHandler.addBuilding(this);
 		
+
 		int tileX = (int) (this.x / Base.CHUNK_SIZE);
 		int tileY = (int) (this.y / Base.CHUNK_SIZE);
 		
-		float totalOreLevel = 
-				GameScreen.chunks.getChunk(tileX, tileY).getIronLevel() + 
-				GameScreen.chunks.getChunk(tileX + 1, tileY).getIronLevel() +
-				GameScreen.chunks.getChunk(tileX, tileY + 1).getIronLevel() + 
-				GameScreen.chunks.getChunk(tileX + 1, tileY + 1).getIronLevel();
+		float totalOreLevel = 0;
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 3; x++) {
+				if (GameScreen.chunks.getChunk(tileX + x, tileY + y) != null) {
+				totalOreLevel += GameScreen.chunks.getChunk(tileX + x, tileY + y).getIronLevel();				
+				}
+			}
+		}
 		
 		if (totalOreLevel > 0) {
 			canGenerate = true;

@@ -204,7 +204,7 @@ public class Chunk {
 		if (corr) {
 			if (creeper != 0) {
 				boolean triangleDrawn = false;
-				TextureRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("corr16");
+				TextureRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("corr32");
 				if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
 					int ax = Math.round(x/Base.CHUNK_SIZE);
 					int ay = Math.round(y/Base.CHUNK_SIZE);
@@ -225,29 +225,60 @@ public class Chunk {
 						minusx.getCreeperLevel() > 0 && 
 						minusy.getCreeperLevel() > 0)
 					{
-						return desiredRegion;
+						return SpriteLoader.tileAtlas.findRegion("corrTL");
 					} else
 					if (plusy.getCreeperLevel() == 0 && 
 						minusx.getCreeperLevel() == 0 &&
 						plusx.getCreeperLevel() > 0 &&
 					    minusy.getCreeperLevel() > 0)  
 					{
-						return desiredRegion;
+						return SpriteLoader.tileAtlas.findRegion("corrTR");
 					} else
 					if (minusy.getCreeperLevel() == 0 && 
 						plusx.getCreeperLevel() == 0 &&
 					    plusy.getCreeperLevel() > 0 &&
 					    minusx.getCreeperLevel() > 0)  
 					{
-						return desiredRegion;
+						return SpriteLoader.tileAtlas.findRegion("corrBL");
 					} else
 					if (minusy.getCreeperLevel() == 0 && 
 						minusx.getCreeperLevel() == 0 && 
 					    plusx.getCreeperLevel() > 0 &&
 					    plusy.getCreeperLevel() > 0)  
 					{
-						return desiredRegion;
+						return SpriteLoader.tileAtlas.findRegion("corrBR");
 					} else
+					//Straight line borders
+					if (plusy.getCreeperLevel() > 0 && 
+						plusx.getCreeperLevel() > 0 && 
+						minusy.getCreeperLevel() > 0 &&
+						minusx.getCreeperLevel() == 0)  
+					{
+						return SpriteLoader.tileAtlas.findRegion("corrSL");
+					} else
+					if (plusy.getCreeperLevel() > 0 && 
+						minusx.getCreeperLevel() > 0 && 
+						minusy.getCreeperLevel() > 0 &&
+						plusx.getCreeperLevel() == 0)  
+					{	
+						return SpriteLoader.tileAtlas.findRegion("corrSR");
+					} else
+					if (plusy.getCreeperLevel() > 0 && 
+						plusx.getCreeperLevel() > 0 && 
+						minusx.getCreeperLevel() > 0 &&
+						minusy.getCreeperLevel() == 0)  
+					{	
+						return SpriteLoader.tileAtlas.findRegion("corrST");
+					} else
+					if (minusy.getCreeperLevel() > 0 && 
+						plusx.getCreeperLevel() > 0 && 
+						minusx.getCreeperLevel() > 0 &&
+						plusy.getCreeperLevel() == 0)  
+					{
+						return SpriteLoader.tileAtlas.findRegion("corrSB");	
+					} else 
+						
+					//Tile ends (currently unused)	
 					if (plusy.getCreeperLevel() == 0 && 
 						plusx.getCreeperLevel() == 0 && 
 						minusy.getCreeperLevel() == 0 &&

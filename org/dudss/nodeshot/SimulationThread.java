@@ -95,20 +95,13 @@ public class SimulationThread implements Runnable {
 	
 	void updateLogic() {
 		simTick++;
-		//Node movement
-		/*if (Base.randomMovement) {
-				for (Node n : GameScreen.nodelist) {
-				n.move();		       
-			}
-		}
-		*/
 		
 		//Updating projectiles
 		GameScreen.bulletHandler.updateAll();
 		
-		//Updating all chunks
+		//Updating chunks and geometry of each section corruption mesh
 		if (simTick >= next_chunk_tick) {
-			next_chunk_tick += 10;
+			next_chunk_tick += 5;
 			GameScreen.chunks.updateAllChunks();
 			GameScreen.chunks.updateSectionMeshes(true);
 		}		

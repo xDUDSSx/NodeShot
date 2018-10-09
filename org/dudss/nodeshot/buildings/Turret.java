@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Turret extends BasicStorage {
 
-	int rechargeRate = 8;
+	int rechargeRate = 32;
 	int nextShot = SimulationThread.simTick += rechargeRate;
 	
 	int lastShot = 0;
@@ -76,11 +76,6 @@ public class Turret extends BasicStorage {
 			r.setColor(Color.RED);
 		}	
 		r.rectLine(this.x, this.y - 2, this.x + (this.width*((float) (storage/maxStorage))), this.y - 2, 3);
-		
-		if (this.lastShot > SimulationThread.simTick - 8) {
-			r.setColor(Color.YELLOW);
-			r.rectLine(this.cx, this.cy, lastTarget.x, lastTarget.y, 1f);
-		}
 		
 		r.end();
 		batch.begin();

@@ -26,7 +26,6 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.buildings.IronMine;
-import org.dudss.nodeshot.buildings.ManualCoalMine;
 import org.dudss.nodeshot.buildings.BasicStorage;
 
 public class DesktopInputProcessor implements InputProcessor {
@@ -107,13 +106,7 @@ public class DesktopInputProcessor implements InputProcessor {
 					Node newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
 					Selector.selectNode(newnode);
 					nodelist.add(newnode);
-				}			
-				
-				if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
-					Building coalMine = new ManualCoalMine(worldPos.x, worldPos.y);
-					coalMine.build();
-					
-				}
+				}							
 			break;
 			
 			case Input.Buttons.RIGHT:
@@ -256,6 +249,9 @@ public class DesktopInputProcessor implements InputProcessor {
 		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.C)) {
 			if (draggingConnection == false) {
 				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE), (int)(worldPos.y/Base.CHUNK_SIZE)).setCreeperLevel(1);
+				int sx = (int)(worldPos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				int sy = (int)(worldPos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true);
 			}
 		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
 			if (draggingConnection == false) {
