@@ -1,222 +1,250 @@
 
 tiles.png
-size: 512,512
+size: 2048,2048
 format: RGBA8888
-filter: Nearest,Nearest
+filter: MipMap,Nearest
 repeat: none
 corr16
   rotate: false
-  xy: 110, 170
+  xy: 1376, 2000
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 corr16section
   rotate: false
-  xy: 2, 190
+  xy: 32, 32
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 corr32
   rotate: false
-  xy: 262, 414
+  xy: 1184, 1984
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBL
   rotate: false
-  xy: 2, 82
+  xy: 1280, 1984
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBR
   rotate: false
-  xy: 262, 342
+  xy: 608, 1216
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrSB
   rotate: false
-  xy: 74, 154
+  xy: 448, 256
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrSL
   rotate: false
-  xy: 2, 154
+  xy: 608, 1408
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrSR
   rotate: false
-  xy: 2, 118
+  xy: 352, 256
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrST
   rotate: false
-  xy: 38, 154
+  xy: 608, 1312
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrTL
   rotate: false
-  xy: 262, 378
+  xy: 704, 1408
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrTR
   rotate: false
-  xy: 298, 414
+  xy: 1184, 1888
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+dirt2
+  rotate: false
+  xy: 32, 928
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+rock0
+  rotate: false
+  xy: 32, 1504
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+rock1
+  rotate: false
+  xy: 608, 1504
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+sand3
+  rotate: false
+  xy: 32, 352
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 seamlesssand16
   rotate: false
-  xy: 298, 394
+  xy: 704, 1328
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 seamlesssand32
   rotate: false
-  xy: 38, 118
+  xy: 352, 160
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tiledCoal
   rotate: false
-  xy: 150, 170
+  xy: 1536, 2000
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalBL
   rotate: false
-  xy: 334, 430
+  xy: 800, 1424
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalBR
   rotate: false
-  xy: 262, 322
+  xy: 352, 80
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalEB
   rotate: false
-  xy: 74, 134
+  xy: 1280, 1904
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalEL
   rotate: false
-  xy: 298, 374
+  xy: 448, 176
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalER
   rotate: false
-  xy: 2, 42
+  xy: 704, 1248
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalET
   rotate: false
-  xy: 394, 430
+  xy: 1040, 1424
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalS
   rotate: false
-  xy: 2, 62
+  xy: 880, 1424
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalTL
   rotate: false
-  xy: 298, 354
+  xy: 608, 1056
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalTR
   rotate: false
-  xy: 2, 22
+  xy: 1184, 1648
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoallow
   rotate: false
-  xy: 38, 98
+  xy: 1184, 1808
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoallower
   rotate: false
-  xy: 262, 302
+  xy: 1456, 2000
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIron
   rotate: false
-  xy: 170, 170
+  xy: 1616, 2000
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronBL
   rotate: false
-  xy: 374, 430
+  xy: 960, 1424
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronBR
   rotate: false
-  xy: 262, 282
+  xy: 608, 976
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronTL
   rotate: false
-  xy: 354, 430
+  xy: 608, 1136
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronTR
   rotate: false
-  xy: 130, 170
+  xy: 1184, 1728
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 transparent16
   rotate: false
-  xy: 2, 2
+  xy: 1184, 1568
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

@@ -2,6 +2,7 @@ package org.dudss.nodeshot;
 
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.terrain.Section;
 
 //SIMULATION THREAD
 public class SimulationThread implements Runnable {
@@ -11,9 +12,10 @@ public class SimulationThread implements Runnable {
     public static int TICKS_PER_SECOND = 30;
     static int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     int MAX_FRAMESKIP = 15; //30 (15)
-    long next_game_tick = getTickCount() + SKIP_TICKS;
+    static long next_game_tick = getTickCount() + SKIP_TICKS;
     
     int next_chunk_tick = 10;
+    public static int lastTicksPerSecond = 30;
     
     public static int simTick;
     
@@ -89,7 +91,7 @@ public class SimulationThread implements Runnable {
    	    }
 	}   
     
-    long getTickCount() {
+    static long getTickCount() {
 		return System.currentTimeMillis();
 	}
 	
@@ -103,7 +105,9 @@ public class SimulationThread implements Runnable {
 		if (simTick >= next_chunk_tick) {
 			next_chunk_tick += 5;
 			GameScreen.chunks.updateAllChunks();
-			GameScreen.chunks.updateSectionMeshes(true);
+			for (Section s : GameScreen.chunks.sectionsInView) {
+				GameScreen.chunks.updateSectionMesh(s, true, -1);
+			}
 		}		
 		
 		//Updating pathHandler logic
@@ -125,13 +129,17 @@ public class SimulationThread implements Runnable {
 	}
 	
 	public static void pauseSim() {
-		System.out.println("SimThread - Pausing at tick: " + simTick);
-		Base.running = false;
-	}
-	 
-	public static void resumeSim() {
-		System.out.println("SimThread - Resuming ...");
-		Base.running = true;
-	}
-	
+		/*System.out.println("SimThread - Pausing at tick: " + simTick);
+		if (TICKS_PER_SECOND > 0) {
+			lastTicksPerSecond = TICKS_PER_SECOND;
+			TICKS_PER_SECOND = 0;
+			SKIP_TICKS = 0;
+			next_game_tick = getTickCount() + SKIP_TICKS;
+		} else {
+			TICKS_PER_SECOND = lastTicksPerSecond;
+			SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+			next_game_tick = getTickCount() + SKIP_TICKS;
+		}
+		*/
+	}	
 }

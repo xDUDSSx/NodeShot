@@ -73,12 +73,12 @@ public class Bullet extends Sprite implements Entity {
 	protected void explode() {
 		for (int y = -3; y < 3; y++) {
 			for (int x = -3; x < 3; x++) {
-				Chunk current = GameScreen.chunks.getChunk((int)(targetCoords.x/Base.CHUNK_SIZE) + x, (int)(targetCoords.y/Base.CHUNK_SIZE) + y); if (current != null) {current.setCreeperLevel(0);}
+				Chunk current = GameScreen.chunks.getChunk((int)(targetCoords.x/Base.CHUNK_SIZE) + x, (int)(targetCoords.y/Base.CHUNK_SIZE) + y); if (current != null) {current.setCreeperLevel(current.getCreeperLevel() - 0.4f);}
 			}
 		}		
 		int sx = (int)(targetCoords.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
 		int sy = (int)(targetCoords.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-		GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true);
+		GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true, -1);
 	}
 	
 	@Override

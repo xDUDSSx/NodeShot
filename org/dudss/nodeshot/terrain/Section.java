@@ -1,13 +1,12 @@
 package org.dudss.nodeshot.terrain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.terrain.datasubsets.Quad;
-import org.dudss.nodeshot.utils.SpriteLoader;
+import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
 
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Section {
 	Chunk[][] sectionChunks;
@@ -22,20 +21,27 @@ public class Section {
 	SubSection ne;
 	
 	Mesh terrainMesh;
-	Mesh corruptionMesh;
 	
 	float[] terrainVerts;
 	short[] terrainIndices;
-	
-	float[] corrVerts;
-	short[] corrIndices;
+
+	List<Mesh> corrMeshes;
+	List<MeshVertexData> corrVertexData;
 	
 	/**Section is an object representing a square grid of chunks with a fixed size.
-	 * It also holds vertex info about underlaying chunk terrain and corruption
+	 * It also holds vertex info about under laying chunk terrain and corruption
 	 * @param chunks
 	 */
 	public Section(Chunk[][] chunks) {
 		sectionChunks = chunks;
+		
+		corrVertexData = new ArrayList<MeshVertexData>();
+		corrMeshes = new ArrayList<Mesh>();
+		
+		for (int i = 0; i < 10; i++) {
+			corrMeshes.add(null);
+			corrVertexData.add(new MeshVertexData(null, null));
+		}
 		
 		Chunk[][] swChunks = new Chunk[size/2][size/2];
 		Chunk[][] seChunks = new Chunk[size/2][size/2];
@@ -142,20 +148,20 @@ public class Section {
 		return terrainMesh;
 	}
 	
-	public void updateCorruptionMesh(float[] verts, short[] indices) {
-		this.corrVerts = verts;
-		this.corrIndices = indices;
+	public void updateCorruptionMesh(int layer, float[] verts, short[] indices) {
+		this.corrVertexData.get(layer).setVerts(verts);
+		this.corrVertexData.get(layer).setIndices(indices);
 	}
 	
-	public float[] getCorruptionVerts() {
-		return corrVerts;
+	public float[] getCorruptionVerts(int layer) {
+		return corrVertexData.get(layer).getVerts();
 	}
 	
-	public short[] getCorruptionIndices() {
-		return corrIndices;
+	public short[] getCorruptionIndices(int layer) {
+		return corrVertexData.get(layer).getIndices();
 	}
 	
-	public Mesh getCorruptionMesh() {
-		return corruptionMesh;
+	public Mesh getCorruptionMesh(int layer) {
+		return corrMeshes.get(layer);
 	}
 }

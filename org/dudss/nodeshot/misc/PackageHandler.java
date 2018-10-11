@@ -21,6 +21,7 @@ public class PackageHandler {
 	}
 	
 	/**Dont use anymore*/
+	@Deprecated
 	public void addPath(Node from, Node to) {
 		DefinitePathHandler newPPH = new DefinitePathHandler(from, to);
 		pathHandlers.add(newPPH);
@@ -28,6 +29,7 @@ public class PackageHandler {
 	}
 	
 	/**Dont use anymore*/
+	@Deprecated
 	public void addPath(Node from, Node to, Color c) {
 		DefinitePathHandler newPPH = new DefinitePathHandler(from, to);
 		newPPH.setColor(c);

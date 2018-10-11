@@ -1,7 +1,5 @@
 package org.dudss.nodeshot.screens;
 
-import static org.dudss.nodeshot.screens.GameScreen.cam;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -11,7 +9,6 @@ import java.util.logging.Logger;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
 import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
@@ -38,11 +35,6 @@ import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
-import org.poly2tri.Poly2Tri;
-import org.poly2tri.geometry.polygon.PolygonPoint;
-import org.poly2tri.triangulation.TriangulationPoint;
-import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
-
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -51,18 +43,14 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -155,7 +143,7 @@ public class GameScreen implements Screen {
 	public static Chunks chunks;
 	public static Chunk hoverChunk = null;
 	
-	public static float viewportWidth = 300f;
+	public static float viewportWidth = 312f;
     FreeTypeFontGenerator generator;
 	
 	public static boolean buildMode = false;
@@ -191,8 +179,9 @@ public class GameScreen implements Screen {
     
     public static GLProfiler glProfiler;
     
-    public static FrameBuffer corrBuffer;
-    public static FrameBuffer fboA;
+    public static List<FrameBuffer> corrBuffers;
+    
+    public static FrameBuffer terrainBuffer;
     public static FrameBuffer blurBuffer;
     
     public GameScreen(Game game)
@@ -241,7 +230,11 @@ public class GameScreen implements Screen {
         Shaders.blurShader.end();
 
 		blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false);
-		corrBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false);
+		
+		corrBuffers = new ArrayList<FrameBuffer>();
+		for (int i = 0; i < 10; i++) {
+			corrBuffers.add(new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false));
+		}
 		
         batch = new SpriteBatch();
         r = new ShapeRenderer();
@@ -309,16 +302,16 @@ public class GameScreen implements Screen {
         	chunks.generateAll();
         }
       
-        Circle c = new Circle(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.WORLD_SIZE/2 + 200);
+        /*Circle c = new Circle(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.WORLD_SIZE/2 + 200);
         for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
     		for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
     			Rectangle rect = new Rectangle(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());    			
         		if (!(Intersector.overlaps(c, rect))) {
-        			chunks.getChunk(x, y).setCreeperLevel(1f);
+        			chunks.getChunk(x, y).setCreeperLevel(0.4f);
         			chunks.getChunk(x, y).setPlagueLevel(0f);
         		}
             }
-        }
+        }*/
         
     }
 
@@ -392,7 +385,7 @@ public class GameScreen implements Screen {
 	        r.end();
 	    }
            
-        drawDebug(batch);
+        //drawDebug(batch);
         
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r, batch);
@@ -427,18 +420,7 @@ public class GameScreen implements Screen {
          
        
        
-        batch.begin();
-        //Drawing packages
-        for(int i = 0; i < packagelist.size(); i++) {
-            Package p = packagelist.get(i);
-            
-            if (selectedID == p.getID()) {
-            	packagelist.get(selectedIndex).drawHighlight(batch);
-            }          
-            
-            p.draw(batch);
-        }
-        
+        batch.begin();      
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
             Node n = nodelist.get(i);  
@@ -463,11 +445,24 @@ public class GameScreen implements Screen {
             }
            
         }
+        
+        //Drawing packages
+        for(int i = 0; i < packagelist.size(); i++) {
+            Package p = packagelist.get(i);
+            
+            if (selectedID == p.getID()) {
+            	packagelist.get(selectedIndex).drawHighlight(batch);
+            }          
+            
+            p.draw(batch);
+        }           
         batch.end();
         
         bulletHandler.drawAll(r, batch);
         
-        chunks.drawCorruption();
+        for(int i = 0; i < 10; i++) {
+        	chunks.drawCorruption(i);
+        }
         
         //HUD, draw last
         //setting UI matrix
@@ -510,7 +505,7 @@ public class GameScreen implements Screen {
     	fboB.begin();
     	Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
-    	Shaders.blurShader.setUniformf("radius", 1f);
+    	Shaders.blurShader.setUniformf("radius", 0.4f);
         Shaders.blurShader.setUniformf("resolution", (cam.zoom * 200) * aspectRatio);
     	Shaders.blurShader.end();
 		batch.setShader(Shaders.blurShader);   	
@@ -530,12 +525,12 @@ public class GameScreen implements Screen {
 		
 		Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
-    	Shaders.blurShader.setUniformf("radius", 1f);
+    	Shaders.blurShader.setUniformf("radius", 0.4f);
     	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
     	Shaders.blurShader.end();
 		
-    	batch.setShader(Shaders.defaultShader);   	
-		s = new Sprite(fboA.getColorBufferTexture());
+    	batch.setShader(Shaders.blurShader);   	
+		s = new Sprite(fboB.getColorBufferTexture());
 		
 		m.setToOrtho2D(0, 0, fboB.getWidth(), fboB.getHeight());		
 		batch.setProjectionMatrix(m);
@@ -845,14 +840,16 @@ public class GameScreen implements Screen {
         }
         
         //Zoom clamping, min max
-        cam.zoom = MathUtils.clamp(cam.zoom, 0.2f, Base.WORLD_SIZE/cam.viewportWidth - 3f);
+        cam.zoom = MathUtils.clamp(cam.zoom, 0.2f, Base.WORLD_SIZE/cam.viewportWidth);
 
+        /*
         float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
         float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
 
         //Making sure the camera doesnt go beyond the world limit
         cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f, Base.WORLD_SIZE - effectiveViewportWidth / 2f);
         cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f, Base.WORLD_SIZE - effectiveViewportHeight / 2f);
+   		*/
     }
 
     public static Entity checkHighlights(boolean select) {
@@ -989,7 +986,7 @@ public class GameScreen implements Screen {
         batch.dispose();
         //img.dispose();
         r.dispose();
-        fboA.dispose();
+        terrainBuffer.dispose();
 		blurBuffer.dispose();
     }  
 }

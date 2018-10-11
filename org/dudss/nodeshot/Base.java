@@ -47,8 +47,9 @@ public class Base {
 	//TERRAIN
 	public static int WORLD_SIZE = 4096;
 	
-	public static float COAL_THRESHOLD = 0.85f;
-	public static float IRON_THRESHOLD = 0.85f;
+	public static float COAL_THRESHOLD = 0.74f;
+	public static float IRON_THRESHOLD = 0.74f;
+	public static float TERRAIN_THRESHOLD = 0.6f;
 	
 	public static int CHUNK_SIZE = 16;
 	public static int SECTION_SIZE = 16;
