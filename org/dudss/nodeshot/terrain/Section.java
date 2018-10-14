@@ -1,6 +1,7 @@
 package org.dudss.nodeshot.terrain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.dudss.nodeshot.Base;
@@ -25,9 +26,12 @@ public class Section {
 	float[] terrainVerts;
 	short[] terrainIndices;
 
+	boolean corrUpdate = false;
+	
 	List<Mesh> corrMeshes;
 	List<MeshVertexData> corrVertexData;
-	
+	List<Boolean> updates;
+ 	
 	/**Section is an object representing a square grid of chunks with a fixed size.
 	 * It also holds vertex info about under laying chunk terrain and corruption
 	 * @param chunks
@@ -38,10 +42,12 @@ public class Section {
 		corrVertexData = new ArrayList<MeshVertexData>();
 		corrMeshes = new ArrayList<Mesh>();
 		
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < Base.MAX_CREEP; i++) {
 			corrMeshes.add(null);
 			corrVertexData.add(new MeshVertexData(null, null));
 		}
+		
+		updates = new ArrayList<>(Collections.nCopies(60, false));
 		
 		Chunk[][] swChunks = new Chunk[size/2][size/2];
 		Chunk[][] seChunks = new Chunk[size/2][size/2];
@@ -133,7 +139,7 @@ public class Section {
 	
 	public void updateTerrainMesh(float[] verts, short[] indices) {
 		this.terrainVerts = verts;
-		this.terrainIndices = indices;
+		this.terrainIndices = indices;		
 	}
 	
 	public float[] getTerrainVerts() {
@@ -150,7 +156,7 @@ public class Section {
 	
 	public void updateCorruptionMesh(int layer, float[] verts, short[] indices) {
 		this.corrVertexData.get(layer).setVerts(verts);
-		this.corrVertexData.get(layer).setIndices(indices);
+		this.corrVertexData.get(layer).setIndices(indices);	
 	}
 	
 	public float[] getCorruptionVerts(int layer) {
@@ -163,5 +169,17 @@ public class Section {
 	
 	public Mesh getCorruptionMesh(int layer) {
 		return corrMeshes.get(layer);
+	}
+	
+	public void updated(int layer) {
+		updates.set(layer, false);
+	}
+	
+	public void requestUpdate(int layer) {
+		updates.set(layer, true);
+	}
+	
+	public boolean needsUpdate(int layer) {
+		return updates.get(layer);
 	}
 }

@@ -10,6 +10,8 @@ public class BaseClass extends Game {
 	public static Screen mainGameScreen;
 	public static Screen menuScreen;
 
+	public static long startTime = System.currentTimeMillis();
+	
 	@Override
 	public void create() {
 		//Creating game screen

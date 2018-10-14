@@ -252,25 +252,38 @@ public class DesktopInputProcessor implements InputProcessor {
 			} 			
 		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.C)) {
 			if (draggingConnection == false) {
+				for (int y = -1; y < 1; y++) {
+					for (int x = -1; x < 1; x++) {
+						Chunk c = GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) + x, (int)(worldPos.y/Base.CHUNK_SIZE) + y);
+						if (c != null) {
+							c.setCreeperLevel(GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) + x, (int)(worldPos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 5);
+						}
+					}
+				}		
+				int sx = (int)(worldPos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				int sy = (int)(worldPos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
+					GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true, -1);
+				}
+				
+			}
+		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
+			if (draggingConnection == false) {
 				for (int y = -5; y < 5; y++) {
 					for (int x = -5; x < 5; x++) {
-						GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) + x, (int)(worldPos.y/Base.CHUNK_SIZE) + y).setCreeperLevel(
-						GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) + x, (int)(worldPos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 0.1f
-						);
+						Chunk c = GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) + x, (int)(worldPos.y/Base.CHUNK_SIZE) + y);
+						if (c != null) {
+							c.setCreeperLevel(GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) + x, (int)(worldPos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() - Base.MAX_CREEP * 0.02f);
+						}
 					}
 				}		
 					
 				int sx = (int)(worldPos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
 				int sy = (int)(worldPos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-				GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true, -1);
-			}
-		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
-			if (draggingConnection == false) {
-				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) - 1, (int)(worldPos.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
-				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE) + 1, (int)(worldPos.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
-				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE), (int)(worldPos.y/Base.CHUNK_SIZE)).setCreeperLevel(0);
-				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE), (int)(worldPos.y/Base.CHUNK_SIZE) + 1).setCreeperLevel(0);
-				GameScreen.chunks.getChunk((int)(worldPos.x/Base.CHUNK_SIZE), (int)(worldPos.y/Base.CHUNK_SIZE) - 1).setCreeperLevel(0);
+				if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
+					GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true, -1);
+				}
+				
 			}
 		} else if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			if (draggingConnection == false) {

@@ -11,9 +11,13 @@ import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 
 public class Base {
 
@@ -50,6 +54,8 @@ public class Base {
 	public static float COAL_THRESHOLD = 0.74f;
 	public static float IRON_THRESHOLD = 0.74f;
 	public static float TERRAIN_THRESHOLD = 0.6f;
+	
+	public static int MAX_CREEP = 5;
 	
 	public static int CHUNK_SIZE = 16;
 	public static int SECTION_SIZE = 16;

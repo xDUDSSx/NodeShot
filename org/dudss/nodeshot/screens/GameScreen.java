@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.Building;
 import org.dudss.nodeshot.entities.Entity;
@@ -43,9 +44,12 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -53,11 +57,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
@@ -81,6 +85,7 @@ public class GameScreen implements Screen {
     //new variables
     public static int WIDTH;
     public static int HEIGHT;
+    public static float aspectRatio;
     
     public static String debugMessage = "Debug message";	
 	public static Logger LOGGER = Logger.getLogger(GameScreen.class.getSimpleName());
@@ -211,7 +216,8 @@ public class GameScreen implements Screen {
     public void show() {
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
-              
+        aspectRatio = (float)WIDTH/(float)HEIGHT;
+        
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
         if (lastCamePos == null) {
@@ -335,14 +341,34 @@ public class GameScreen implements Screen {
         handleInput();
         hudMenu.update();
         cam.update();
-        batch.setProjectionMatrix(cam.combined);
-        r.setProjectionMatrix(cam.combined);
-        
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+
+        Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
      
         glProfiler.reset();        
 		
+        //Background cloud rendering
+        float secondsSinceStartup = ((System.currentTimeMillis() - BaseClass.startTime) / 1000f);
+        Matrix4 uiMatrix = cam.combined.cpy();
+        uiMatrix.setToOrtho2D(0, 0, WIDTH, HEIGHT);
+ 		Shaders.solidCloudShader.begin();
+ 		Shaders.solidCloudShader.pedantic = false;
+ 		Shaders.solidCloudShader.setUniformMatrix("u_projTrans", uiMatrix);
+		//Shaders.solidCloudShader.setUniformi("u_texture", 0);
+ 		Shaders.solidCloudShader.setUniformf("time", secondsSinceStartup);
+ 		Shaders.solidCloudShader.setUniformf("resolution", GameScreen.WIDTH, GameScreen.HEIGHT);
+ 		Shaders.solidCloudShader.setUniformf("pos", GameScreen.cam.position.x, GameScreen.cam.position.y);
+ 		Shaders.solidCloudShader.end();
+        setHudProjectionMatrix(batch);
+        batch.begin();
+        batch.setShader(Shaders.solidCloudShader);
+        float[] verts = new float[] {0, 0, Color.toFloatBits(1f, 0, 0, 1f), 0, 0, WIDTH, 0, Color.toFloatBits(1f, 0, 0, 1f), 1, 0, WIDTH, HEIGHT, Color.toFloatBits(1f, 0, 0, 1f), 1, 1, 0, HEIGHT, Color.toFloatBits(1f, 0, 0, 1f), 0, 1};        
+ 		batch.draw(SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
+ 		batch.end();
+        
+ 		batch.setProjectionMatrix(cam.combined);
+ 		r.setProjectionMatrix(cam.combined);
+ 		
         chunks.drawTerrain();
         
 		if (buildMode == true) {
@@ -354,11 +380,11 @@ public class GameScreen implements Screen {
 	        batch.end();
 		}
         
-        /*LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
+        LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
         			"\nCalls: " + glProfiler.getCalls() +
         			"\nTexture binding " + glProfiler.getTextureBindings() + 
         			"\nShaderSwitches: " + glProfiler.getShaderSwitches()
-        );*/
+        );
 
         r.setAutoShapeType(true);      
         if (buildMode == true) {
@@ -385,8 +411,7 @@ public class GameScreen implements Screen {
 	        r.end();
 	    }
            
-        //drawDebug(batch);
-        
+ 
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r, batch);
         r.end();
@@ -459,15 +484,19 @@ public class GameScreen implements Screen {
         batch.end();
         
         bulletHandler.drawAll(r, batch);
-        
-        for(int i = 0; i < 10; i++) {
+    
+        for(int i = 0; i < Base.MAX_CREEP; i++) {
         	chunks.drawCorruption(i);
         }
         
+        //chunks.drawCorruption(batch);
+        
+        //drawDebug(batch);
+        
         //HUD, draw last
-        //setting UI matrix
+        //setting screen matrix    
         setHudProjectionMatrix(batch);
-        setHudProjectionMatrix(r);
+        setHudProjectionMatrix(r); 
         
         batch.begin();
         if (Gdx.app.getType() == ApplicationType.Android) {
@@ -495,13 +524,12 @@ public class GameScreen implements Screen {
         for (Section s : chunks.sectionsInView) {	   
         	Chunk c = s.getChunk(0, 0);	        	
         	batch.draw(SpriteLoader.sectionOutline, c.getX() , c.getY(), 256, 256);	
-        }
-        batch.end();
+        	//font.draw(batch, s.mesh, x, y)
+        }      
+        batch.end();    
     }
     
     public static void blurBuffer(FrameBuffer fboA, FrameBuffer fboB, Texture texture, float x, float y) {
-    	float aspectRatio = (float)WIDTH/(float)HEIGHT;
-    	
     	fboB.begin();
     	Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
@@ -528,7 +556,7 @@ public class GameScreen implements Screen {
     	Shaders.blurShader.setUniformf("radius", 0.4f);
     	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
     	Shaders.blurShader.end();
-		
+		  	
     	batch.setShader(Shaders.blurShader);   	
 		s = new Sprite(fboB.getColorBufferTexture());
 		
@@ -968,6 +996,8 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         WIDTH = width;
         HEIGHT = height;
+        
+        aspectRatio = (float)WIDTH/(float)HEIGHT;
         
         cam.viewportWidth = viewportWidth;
         cam.viewportHeight = viewportWidth * height/width;

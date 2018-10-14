@@ -57,74 +57,62 @@ public class Chunk {
 	}
 	
 	//TODO: rewrite the update -> simpler more "fluid" like behaviour 
-	public void update() {
+	public void update() {	
 		/*if (toExpand) {			
-			switch (Base.getRandomIntNumberInRange(1, 4)) {		
-				case 1:	Chunk c1 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) - 1, (int)(this.y/Base.CHUNK_SIZE));
-						if (c1 != null) {
-							float x = 0.2f - (float)(((Math.pow(this.creeper, 3))*0.1f)) + (Math.abs(creeper - c1.getCreeperLevel())* 0.5f);
-							if (x > 1) {
-								x = 1f;
-							}
-							if (Base.getRandomFloatNumberInRange(0, 1) <= x) {
-								c1.setCreeperLevel(Base.round(c1.getCreeperLevel() + 0.05f, 2));
-							}
-						}
-						break;
-				case 2: Chunk c2 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) + 1, (int)(this.y/Base.CHUNK_SIZE));
-						if (c2 != null) {
-							float x = 0.2f - (float)(((Math.pow(this.creeper, 3))*0.1f)) + (Math.abs(creeper - c2.getCreeperLevel())* 0.5f);
-							if (x > 1) {
-								x = 1f;
-							}
-							if (Base.getRandomFloatNumberInRange(0, 1) <= x) {
-								c2.setCreeperLevel(Base.round(c2.getCreeperLevel() + 0.05f, 2));
-							}
-						}
-						break;
-						
-				case 3: Chunk c3 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) + 1);					
-						if (c3 != null) {
-							float x = 0.2f - (float)(((Math.pow(this.creeper, 3))*0.1f)) + (Math.abs(creeper - c3.getCreeperLevel())* 0.5f);
-							if (x > 1) {
-								x = 1f;
-							}
-							if (Base.getRandomFloatNumberInRange(0, 1) <= x) {
-								c3.setCreeperLevel(Base.round(c3.getCreeperLevel() + 0.05f, 2));
-							}
-						}
-						break;
-					
-				case 4: Chunk c4 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) - 1);
-						if (c4 != null) {
-							float x = 0.2f - (float)(((Math.pow(this.creeper, 3))*0.1f)) + (Math.abs(creeper - c4.getCreeperLevel())* 0.5f);
-							if (x > 1) {
-								x = 1f;
-							}
-							if (Base.getRandomFloatNumberInRange(0, 1) <= x) {
-								c4.setCreeperLevel(Base.round(c4.getCreeperLevel() + 0.05f, 2));
-							}
-						}
-						break;							
+		
+			Chunk c1 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) - 1, (int)(this.y/Base.CHUNK_SIZE));
+			Chunk c2 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) + 1, (int)(this.y/Base.CHUNK_SIZE));
+			Chunk c3 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) + 1);					
+			Chunk c4 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) - 1);
+			
+			if (c1 != null) {
+				if (c1.creeper <= 0 && this.creeper > c1.height) {
+					c1.setCreeperLevel(c1.height + 0.01f);
+				} 
+				if (c1.height < height && c1.creeper <= 0) {
+					c1.setCreeperLevel(c1.height + 0.01f);
+				}
 			}
-
+			
+			if (c2 != null) {
+				if (c2.creeper <= 0 && this.creeper > c2.height) {
+					c2.setCreeperLevel(c2.height + 0.01f);
+				} 
+				if (c2.height < height && c2.creeper <= 0) {
+					c2.setCreeperLevel(c2.height + 0.01f);
+				}
+			}
+			
+			if (c3 != null) {
+				if (c3.creeper <= 0 && this.creeper > c3.height) {
+					c3.setCreeperLevel(c3.height + 0.01f);
+				}
+				if (c3.height < height && c3.creeper <= 0) {
+					c3.setCreeperLevel(c3.height + 0.01f);
+				}
+			}
+			
+			if (c4 != null) {
+				if (c4.creeper <= 0 && this.creeper > c4.height) {
+					c4.setCreeperLevel(c4.height + 0.01f);
+				} 
+				if (c4.height < height && c4.creeper <= 0) {
+					c4.setCreeperLevel(c4.height + 0.01f);
+				}
+			}
 			toExpand = false;
 		}
 		
-		if (this.creeper >= 0.2f) {
-			//if (Base.getRandomFloatNumberInRange(0, 1) <= 0.2f - ((Math.pow(this.creeper, 2))*0.1f)) {
-				toExpand = true;
-			//}
+		if (this.creeper > height + 0.5f) {			
+			toExpand = true;
 		}
 		
-		/*if (this.creeper >= 0.5) {
-			if (Base.getRandomFloatNumberInRange(0, 1) <= 0.0001f) {
-				this.creeper = 0;
-				toExpand = false;
-				System.out.println("ded");
-			}
-		}
-		*/
+		if (this.creeper > 0) {
+			//if (Base.getRandomFloatNumberInRange(0, 1) < 0.05f) {
+				//creeper += 0.04f;
+			//}/
+			this.setCreeperLevel(this.creeper + (0.01f - Base.range(creeper*creeper*creeper*creeper, 0f, Base.MAX_CREEP * 1000f, 0f, 0.0095f)));
+		}*/
 		
 		if (toExpand) {			
 		
@@ -133,104 +121,79 @@ public class Chunk {
 			Chunk c3 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) + 1);					
 			Chunk c4 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) - 1);
 			
+			if (creeper < 0.01f) {
+				setCreeperLevel(0);
+			}
+			
+			float spore = 0.5f;
+			if (spore > creeper) {
+				spore = creeper;
+			}
+			float n = 0;
+			
+			//Check how many tiles are eligible to get creeper transfered
 			if (c1 != null) {
-				if (c1.creeper <= 0) {
-					c1.creeper += 0.1f;
-				} 
-			}
-			
-			if (c2 != null) {
-				if (c2.creeper <= 0) {
-					c2.creeper += 0.1f;
-				} 
-			}
-			
-			if (c3 != null) {
-				if (c3.creeper <= 0) {
-					c3.creeper += 0.1f;
-				}
-			}
-			
-			if (c4 != null) {
-				if (c4.creeper <= 0) {
-					c4.creeper += 0.1f;
-				} 
-			}
-			
-			/*float spore = 0.2f;
-			int candidates = 0;
-			
-			if (c1 != null) {
-				if (c1.creeper <= 0) {
-					c1.creeper += 0.1f;
-				} else if (c1.creeper < creeper) {
-					candidates++;
+				if (c1.creeper + c1.height < creeper + height) {
+					n++;
 				}
 			}
 			
 			if (c2 != null) {
-				if (c2.creeper <= 0) {
-					c2.creeper += 0.1f;
-				} else if (c2.creeper < creeper) {
-					candidates++;
+				if (c2.creeper + c2.height < creeper + height) {
+					n++;
 				}
 			}
 			
 			if (c3 != null) {
-				if (c3.creeper <= 0) {
-					c3.creeper += 0.1f;
-				} else if (c3.creeper < creeper) {
-					candidates++;
+				if (c3.creeper + c3.height < creeper + height) {
+					n++;
 				}
 			}
 			
 			if (c4 != null) {
-				if (c4.creeper <= 0) {
-					c4.creeper += 0.1f;
-				} else if (c4.creeper < creeper) {
-					candidates++;
+				if (c4.creeper + c4.height < creeper + height) {
+					n++;
 				}
 			}
-			//---------------------------------
+			
+			
+			float cut = spore / n;
+			
+			//Distribute transfer creeper
 			if (c1 != null) {
-				if (c1.creeper < creeper) {
-					c1.creeper += spore/candidates;				
+				if (c1.creeper + c1.height < creeper + height) {
+					c1.setCreeperLevel(c1.getCreeperLevel() + cut);
 				}
 			}
 			
 			if (c2 != null) {
-				if (c2.creeper < creeper) {
-					c2.creeper += spore/candidates;				
+				if (c2.creeper + c2.height < creeper + height) {
+					c2.setCreeperLevel(c2.getCreeperLevel() + cut);
 				}
 			}
 			
 			if (c3 != null) {
-				if (c3.creeper < creeper) {
-					c3.creeper += spore/candidates;				
+				if (c3.creeper + c3.height < creeper + height) {
+					c3.setCreeperLevel(c3.getCreeperLevel() + cut);
 				}
 			}
 			
 			if (c4 != null) {
-				if (c4.creeper < creeper) {
-					c4.creeper += spore/candidates;				
+				if (c4.creeper + c4.height < creeper + height) {
+					c4.setCreeperLevel(c4.getCreeperLevel() + cut);
 				}
 			}
 			
-			if (candidates > 0) {
-				creeper -= spore;
+			setCreeperLevel(creeper - spore);
+			if (creeper < 0.01f) {
+				setCreeperLevel(0);
 			}
-			*/
-			toExpand = false;
+			
+		toExpand = false;
 		}
 		
-		if (this.creeper > 0.11f) {			
+		if ((creeper + height) > (height + 0.41f)) {			
 			toExpand = true;
-		}
-		
-		if (this.creeper > 0) {
-			if (Base.getRandomFloatNumberInRange(0, 1) < 0.05f) {
-				creeper += 0.04f;
-			}
 		}
 	}
 	
@@ -637,8 +600,8 @@ public class Chunk {
 	
 	public void setCreeperLevel(float level) {
 		creeper = level;
-		if (creeper > 1) {
-			//creeper = 1;
+		if (creeper > Base.MAX_CREEP) {
+			creeper = Base.MAX_CREEP;
 		}
 		if (creeper < 0) {
 			creeper = 0;
