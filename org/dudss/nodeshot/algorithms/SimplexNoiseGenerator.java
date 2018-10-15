@@ -3,6 +3,7 @@ package org.dudss.nodeshot.algorithms;
 import org.dudss.nodeshot.Base;
 
 public class SimplexNoiseGenerator {
+	
 	public float[][] generateOctavedSimplexNoise(int width, int height, int octaves, float roughness, float scale){
 		float[][] totalNoise = new float[width][height];
 		float layerFrequency = scale;

@@ -8,7 +8,7 @@ import static org.dudss.nodeshot.screens.GameScreen.cam;
 import static org.dudss.nodeshot.screens.GameScreen.debugMessage;
 import static org.dudss.nodeshot.screens.GameScreen.deleteButton;
 import static org.dudss.nodeshot.screens.GameScreen.draggingConnection;
-import static org.dudss.nodeshot.screens.GameScreen.lastCamePos;
+import static org.dudss.nodeshot.screens.GameScreen.lastCamPos;
 import static org.dudss.nodeshot.screens.GameScreen.lastMousePress;
 import static org.dudss.nodeshot.screens.GameScreen.lastMousePressType;
 import static org.dudss.nodeshot.screens.GameScreen.mousePos;
@@ -36,7 +36,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class MobileGestureListener implements GestureDetector.GestureListener{
-
+	
+	/**This is an old class that is not updated to new principles, the game will probably not support mobile so
+	 * this class will be most likely deleted in the future
+	 */
+	
 	@Override
     public boolean touchDown(float x, float y, int pointer, int button) {
         mouseX = (int) x;
@@ -90,7 +94,7 @@ public class MobileGestureListener implements GestureDetector.GestureListener{
         //Back button detection
         if (backButton.contains(mouseX, (HEIGHT - mouseY))) {
             buttonIntersected = true;
-            lastCamePos = cam.position;
+            lastCamPos = cam.position;
             nodeshotGame.setScreen(BaseClass.menuScreen);
         }
 

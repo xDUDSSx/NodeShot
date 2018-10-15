@@ -1,5 +1,8 @@
 package org.dudss.nodeshot.screens;
 
+import static org.dudss.nodeshot.screens.GameScreen.cam;
+import static org.dudss.nodeshot.screens.GameScreen.prevCameraOffset;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -164,9 +167,12 @@ public class GameScreen implements Screen {
     GlyphLayout layout;
 
     public static OrthographicCamera cam;
-    public static Vector3 lastCamePos;
+    public static Vector3 lastCamPos;
     public float lastZoom;
     public static Boolean zooming = false;
+    //Background shader helper vars
+    public static float off = 0.5f;
+    public static Vector3 prevCameraOffset;
     
     TextureAtlas atlas;
     
@@ -220,15 +226,16 @@ public class GameScreen implements Screen {
         
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
-        if (lastCamePos == null) {
+        if (lastCamPos == null) {
             cam.position.set(Base.WORLD_SIZE / 2f, Base.WORLD_SIZE / 2f, 0);
-            cam.zoom = 3f;
+            cam.zoom = 3f;           
         } else {
-            cam.position.set(lastCamePos);
+            cam.position.set(lastCamPos);
             cam.zoom = lastZoom;
         }
+        prevCameraOffset = new Vector3(cam.position);
         cam.update();
-        lastCamePos = cam.position;
+        lastCamPos = cam.position;
         lastZoom = cam.zoom;
         
         Shaders.blurShader.begin();
@@ -340,35 +347,18 @@ public class GameScreen implements Screen {
     public void render (float delta) {
         handleInput();
         hudMenu.update();
-        cam.update();
-
+        cam.update();	
+        
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
      
+        //OpenGL performance logging
         glProfiler.reset();        
 		
         //Background cloud rendering
-        float secondsSinceStartup = ((System.currentTimeMillis() - BaseClass.startTime) / 1000f);
-        Matrix4 uiMatrix = cam.combined.cpy();
-        uiMatrix.setToOrtho2D(0, 0, WIDTH, HEIGHT);
- 		Shaders.solidCloudShader.begin();
- 		Shaders.solidCloudShader.pedantic = false;
- 		Shaders.solidCloudShader.setUniformMatrix("u_projTrans", uiMatrix);
-		//Shaders.solidCloudShader.setUniformi("u_texture", 0);
- 		Shaders.solidCloudShader.setUniformf("time", secondsSinceStartup);
- 		Shaders.solidCloudShader.setUniformf("resolution", GameScreen.WIDTH, GameScreen.HEIGHT);
- 		Shaders.solidCloudShader.setUniformf("pos", GameScreen.cam.position.x, GameScreen.cam.position.y);
- 		Shaders.solidCloudShader.end();
-        setHudProjectionMatrix(batch);
-        batch.begin();
-        batch.setShader(Shaders.solidCloudShader);
-        float[] verts = new float[] {0, 0, Color.toFloatBits(1f, 0, 0, 1f), 0, 0, WIDTH, 0, Color.toFloatBits(1f, 0, 0, 1f), 1, 0, WIDTH, HEIGHT, Color.toFloatBits(1f, 0, 0, 1f), 1, 1, 0, HEIGHT, Color.toFloatBits(1f, 0, 0, 1f), 0, 1};        
- 		batch.draw(SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
- 		batch.end();
-        
- 		batch.setProjectionMatrix(cam.combined);
- 		r.setProjectionMatrix(cam.combined);
+        drawBackgroundClouds(batch);
  		
+        //Rendering the terrain
         chunks.drawTerrain();
         
 		if (buildMode == true) {
@@ -380,11 +370,12 @@ public class GameScreen implements Screen {
 	        batch.end();
 		}
         
-        LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
+		//OpenGL performance logging
+        /*LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
         			"\nCalls: " + glProfiler.getCalls() +
         			"\nTexture binding " + glProfiler.getTextureBindings() + 
         			"\nShaderSwitches: " + glProfiler.getShaderSwitches()
-        );
+        );*/
 
         r.setAutoShapeType(true);      
         if (buildMode == true) {
@@ -431,7 +422,7 @@ public class GameScreen implements Screen {
         	}
         }
       
-        //grid rendering
+        //Connector rendering
         drawConnectors(r);
     
         if (buildMode && builtBuilding != null) {
@@ -443,8 +434,6 @@ public class GameScreen implements Screen {
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
          
-       
-       
         batch.begin();      
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
@@ -485,12 +474,15 @@ public class GameScreen implements Screen {
         
         bulletHandler.drawAll(r, batch);
     
+        //Drawing all the corruption layers
+        //Corruption is currently drawn as separate layers //TODO: Optimize heavily!
         for(int i = 0; i < Base.MAX_CREEP; i++) {
         	chunks.drawCorruption(i);
         }
         
         //chunks.drawCorruption(batch);
         
+        //Draw debug rectangles representing sections of chunks
         //drawDebug(batch);
         
         //HUD, draw last
@@ -529,6 +521,7 @@ public class GameScreen implements Screen {
         batch.end();    
     }
     
+    //Shader related rendering meshods
     public static void blurBuffer(FrameBuffer fboA, FrameBuffer fboB, Texture texture, float x, float y) {
     	fboB.begin();
     	Shaders.blurShader.begin();
@@ -572,6 +565,45 @@ public class GameScreen implements Screen {
 		batch.setShader(Shaders.defaultShader);
 	}   
     
+    public void drawBackgroundClouds(SpriteBatch batch) {
+        //Getting the time this application has run for, the is fed to the cloud shader and makes it "animated"
+    	float secondsSinceStartup = ((System.currentTimeMillis() - BaseClass.startTime) / 1000f);
+    	
+    	//Creating a basic screen matrix
+        Matrix4 uiMatrix = cam.combined.cpy();
+        uiMatrix.setToOrtho2D(0, 0, WIDTH, HEIGHT);
+        
+        //Mesh vertexes that correspond to a single quad covering the screen
+        float[] verts = new float[] {0, 0, Color.toFloatBits(1f, 0, 0, 1f), 0, 0, WIDTH, 0, Color.toFloatBits(1f, 0, 0, 1f), 1, 0, WIDTH, HEIGHT, Color.toFloatBits(1f, 0, 0, 1f), 1, 1, 0, HEIGHT, Color.toFloatBits(1f, 0, 0, 1f), 0, 1};        
+        //cloud scale that is normalized to some predefined values
+        float clampedScale = Base.range(cam.zoom*0.5f, Base.MIN_ZOOM, Base.WORLD_SIZE/cam.viewportWidth, 2f, 5f);
+        
+        //Setting the shader uniforms
+ 		Shaders.solidCloudShader.begin();
+ 		//Flag indicating that the shader does not need all the uniforms that are expected by LibGdx (eg. texture, which is not used)
+ 		Shaders.solidCloudShader.pedantic = false;
+ 		//Setting the projection matrix
+ 		Shaders.solidCloudShader.setUniformMatrix("u_projTrans", uiMatrix);
+ 		//Setting the time uniform
+ 		Shaders.solidCloudShader.setUniformf("time", secondsSinceStartup);
+ 		//Setting the cloud scale
+ 		Shaders.solidCloudShader.setUniformf("zoom", clampedScale);
+ 		//Screen resolution
+ 		Shaders.solidCloudShader.setUniformf("resolution", WIDTH, HEIGHT);
+ 		//Offset from the original coordinates used to make the clouds scale up/down from the center of the screen rather than bottom right corner
+ 		Shaders.solidCloudShader.setUniformf("offset", clampedScale / 2f);
+ 		//Offset vector that reacts to the in-game camera position, making it look like the clouds are part of the scene
+ 		Shaders.solidCloudShader.setUniformf("pos", cam.position.x, cam.position.y);
+ 		Shaders.solidCloudShader.end(); 		        
+        
+        batch.begin();
+        batch.setShader(Shaders.solidCloudShader);       
+        //This particular batch function requires a texture to bind, so I'm binding the texture used later in chunk rendering 
+        //TODO: stop using spritebatch and call the render from an actual Mesh object (will be cleaner and will not require an extra texture bind)
+        batch.draw(SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
+ 		batch.end();
+ 		batch.setShader(Shaders.defaultShader);
+    }
     void drawConnectors(ShapeRenderer sR) {
 
     	r.begin(ShapeType.Filled);
@@ -841,24 +873,24 @@ public class GameScreen implements Screen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             cam.translate(-3, 0, 0);
-			GameScreen.chunks.updateView(cam);
+          	GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             cam.translate(3, 0, 0);            
-			GameScreen.chunks.updateView(cam);
+          	GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            cam.translate(0, -3, 0);          
-			GameScreen.chunks.updateView(cam);
+            cam.translate(0, -3, 0);     
+            GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            cam.translate(0, 3, 0);         
-			GameScreen.chunks.updateView(cam);
+            cam.translate(0, 3, 0);  
+          	GameScreen.chunks.updateView(cam);
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
         	lastZoom = cam.zoom;
-        	lastCamePos = cam.position;
+        	lastCamPos = cam.position;
         	nodeshotGame.setScreen(new MenuScreen(nodeshotGame));
         }
 
@@ -868,16 +900,16 @@ public class GameScreen implements Screen {
         }
         
         //Zoom clamping, min max
-        cam.zoom = MathUtils.clamp(cam.zoom, 0.2f, Base.WORLD_SIZE/cam.viewportWidth);
+        cam.zoom = MathUtils.clamp(cam.zoom, Base.MIN_ZOOM, Base.WORLD_SIZE/cam.viewportWidth);
 
-        /*
+        
         float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
         float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
 
         //Making sure the camera doesnt go beyond the world limit
-        cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f, Base.WORLD_SIZE - effectiveViewportWidth / 2f);
-        cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f, Base.WORLD_SIZE - effectiveViewportHeight / 2f);
-   		*/
+        cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f - effectiveViewportWidth / 2f);
+        cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f -  Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f - effectiveViewportHeight / 2f);
+   		
     }
 
     public static Entity checkHighlights(boolean select) {
@@ -953,17 +985,6 @@ public class GameScreen implements Screen {
             float y1 = n1.getCY();
             float x2 = n2.getCX();
             float y2 = n2.getCY();
-
-            Polygon p = new Polygon(new float[] {
-                    rect.getX(),
-                    rect.getY(),
-                    (rect.getX()+8f),
-                    rect.getY(),
-                    (rect.getX()+8f),
-                    (rect.getY()+8f),
-                    rect.getX(),
-                    (rect.getY()+8f)
-            });
 
             if (Intersector.distanceSegmentPoint(x1, y1, x2, y2, worldPos.x, worldPos.y) <= 3)
             {

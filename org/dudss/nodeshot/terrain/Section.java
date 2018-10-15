@@ -25,10 +25,10 @@ public class Section {
 	
 	float[] terrainVerts;
 	short[] terrainIndices;
-
-	boolean corrUpdate = false;
 	
 	List<Mesh> corrMeshes;
+	boolean terrainUpdate = false;
+	
 	List<MeshVertexData> corrVertexData;
 	List<Boolean> updates;
  	
@@ -154,6 +154,18 @@ public class Section {
 		return terrainMesh;
 	}
 	
+	public void updatedTerrain() {
+		terrainUpdate = false;
+	}
+	
+	public void requestTerrainUpdate() {
+		terrainUpdate = true;
+	}
+	
+	public boolean needsTerrainUpdate() {
+		return terrainUpdate;
+	}
+	
 	public void updateCorruptionMesh(int layer, float[] verts, short[] indices) {
 		this.corrVertexData.get(layer).setVerts(verts);
 		this.corrVertexData.get(layer).setIndices(indices);	
@@ -171,15 +183,15 @@ public class Section {
 		return corrMeshes.get(layer);
 	}
 	
-	public void updated(int layer) {
+	public void updatedCorruption(int layer) {
 		updates.set(layer, false);
 	}
 	
-	public void requestUpdate(int layer) {
+	public void requestCorruptionUpdate(int layer) {
 		updates.set(layer, true);
 	}
 	
-	public boolean needsUpdate(int layer) {
+	public boolean needsCorruptionUpdate(int layer) {
 		return updates.get(layer);
 	}
 }

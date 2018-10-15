@@ -132,6 +132,9 @@ public class Chunks {
 		}
 	}
 
+	/**Updates terrain or corruption meshes of the section, if corr == true -> corruption mesh of a selected layer will be updated
+	 * If layer == -1 -> all corruption meshes of the section will be updated
+	 * **/
 	public void updateSectionMesh(Section s, boolean corr, int layer) {      
     	if (!corr) {
         	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false, 0);
@@ -142,34 +145,18 @@ public class Chunks {
     				MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, i);
     	        	s.updateCorruptionMesh(i, mvdCorruption.getVerts(), mvdCorruption.getIndices());
     	        	for (int c = 0; c < Base.MAX_CREEP; c++) {
-    	        		s.requestUpdate(c);
+    	        		s.requestCorruptionUpdate(c);
     	        	}
     			}
     		} else {
 	        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, layer);
 	        	s.updateCorruptionMesh(layer, mvdCorruption.getVerts(), mvdCorruption.getIndices());   
-	        	s.requestUpdate(layer);
+	        	s.requestCorruptionUpdate(layer);
     		}
     	}
 	}
 	
-	/*public void updateSectionMeshes(Section s, boolean corr, int layer) {      
-    	if (!corr) {
-        	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false, 0);
-        	s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
-    	} else {
-    		if (layer == -1) {
-    			for (int i = 0; i < Base.MAX_CREEP; i++) {
-    				MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, i);
-    	        	s.updateCorruptionMesh(i, mvdCorruption.getVerts(), mvdCorruption.getIndices());    	
-    			}
-    		} else {
-	        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, layer);
-	        	s.updateCorruptionMesh(layer, mvdCorruption.getVerts(), mvdCorruption.getIndices());    
-    		}
-    	}
-	}*/
-	
+	//TODO: Make this depend and be handled by a section (for performance reasons, no need to update chunks with no corruption or buildings)
 	public void updateAllChunks() {
 		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
@@ -184,8 +171,11 @@ public class Chunks {
 		    Shaders.defaultShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
 		    Shaders.defaultShader.setUniformi("u_texture", 0);
 		    for (Section s : sectionsInView) {
-		    	s.getTerrainMesh().setVertices(s.getTerrainVerts());
-		    	s.getTerrainMesh().setIndices(s.getTerrainIndices());	    	
+		    	if (s.needsTerrainUpdate() == true) {		
+		    		s.getTerrainMesh().setVertices(s.getTerrainVerts());
+			    	s.getTerrainMesh().setIndices(s.getTerrainIndices());	 
+	 				s.updatedTerrain();
+	 			}
 		    	s.getTerrainMesh().render(Shaders.defaultShader, GL20.GL_TRIANGLES);
 		    }
 		    Shaders.defaultShader.end();	
@@ -204,10 +194,10 @@ public class Chunks {
 			Shaders.testShader.setUniformi("u_texture", 0);			
 			    
 	 		for (Section s : sectionsInView) {	   	 
-	 			if (s.needsUpdate(layer) == true) {		
+	 			if (s.needsCorruptionUpdate(layer) == true) {		
 	 				s.getCorruptionMesh(layer).setVertices(s.getCorruptionVerts(layer));
 			    	s.getCorruptionMesh(layer).setIndices(s.getCorruptionIndices(layer));
-	 				s.updated(layer);
+	 				s.updatedCorruption(layer);
 	 			}
 	 			Shaders.testShader.setUniformf("shade", 1f - (0.5f * ((float)(layer + 1) / (Base.MAX_CREEP + 1))));
 		    	s.getCorruptionMesh(layer).render(Shaders.testShader, GL20.GL_TRIANGLES);
@@ -236,7 +226,7 @@ public class Chunks {
 	    batch.setShader(Shaders.defaultShader);
 	    for (int i = 0; i < Base.MAX_CREEP; i++) {
 	    	for (Section s : sectionsInView) {	   	 
-	 			if (s.needsUpdate(0) == true) {
+	 			if (s.needsCorruptionUpdate(0) == true) {
 	 				s.updateCorruptionMesh(i, s.getCorruptionVerts(i), s.getCorruptionIndices(i));		    		
 	 			}
 		    	s.getCorruptionMesh(i).render(Shaders.defaultShader, GL20.GL_TRIANGLES);
@@ -301,7 +291,7 @@ public class Chunks {
 	public Mesh generateMesh(Section s, boolean corr, int level) {		
 	    int numberOfRectangles = Base.SECTION_SIZE*Base.SECTION_SIZE;
 	    int numberOfVertices = 4 * numberOfRectangles;
-	    Mesh mesh = new Mesh(true, numberOfVertices, numberOfRectangles * 6, 
+	    Mesh mesh = new Mesh(false, numberOfVertices, numberOfRectangles * 6, 
 				new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
 				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
 				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
@@ -550,9 +540,7 @@ public class Chunks {
  	   	
  	   Pixmap heightPixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
 	   	for (int x2 = 0; x2 < Base.CHUNK_AMOUNT; x2++) {
-	   		for (int y2 = 0; y2 < Base.CHUNK_AMOUNT; y2++) {   
-	    		//float newVal = Base.range(heightMap[x2][y2], -1.4f, 1.4f, -1.0f, 1.0f);    
-	    		
+	   		for (int y2 = 0; y2 < Base.CHUNK_AMOUNT; y2++) {   	    		
 	    	    //Converting [-1.0,1.0] to [0,1]
 	    	    float val = (((heightMap[x2][y2] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;	    	    
 	    	    heightPixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
@@ -563,7 +551,7 @@ public class Chunks {
 		//CHUNK GEN
 		System.out.println("Generating chunks (n. " + Base.CHUNK_AMOUNT*Base.CHUNK_AMOUNT + ")");
 		System.out.println("Generating terrain heights");
-		ironPixmap = generateHeights(heightPixmap);
+		heightPixmap = generateHeights(heightPixmap);
 		System.out.println("Generating coal ore");
 		coalPixmap = generateCoalPatches(coalPixmap);
 		System.out.println("Generating iron ore");
@@ -577,8 +565,7 @@ public class Chunks {
 		Pixmap patchPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.RGBA8888);
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
-				Color c = new Color(pixmap.getPixel(x, y));
-				//System.out.println("Color val: " + c.r);
+				Color c = new Color(pixmap.getPixel(x, y));				
 				if (c.r > Base.COAL_THRESHOLD) {
 					float level = Base.range(c.r, Base.COAL_THRESHOLD, 1f, 0.2f, 1.0f);
 					chunks[x][y].setCoalLevel(level);
@@ -592,8 +579,7 @@ public class Chunks {
 		Pixmap patchPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.RGBA8888);
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
-				Color c = new Color(pixmap.getPixel(x, y));
-				//System.out.println("Color val: " + c.r);				
+				Color c = new Color(pixmap.getPixel(x, y));						
 				if (c.r > Base.IRON_THRESHOLD) {
 					float level = Base.range(c.r, Base.IRON_THRESHOLD, 1f, 0.2f, 1.0f);
 					chunks[x][y].setIronLevel(level);
@@ -607,11 +593,10 @@ public class Chunks {
 		Pixmap patchPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.RGBA8888);
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
-				Color c = new Color(pixmap.getPixel(x, y));
-				//System.out.println("Color val: " + c.r);
-				if (c.r > 0.50f) {
-					float height = Base.range(c.r, Base.TERRAIN_THRESHOLD, 1f, 0.1f, 1.0f);
-					int val = (int)(height/0.2f);
+				Color c = new Color(pixmap.getPixel(x, y));				
+				if (c.r > 0.1f) {
+					//float height = Base.range(c.r, Base.TERRAIN_THRESHOLD, 1f, 0.1f, 1.0f);
+					int val = (int) (c.r / 0.2f);
 					if (val > 3) {
 						val = 3;
 					} else if (val < 0) {
@@ -620,7 +605,7 @@ public class Chunks {
 					chunks[x][y].setHeight(val);
 					
 				} else {
-					chunks[x][y].setHeight(0);
+					chunks[x][y].setHeight(-1);
 				}
 			}
 		}

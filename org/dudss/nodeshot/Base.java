@@ -34,6 +34,8 @@ public class Base {
 	public static int SCREEN_WIDTH;
 	public static int SCREEN_HEIGHT;
 
+	public static float MIN_ZOOM = 0.2f;
+	
 	public static int RADIUS = 16;
 	public static int PACKAGE_RADIUS = 16;
 
