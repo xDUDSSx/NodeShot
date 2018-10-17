@@ -23,9 +23,9 @@ public class Bullet extends Sprite implements Entity {
 	float percentage;
 	float speed;
 	float effectiveSpeed;
-	float damage;
+	float damage = 0.6f;
 	
-	int radius;
+	int radius = 4;
 	
 	/**A bullet object that travels from point A (turret) to point B (target) at a speed and damages corruption around its target (point B)*/
 	public Bullet(float x, float y, Vector2 target) {
@@ -71,9 +71,15 @@ public class Bullet extends Sprite implements Entity {
 	
 	/**Called when bullet reaches its target, damages corruption*/
 	protected void explode() {
-		for (int y = -3; y < 3; y++) {
-			for (int x = -3; x < 3; x++) {
-				Chunk current = GameScreen.chunks.getChunk((int)(targetCoords.x/Base.CHUNK_SIZE) + x, (int)(targetCoords.y/Base.CHUNK_SIZE) + y); if (current != null) {current.setCreeperLevel(current.getCreeperLevel() - 0.4f);}
+		for (int y = (-radius); y < radius; y++) {
+			for (int x = (-radius); x < radius; x++) {
+				Chunk current = GameScreen.chunks.getChunk((int)(targetCoords.x/Base.CHUNK_SIZE) + x, (int)(targetCoords.y/Base.CHUNK_SIZE) + y); 
+				if (current != null) {
+					//System.out.println(Math.hypot((current.getX() + Base.CHUNK_SIZE/2) - targetCoords.x, (current.getY() + Base.CHUNK_SIZE/2) - targetCoords.y));
+					if (Math.hypot((current.getX() + Base.CHUNK_SIZE/2) - targetCoords.x, (current.getY() + Base.CHUNK_SIZE/2) - targetCoords.y) <= (radius*Base.CHUNK_SIZE)) {
+						current.setCreeperLevel(current.getCreeperLevel() - damage);
+					} 
+				}				
 			}
 		}		
 		int sx = (int)(targetCoords.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));

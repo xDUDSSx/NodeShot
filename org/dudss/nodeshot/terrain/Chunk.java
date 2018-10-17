@@ -24,6 +24,7 @@ public class Chunk {
 	float ironOre = 0f;
 	
 	float creeper = 0;
+	float spore = 0;
 	
 	int height = 1;
 	
@@ -31,6 +32,8 @@ public class Chunk {
 	float plague = 0;
 
 	boolean toExpand = false;
+	long lastUpdate = System.currentTimeMillis();
+	long updateRate = 500;
 	
 	TextureRegion dirtTr;
 	TextureRegion coalTr;
@@ -45,155 +48,70 @@ public class Chunk {
 		BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT, END_LEFT, END_RIGHT, END_TOP, END_BOTTOM, SINGLE
 	}
 	
+	int ax;
+	int ay;
+	
+	Chunk minusx;
+	Chunk plusx;
+	Chunk minusy;
+	Chunk plusy;
+	
+	Chunk cornerTopLeft;
+	Chunk cornerTopRight;
+	Chunk cornerBottomLeft;
+	Chunk cornerBottomRight;
+	
+	Chunk[] neighbours;
+	
 	Chunk(float x, float y) {
 		this.x = x;
 		this.y = y;
 		
-		dirtTr = new TextureRegion(SpriteLoader.savanaTex);
+		/*dirtTr = new TextureRegion(SpriteLoader.savanaTex);
 		coalTr = new TextureRegion(SpriteLoader.coalTex);
 		coalLowerTr = new TextureRegion(SpriteLoader.coalLowerTex);
 		coalLowTr = new TextureRegion(SpriteLoader.coalLowTex);
 		ironTr = new TextureRegion(SpriteLoader.ironTex);	
+		*/
 	}
 	
 	//TODO: rewrite the update -> simpler more "fluid" like behaviour 
-	public void update() {	
-		/*if (toExpand) {			
-		
-			Chunk c1 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) - 1, (int)(this.y/Base.CHUNK_SIZE));
-			Chunk c2 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) + 1, (int)(this.y/Base.CHUNK_SIZE));
-			Chunk c3 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) + 1);					
-			Chunk c4 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) - 1);
+	public void update() {			
+		if (lastUpdate + updateRate <= System.currentTimeMillis() && height + creeper > height + 0.05f) {
+			//loat flowRate = 0.5f;
+			spore = creeper/2f;
 			
-			if (c1 != null) {
-				if (c1.creeper <= 0 && this.creeper > c1.height) {
-					c1.setCreeperLevel(c1.height + 0.01f);
-				} 
-				if (c1.height < height && c1.creeper <= 0) {
-					c1.setCreeperLevel(c1.height + 0.01f);
+			float[] diffs = new float[8];
+			for (int i = 0; i < 8; i++) {
+				if (neighbours[i] != null && neighbours[i].height + 0.25f < height + creeper) {
+					diffs[i] = (height + creeper) - (neighbours[i].height + neighbours[i].creeper);
+				} else {
+					diffs[i] = 0;
+				}
+			}		
+			
+			float total = 0;
+			for (int i = 0; i < 8; i++) {
+				if (!(diffs[i] <= 0)) {
+					total += diffs[i];
 				}
 			}
 			
-			if (c2 != null) {
-				if (c2.creeper <= 0 && this.creeper > c2.height) {
-					c2.setCreeperLevel(c2.height + 0.01f);
-				} 
-				if (c2.height < height && c2.creeper <= 0) {
-					c2.setCreeperLevel(c2.height + 0.01f);
+			float totalAdded = 0;
+			for (int i = 0; i < 8; i++) {
+				if (!(diffs[i] <= 0)) {
+					float toAdd = (diffs[i]/total) * spore;
+					neighbours[i].setCreeperLevel(neighbours[i].getCreeperLevel() + toAdd);
+					totalAdded += toAdd;					
 				}
-			}
+			}		
 			
-			if (c3 != null) {
-				if (c3.creeper <= 0 && this.creeper > c3.height) {
-					c3.setCreeperLevel(c3.height + 0.01f);
-				}
-				if (c3.height < height && c3.creeper <= 0) {
-					c3.setCreeperLevel(c3.height + 0.01f);
-				}
-			}
+			//System.out.println("totalAdded: " + totalAdded + " spore: " + spore + " creeper " + creeper);
+			setCreeperLevel(creeper -= totalAdded);
 			
-			if (c4 != null) {
-				if (c4.creeper <= 0 && this.creeper > c4.height) {
-					c4.setCreeperLevel(c4.height + 0.01f);
-				} 
-				if (c4.height < height && c4.creeper <= 0) {
-					c4.setCreeperLevel(c4.height + 0.01f);
-				}
-			}
-			toExpand = false;
-		}
-		
-		if (this.creeper > height + 0.5f) {			
-			toExpand = true;
-		}
-		
-		if (this.creeper > 0) {
-			//if (Base.getRandomFloatNumberInRange(0, 1) < 0.05f) {
-				//creeper += 0.04f;
-			//}/
-			this.setCreeperLevel(this.creeper + (0.01f - Base.range(creeper*creeper*creeper*creeper, 0f, Base.MAX_CREEP * 1000f, 0f, 0.0095f)));
-		}*/
-		
-		if (toExpand) {			
-		
-			Chunk c1 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) - 1, (int)(this.y/Base.CHUNK_SIZE));
-			Chunk c2 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE) + 1, (int)(this.y/Base.CHUNK_SIZE));
-			Chunk c3 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) + 1);					
-			Chunk c4 = GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE) - 1);
-			
-			if (creeper < 0.01f) {
-				setCreeperLevel(0);
-			}
-			
-			float spore = 0.5f;
-			if (spore > creeper) {
-				spore = creeper;
-			}
-			float n = 0;
-			
-			//Check how many tiles are eligible to get creeper transfered
-			if (c1 != null) {
-				if (c1.creeper + c1.height < creeper + height) {
-					n++;
-				}
-			}
-			
-			if (c2 != null) {
-				if (c2.creeper + c2.height < creeper + height) {
-					n++;
-				}
-			}
-			
-			if (c3 != null) {
-				if (c3.creeper + c3.height < creeper + height) {
-					n++;
-				}
-			}
-			
-			if (c4 != null) {
-				if (c4.creeper + c4.height < creeper + height) {
-					n++;
-				}
-			}
-			
-			
-			float cut = spore / n;
-			
-			//Distribute transfer creeper
-			if (c1 != null) {
-				if (c1.creeper + c1.height < creeper + height) {
-					c1.setCreeperLevel(c1.getCreeperLevel() + cut);
-				}
-			}
-			
-			if (c2 != null) {
-				if (c2.creeper + c2.height < creeper + height) {
-					c2.setCreeperLevel(c2.getCreeperLevel() + cut);
-				}
-			}
-			
-			if (c3 != null) {
-				if (c3.creeper + c3.height < creeper + height) {
-					c3.setCreeperLevel(c3.getCreeperLevel() + cut);
-				}
-			}
-			
-			if (c4 != null) {
-				if (c4.creeper + c4.height < creeper + height) {
-					c4.setCreeperLevel(c4.getCreeperLevel() + cut);
-				}
-			}
-			
-			setCreeperLevel(creeper - spore);
-			if (creeper < 0.01f) {
-				setCreeperLevel(0);
-			}
-			
-		toExpand = false;
-		}
-		
-		if ((creeper + height) > (height + 0.41f)) {			
-			toExpand = true;
+			lastUpdate = System.currentTimeMillis();			
+		} else {
+			return;
 		}
 	}
 	
@@ -213,20 +131,7 @@ public class Chunk {
 			
 			boolean triangleDrawn = false;
 			
-			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
-				int ax = Math.round(x/Base.CHUNK_SIZE);
-				int ay = Math.round(y/Base.CHUNK_SIZE);
-				
-				Chunk minusx = GameScreen.chunks.getChunk(ax - 1, ay);
-				Chunk plusx = GameScreen.chunks.getChunk(ax + 1, ay);
-				Chunk minusy = GameScreen.chunks.getChunk(ax, ay - 1);
-				Chunk plusy = GameScreen.chunks.getChunk(ax, ay + 1);
-				
-				/*Chunk cornerTopLeft = GameScreen.chunks.getChunk(ax - 1, ay + 1);
-				Chunk cornerTopRight = GameScreen.chunks.getChunk(ax + 1, ay + 1);
-				Chunk corneBottomLeft = GameScreen.chunks.getChunk(ax - 1, ay - 1);
-				Chunk cornerBottomRight = GameScreen.chunks.getChunk(ax + 1, ay - 1);
-				*/
+			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {				
 				
 				if (plusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 &&
@@ -320,19 +225,6 @@ public class Chunk {
 			boolean triangleDrawn = false;
 			AtlasRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledIron");
 			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
-				int ax = Math.round(x/Base.CHUNK_SIZE);
-				int ay = Math.round(y/Base.CHUNK_SIZE);
-				
-				Chunk minusx = GameScreen.chunks.getChunk(ax - 1, ay);
-				Chunk plusx = GameScreen.chunks.getChunk(ax + 1, ay);
-				Chunk minusy = GameScreen.chunks.getChunk(ax, ay - 1);
-				Chunk plusy = GameScreen.chunks.getChunk(ax, ay + 1);
-				
-				/*Chunk cornerTopLeft = GameScreen.chunks.getChunk(ax - 1, ay + 1);
-				Chunk cornerTopRight = GameScreen.chunks.getChunk(ax + 1, ay + 1);
-				Chunk corneBottomLeft = GameScreen.chunks.getChunk(ax - 1, ay - 1);
-				Chunk cornerBottomRight = GameScreen.chunks.getChunk(ax + 1, ay - 1);
-				*/
 				
 				if (plusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 &&
@@ -428,6 +320,7 @@ public class Chunk {
 			case 1: return SpriteLoader.tileAtlas.findRegion("rock1");
 			case 2: return SpriteLoader.tileAtlas.findRegion("dirt2");
 			case 3: return SpriteLoader.tileAtlas.findRegion("sand3");
+			case 4: return SpriteLoader.tileAtlas.findRegion("sand4");
 		}
 		
 		//return default sand texture
@@ -439,19 +332,6 @@ public class Chunk {
 		if (creeper > level) {
 			AtlasRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("corr32");
 			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
-				int ax = Math.round(x/Base.CHUNK_SIZE);
-				int ay = Math.round(y/Base.CHUNK_SIZE);			
-					
-				Chunk minusx = GameScreen.chunks.getChunk(ax - 1, ay);
-				Chunk plusx = GameScreen.chunks.getChunk(ax + 1, ay);
-				Chunk minusy = GameScreen.chunks.getChunk(ax, ay - 1);
-				Chunk plusy = GameScreen.chunks.getChunk(ax, ay + 1);
-				
-				/*Chunk cornerTopLeft = GameScreen.chunks.getChunk(ax - 1, ay + 1);
-				Chunk cornerTopRight = GameScreen.chunks.getChunk(ax + 1, ay + 1);
-				Chunk corneBottomLeft = GameScreen.chunks.getChunk(ax - 1, ay - 1);
-				Chunk cornerBottomRight = GameScreen.chunks.getChunk(ax + 1, ay - 1);
-				*/
 				
 				if (plusy.getCreeperLevel() <= level &&
 					plusx.getCreeperLevel() <= level &&
@@ -553,6 +433,32 @@ public class Chunk {
 		return SpriteLoader.tileAtlas.findRegion("transparent16");
 	}
 	
+	public void updateNeighbour() {
+		ax = Math.round(x/Base.CHUNK_SIZE);
+		ay = Math.round(y/Base.CHUNK_SIZE);
+		
+		minusx = GameScreen.chunks.getChunk(ax - 1, ay);
+		plusx = GameScreen.chunks.getChunk(ax + 1, ay);
+		minusy = GameScreen.chunks.getChunk(ax, ay - 1);
+		plusy = GameScreen.chunks.getChunk(ax, ay + 1);
+		
+		cornerTopLeft = GameScreen.chunks.getChunk(ax - 1, ay + 1);
+		cornerTopRight = GameScreen.chunks.getChunk(ax + 1, ay + 1);
+		cornerBottomLeft = GameScreen.chunks.getChunk(ax - 1, ay - 1);
+		cornerBottomRight = GameScreen.chunks.getChunk(ax + 1, ay - 1);
+		
+		//Putting these chunks into array for accessibility
+		neighbours = new Chunk[8];		
+		neighbours[0] = plusx;
+		neighbours[1] = plusy;
+		neighbours[2] = minusx;
+		neighbours[3] = minusy;
+		neighbours[4] = cornerTopLeft;
+		neighbours[5] = cornerTopRight;
+		neighbours[6] = cornerBottomLeft;
+		neighbours[7] = cornerBottomRight;
+	}
+	
 	public void setCoalLevel(float level) {
 		if (level == -1) {
 			coalOre = 0;
@@ -603,7 +509,7 @@ public class Chunk {
 		if (creeper > Base.MAX_CREEP) {
 			creeper = Base.MAX_CREEP;
 		}
-		if (creeper < 0) {
+		if (creeper < 0.05f) {
 			creeper = 0;
 		}
 	}

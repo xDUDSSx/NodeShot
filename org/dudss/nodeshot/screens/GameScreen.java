@@ -358,6 +358,9 @@ public class GameScreen implements Screen {
         //Background cloud rendering
         drawBackgroundClouds(batch);
  		
+        batch.setProjectionMatrix(cam.combined);
+        r.setProjectionMatrix(cam.combined);
+        
         //Rendering the terrain
         chunks.drawTerrain();
         
@@ -526,7 +529,7 @@ public class GameScreen implements Screen {
     	fboB.begin();
     	Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
-    	Shaders.blurShader.setUniformf("radius", 0.4f);
+    	Shaders.blurShader.setUniformf("radius", 0.5f);
         Shaders.blurShader.setUniformf("resolution", (cam.zoom * 200) * aspectRatio);
     	Shaders.blurShader.end();
 		batch.setShader(Shaders.blurShader);   	
@@ -546,7 +549,7 @@ public class GameScreen implements Screen {
 		
 		Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
-    	Shaders.blurShader.setUniformf("radius", 0.4f);
+    	Shaders.blurShader.setUniformf("radius", 0.5f);
     	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
     	Shaders.blurShader.end();
 		  	
@@ -604,6 +607,7 @@ public class GameScreen implements Screen {
  		batch.end();
  		batch.setShader(Shaders.defaultShader);
     }
+    
     void drawConnectors(ShapeRenderer sR) {
 
     	r.begin(ShapeType.Filled);

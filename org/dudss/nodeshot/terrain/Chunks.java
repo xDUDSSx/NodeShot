@@ -70,6 +70,13 @@ public class Chunks {
 			}
 		}
 		
+		//Setting each chunk their neighbours, this way they dont have to initialized and then dumped at runtime
+		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
+				chunks[x][y].updateNeighbour();
+			}
+		}
+		
 		//Camera view bounds
 		viewBounds = new Rectangle();
 		imageBounds = new Rectangle();
@@ -422,7 +429,7 @@ public class Chunks {
 	  	        if (corr) {
 	  	        	//float tint = 1.0f - (Base.range((int)(c.getCreeperLevel()), 0f, Base.MAX_CREEP, 0f, 0.6f));
 	  	        	//f = Color.toFloatBits(tint, tint, tint, 0.9f);
-	  	        	f = Color.toFloatBits(1f, 1f, 1f, 0.9f);
+	  	        	f = Color.toFloatBits(1f, 1f, 1f, 0.95f);
 	  	        } else {
 	  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
 	  	        }
@@ -594,19 +601,19 @@ public class Chunks {
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
 				Color c = new Color(pixmap.getPixel(x, y));				
-				if (c.r > 0.1f) {
+				//if (c.r > 0.1f) {
 					//float height = Base.range(c.r, Base.TERRAIN_THRESHOLD, 1f, 0.1f, 1.0f);
 					int val = (int) (c.r / 0.2f);
-					if (val > 3) {
-						val = 3;
+					if (val > 4) {
+						val = 4;
 					} else if (val < 0) {
 						val = 0;
 					}
 					chunks[x][y].setHeight(val);
 					
-				} else {
+				/*} else {
 					chunks[x][y].setHeight(-1);
-				}
+				}*/
 			}
 		}
 		return patchPixmap;

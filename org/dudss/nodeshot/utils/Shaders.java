@@ -10,6 +10,7 @@ public class Shaders {
 	public static ShaderProgram blurShader;
 	public static ShaderProgram cloudShader;
 	public static ShaderProgram solidCloudShader;
+	public static ShaderProgram rotatingCloudShader;
 	
 	public static void load() {
 		String vertexDefaultShader = Gdx.files.internal("res/defaultVertex.glsl").readString();
@@ -24,8 +25,7 @@ public class Shaders {
 		
 		testShader = new ShaderProgram(vertShader, fragShader);
 		System.out.println(testShader.isCompiled());
-		System.out.println(testShader.getLog());
-		
+		System.out.println(testShader.getLog());		
 		
 		String blurfragShader = Gdx.files.internal("res/blurFragment.glsl").readString();
 		String blurvertShader = Gdx.files.internal("res/blurVertex.glsl").readString();
@@ -34,12 +34,16 @@ public class Shaders {
 		
 		String cloudFragShader = Gdx.files.internal("res/cloudFragment.glsl").readString();
 		cloudShader = new ShaderProgram(vertexDefaultShader, cloudFragShader);
-		System.out.println(cloudShader.isCompiled());
-		System.out.println(cloudShader.getLog());
 		
 		String solidcloudFragShader = Gdx.files.internal("res/solidcloudFragment.glsl").readString();
 		solidCloudShader = new ShaderProgram(vertexDefaultShader, solidcloudFragShader);
 		System.out.println(solidCloudShader.isCompiled());
 		System.out.println(solidCloudShader.getLog());
+		
+		String rotatingcloudFragShader = Gdx.files.internal("res/rotatingsolidcloudFragment.glsl").readString();
+		rotatingCloudShader = new ShaderProgram(vertexDefaultShader, rotatingcloudFragShader);
+		System.out.println(rotatingCloudShader.isCompiled());
+		System.out.println(rotatingCloudShader.getLog());
+		
 	}
 }

@@ -2,8 +2,7 @@ package org.dudss.nodeshot.screens;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
-import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
+import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.Application.ApplicationType;
@@ -13,15 +12,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -30,9 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -189,14 +183,12 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-       // b.begin();
-       // background.draw(b);
-       // b.end();
+        drawBackgroundClouds(b);
         
         Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);      
         
-        sR.begin(ShapeType.Filled);
+        sR.begin(ShapeType.Filled);      
         sR.rect((Gdx.graphics.getWidth()) * 0.25f - 25, 0,((float)(Gdx.graphics.getWidth()) * 0.5f) + 50 , Gdx.graphics.getHeight(), semi, semi, Color.BLACK, Color.BLACK);
         sR.end();
         
@@ -208,7 +200,13 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+    	//Updating the viewport
         viewport.update(width, height);
+        
+        //Updating the shape renderer projection matrix (adapting it to the new size)
+        Matrix4 m = new Matrix4();
+        sR.setProjectionMatrix(m.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
     }
@@ -234,5 +232,45 @@ public class MenuScreen implements Screen {
         atlas.dispose();
         sR.dispose();
         b.dispose();
+    }
+    
+    public void drawBackgroundClouds(SpriteBatch batch) {
+        //Getting the time this application has run for, the is fed to the cloud shader and makes it "animated"
+    	float secondsSinceStartup = ((System.currentTimeMillis() - BaseClass.startTime) / 1000f);
+    	
+    	//Creating a basic screen matrix
+        Matrix4 uiMatrix = new Matrix4();
+        uiMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
+        
+        //Mesh vertexes that correspond to a single quad covering the screen
+        float[] verts = new float[] {0, 0, Color.toFloatBits(1f, 0, 0, 1f), 0, 0, Gdx.graphics.getWidth(), 0, Color.toFloatBits(1f, 0, 0, 1f), 1, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.toFloatBits(1f, 0, 0, 1f), 1, 1, 0, Gdx.graphics.getHeight(), Color.toFloatBits(1f, 0, 0, 1f), 0, 1};        
+        //cloud scale that is normalized to some predefined values
+        float clampedScale = 1f;
+        
+        //Setting the shader uniforms
+ 		Shaders.rotatingCloudShader.begin();
+ 		//Flag indicating that the shader does not need all the uniforms that are expected by LibGdx (eg. texture, which is not used)
+ 		Shaders.rotatingCloudShader.pedantic = false;
+ 		//Setting the projection matrix
+ 		Shaders.rotatingCloudShader.setUniformMatrix("u_projTrans", uiMatrix);
+ 		//Setting the time uniform
+ 		Shaders.rotatingCloudShader.setUniformf("time", secondsSinceStartup);
+ 		//Setting the cloud scale
+ 		Shaders.rotatingCloudShader.setUniformf("zoom", clampedScale);
+ 		//Screen resolution
+ 		Shaders.rotatingCloudShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+ 		//Offset from the original coordinates used to make the clouds scale up/down from the center of the screen rather than bottom right corner
+ 		Shaders.rotatingCloudShader.setUniformf("offset", clampedScale / 2f);
+ 		//Offset vector that reacts to the in-game camera position, making it look like the clouds are part of the scene
+ 		Shaders.rotatingCloudShader.setUniformf("pos", 0, 0);
+ 		Shaders.rotatingCloudShader.end(); 		        
+        
+        batch.begin();
+        batch.setShader(Shaders.rotatingCloudShader);       
+        //This particular batch function requires a texture to bind, so I'm binding the texture used later in chunk rendering 
+        //TODO: stop using spritebatch and call the render from an actual Mesh object (will be cleaner and will not require an extra texture bind)
+        batch.draw(SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
+ 		batch.end();
+ 		batch.setShader(Shaders.defaultShader);
     }
 }

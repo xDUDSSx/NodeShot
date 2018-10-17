@@ -6,7 +6,7 @@ filter: MipMap,Nearest
 repeat: none
 corr16
   rotate: false
-  xy: 1376, 2000
+  xy: 800, 848
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -20,63 +20,63 @@ corr16section
   index: -1
 corr32
   rotate: false
-  xy: 1184, 1984
+  xy: 1184, 1408
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBL
   rotate: false
-  xy: 1280, 1984
+  xy: 1184, 1312
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBR
   rotate: false
-  xy: 608, 1216
+  xy: 1856, 1984
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrSB
   rotate: false
-  xy: 448, 256
+  xy: 1760, 1888
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrSL
   rotate: false
-  xy: 608, 1408
+  xy: 608, 832
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrSR
   rotate: false
-  xy: 352, 256
+  xy: 1760, 1984
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrST
   rotate: false
-  xy: 608, 1312
+  xy: 352, 256
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrTL
   rotate: false
-  xy: 704, 1408
+  xy: 608, 736
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrTR
   rotate: false
-  xy: 1184, 1888
+  xy: 704, 832
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -84,6 +84,13 @@ corrTR
 dirt2
   rotate: false
   xy: 32, 928
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+grass4
+  rotate: false
+  xy: 1184, 1504
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
@@ -109,142 +116,149 @@ sand3
   orig: 512, 512
   offset: 0, 0
   index: -1
+sand4
+  rotate: false
+  xy: 608, 928
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 seamlesssand16
   rotate: false
-  xy: 704, 1328
+  xy: 352, 176
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 seamlesssand32
   rotate: false
-  xy: 352, 160
+  xy: 1280, 1408
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tiledCoal
   rotate: false
-  xy: 1536, 2000
+  xy: 1184, 1152
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalBL
   rotate: false
-  xy: 800, 1424
+  xy: 448, 272
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalBR
   rotate: false
-  xy: 352, 80
+  xy: 1184, 1232
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalEB
   rotate: false
-  xy: 1280, 1904
+  xy: 704, 752
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalEL
   rotate: false
-  xy: 448, 176
+  xy: 1280, 1328
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalER
   rotate: false
-  xy: 704, 1248
+  xy: 1760, 1808
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalET
   rotate: false
-  xy: 1040, 1424
+  xy: 1760, 1728
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalS
   rotate: false
-  xy: 880, 1424
+  xy: 1856, 1904
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalTL
   rotate: false
-  xy: 608, 1056
+  xy: 528, 272
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalTR
   rotate: false
-  xy: 1184, 1648
+  xy: 880, 848
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoallow
   rotate: false
-  xy: 1184, 1808
+  xy: 608, 656
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoallower
   rotate: false
-  xy: 1456, 2000
+  xy: 352, 96
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIron
   rotate: false
-  xy: 1616, 2000
+  xy: 960, 848
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronBL
   rotate: false
-  xy: 960, 1424
+  xy: 608, 576
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronBR
   rotate: false
-  xy: 608, 976
+  xy: 1456, 1424
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronTL
   rotate: false
-  xy: 608, 1136
+  xy: 1376, 1424
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronTR
   rotate: false
-  xy: 1184, 1728
+  xy: 1952, 2000
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 transparent16
   rotate: false
-  xy: 1184, 1568
+  xy: 608, 496
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
