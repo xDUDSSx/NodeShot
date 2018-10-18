@@ -144,6 +144,7 @@ public class GameScreen implements Screen {
 	public static int selectedIndex = -1;
 	public static EntityType selectedType = EntityType.NONE;
 
+	public static Boolean debug = false;
 	static Boolean drawString = false;
 	static String stringToWrite = "";
 
@@ -274,6 +275,7 @@ public class GameScreen implements Screen {
         stage = new Stage(stageViewport);         
 
         buildMenu = new BuildMenu("Build menu", skin);
+        
         TextButton imgButton = new TextButton("Build", skin, "hoverfont15");
         imgButton.addListener(new ClickListener(){
             @Override
@@ -286,7 +288,7 @@ public class GameScreen implements Screen {
         imgButton.setPosition(10, 10);        
         stage.addActor(imgButton);
         stage.addActor(buildMenu);
-        
+                
         hudMenu = new HudMenu("HUD menu", skin);
         stage.addActor(hudMenu);
         
@@ -483,11 +485,9 @@ public class GameScreen implements Screen {
         	chunks.drawCorruption(i);
         }
         
-        //chunks.drawCorruption(batch);
-        
-        //Draw debug rectangles representing sections of chunks
-        //drawDebug(batch);
-        
+        //Draw debug infographics
+        if (debug) drawDebug(batch, r);
+           
         //HUD, draw last
         //setting screen matrix    
         setHudProjectionMatrix(batch);
@@ -514,14 +514,38 @@ public class GameScreen implements Screen {
         glProfiler.reset();
     }   
     
-    public static void drawDebug(SpriteBatch batch) {
+    public static void drawDebug(SpriteBatch batch, ShapeRenderer r) {
     	batch.begin();    	        
         for (Section s : chunks.sectionsInView) {	   
         	Chunk c = s.getChunk(0, 0);	        	
         	batch.draw(SpriteLoader.sectionOutline, c.getX() , c.getY(), 256, 256);	
         	//font.draw(batch, s.mesh, x, y)
         }      
-        batch.end();    
+        batch.end();   
+
+        r.begin(ShapeType.Filled);
+        r.setColor(Color.WHITE);
+        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+        		if (chunks.getChunk(x, y).getCreeperLevel() > 0) {
+        			//float n = Base.range(chunks.getChunk(x, y).getCreeperLevel(), 0, 5, 0, 1) * 100;
+        			float n = chunks.getChunk(x, y).getCreeperLevel() * 100;
+        			
+        			//System.out.println(n);
+        			if (n == 100) {
+        				n = 99;
+        			}
+        			float rc = (255 * n) / 100;
+        			float g = (255 * (100 - n)) / 100 ;
+        			float b = 0;
+        			//System.out.println(rc + " " + g + " " + b);
+        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));
+        			r.setColor(c);
+        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+        		}	      
+        	}
+        }
+        r.end();
     }
     
     //Shader related rendering meshods

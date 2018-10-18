@@ -15,12 +15,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class BasicStorage implements Building, Storage{
+public class BasicStorage extends Building implements Storage {
 	
 	InputNode input;
 	
-	float x,y;
-	float cx,cy;
 	float width = 32;
 	float height = 32;
 	
@@ -29,7 +27,7 @@ public class BasicStorage implements Building, Storage{
 	
 	public boolean full = false;
 	
-	   List<ItemType> accepted;
+	List<ItemType> accepted;
 	
 	protected Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
 	protected Color color = Color.GOLDENROD;
@@ -43,27 +41,7 @@ public class BasicStorage implements Building, Storage{
 				
 		accepted = new ArrayList<ItemType>();			
 	}
-	
-	public void setLocation(float cx, float cy, boolean snap) {
-		if (snap) {
-			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			
-			x = nx - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
-			y = ny - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
-			
-			this.cx = nx + Base.CHUNK_SIZE/2;
-			this.cy = ny + Base.CHUNK_SIZE/2;
-		} else {
-			this.cx = cx;
-			this.cy = cy;
-			
-			x = cx - (width/2);
-			y = cy - (height/2);
-		}
 		
-	}
-	
 	@Override
 	public void update() {
 		if (storage < maxStorage) {

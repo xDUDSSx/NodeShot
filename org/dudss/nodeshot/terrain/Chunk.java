@@ -3,17 +3,9 @@ package org.dudss.nodeshot.terrain;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunks.OreType;
-import org.dudss.nodeshot.terrain.datasubsets.Quad;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 
 public class Chunk {
 	float x, y;
@@ -23,9 +15,13 @@ public class Chunk {
 	float coalOre = 0f;
 	float ironOre = 0f;
 	
-	float creeper = 0;
+	//0 to Base.MAX_CREEP 
+	float creeper = 0;	
+	float flowRate = 0.15f;
 	float spore = 0;
+	public float creeperChange = 0;
 	
+		
 	int height = 1;
 	
 	//TODO: remove plague, probably not going to use it
@@ -34,15 +30,6 @@ public class Chunk {
 	boolean toExpand = false;
 	long lastUpdate = System.currentTimeMillis();
 	long updateRate = 500;
-	
-	TextureRegion dirtTr;
-	TextureRegion coalTr;
-	TextureRegion coalLowerTr;
-	TextureRegion coalLowTr;	
-	TextureRegion ironTr;
-	
-	protected final int NUM_VERTICES = 20;
-	protected float vertices[] = new float[NUM_VERTICES];
 	
 	enum TriangleOrientation {
 		BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT, END_LEFT, END_RIGHT, END_TOP, END_BOTTOM, SINGLE
@@ -66,20 +53,18 @@ public class Chunk {
 	Chunk(float x, float y) {
 		this.x = x;
 		this.y = y;
-		
-		/*dirtTr = new TextureRegion(SpriteLoader.savanaTex);
-		coalTr = new TextureRegion(SpriteLoader.coalTex);
-		coalLowerTr = new TextureRegion(SpriteLoader.coalLowerTex);
-		coalLowTr = new TextureRegion(SpriteLoader.coalLowTex);
-		ironTr = new TextureRegion(SpriteLoader.ironTex);	
-		*/
 	}
 	
 	//TODO: rewrite the update -> simpler more "fluid" like behaviour 
-	public void update() {			
+	/**Current corruption update method, creeper is distributed along the tiles with lower creeper in relation to the difference from this chunks {@link #creeper}
+	 * The resulting creeper level changes are saved into respectable {@link #creeperChange} variables and the actual creeper is set later
+	 * using the {@link #applyUpdate()} method.
+	 * This is done to remove an axial bias in the direction of the subsequent updates
+	 */
+	public void update() {		
 		if (lastUpdate + updateRate <= System.currentTimeMillis() && height + creeper > height + 0.05f) {
-			//loat flowRate = 0.5f;
-			spore = creeper/2f;
+			
+			spore = creeper*flowRate;
 			
 			float[] diffs = new float[8];
 			for (int i = 0; i < 8; i++) {
@@ -101,13 +86,13 @@ public class Chunk {
 			for (int i = 0; i < 8; i++) {
 				if (!(diffs[i] <= 0)) {
 					float toAdd = (diffs[i]/total) * spore;
-					neighbours[i].setCreeperLevel(neighbours[i].getCreeperLevel() + toAdd);
+					neighbours[i].creeperChange += toAdd;
 					totalAdded += toAdd;					
 				}
 			}		
 			
-			//System.out.println("totalAdded: " + totalAdded + " spore: " + spore + " creeper " + creeper);
-			setCreeperLevel(creeper -= totalAdded);
+			creeperChange -= totalAdded;
+			//System.out.println("creeper: " + creeper + " spore: " + spore + " change: " + currentCreeperChange);
 			
 			lastUpdate = System.currentTimeMillis();			
 		} else {
@@ -115,21 +100,24 @@ public class Chunk {
 		}
 	}
 	
-	/**Returns a TextureRegion represeting this tile, if corr is true the method will return tile corruption representation**/
+	public void applyUpdate() {
+		setCreeperLevel(creeper + creeperChange);
+		creeperChange = 0;
+	}
+	
+	/**Returns an AtlasRegion representing this tile, if corr is true the method will return tile corruption representation**/
 	public AtlasRegion getAppropriateTexture(boolean corr) {
 		if (coalOre != 0) {	
 			AtlasRegion desiredRegion = null;
 			if (coalOre <= 0.25) {
 				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoallow");
 			} else 
-			if (coalOre <= 0.5) {		
+			if (coalOre <= 0.5) {		;
 				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoallower");
 			} else
 			if (coalOre > 0.5) {
 				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoal");
 			}		
-			
-			boolean triangleDrawn = false;
 			
 			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {				
 				
@@ -138,8 +126,6 @@ public class Chunk {
 					minusx.getOreLevel() > 0 && 
 					minusy.getOreLevel() > 0)
 				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_LEFT, batch, false);
-					//triangleDrawn = true;
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalTL");
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -147,8 +133,6 @@ public class Chunk {
 					plusx.getOreLevel() > 0 &&
 				    minusy.getOreLevel() > 0)  
 				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.BOTTOM_RIGHT, batch, false);
-					//triangleDrawn = true;
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalTR");
 				} else
 				if (minusy.getOreLevel() == 0 && 
@@ -156,8 +140,6 @@ public class Chunk {
 				    plusy.getOreLevel() > 0 &&
 				    minusx.getOreLevel() > 0)  
 				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.TOP_LEFT, batch, false);
-					//triangleDrawn = true;
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalBL");
 				} else
 				if (minusy.getOreLevel() == 0 && 
@@ -165,8 +147,6 @@ public class Chunk {
 				    plusx.getOreLevel() > 0 &&
 				    plusy.getOreLevel() > 0)  
 				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.TOP_RIGHT, batch, false);
-					//triangleDrawn = true;
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalBR");
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -174,8 +154,6 @@ public class Chunk {
 					minusy.getOreLevel() == 0 &&
 					minusx.getOreLevel() > 0)  
 				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.END_RIGHT, batch, false);
-					//triangleDrawn = true;	
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalEL");
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -183,8 +161,6 @@ public class Chunk {
 					minusy.getOreLevel() == 0 &&
 					plusx.getOreLevel() > 0)  
 				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.END_LEFT, batch, false);
-					//triangleDrawn = true;		
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalER");
 				} else
 				if (plusy.getOreLevel() == 0 && 
@@ -192,34 +168,25 @@ public class Chunk {
 					minusx.getOreLevel() == 0 &&
 					minusy.getOreLevel() > 0)  
 				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.END_TOP, batch, false);
-					//triangleDrawn = true;		
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalET");
 				} else
 				if (minusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 && 
 					minusx.getOreLevel() == 0 &&
 					plusy.getOreLevel() > 0)  
-				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.END_BOTTOM, batch, false);
-					//triangleDrawn = true;			
+				{		
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalEB");
 				} else 
 				if (minusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 && 
 					minusx.getOreLevel() == 0 &&
 					plusy.getOreLevel() == 0)  
-				{
-					//drawTileTriangle(desiredRegion, TriangleOrientation.SINGLE, batch, false);
-					//triangleDrawn = true;			
+				{		
 					return SpriteLoader.tileAtlas.findRegion("tiledCoalS");
 				}
 			}
-		
-			if (!triangleDrawn) {
-				return desiredRegion;
-				//drawTile(desiredRegion, batch, false);
-			}
+				
+			return desiredRegion;
 		} else
 		if (ironOre != 0) {
 			boolean triangleDrawn = false;
@@ -504,18 +471,22 @@ public class Chunk {
 		}
 	}
 	
-	public void setCreeperLevel(float level) {
+	public void setCreeperLevel(float level) {	
+		if (level > Base.MAX_CREEP) {
+			level = Base.MAX_CREEP;
+		}
+		if (level < 0.05f) {
+			level = 0;
+		}
+		
 		creeper = level;
-		if (creeper > Base.MAX_CREEP) {
-			creeper = Base.MAX_CREEP;
-		}
-		if (creeper < 0.05f) {
-			creeper = 0;
-		}
 	}
+	
 	public float getCreeperLevel() {
 		return creeper;
 	}
+	
+	
 	
 	public void setHeight(int level) {
 		height = level;

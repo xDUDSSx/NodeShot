@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.ui;
 
+import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunks.OreType;
 
@@ -18,6 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class HudMenu extends Window {
 
 	Table table;
+	Table supertable;
+	Table right;
+	
 	Skin skin;
 	
 	Label oreLevel;
@@ -34,10 +38,8 @@ public class HudMenu extends Window {
 		setSize();
 		
     	table = new Table();
-        table.center();
-        table.left();
-        table.setFillParent(true);  
-        table.setSize(this.getPrefWidth(), this.getPrefWidth());
+        //table.left();
+        //table.setSize(this.getPrefWidth()/2, this.getPrefHeight());
 
         oreLevel = new Label("Ore level: 0.0", skin, "font15");
         table.add(oreLevel).fill().left().padLeft(10).padRight(10).padTop(17).padBottom(2);
@@ -51,10 +53,32 @@ public class HudMenu extends Window {
         plagueLevel = new Label("Plague: 0.0", skin, "font15");     
         table.add(plagueLevel).fill().left().padLeft(10).padRight(10).padTop(2).padBottom(2);
         
+        right = new Table();
+        //right.right();
+        //right.setSize(this.getPrefWidth()/2, this.getPrefHeight());
+
+        TextButton debugButton = new TextButton("Debug", skin, "hoverfont15");
+        debugButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            	GameScreen.debug = !(GameScreen.debug);
+            }
+        });
+           
+        right.add(debugButton).padLeft(10).padRight(10).padTop(10).fill();
+        
+        supertable = new Table();
+        supertable.left();
+        supertable.setSize(this.getPrefWidth(), this.getPrefHeight());
+        supertable.setFillParent(true);
+        
+        supertable.add(table).left().fill(true);
+        supertable.add(right).right().fill(true);
+        
         this.setResizable(false);
         this.setMovable(false);
         this.setVisible(true);
-        this.addActor(table);
+        this.addActor(supertable);
 	}
 	
 	public void resize() {
@@ -67,20 +91,9 @@ public class HudMenu extends Window {
 	
 	public void update() {
 		if (GameScreen.hoverChunk != null) {
-			/*if (GameScreen.hoverChunk.getCoalLevel() > 0) {
-				
-			} else 
-			if (GameScreen.hoverChunk.getIronLevel() > 0) { 
-				oreLevel.setText("Ore level: " + GameScreen.hoverChunk.getIronLevel());
-				oreType.setText("Ore type: " + GameScreen.hoverChunk.getOreType().toString());
-			} else {
-				oreLevel.setText("Ore level: " + 0 );
-				oreType.setText("Ore type: " + OreType.NONE);
-			}
-			*/
-			oreLevel.setText("Ore level: " + GameScreen.hoverChunk.getOreLevel());
-			oreType.setText("Ore level: " + GameScreen.hoverChunk.getOreType().toString());
-			corruptionLevel.setText("Corruption: " + GameScreen.hoverChunk.getCreeperLevel());
+			oreLevel.setText("Ore level: " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
+			oreType.setText("Ore type: " + GameScreen.hoverChunk.getOreType().toString());
+			corruptionLevel.setText("Corruption: " + Base.round(GameScreen.hoverChunk.getCreeperLevel(), 3));
 			plagueLevel.setText("Plague: " + GameScreen.hoverChunk.getPlagueLevel());
 		}
 	}

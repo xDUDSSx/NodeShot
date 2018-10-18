@@ -16,19 +16,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public abstract class BasicMine implements Building {
+public abstract class BasicMine extends Building {
 
-	//Building node - outputs Iron
+		//Building node - outputs Item
 		OutputNode output;
 		//The iron mine boundary node
 		Node export;
 		//First and the only connector of the output node
 		Connector firstConnector;
-		//Target node - where is Iron sent
+		//Target node - where is Item sent
 		Node target;
-		
-		float x,y;
-		float cx,cy;
+
 		float width = 48;
 		float height = 48;
 		
@@ -47,25 +45,6 @@ public abstract class BasicMine implements Building {
 			y = cy - (height/2);
 		}
 		
-		public void setLocation(float cx, float cy, boolean snap) {
-			if (snap) {
-				float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-				float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-				
-				x = nx - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
-				y = ny - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
-				
-				this.cx = nx + Base.CHUNK_SIZE/2;
-				this.cy = ny + Base.CHUNK_SIZE/2;
-			} else {
-				this.cx = cx;
-				this.cy = cy;
-				
-				x = cx - (width/2);
-				y = cy - (height/2);
-			}
-		}
-		
 		@Override
 		public void update() {
 			if (nextSimTick <= SimulationThread.simTick) {
@@ -74,9 +53,7 @@ public abstract class BasicMine implements Building {
 			}
 		}
 
-		public void generate() {
-			
-		}
+		abstract public void generate();
 		
 		@Override
 		public void draw(ShapeRenderer r, SpriteBatch batch) {	
@@ -94,8 +71,8 @@ public abstract class BasicMine implements Building {
 				float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
 				float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
 				
-				prefX = nx - ((int)(width/2)/16) * 16;
-				prefY = ny - ((int)(width/2)/16) * 16;	
+				prefX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
+				prefY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
 			} else {
 				prefX = cx - (width/2);
 				prefY = cy - (height/2);

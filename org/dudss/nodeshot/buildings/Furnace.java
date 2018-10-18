@@ -21,10 +21,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class Furnace implements Building, Storage {
+public class Furnace extends Building implements Storage {
 
-	float x,y;
-	float cx,cy;
 	float width = 48;
 	float height = 48;
 	
@@ -85,25 +83,6 @@ public class Furnace implements Building, Storage {
 		}
 	}
 	
-	public void setLocation(float cx, float cy, boolean snap) {
-		if (snap) {
-			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			
-			x = nx - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
-			y = ny - ((int)(width/2)/Base.CHUNK_SIZE) * 16;
-			
-			this.cx = nx + Base.CHUNK_SIZE/2;
-			this.cy = ny + Base.CHUNK_SIZE/2;
-		} else {
-			this.cx = cx;
-			this.cy = cy;
-			
-			x = cx - (width/2);
-			y = cy - (height/2);
-		}	
-	}
-
 	@Override
 	public void draw(ShapeRenderer r, SpriteBatch batch) {
 		r.set(ShapeType.Filled);

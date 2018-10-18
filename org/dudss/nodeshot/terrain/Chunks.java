@@ -170,6 +170,12 @@ public class Chunks {
 				chunks[x][y].update();
 			}
 		}
+		
+		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
+				chunks[x][y].applyUpdate();
+			}
+		}
 	}
 				
 	public void drawTerrain() {

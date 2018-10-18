@@ -60,7 +60,7 @@ public class CoalMine extends BasicMine {
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
 				if (GameScreen.chunks.getChunk(tileX + x, tileY + y) != null) {
-				totalOreLevel += GameScreen.chunks.getChunk(tileX + x, tileY + y).getCoalLevel();				
+					totalOreLevel += GameScreen.chunks.getChunk(tileX + x, tileY + y).getCoalLevel();				
 				}
 			}
 		}

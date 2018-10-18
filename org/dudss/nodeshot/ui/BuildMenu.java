@@ -1,13 +1,14 @@
 package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.buildings.AmmoStorage;
+import org.dudss.nodeshot.buildings.BasicStorage;
+import org.dudss.nodeshot.buildings.CoalMine;
+import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Furnace;
 import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.Turret;
 import org.dudss.nodeshot.buildings.TurretCheat;
-import org.dudss.nodeshot.buildings.CoalMine;
-import org.dudss.nodeshot.buildings.AmmoStorage;
-import org.dudss.nodeshot.buildings.BasicStorage;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -89,6 +90,7 @@ public class BuildMenu extends Window {
 		TextButton ammoStorageButton  = new TextButton("Ammo storage", skin, "hoverfont30");	
 		TextButton turretButton = new TextButton("Turret", skin, "hoverfont30");	
 		TextButton turretCheatButton = new TextButton("Turret Unlimited", skin, "hoverfont30");	
+		TextButton creeperGenerator = new TextButton("Creeper Generator", skin, "hoverfont30");	
 		storageButton.setSize(100,100);
 		
 		coalMineButton.setSize(500, 150);
@@ -103,7 +105,9 @@ public class BuildMenu extends Window {
 		other.addActor(furnaceButton);
 		other.addActor(turretButton);
 		other.addActor(turretCheatButton);
+		other.addActor(creeperGenerator);
 
+		
 		other.setVisible(false);
 		connectors.setVisible(false);
 		mines.setVisible(false);
@@ -226,6 +230,16 @@ public class BuildMenu extends Window {
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtBuilding = new TurretCheat(0, 0);
+				}		
+		    }
+	    });
+	    
+		creeperGenerator.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new CreeperGenerator(0, 0);
 				}		
 		    }
 	    });
