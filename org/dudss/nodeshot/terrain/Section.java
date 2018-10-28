@@ -183,7 +183,7 @@ public class Section {
 		return corrMeshes.get(layer);
 	}
 	
-	public void updatedCorruption(int layer) {
+	public void updatedCorruptionMesh(int layer) {
 		updates.set(layer, false);
 	}
 	
@@ -191,7 +191,7 @@ public class Section {
 		updates.set(layer, true);
 	}
 	
-	public boolean needsCorruptionUpdate(int layer) {
+	public boolean needsCorruptionMeshUpdate(int layer) {
 		return updates.get(layer);
 	}
 }

@@ -51,14 +51,14 @@ public class Base {
 	static int paint_spacing = 2;
 	
 	//TERRAIN
-	public static int WORLD_SIZE = 4096;
+	public static int WORLD_SIZE = 3072;
 	
 	public static float COAL_THRESHOLD = 0.74f;
 	public static float IRON_THRESHOLD = 0.74f;
 	public static float TERRAIN_THRESHOLD = 0.6f;
 	
-	public static int MAX_CREEP = 5;
-	
+	public static int MAX_CREEP = 10;
+	 
 	public static int CHUNK_SIZE = 16;
 	public static int SECTION_SIZE = 16;
 	

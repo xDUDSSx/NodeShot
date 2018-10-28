@@ -1,8 +1,5 @@
 package org.dudss.nodeshot.screens;
 
-import static org.dudss.nodeshot.screens.GameScreen.cam;
-import static org.dudss.nodeshot.screens.GameScreen.prevCameraOffset;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -246,7 +243,7 @@ public class GameScreen implements Screen {
 		blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false);
 		
 		corrBuffers = new ArrayList<FrameBuffer>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < Base.MAX_CREEP; i++) {
 			corrBuffers.add(new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false));
 		}
 		
@@ -484,6 +481,7 @@ public class GameScreen implements Screen {
         for(int i = 0; i < Base.MAX_CREEP; i++) {
         	chunks.drawCorruption(i);
         }
+        //chunks.drawCorruption(1);
         
         //Draw debug infographics
         if (debug) drawDebug(batch, r);
@@ -553,7 +551,7 @@ public class GameScreen implements Screen {
     	fboB.begin();
     	Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
-    	Shaders.blurShader.setUniformf("radius", 0.5f);
+    	Shaders.blurShader.setUniformf("radius", 0.0f);
         Shaders.blurShader.setUniformf("resolution", (cam.zoom * 200) * aspectRatio);
     	Shaders.blurShader.end();
 		batch.setShader(Shaders.blurShader);   	
@@ -573,7 +571,7 @@ public class GameScreen implements Screen {
 		
 		Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
-    	Shaders.blurShader.setUniformf("radius", 0.5f);
+    	Shaders.blurShader.setUniformf("radius", 0.0f);
     	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
     	Shaders.blurShader.end();
 		  	

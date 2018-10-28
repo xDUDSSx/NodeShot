@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
@@ -22,12 +21,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Chunks {
@@ -35,14 +30,14 @@ public class Chunks {
 	Chunk[][] chunks;
 	public Section[][] sections;
 	
-	/**All Section instances that are currently visible by the camera.
-	 * Updated by the updateView() method.
+	/**All {@link Section} instances that are currently visible by the camera.
+	 * Updated by the {@link #updateView()} method.
 	 */
 	public List<Section> sectionsInView;
 	
-	/**Time of the last updateView(), used to prevent unnecessary view updates*/
+	/**Time of the last {@link #updateView()}, used to prevent unnecessary view updates*/
 	public long lastViewPoll = System.currentTimeMillis();
-	/**Minimum delay(ms) inbetween updateView() calls*/
+	/**Minimum delay(ms) inbetween {@link #updateView()} calls*/
 	public long pollRate = 2;
 	
 	public boolean created = false;
@@ -207,10 +202,10 @@ public class Chunks {
 			Shaders.testShader.setUniformi("u_texture", 0);			
 			    
 	 		for (Section s : sectionsInView) {	   	 
-	 			if (s.needsCorruptionUpdate(layer) == true) {		
+	 			if (s.needsCorruptionMeshUpdate(layer) == true) {		
 	 				s.getCorruptionMesh(layer).setVertices(s.getCorruptionVerts(layer));
 			    	s.getCorruptionMesh(layer).setIndices(s.getCorruptionIndices(layer));
-	 				s.updatedCorruption(layer);
+	 				s.updatedCorruptionMesh(layer);
 	 			}
 	 			Shaders.testShader.setUniformf("shade", 1f - (0.5f * ((float)(layer + 1) / (Base.MAX_CREEP + 1))));
 		    	s.getCorruptionMesh(layer).render(Shaders.testShader, GL20.GL_TRIANGLES);
@@ -221,257 +216,163 @@ public class Chunks {
 	 		GameScreen.blurBuffer(GameScreen.corrBuffers.get(layer), GameScreen.blurBuffer, GameScreen.corrBuffers.get(layer).getColorBufferTexture(), 0, 0);
 	}
 	
-	@Deprecated
-	public void drawCorruption(SpriteBatch batch) {
-	 	Gdx.gl.glEnable(GL20.GL_BLEND);
-	 	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
-        SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
-        batch.begin();           	
-        
-	    GameScreen.corrBuffers.get(0).begin();
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
- 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
- 				
- 		Shaders.defaultShader.begin();
-	    Shaders.defaultShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
-	    Shaders.defaultShader.setUniformi("u_texture", 0);
-	    Shaders.defaultShader.end();
-	    batch.setShader(Shaders.defaultShader);
-	    for (int i = 0; i < Base.MAX_CREEP; i++) {
-	    	for (Section s : sectionsInView) {	   	 
-	 			if (s.needsCorruptionUpdate(0) == true) {
-	 				s.updateCorruptionMesh(i, s.getCorruptionVerts(i), s.getCorruptionIndices(i));		    		
-	 			}
-		    	s.getCorruptionMesh(i).render(Shaders.defaultShader, GL20.GL_TRIANGLES);
-	 		}
-	    }
- 		GameScreen.corrBuffers.get(0).end();
- 		
- 		Matrix4 m = new Matrix4();
-		m.setToOrtho2D(0, 0, GameScreen.corrBuffers.get(0).getWidth(), GameScreen.corrBuffers.get(0).getHeight());
-		batch.setProjectionMatrix(m);	
-		Sprite s = new Sprite(GameScreen.corrBuffers.get(0).getColorBufferTexture());
-		s.flip(false, true);			
-		s.draw(batch);
-			
-		//GameScreen.blurBuffer(GameScreen.corrBuffers.get(i), GameScreen.blurBuffer, GameScreen.corrBuffers.get(i).getColorBufferTexture(), 0, 0);	    
-        
-		batch.end();
-		batch.setProjectionMatrix(GameScreen.cam.combined);	
-		Gdx.gl.glDisable(GL20.GL_BLEND);
-	}
-	
-	
-	@Deprecated
-	public void drawCorruption2(SpriteBatch batch) {
-	 	Gdx.gl.glEnable(GL20.GL_BLEND);
-	 	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
-        SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
-        batch.begin();           	
-        
-	    GameScreen.corrBuffers.get(0).begin();
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
- 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
- 				
- 		Shaders.defaultShader.begin();
-	    Shaders.defaultShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
-	    Shaders.defaultShader.setUniformi("u_texture", 0);
-	    Shaders.defaultShader.end();
-	    batch.setShader(Shaders.defaultShader);
-	    for (int i = 0; i < Base.MAX_CREEP; i++) {
-	 		for (Section s : sectionsInView) {	   
-	 			s.getCorruptionMesh(i).setVertices(s.getCorruptionVerts(i));
-		    	s.getCorruptionMesh(i).setIndices(s.getCorruptionIndices(i));
-		    	s.getCorruptionMesh(i).render(Shaders.defaultShader, GL20.GL_TRIANGLES);
-	 		}
-	    }
- 		GameScreen.corrBuffers.get(0).end();
- 		
- 		Matrix4 m = new Matrix4();
-		m.setToOrtho2D(0, 0, GameScreen.corrBuffers.get(0).getWidth(), GameScreen.corrBuffers.get(0)  .getHeight());
-		batch.setProjectionMatrix(m);	
-		Sprite s = new Sprite(GameScreen.corrBuffers.get(0).getColorBufferTexture());
-		s.flip(false, true);			
-		s.draw(batch);
-			
-		//GameScreen.blurBuffer(GameScreen.corrBuffers.get(i), GameScreen.blurBuffer, GameScreen.corrBuffers.get(i).getColorBufferTexture(), 0, 0);	    
-        
-		batch.end();
-		batch.setProjectionMatrix(GameScreen.cam.combined);	
-		Gdx.gl.glDisable(GL20.GL_BLEND);
-	}
-	
+	/**Generates and initializes a terrain or a corruption mesh. Should be only called once 
+	 * and the initialized meshes than can get updated using the the {@link #generateMeshVertexData(Section, boolean, int)} method.
+	 * @param s The assigned section.
+	 * @param corr Whether a terrain or a corruption mesh should be generated
+	 * @param level The layer of the corruption mesh (In case of corruption mesh generation)
+	 * @return Returns the generated Mesh object*/
 	public Mesh generateMesh(Section s, boolean corr, int level) {		
 	    int numberOfRectangles = Base.SECTION_SIZE*Base.SECTION_SIZE;
 	    int numberOfVertices = 4 * numberOfRectangles;
+	    
+	    MeshVertexData newMeshData = generateVertexArrays(s, corr, level, numberOfRectangles, numberOfVertices);
+	    
 	    Mesh mesh = new Mesh(false, numberOfVertices, numberOfRectangles * 6, 
 				new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
 				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
 				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
-
-	    int vertexPositionValue = 2;
-	    int vertexColorValue = 1;
-	    int vertexTexCordsValue = 2;
 	    
-	    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue;
-
-	    short[] vertexIndices = new short[numberOfRectangles * 6];
-	    float[] verticesWithColor = new float[numberOfVertices * valuesPerVertex];
-
-	    int i = 0;
-	    for (int y = 0; y < Math.sqrt(numberOfRectangles); y++) {
-	    	 for (int x = 0; x < Math.sqrt(numberOfRectangles); x++) {
-	    		Chunk c = s.sectionChunks[x][y];
-	    		 
-				float tileX = c.getX();
-				float tileY = c.getY();						
-				
-	  	        int rectangleOffsetInArray = i * valuesPerVertex * 4;  	        
-	  	        
-	  	        float u = 0;
-	  	        float v = 0;
-	  	        float u2 = 1;
-	  	        float v2 = 1;
-	  	        
-	  	        TextureRegion t = null;
-	  	        if (corr) {
-	  	        	t = c.getCorruptionTexture(level);
-	  	        } else {
-	  	        	t = c.getAppropriateTexture(corr);
-	  	        }
-	  	        
-	  	        u = t.getU();
-	  	        v = t.getV();
-	  	        u2 = t.getU2();
-	  	        v2 = t.getV2();
-	  	        
-	  	        float f = 0;
-	  	        if (corr) {
-	  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
-	  	        } else {
-	  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
-	  	        }
-
-	  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY, f, rectangleOffsetInArray, 0);
-	  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY, f, rectangleOffsetInArray, 1);
-	  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 2);
-	  	        setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 3);
-	  	        
-	  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
-	  	        vertexIndices[i * 6 + 1] = (short) (i * 4 + 1);
-	  	        vertexIndices[i * 6 + 2] = (short) (i * 4 + 3);
-	  	        vertexIndices[i * 6 + 3] = (short) (i * 4 + 3);
-	  	        vertexIndices[i * 6 + 4] = (short) (i * 4 + 2);
-	  	        vertexIndices[i * 6 + 5] = (short) (i * 4 + 1);
-	  	        
-	  	        i++;
-	    	 }
-	    }	    
-	    mesh.setVertices(verticesWithColor);
-	    mesh.setIndices(vertexIndices);
+	    mesh.setVertices(newMeshData.getVerts());
+	    mesh.setIndices(newMeshData.getIndices());
+	    
 	    if (corr) {
-	    	s.updateCorruptionMesh(level, verticesWithColor, vertexIndices);
+	    	s.updateCorruptionMesh(level, newMeshData.getVerts(), newMeshData.getIndices());
 	    } else {
-	    	s.updateTerrainMesh(verticesWithColor, vertexIndices);
+	    	s.updateTerrainMesh(newMeshData.getVerts(), newMeshData.getIndices());
 	    }
 	    
 	    return mesh;
 	}
 	
-	public MeshVertexData generateMeshVertexData(Section s, boolean corr, int level) {		
-	    int numberOfRectangles = Base.SECTION_SIZE*Base.SECTION_SIZE;	       
+	/**Returns an updated {@link MeshVertexData} object used to update the {@link Section} meshes.
+	 * @param s The assigned section.
+	 * @param corr Whether a terrain or a corruption mesh should be generated
+	 * @param level The layer of the corruption mesh (In case of corruption mesh generation)
+	 * @return Updated {@link MeshVertexData} object.*/
+	public MeshVertexData generateMeshVertexData(Section s, boolean corr, int level) {	
+		int numberOfRectangles = Base.SECTION_SIZE*Base.SECTION_SIZE;
 	    int numberOfVertices = 4 * numberOfRectangles;
-	    int vertexPositionValue = 2;
-	    int vertexColorValue = 1;
-	    int vertexTexCordsValue = 2;
-	    
-	    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue;
-
-	    short[] vertexIndices = new short[numberOfRectangles * 6];
-	    float[] verticesWithColor = new float[numberOfVertices * valuesPerVertex];
-
-	    int i = 0;
-	    for (int y = 0; y < Math.sqrt(numberOfRectangles); y++) {
-	    	 for (int x = 0; x < Math.sqrt(numberOfRectangles); x++) {
-	    		Chunk c = s.sectionChunks[x][y];
-	    		 
-				float tileX = c.getX();
-				float tileY = c.getY();						
-				
-	  	        int rectangleOffsetInArray = i * valuesPerVertex * 4;  	        
-	  	        
-	  	        float u = 0;
-	  	        float v = 0;
-	  	        float u2 = 1;
-	  	        float v2 = 1;
-	  	        
-	  	      	AtlasRegion t = null;
-	  	        if (corr) {
-	  	        	t = c.getCorruptionTexture(level);
-	  	        } else {
-	  	        	t = c.getAppropriateTexture(corr);
-	  	        }
-	  	            
-	  	        u = t.getU();
-	  	        v = t.getV();
-	  	        u2 = t.getU2();
-	  	        v2 = t.getV2();
-	  	        
-	  	  	       
-			    float width = u2 - u;
-			    //float height = v2 - v;
-	  	        float fix = width * 0.1f;
-		        float nU = (u + fix);
-		        float nV = (v + fix);
-		        float nU2 = (u2 - fix);
-		        float nV2 = (v2 - fix);
-		        
-		        u = nU;
-		        v = nV;
-		        u2 = nU2;
-		        v2 = nV2;
-		        
-	  	        float f = 0;
-	  	        if (corr) {
-	  	        	//float tint = 1.0f - (Base.range((int)(c.getCreeperLevel()), 0f, Base.MAX_CREEP, 0f, 0.6f));
-	  	        	//f = Color.toFloatBits(tint, tint, tint, 0.9f);
-	  	        	f = Color.toFloatBits(1f, 1f, 1f, 0.95f);
-	  	        } else {
-	  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
-	  	        }
-
-	  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY, f, rectangleOffsetInArray, 0);
-	  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY, f, rectangleOffsetInArray, 1);
-	  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 2);
-	  	        setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 3);
-	  	        
-	  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
-	  	        vertexIndices[i * 6 + 1] = (short) (i * 4 + 1);
-	  	        vertexIndices[i * 6 + 2] = (short) (i * 4 + 3);
-	  	        vertexIndices[i * 6 + 3] = (short) (i * 4 + 3);
-	  	        vertexIndices[i * 6 + 4] = (short) (i * 4 + 2);
-	  	        vertexIndices[i * 6 + 5] = (short) (i * 4 + 1);
-	  	        
-	  	        i++;
-	    	 }
-	    }	    
-	    
-	    return new MeshVertexData(verticesWithColor, vertexIndices);
+	    return generateVertexArrays(s, corr, level, numberOfRectangles, numberOfVertices);
 	}
 
-	private void setValuesInArrayForVertex(float[] verticesWithColor, float u, float v, float x, float y, float c, int rectangleOffsetInArray, int vertexNumberInRect) {
+	/**Generates the vertices and indices arrays
+	 * @param s The assigned section.
+	 * @param corr Whether a terrain or a corruption mesh should b e generated
+	 * @param level The layer of the corruption mesh (In case of corruption mesh generation)
+	 * @param numberOfRectangles Number of rectangles in the vertex array
+	 * @param numberOfVertices Number of vertices in the vertex array
+	 * @return Updated {@link MeshVertexData} object.
+	 * */
+	private MeshVertexData generateVertexArrays(Section s, boolean corr, int level, int numberOfRectangles, int numberOfVertices) {			      			
+			int vertexPositionValue = 2;
+			int vertexColorValue = 1;
+		    int vertexTexCordsValue = 2;
+		    
+		    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue;
+
+		    short[] vertexIndices = new short[numberOfRectangles * 6];
+		    float[] verticesWithColor = new float[numberOfVertices * valuesPerVertex];
+
+		    int i = 0;
+		    
+		    int nullTiles = 0;
+		    
+		    for (int y = 0; y < Math.sqrt(numberOfRectangles); y++) {
+		    	 for (int x = 0; x < Math.sqrt(numberOfRectangles); x++) {
+		    		Chunk c = s.sectionChunks[x][y];
+		    		 
+					float tileX = c.getX();
+					float tileY = c.getY();						
+					
+		  	        int rectangleOffsetInArray = i * valuesPerVertex * 4;  	        
+		  	        
+		  	        float u = 0;
+		  	        float v = 0;
+		  	        float u2 = 1;
+		  	        float v2 = 1;
+		  	        
+		  	      	AtlasRegion t = null;
+		  	        if (corr) {
+		  	        	t = c.getCorruptionTexture(level);
+		  	        } else {
+		  	        	t = c.getAppropriateTexture(corr);
+		  	        }
+		  	           
+		  	        if (t == null && corr) {  
+		  	        	nullTiles++;
+		  	        } else {
+			  	        u = t.getU();
+			  	        v = t.getV();
+			  	        u2 = t.getU2();
+			  	        v2 = t.getV2();
+			  	        
+			  	  	       
+					    float width = u2 - u;
+					    //float height = v2 - v;
+			  	        float fix = width * 0.1f;
+				        float nU = (u + fix);
+				        float nV = (v + fix);
+				        float nU2 = (u2 - fix);
+				        float nV2 = (v2 - fix);
+				        
+				        u = nU;
+				        v = nV;
+				        u2 = nU2;
+				        v2 = nV2;
+				        
+			  	        float f = 0;
+			  	        if (corr) {
+			  	        	//float tint = 1.0f - (Base.range((int)(c.getCreeperLevel()), 0f, Base.MAX_CREEP, 0f, 0.6f));
+			  	        	//f = Color.toFloatBits(tint, tint, tint, 0.9f);
+			  	        	f = Color.toFloatBits(1f, 1f, 1f, 0.95f);
+			  	        } else {
+			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
+			  	        }
+
+		  	       
+			  	        u = t.getU();
+			  	      	v = t.getV();
+			  	        u2 = t.getU2();
+			  	        v2 = t.getV2();
+			  	        
+			  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY, f, rectangleOffsetInArray, 0);
+			  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY, f, rectangleOffsetInArray, 1);
+			  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 2);
+			  	        setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 3);
+			  	        
+			  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
+			  	        vertexIndices[i * 6 + 1] = (short) (i * 4 + 1);
+			  	        vertexIndices[i * 6 + 2] = (short) (i * 4 + 3);
+			  	        vertexIndices[i * 6 + 3] = (short) (i * 4 + 3);
+			  	        vertexIndices[i * 6 + 4] = (short) (i * 4 + 2);
+			  	        vertexIndices[i * 6 + 5] = (short) (i * 4 + 1);
+			  	        
+			  	        i++;
+		  	        }
+		    	}
+		    }	 		    
+		    if (nullTiles > 0) {
+		    	//float[] newVerts = new float[1];
+		    	//TODO: implement verts array shortening to remove the not initialized vertexes of missing grid tiles, 
+		    	//System.arraycopy(src, srcPos, dest, destPos, length);
+		    }
+		    return new MeshVertexData(verticesWithColor, vertexIndices);
+	}
+	
+	private void setValuesInArrayForVertex(float[] vertices, float u, float v, float x, float y, float c, int rectangleOffsetInArray, int vertexNumberInRect) {
 	    int vertexOffsetInArray = rectangleOffsetInArray + vertexNumberInRect * 5;
 
 	    // x position
-	    verticesWithColor[vertexOffsetInArray + 0] = x;
+	    vertices[vertexOffsetInArray + 0] = x;
 	    // y position
-	    verticesWithColor[vertexOffsetInArray + 1] = y;
+	    vertices[vertexOffsetInArray + 1] = y;
 	    // color 
-	    verticesWithColor[vertexOffsetInArray + 2] = c;  	    
+	    vertices[vertexOffsetInArray + 2] = c;  	    
 	    // u texture coord
-	    verticesWithColor[vertexOffsetInArray + 3] = u;
+	    vertices[vertexOffsetInArray + 3] = u;
 	    // v texture coord
-	    verticesWithColor[vertexOffsetInArray + 4] = v;
+	    vertices[vertexOffsetInArray + 4] = v;
 	}
 	
 	public void setCoalLevel(float level, int x, int y) {
@@ -514,7 +415,7 @@ public class Chunks {
 			}
 		}
 	}
-
+	
 	public void generateAll() {
 		SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
 		System.out.println("\nGenerating noise (1/3)");

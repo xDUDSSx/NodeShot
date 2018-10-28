@@ -1,5 +1,8 @@
 package org.dudss.nodeshot.terrain.datasubsets;
 
+/**
+ * An object wrapper enclosing {@link Mesh} vertices and indices data arrays.
+ */
 public class MeshVertexData {
 	float[] verts;
 	short[] indices;

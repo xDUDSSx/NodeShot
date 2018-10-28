@@ -239,59 +239,6 @@ public class Node extends Sprite implements Entity {
 		return connections;
 	}
 
-	public void move() {
-
-		Point vector = null;
-
-		int rangeXfrom = -5;
-		int rangeXto = 5;
-		int rangeYfrom = -5;
-		int rangeYto = 5;
-
-		if (this.movementVector == null) {
-			movementVector = new Point(Base.getRandomIntNumberInRange(rangeXfrom, rangeXto), Base.getRandomIntNumberInRange(rangeYfrom, rangeYto));
-		}
-
-		vector = movementVector;
-
-		Point currentPoint = new Point((int) this.getCX(), (int) this.getCY());
-
-		if (currentPoint.y <= 0) {
-			vector.setLocation(vector.x, -vector.y);
-		}
-		if (currentPoint.x <= 0) {
-			vector.setLocation(-vector.x, vector.y);
-		}
-		if (currentPoint.y >= Base.WORLD_SIZE - radius) {
-			vector.setLocation(vector.x, -vector.y);
-		}
-		if (currentPoint.x >= Base.WORLD_SIZE - radius) {
-			vector.setLocation(-vector.x, vector.y);
-		}
-
-		Point newPoint = new Point(currentPoint.x + vector.x, currentPoint.y + vector.y);
-		movementVector = vector;
-
-		// Connecting / Disconnecting
-		for (Node n : GameScreen.nodelist) {
-			if (this.getDistance(n) <= Base.CONNECT_DISTANCE) {
-				if (!connected_by.contains(n) && !connected_to.contains(n)) {
-					if (n != this) {
-						this.connectTo(n);
-					}
-				}
-			} else {
-				if (this.getConnectedToNodes().contains(n)) {
-					disconnect(n);
-				}
-			}
-		}
-
-		// Positioning the Node
-		setLocation(newPoint.x, newPoint.y);
-		this.setPosition(x, y);
-	}
-
 	public void disconnect(Node node) {
 		this.connected_to.remove(node);
 		this.connections -= 1;
