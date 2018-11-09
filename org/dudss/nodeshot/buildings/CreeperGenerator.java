@@ -40,7 +40,6 @@ public class CreeperGenerator extends Building {
 	}
 	
 	public void generate() {
-		System.out.println("generate");
 		int tileX = (int) (this.x / Base.CHUNK_SIZE);
 		int tileY = (int) (this.y / Base.CHUNK_SIZE);
 

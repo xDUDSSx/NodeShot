@@ -1,7 +1,6 @@
 package org.dudss.nodeshot.terrain;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -25,6 +24,7 @@ public class Chunk {
 			
 	int height = 1;
 	
+	boolean[] newEdges;
 	boolean[] edges;
 	
 	//TODO: remove plague, probably not going to use it
@@ -32,7 +32,7 @@ public class Chunk {
 
 	boolean toExpand = false;
 	long lastUpdate = System.currentTimeMillis();
-	long updateRate = 500;
+	long updateRate = 100;
 	
 	enum TriangleOrientation {
 		BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT, END_LEFT, END_RIGHT, END_TOP, END_BOTTOM, SINGLE
@@ -60,6 +60,11 @@ public class Chunk {
 		edges = new boolean[Base.MAX_CREEP];
 		for (int i = 0; i < Base.MAX_CREEP; i++) {
 			edges[i] = false;
+		}
+		
+		newEdges = new boolean[Base.MAX_CREEP];
+		for (int i = 0; i < Base.MAX_CREEP; i++) {
+			newEdges[i] = false;
 		}
 	}
 	
@@ -304,9 +309,16 @@ public class Chunk {
 	
 	public AtlasRegion getCorruptionTexture(int level) {
 		if (creeper != 0) {
+			if (creeper + height > level) { 	
+				return resolveCorruptionEdges(level);
+			}
+			return null;
+		}
+		return null;
+		/*if (creeper != 0) {
 			if (creeper + height > level) { 						
 				if ((creeper + height > level + 1) && (level + 1 < Base.MAX_CREEP)) {
-					this.edges[level] = false;
+					this.newEdges[level] = false;
 					
 					if (this.edges[level + 1] == true) {			
 						if (plusx.getCreeperLevel() + height > level && plusx.getCreeperLevel() != 0 &&
@@ -314,31 +326,34 @@ public class Chunk {
 							minusx.getCreeperLevel() + height > level && minusx.getCreeperLevel() != 0 &&
 							minusy.getCreeperLevel() + height > level && minusy.getCreeperLevel() != 0)  
 						{
-							this.edges[level] = false;
+							this.newEdges[level] = false;
 							return SpriteLoader.tileAtlas.findRegion("corr32");							
 						}
 					} else {
-						return null;
+						this.newEdges[level] = false;
+						return null;		
 					}
 				} else {
-					return resolveCorruptionEdges(level, true);
+					return resolveCorruptionEdges(level);
 				}			
 			} else {
-				this.edges[level] = false;
+				this.newEdges[level] = false;
 				return null;
 			}
 		}
+		this.newEdges[level] = false;
 		return null;
+		*/
 	}
 	
-	private AtlasRegion resolveCorruptionEdges(int level, boolean toplevel) {
+	private AtlasRegion resolveCorruptionEdges(int level) {
 		if (x > 16 && y > 16 && x < Base.WORLD_SIZE-16 && y < Base.WORLD_SIZE-16) { 
 			if (plusy.getCreeperLevel() + height <= level &&
 				plusx.getCreeperLevel() + height <= level &&
 				minusx.getCreeperLevel() + height > level && 
 				minusy.getCreeperLevel() + height > level)
 			{
-				this.edges[level] = true;
+				this.newEdges[level] = true;
 				return SpriteLoader.tileAtlas.findRegion("corrTL");
 			} else
 			if (plusy.getCreeperLevel() + height <= level && 
@@ -346,7 +361,7 @@ public class Chunk {
 				plusx.getCreeperLevel() + height > level &&
 			    minusy.getCreeperLevel() + height > level)  
 			{
-				this.edges[level] = true;
+				this.newEdges[level] = true;
 				return SpriteLoader.tileAtlas.findRegion("corrTR");
 			} else
 			if (minusy.getCreeperLevel() + height <= level && 
@@ -354,7 +369,7 @@ public class Chunk {
 			    plusy.getCreeperLevel() + height > level &&
 			    minusx.getCreeperLevel() + height > level)  
 			{
-				this.edges[level] = true;
+				this.newEdges[level] = true;
 				return SpriteLoader.tileAtlas.findRegion("corrBL");
 			} else
 			if (minusy.getCreeperLevel() + height <= level && 
@@ -362,7 +377,7 @@ public class Chunk {
 			    plusx.getCreeperLevel() + height > level &&
 			    plusy.getCreeperLevel() + height > level)  
 			{
-				this.edges[level] = true;
+				this.newEdges[level] = true;
 				return SpriteLoader.tileAtlas.findRegion("corrBR");
 			} else
 			//Straight line borders
@@ -371,7 +386,7 @@ public class Chunk {
 				minusy.getCreeperLevel() + height > level &&
 				minusx.getCreeperLevel() + height <= level)  
 			{
-				this.edges[level] = true;
+				this.newEdges[level] = true;
 				return SpriteLoader.tileAtlas.findRegion("corrSL");
 			} else
 			if (plusy.getCreeperLevel() + height > level && 
@@ -379,7 +394,7 @@ public class Chunk {
 				minusy.getCreeperLevel() + height > level &&
 				plusx.getCreeperLevel() + height <= level)  
 			{	
-				this.edges[level] = true;
+				this.newEdges[level] = true;
 				return SpriteLoader.tileAtlas.findRegion("corrSR");
 			} else
 			if (plusy.getCreeperLevel() + height > level && 
@@ -387,7 +402,7 @@ public class Chunk {
 				minusx.getCreeperLevel() + height > level &&
 				minusy.getCreeperLevel() + height <= level)  
 			{	
-				this.edges[level] = true;
+				this.newEdges[level] = true;
 				return SpriteLoader.tileAtlas.findRegion("corrST");
 			} else
 			if (minusy.getCreeperLevel() + height > level && 
@@ -395,7 +410,7 @@ public class Chunk {
 				minusx.getCreeperLevel() + height > level &&
 				plusy.getCreeperLevel() + height <= 0)  
 			{
-				this.edges[level] = true;
+				this.newEdges[level] = true;
 				return SpriteLoader.tileAtlas.findRegion("corrSB");	
 			} else
 				
@@ -405,7 +420,7 @@ public class Chunk {
 				minusy.getCreeperLevel() + height <= level &&
 				minusx.getCreeperLevel() + height > level)  
 			{
-				this.edges[level] = false;
+				this.newEdges[level] = false;
 				return SpriteLoader.tileAtlas.findRegion("corr32");	
 			} else
 			if (plusy.getCreeperLevel() + height <= level && 
@@ -413,7 +428,7 @@ public class Chunk {
 				minusy.getCreeperLevel() + height <= level &&
 				plusx.getCreeperLevel() + height > level)  
 			{	
-				this.edges[level] = false;
+				this.newEdges[level] = false;
 				return SpriteLoader.tileAtlas.findRegion("corr32");
 			} else
 			if (plusy.getCreeperLevel() + height <= level && 
@@ -421,7 +436,7 @@ public class Chunk {
 				minusx.getCreeperLevel() + height <= level &&
 				minusy.getCreeperLevel() + height > level)  
 			{	
-				this.edges[level] = false;
+				this.newEdges[level] = false;
 				return SpriteLoader.tileAtlas.findRegion("corr32");
 			} else
 			if (minusy.getCreeperLevel() + height <= level && 
@@ -429,7 +444,7 @@ public class Chunk {
 				minusx.getCreeperLevel() + height <= level &&
 				plusy.getCreeperLevel() + height > level)  
 			{
-				this.edges[level] = false;
+				this.newEdges[level] = false;
 				return SpriteLoader.tileAtlas.findRegion("corr32");	
 			} else 
 			if (minusy.getCreeperLevel() + height <= level && 
@@ -437,12 +452,17 @@ public class Chunk {
 				minusx.getCreeperLevel() + height <= level &&
 				plusy.getCreeperLevel() + height <= level)  
 			{
-				this.edges[level] = false;
+				this.newEdges[level] = false;
 				return SpriteLoader.tileAtlas.findRegion("corr32");
 			}
 		}
-		this.edges[level] = false;
+		this.newEdges[level] = false;
 		return SpriteLoader.tileAtlas.findRegion("corr32");
+	}
+	
+	/**Method that applies edge changes, necessary to call after a corruption mesh update (after all other Chunks textures have been updated)*/
+	public void updateEdges() {
+		this.edges = Arrays.copyOf(newEdges, Base.MAX_CREEP);
 	}
 	
 	public AtlasRegion getCorruptionTexture2(int level) {

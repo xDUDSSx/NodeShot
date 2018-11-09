@@ -1,4 +1,4 @@
-package org.dudss.nodeshot.inputs;
+/*package org.dudss.nodeshot.inputs;
 
 import static org.dudss.nodeshot.screens.GameScreen.HEIGHT;
 import static org.dudss.nodeshot.screens.GameScreen.backButton;
@@ -39,7 +39,7 @@ public class MobileGestureListener implements GestureDetector.GestureListener{
 	
 	/**This is an old class that is not updated to new principles, the game will probably not support mobile so
 	 * this class will be most likely deleted in the future
-	 */
+	 
 	
 	@Override
     public boolean touchDown(float x, float y, int pointer, int button) {
@@ -269,3 +269,4 @@ public class MobileGestureListener implements GestureDetector.GestureListener{
         debugMessage = "pinchStop";
     }
 }
+*/

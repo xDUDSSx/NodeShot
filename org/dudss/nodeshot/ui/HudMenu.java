@@ -38,9 +38,7 @@ public class HudMenu extends Window {
 		setSize();
 		
     	table = new Table();
-        //table.left();
-        //table.setSize(this.getPrefWidth()/2, this.getPrefHeight());
-
+    	
         oreLevel = new Label("Ore level: 0.0", skin, "font15");
         table.add(oreLevel).fill().left().padLeft(10).padRight(10).padTop(17).padBottom(2);
         table.row();
@@ -54,8 +52,6 @@ public class HudMenu extends Window {
         table.add(plagueLevel).fill().left().padLeft(10).padRight(10).padTop(2).padBottom(2);
         
         right = new Table();
-        //right.right();
-        //right.setSize(this.getPrefWidth()/2, this.getPrefHeight());
 
         TextButton debugButton = new TextButton("Debug", skin, "hoverfont15");
         debugButton.addListener(new ClickListener(){

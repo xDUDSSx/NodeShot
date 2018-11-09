@@ -19,7 +19,6 @@ import org.dudss.nodeshot.entities.nodes.InputNode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.inputs.DesktopInputProcessor;
-import org.dudss.nodeshot.inputs.MobileGestureListener;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.misc.BuildingHandler;
@@ -44,12 +43,9 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -57,15 +53,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -86,8 +79,7 @@ public class GameScreen implements Screen {
     public static int WIDTH;
     public static int HEIGHT;
     public static float aspectRatio;
-    
-    public static String debugMessage = "Debug message";	
+
 	public static Logger LOGGER = Logger.getLogger(GameScreen.class.getSimpleName());
     
     public static boolean startedOnce = false;
@@ -244,7 +236,7 @@ public class GameScreen implements Screen {
 		
 		corrBuffers = new ArrayList<FrameBuffer>();
 		for (int i = 0; i < Base.MAX_CREEP; i++) {
-			corrBuffers.add(new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false));
+			corrBuffers.add(new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false));
 		}
 		
         batch = new SpriteBatch();
@@ -299,32 +291,26 @@ public class GameScreen implements Screen {
         //Input processors
         InputMultiplexer multiplexer = new InputMultiplexer();       
         multiplexer.addProcessor(stage);
-        if (Gdx.app.getType() == ApplicationType.Android) {
+        
+        DesktopInputProcessor dip = new DesktopInputProcessor();
+    	multiplexer.addProcessor(dip);
+        
+        //Android not supported anymore
+        /*if (Gdx.app.getType() == ApplicationType.Android) {
         	MobileGestureListener mgl = new MobileGestureListener();
         	multiplexer.addProcessor(new GestureDetector(mgl));
         } else {
         	DesktopInputProcessor dip = new DesktopInputProcessor();
         	multiplexer.addProcessor(dip);
         }  
+        */     	
         Gdx.input.setInputProcessor(multiplexer); 
         
         chunks.create(cam);
         //Generate terrain if not generated already
         if (chunks.generated == false) {       	
         	chunks.generateAll();
-        }
-      
-        /*Circle c = new Circle(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.WORLD_SIZE/2 + 200);
-        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-    		for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
-    			Rectangle rect = new Rectangle(chunks.getChunk(x, y).getX(), chunks.getChunk(x, y).getY(), chunks.getChunk(x, y).getSize(), chunks.getChunk(x, y).getSize());    			
-        		if (!(Intersector.overlaps(c, rect))) {
-        			chunks.getChunk(x, y).setCreeperLevel(0.4f);
-        			chunks.getChunk(x, y).setPlagueLevel(0f);
-        		}
-            }
-        }*/
-        
+        }       
     }
 
     @Override
@@ -501,7 +487,7 @@ public class GameScreen implements Screen {
         drawFps(batch);
         //drawInfo(batch);
         drawCoords(batch);
-        drawDebugMessage(debugMessage, batch);
+        drawTerrainInfo(batch);
 
         batch.end();
         
@@ -546,7 +532,7 @@ public class GameScreen implements Screen {
         r.end();
     }
     
-    //Shader related rendering meshods
+    //Shader related rendering methods
     public static void blurBuffer(FrameBuffer fboA, FrameBuffer fboB, Texture texture, float x, float y) {
     	fboB.begin();
     	Shaders.blurShader.begin();
@@ -729,13 +715,22 @@ public class GameScreen implements Screen {
         font.draw(batch, "simTick: " + SimulationThread.simTick , 5 + 5 + text3width, HEIGHT - textheight*2 - 2);
     }
 
-    void drawDebugMessage(String message, SpriteBatch batch) {
-        float textheight = font.getCapHeight();
-
-        layout.setText(font, message);
-        float textwidth = layout.width;
-
-        font.draw(batch, message, WIDTH/2 - textwidth/2, textheight + 5);
+    void drawTerrainInfo(SpriteBatch batch) {
+    	if (GameScreen.hoverChunk != null) {
+    		float textheight = font.getCapHeight();
+	
+			StringBuilder sb = new StringBuilder();
+			sb.append("Height: " + GameScreen.hoverChunk.getHeight());
+			sb.append(", ");
+			sb.append("Creeper: " + Base.round(GameScreen.hoverChunk.getCreeperLevel(), 3));
+			sb.append(", ");
+			sb.append("Ore level: (" + GameScreen.hoverChunk.getOreType().toString() + ") " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
+			
+			layout.setText(font, sb.toString());
+			float textwidth = layout.width;
+	
+			font.draw(batch, sb.toString(), WIDTH/2 - textwidth/2, HEIGHT - textheight + 2);      
+    	}
     }
 
     void drawInfo(SpriteBatch batch) {

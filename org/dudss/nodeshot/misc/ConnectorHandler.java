@@ -66,6 +66,7 @@ public class ConnectorHandler {
 	
 
 	/**Deprecated, don't use anymore, ineffective*/ //TODO: ?? still used, solve
+	@Deprecated
 	public List<Connector> getAllConnectorsToNode(Node n) {
 		List<Connector> list = new ArrayList<Connector>();
 		for (Connector nC : connectors) {

@@ -31,13 +31,13 @@ public class Chunks {
 	public Section[][] sections;
 	
 	/**All {@link Section} instances that are currently visible by the camera.
-	 * Updated by the {@link #updateView()} method.
+	 * Updated by the {@link #updateView(OrthographicCamera)} method.
 	 */
 	public List<Section> sectionsInView;
 	
-	/**Time of the last {@link #updateView()}, used to prevent unnecessary view updates*/
+	/**Time of the last {@link #updateView(OrthographicCamera)}, used to prevent unnecessary view updates*/
 	public long lastViewPoll = System.currentTimeMillis();
-	/**Minimum delay(ms) inbetween {@link #updateView()} calls*/
+	/**Minimum delay(ms) inbetween {@link #updateView(OrthographicCamera)} calls*/
 	public long pollRate = 2;
 	
 	public boolean created = false;
@@ -134,15 +134,18 @@ public class Chunks {
 		}
 	}
 
-	/**Updates terrain or corruption meshes of the section, if corr == true -> corruption mesh of a selected layer will be updated
-	 * If layer == -1 -> all corruption meshes of the section will be updated
+	/**Updates terrain or corruption meshes of the section, if corr == true, corruption mesh of a selected layer will be updated
+	 * If layer == -1, all corruption meshes of the section will be updated
+	 * @param s The assigned section
+	 * @param corr Whether a terrain or corruption mesh should be updated
+	 * @param level Which corruption level should be updated
 	 * **/
-	public void updateSectionMesh(Section s, boolean corr, int layer) {      
+	public void updateSectionMesh(Section s, boolean corr, int level) {      
     	if (!corr) {
         	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false, 0);
         	s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
     	} else {
-    		if (layer == -1) {
+    		if (level == -1) {
     			for (int i = 0; i < Base.MAX_CREEP; i++) {
     				MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, i);
     	        	s.updateCorruptionMesh(i, mvdCorruption.getVerts(), mvdCorruption.getIndices());
@@ -151,9 +154,9 @@ public class Chunks {
     	        	}
     			}
     		} else {
-	        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, layer);
-	        	s.updateCorruptionMesh(layer, mvdCorruption.getVerts(), mvdCorruption.getIndices());   
-	        	s.requestCorruptionUpdate(layer);
+	        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, level);
+	        	s.updateCorruptionMesh(level, mvdCorruption.getVerts(), mvdCorruption.getIndices());   
+	        	s.requestCorruptionUpdate(level);
     		}
     	}
 	}
@@ -351,7 +354,14 @@ public class Chunks {
 			  	        i++;
 		  	        }
 		    	}
-		    }	 		    
+		    }	 	
+		    
+		    for (int y = 0; y < Math.sqrt(numberOfRectangles); y++) {
+		    	for (int x = 0; x < Math.sqrt(numberOfRectangles); x++) {
+		    		s.sectionChunks[x][y].updateEdges();
+		    	}
+		    }
+		    
 		    if (nullTiles > 0) {
 		    	//float[] newVerts = new float[1];
 		    	//TODO: implement verts array shortening to remove the not initialized vertexes of missing grid tiles, 
