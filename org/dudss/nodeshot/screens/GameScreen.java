@@ -232,7 +232,7 @@ public class GameScreen implements Screen {
         Shaders.blurShader.setUniformf("resolution", cam.zoom * 100);
         Shaders.blurShader.end();
 
-		blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/2, HEIGHT/2, false);
+		blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
 		
 		corrBuffers = new ArrayList<FrameBuffer>();
 		for (int i = 0; i < Base.MAX_CREEP; i++) {
@@ -245,7 +245,7 @@ public class GameScreen implements Screen {
         //font generation
         font = new BitmapFont();
         layout = new GlyphLayout();         
-        generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/Helvetica-Regular.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/data/Helvetica-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Base.HUD_FONT_SIZE;
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'()>?:%+-*/";        
@@ -257,8 +257,8 @@ public class GameScreen implements Screen {
         	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
         	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
-        	atlas = new TextureAtlas("res/uiskin.atlas");
-        	skin = new Skin(Gdx.files.classpath("res/uiskin.json"), atlas);
+        	atlas = new TextureAtlas("res/data/uiskin.atlas");
+        	skin = new Skin(Gdx.files.classpath("res/data/uiskin.json"), atlas);
         }
         stageViewport = new StretchViewport(WIDTH, HEIGHT);
         stage = new Stage(stageViewport);         
@@ -460,14 +460,13 @@ public class GameScreen implements Screen {
         }           
         batch.end();
         
-        bulletHandler.drawAll(r, batch);
-    
         //Drawing all the corruption layers
-        //Corruption is currently drawn as separate layers //TODO: Optimize heavily!
+        //Corruption is currently drawn as individual mesh layers
         for(int i = 0; i < Base.MAX_CREEP; i++) {
         	chunks.drawCorruption(i);
         }
-        //chunks.drawCorruption(1);
+        
+        bulletHandler.drawAll(r, batch);
         
         //Draw debug infographics
         if (debug) drawDebug(batch, r);
@@ -547,7 +546,7 @@ public class GameScreen implements Screen {
 		m.setToOrtho2D(0, 0, fboA.getWidth(), fboA.getHeight());
 		batch.setProjectionMatrix(m);	
 
-		s.flip(false, true);
+		s.flip(false, false);
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
@@ -567,7 +566,7 @@ public class GameScreen implements Screen {
 		m.setToOrtho2D(0, 0, fboB.getWidth(), fboB.getHeight());		
 		batch.setProjectionMatrix(m);
 		
-		s.flip(false, true);
+		s.flip(false, false);
 		batch.begin();
 		s.draw(batch);
 		batch.end();
@@ -723,6 +722,8 @@ public class GameScreen implements Screen {
 			sb.append("Height: " + GameScreen.hoverChunk.getHeight());
 			sb.append(", ");
 			sb.append("Creeper: " + Base.round(GameScreen.hoverChunk.getCreeperLevel(), 3));
+			sb.append(", ");
+			sb.append("AbsCreeper: " + Base.round(GameScreen.hoverChunk.getAbsoluteCreeperLevel(), 3));
 			sb.append(", ");
 			sb.append("Ore level: (" + GameScreen.hoverChunk.getOreType().toString() + ") " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
 			

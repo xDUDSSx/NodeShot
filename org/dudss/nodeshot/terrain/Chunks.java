@@ -65,7 +65,7 @@ public class Chunks {
 			}
 		}
 		
-		//Setting each chunk their neighbours, this way they dont have to initialized and then dumped at runtime
+		//Setting each chunk it's neighbours, this way they don't have to be initialized and then dumped at runtime
 		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
 				chunks[x][y].updateNeighbour();
@@ -211,7 +211,7 @@ public class Chunks {
 	 				s.updatedCorruptionMesh(layer);
 	 			}
 	 			Shaders.testShader.setUniformf("shade", 1f - (0.5f * ((float)(layer + 1) / (Base.MAX_CREEP + 1))));
-		    	s.getCorruptionMesh(layer).render(Shaders.testShader, GL20.GL_TRIANGLES);
+	 			s.getCorruptionMesh(layer).render(Shaders.testShader, GL20.GL_TRIANGLES);
 	 		}	 	 		
 	 		Shaders.testShader.end();
 	 		
@@ -328,7 +328,7 @@ public class Chunks {
 			  	        if (corr) {
 			  	        	//float tint = 1.0f - (Base.range((int)(c.getCreeperLevel()), 0f, Base.MAX_CREEP, 0f, 0.6f));
 			  	        	//f = Color.toFloatBits(tint, tint, tint, 0.9f);
-			  	        	f = Color.toFloatBits(1f, 1f, 1f, 0.95f);
+			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
 			  	        } else {
 			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
 			  	        }
@@ -355,12 +355,6 @@ public class Chunks {
 		  	        }
 		    	}
 		    }	 	
-		    
-		    for (int y = 0; y < Math.sqrt(numberOfRectangles); y++) {
-		    	for (int x = 0; x < Math.sqrt(numberOfRectangles); x++) {
-		    		s.sectionChunks[x][y].updateEdges();
-		    	}
-		    }
 		    
 		    if (nullTiles > 0) {
 		    	//float[] newVerts = new float[1];

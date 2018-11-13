@@ -72,13 +72,11 @@ public class Furnace extends Building implements Storage {
 		}
 	}
 
-	private void generate() {
-		System.out.println("Factory generate! at " + System.currentTimeMillis());
+	private void generate() {		
 		if (this.output.getAllConnectedNodes().size() > 0) {
 			if (this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
 				Ammo p = new Ammo(this.output);
 				output.sendPackage(p);
-				System.out.println("sending product");
 			}
 		}
 	}

@@ -20,8 +20,8 @@ public class Bullet extends Sprite implements Entity {
 	
 	double rotation;
 	
-	float percentage;
-	float speed;
+	float percentage = 0;
+	float speed = 5f;
 	float effectiveSpeed;
 	float damage = 0.6f;
 	
@@ -37,11 +37,7 @@ public class Bullet extends Sprite implements Entity {
 		
 		targetCoords = target;
 		trajectoryVector = new Vector2(targetCoords.x - x, targetCoords.y - y);
-		percentage = 0;
-		speed = 5f;
 		effectiveSpeed = speed * (float)(100/Math.hypot(trajectoryVector.x, trajectoryVector.y));
-		damage = 1.0f;
-		radius = 1;
 		
 		this.set(new Sprite(SpriteLoader.bullet));
 		this.setOrigin(4, 2);

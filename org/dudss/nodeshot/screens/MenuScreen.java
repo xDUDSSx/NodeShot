@@ -56,8 +56,6 @@ public class MenuScreen implements Screen {
     ShapeRenderer sR;
     SpriteBatch b;
     
-    Sprite background;
-    
     Image logo;
 
     Image coalheightmap;
@@ -77,9 +75,9 @@ public class MenuScreen implements Screen {
         	
         	logoTex = new Texture(Gdx.files.internal("nodelogo.png"));
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
-        	atlas = new TextureAtlas("res/uiskin.atlas");
-        	skin = new Skin(Gdx.files.classpath("res/uiskin.json"), atlas);
-        	logoTex = new Texture(Gdx.files.classpath("res/nodelogo.png"));
+        	atlas = new TextureAtlas("res/data/uiskin.atlas");
+        	skin = new Skin(Gdx.files.classpath("res/data/uiskin.json"), atlas);
+        	logoTex = new Texture(Gdx.files.classpath("res/data/nodelogo.png"));
         }
        
         batch = new SpriteBatch();
@@ -116,10 +114,6 @@ public class MenuScreen implements Screen {
         sR.setColor(Color.DARK_GRAY);
         
         b = new SpriteBatch();
-        
-        background = new Sprite(new Texture("res/nodeintro.png"));
-        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        background.setPosition(0, 0);
         
         //Create Table
         Table mainTable = new Table();

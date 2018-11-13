@@ -78,61 +78,6 @@ public class Section {
 		ne = new SubSection(neChunks, size/2);
 	}
 	
-	/*public void draw(SpriteBatch batch) {		
-		
-		boolean swFull = sw.isFull();
-		boolean seFull = se.isFull();
-		boolean nwFull = nw.isFull();
-		boolean neFull = ne.isFull();
-		
-		if (swFull && seFull && nwFull && neFull) {
-			full = true;
-			drawFullTile();
-			return;
-		} else {
-			full = false;
-		}
-		
-		if (swFull) {
-			drawFullSubTile(1);
-		} else {
-			for (int y = 0; y < size/2; y++) {
-				for (int x = 0; x < size/2; x++) {	
-					sw.subSectionChunks[x][y].draw(batch, 0, 0);
-				}
-			}
-		}
-		
-		if (seFull) {
-			drawFullSubTile(2);
-		} else {
-			for (int y = 0; y < size/2; y++) {
-				for (int x = 0; x < size/2; x++) {	
-					se.subSectionChunks[x][y].draw(batch, 0, 0);
-				}
-			}
-		}
-		if (nwFull) {
-			drawFullSubTile(3);
-		} else {
-			for (int y = 0; y < size/2; y++) {
-				for (int x = 0; x < size/2; x++) {	
-					nw.subSectionChunks[x][y].draw(batch, 0, 0);
-				}
-			}
-		}
-		if (neFull) {
-			drawFullSubTile(4);
-		} else {
-			for (int y = 0; y < size/2; y++) {
-				for (int x = 0; x < size/2; x++) {	
-					ne.subSectionChunks[x][y].draw(batch, 0, 0);
-				}
-			}
-		}
-	}
-	*/ 	
-	
 	public Chunk getChunk(int x, int y) {
 		return sectionChunks[x][y];
 	}

@@ -27,7 +27,6 @@ public class HudMenu extends Window {
 	Label oreLevel;
 	Label oreType;
 	Label corruptionLevel;
-	Label plagueLevel;
 	
 	public HudMenu(String title, Skin skin) {
 		super(title, skin);
@@ -48,8 +47,6 @@ public class HudMenu extends Window {
         corruptionLevel = new Label("Corruption: 0.0", skin, "font15");     
         table.add(corruptionLevel).fill().left().padLeft(10).padRight(10).padTop(2).padBottom(2);
         table.row();
-        plagueLevel = new Label("Plague: 0.0", skin, "font15");     
-        table.add(plagueLevel).fill().left().padLeft(10).padRight(10).padTop(2).padBottom(2);
         
         right = new Table();
 
@@ -90,7 +87,6 @@ public class HudMenu extends Window {
 			oreLevel.setText("Ore level: " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
 			oreType.setText("Ore type: " + GameScreen.hoverChunk.getOreType().toString());
 			corruptionLevel.setText("Corruption: " + Base.round(GameScreen.hoverChunk.getCreeperLevel(), 3));
-			plagueLevel.setText("Plague: " + GameScreen.hoverChunk.getPlagueLevel());
 		}
 	}
 	
