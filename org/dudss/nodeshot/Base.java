@@ -58,7 +58,8 @@ public class Base {
 	public static float TERRAIN_THRESHOLD = 0.6f;
 	
 	public static int MAX_CREEP = 10;
-	 
+	public static int MAX_HEIGHT = 10; 
+	
 	public static int CHUNK_SIZE = 16;
 	public static int SECTION_SIZE = 16;
 	

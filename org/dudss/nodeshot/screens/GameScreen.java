@@ -311,6 +311,8 @@ public class GameScreen implements Screen {
         if (chunks.generated == false) {       	
         	chunks.generateAll();
         }       
+        
+        
     }
 
     @Override
@@ -404,6 +406,11 @@ public class GameScreen implements Screen {
 	        	r.end();
         	} else if ((hoverChunk.getCoalLevel() > 0 || hoverChunk.getIronLevel() > 0)) {
 	        	r.begin(ShapeType.Line);
+	        	r.setColor(Color.WHITE);
+	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
+	        	r.end();
+        	} else if (this.debug == true) {
+        		r.begin(ShapeType.Line);
 	        	r.setColor(Color.WHITE);
 	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
 	        	r.end();

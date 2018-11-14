@@ -213,16 +213,11 @@ public class DesktopInputProcessor implements InputProcessor {
 	}
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		mouseX = Gdx.input.getX();
-		mouseY = Gdx.input.getY();
-		
+	public boolean touchDragged(int screenX, int screenY, int pointer) {		
 		//Getting old pos
 		Vector2 previousMousePos = new Vector2(mousePos.x, mousePos.y);
 		
-		//Setting current (new) pos
-		mousePos.x = mouseX;
-		mousePos.y = mouseY;
+		updateMousePos(screenX, screenY);
 		
 		Vector3 worldMousePos = cam.unproject(new Vector3(mouseX, mouseY, 0));
 		Vector3 previousWorldMousePos = cam.unproject(new Vector3(previousMousePos.x, previousMousePos.y, 0));
@@ -281,6 +276,38 @@ public class DesktopInputProcessor implements InputProcessor {
 				}
 				
 			}
+		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.B)) {
+			if (draggingConnection == false) {			
+				Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE), (int)(worldMousePos.y/Base.CHUNK_SIZE));
+				if (c != null) {
+					c.setHeight((int)GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE), (int)(worldMousePos.y/Base.CHUNK_SIZE)).getHeight() + 1);
+				}
+				
+				int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
+					GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], false, -1);
+				}
+				
+			}	
+		}
+		else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.N)) {
+			if (draggingConnection == false) {
+				for (int y = 0; y < 1; y++) {
+					for (int x = 0; x < 1; x++) {
+						Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
+						if (c != null) {
+							c.setHeight((int)GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getHeight() - 1);
+						}
+					}
+				}		
+				int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
+					GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], false, -1);
+				}
+				
+			}
 		} else if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			if (draggingConnection == false) {
 				float xPos = previousWorldMousePos.x - worldMousePos.x;
@@ -302,6 +329,11 @@ public class DesktopInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
+		updateMousePos(screenX, screenY);
+		return false;
+	}
+
+	private void updateMousePos(int screenX, int screenY) {
 		mouseX = screenX;
 		mouseY = screenY;	
 		
@@ -316,10 +348,8 @@ public class DesktopInputProcessor implements InputProcessor {
 			
 		GameScreen.hoverChunk = GameScreen.chunks.getChunk((int)nx, (int)ny);
 		GameScreen.hudMenu.update();
-		
-		return false;
 	}
-
+	
 	@Override
 	public boolean scrolled(int amount) {
 		//Cancel right click menu if one is present

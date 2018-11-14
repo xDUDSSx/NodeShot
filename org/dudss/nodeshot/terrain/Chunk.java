@@ -1,7 +1,5 @@
 package org.dudss.nodeshot.terrain;
 
-import java.util.Arrays;
-
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -124,8 +122,8 @@ public class Chunk {
 		creeperChange = 0;
 	}
 	
-	/**Returns an AtlasRegion representing this tile, if corr is true the method will return tile corruption representation**/
-	public AtlasRegion getAppropriateTexture(boolean corr) {
+	/**Returns an AtlasRegion representing this tiles terrain*/
+	public AtlasRegion getTerrainTexture() {
 		if (coalOre != 0) {	
 			AtlasRegion desiredRegion = null;
 			if (coalOre <= 0.25) {
@@ -517,6 +515,13 @@ public class Chunk {
 	 * @param level The new terrain height level
 	 * */
 	public void setHeight(int level) {
+		if (level > Base.MAX_HEIGHT) {
+			level = Base.MAX_HEIGHT;
+		}
+		if (level < 0) {
+			level = 0;
+		}
+		
 		height = level;
 	}
 	

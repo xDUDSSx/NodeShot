@@ -144,6 +144,7 @@ public class Chunks {
     	if (!corr) {
         	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false, 0);
         	s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
+        	s.requestTerrainUpdate();
     	} else {
     		if (level == -1) {
     			for (int i = 0; i < Base.MAX_CREEP; i++) {
@@ -191,7 +192,7 @@ public class Chunks {
 		    }
 		    Shaders.defaultShader.end();	
 	}	
-
+	
 	public void drawCorruption(int layer) {
 		 	Gdx.gl.glEnable(GL20.GL_BLEND);
 	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      	       			
@@ -210,7 +211,10 @@ public class Chunks {
 			    	s.getCorruptionMesh(layer).setIndices(s.getCorruptionIndices(layer));
 	 				s.updatedCorruptionMesh(layer);
 	 			}
-	 			Shaders.testShader.setUniformf("shade", 1f - (0.5f * ((float)(layer + 1) / (Base.MAX_CREEP + 1))));
+	 			//Shaders.testShader.setUniformf("shade", 1f - (0.5f * ((float)(layer + 1) / (Base.MAX_CREEP + 1))));
+	 			
+	 			//float f = layer % 2 == 0 ? 1f : 0f;
+	 			Shaders.testShader.setUniformf("shade", 1f - (float)layer/(float)Base.MAX_CREEP);
 	 			s.getCorruptionMesh(layer).render(Shaders.testShader, GL20.GL_TRIANGLES);
 	 		}	 	 		
 	 		Shaders.testShader.end();
@@ -299,7 +303,7 @@ public class Chunks {
 		  	        if (corr) {
 		  	        	t = c.getCorruptionTexture(level);
 		  	        } else {
-		  	        	t = c.getAppropriateTexture(corr);
+		  	        	t = c.getTerrainTexture();
 		  	        }
 		  	           
 		  	        if (t == null && corr) {  

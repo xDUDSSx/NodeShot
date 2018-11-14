@@ -20,10 +20,10 @@ public class CreeperGenerator extends Building {
 	protected Color prefabColor = new Color(49f/255f, 209f/255f, 12f/255f, 0.5f);
 	protected Color color = new Color(35/255f, 175/255f, 3/255f, 1f);
 	
-	public int productionRate = 120;
+	public int productionRate = 20;
 	public int nextSimTick = -1;
 	
-	public CreeperGenerator(float cx, float cy) {
+	public CreeperGenerator(float cx, float cy) {		
 		this.cx = cx;
 		this.cy = cy;
 		
@@ -43,13 +43,9 @@ public class CreeperGenerator extends Building {
 		int tileX = (int) (this.x / Base.CHUNK_SIZE);
 		int tileY = (int) (this.y / Base.CHUNK_SIZE);
 
-		for (int y = 0; y < 3; y++) {
-			for (int x = 0; x < 3; x++) {
-				if (GameScreen.chunks.getChunk(tileX + x, tileY + y) != null) {
-					GameScreen.chunks.getChunk(tileX + x, tileY + y).setCreeperLevel(GameScreen.chunks.getChunk(tileX + x, tileY + y).getCreeperLevel() + 5f);	
-				}
-			}
-		}		
+		if (GameScreen.chunks.getChunk(tileX + 1, tileY + 1) != null) {
+			GameScreen.chunks.getChunk(tileX + 1, tileY + 1).setCreeperLevel(10f);	
+		}	
 	}
 
 	@Override

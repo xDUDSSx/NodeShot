@@ -33,7 +33,6 @@ public class IndefinitePathHandler implements PathHandler {
 		medianNode = currentPackage.to;
 		currentConnector.add(currentPackage);	
 		currentPackage.go();
-		//System.out.println("Indefinite package sent: at: " + System.currentTimeMillis());
 	}
 	
 	@Override
