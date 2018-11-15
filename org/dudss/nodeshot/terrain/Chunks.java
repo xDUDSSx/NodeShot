@@ -91,6 +91,9 @@ public class Chunks {
 		ch.update();
 	}
 	
+	/**Updates section camera culling and updates sections that got into the camera view
+	 * @param cam The main game camera
+	 * */
 	public void updateView(OrthographicCamera cam) {
 		if ((lastViewPoll + pollRate) < System.currentTimeMillis()) {
 			float width = cam.viewportWidth * cam.zoom;
@@ -224,7 +227,7 @@ public class Chunks {
 	}
 	
 	/**Generates and initializes a terrain or a corruption mesh. Should be only called once 
-	 * and the initialized meshes than can get updated using the the {@link #generateMeshVertexData(Section, boolean, int)} method.
+	 * and the initialized mesh than can get updated using the the {@link #generateMeshVertexData(Section, boolean, int)} method.
 	 * @param s The assigned section.
 	 * @param corr Whether a terrain or a corruption mesh should be generated
 	 * @param level The layer of the corruption mesh (In case of corruption mesh generation)
@@ -238,7 +241,8 @@ public class Chunks {
 	    Mesh mesh = new Mesh(false, numberOfVertices, numberOfRectangles * 6, 
 				new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
 				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"),
+				new VertexAttribute(Usage.Generic, 1, "a_shade"));
 	    
 	    mesh.setVertices(newMeshData.getVerts());
 	    mesh.setIndices(newMeshData.getIndices());
@@ -263,7 +267,7 @@ public class Chunks {
 	    return generateVertexArrays(s, corr, level, numberOfRectangles, numberOfVertices);
 	}
 
-	/**Generates the vertices and indices arrays
+	/**Generates the vertices and indices arrays for a Mesh with 6 vertex attributes
 	 * @param s The assigned section.
 	 * @param corr Whether a terrain or a corruption mesh should b e generated
 	 * @param level The layer of the corruption mesh (In case of corruption mesh generation)
@@ -272,12 +276,13 @@ public class Chunks {
 	 * @return Updated {@link MeshVertexData} object.
 	 * */
 	private MeshVertexData generateVertexArrays(Section s, boolean corr, int level, int numberOfRectangles, int numberOfVertices) {			      			
-			int vertexPositionValue = 2;
-			int vertexColorValue = 1;
-		    int vertexTexCordsValue = 2;
+			int vertexPositionValue = 2; //x,y position values
+			int vertexColorValue = 1; //A single packed color value
+		    int vertexTexCordsValue = 2; //u,v texture coordinates
+		    int vertexShadeValue = 1; //Custom value representing shade of corruption
 		    
-		    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue;
-
+		    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue + vertexShadeValue; //6
+		    
 		    short[] vertexIndices = new short[numberOfRectangles * 6];
 		    float[] verticesWithColor = new float[numberOfVertices * valuesPerVertex];
 
@@ -298,6 +303,8 @@ public class Chunks {
 		  	        float v = 0;
 		  	        float u2 = 1;
 		  	        float v2 = 1;
+		  	        
+		  	        float shade = 0;
 		  	        
 		  	      	AtlasRegion t = null;
 		  	        if (corr) {
@@ -343,10 +350,10 @@ public class Chunks {
 			  	        u2 = t.getU2();
 			  	        v2 = t.getV2();
 			  	        
-			  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY, f, rectangleOffsetInArray, 0);
-			  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY, f, rectangleOffsetInArray, 1);
-			  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 2);
-			  	        setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY + Base.CHUNK_SIZE, f, rectangleOffsetInArray, 3);
+			  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY, f, shade, rectangleOffsetInArray, 0);
+			  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY, f, shade, rectangleOffsetInArray, 1);
+			  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, shade, rectangleOffsetInArray, 2);
+			  	        setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY + Base.CHUNK_SIZE, f, shade, rectangleOffsetInArray, 3);
 			  	        
 			  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
 			  	        vertexIndices[i * 6 + 1] = (short) (i * 4 + 1);
@@ -368,19 +375,33 @@ public class Chunks {
 		    return new MeshVertexData(verticesWithColor, vertexIndices);
 	}
 	
-	private void setValuesInArrayForVertex(float[] vertices, float u, float v, float x, float y, float c, int rectangleOffsetInArray, int vertexNumberInRect) {
-	    int vertexOffsetInArray = rectangleOffsetInArray + vertexNumberInRect * 5;
+	/**Method that populates the mesh vertex array (OpenGL VBO)
+	 * @param vertices The array that is being modified
+	 * @param u U texture coordinate
+	 * @param v V texture coordinate
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @param c The packed color that can be used with shaders
+	 * @param shade A special shade attribute represented as "a_shade" in shaders and which is used to tint corruption mesh tiles
+	 * @param rectangeOffsetInArray Index of the current position in the array
+	 * @param vertexNumberInRect Rectangle (tile) vertex which attributes are being set
+	 * */
+	private void setValuesInArrayForVertex(float[] vertices, float u, float v, float x, float y, float c, float shade, int rectangleOffsetInArray, int vertexNumberInRect) {
+	    int valuesPerVertex = 6; //Constant representing the number of individual attributes (x,y,c,u,v,shade)
+		int vertexOffsetInArray = rectangleOffsetInArray + vertexNumberInRect * valuesPerVertex; 
 
 	    // x position
 	    vertices[vertexOffsetInArray + 0] = x;
 	    // y position
 	    vertices[vertexOffsetInArray + 1] = y;
 	    // color 
-	    vertices[vertexOffsetInArray + 2] = c;  	    
+	    vertices[vertexOffsetInArray + 2] = c;  	 	
 	    // u texture coord
 	    vertices[vertexOffsetInArray + 3] = u;
 	    // v texture coord
 	    vertices[vertexOffsetInArray + 4] = v;
+	    // shade
+	    vertices[vertexOffsetInArray + 5] = shade;
 	}
 	
 	public void setCoalLevel(float level, int x, int y) {
@@ -402,6 +423,7 @@ public class Chunks {
 		chunks[x][y] = chunk;
 	}
 	
+	/**Generates all the {@link Section}s and initializes their terrain and corruption meshes */
 	public void generateSections() {
 		for (int y = 0; y < Base.CHUNK_AMOUNT; y+=Base.SECTION_SIZE) {
 			for (int x = 0; x < Base.CHUNK_AMOUNT; x+=Base.SECTION_SIZE) {
@@ -424,6 +446,7 @@ public class Chunks {
 		}
 	}
 	
+	/**Generates terrain and sections*/
 	public void generateAll() {
 		SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
 		System.out.println("\nGenerating noise (1/3)");
