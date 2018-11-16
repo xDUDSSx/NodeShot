@@ -38,7 +38,7 @@ public class HudMenu extends Window {
 		
     	table = new Table();
     	
-        oreLevel = new Label("Ore level: 0.0", skin, "font15");
+        /*oreLevel = new Label("Ore level: 0.0", skin, "font15");
         table.add(oreLevel).fill().left().padLeft(10).padRight(10).padTop(17).padBottom(2);
         table.row();
         oreType = new Label("Ore type: NONE", skin, "font15");
@@ -47,7 +47,8 @@ public class HudMenu extends Window {
         corruptionLevel = new Label("Corruption: 0.0", skin, "font15");     
         table.add(corruptionLevel).fill().left().padLeft(10).padRight(10).padTop(2).padBottom(2);
         table.row();
-        
+        */
+       
         right = new Table();
 
         TextButton debugButton = new TextButton("Debug", skin, "hoverfont15");
@@ -84,9 +85,7 @@ public class HudMenu extends Window {
 	
 	public void update() {
 		if (GameScreen.hoverChunk != null) {
-			oreLevel.setText("Ore level: " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
-			oreType.setText("Ore type: " + GameScreen.hoverChunk.getOreType().toString());
-			corruptionLevel.setText("Corruption: " + Base.round(GameScreen.hoverChunk.getCreeperLevel(), 3));
+			//Can show information about the chunk under the cursor
 		}
 	}
 	

@@ -51,7 +51,7 @@ public class Base {
 	static int paint_spacing = 2;
 	
 	//TERRAIN
-	public static int WORLD_SIZE = 3072;
+	public static int WORLD_SIZE = 2048;
 	
 	public static float COAL_THRESHOLD = 0.74f;
 	public static float IRON_THRESHOLD = 0.74f;

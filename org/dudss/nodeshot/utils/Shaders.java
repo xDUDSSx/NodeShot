@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 public class Shaders {
 	
 	public static ShaderProgram defaultShader;
-	public static ShaderProgram testShader;
+	public static ShaderProgram corruptionShader;
 	public static ShaderProgram blurShader;
 	public static ShaderProgram cloudShader;
 	public static ShaderProgram solidCloudShader;
@@ -23,10 +23,10 @@ public class Shaders {
 		defaultShader = new ShaderProgram(vertexDefaultShader, fragmentDefaultShader);
 		compiled.add(defaultShader.isCompiled());
 		
-		String fragShader = Gdx.files.internal("res/testFrag.glsl").readString();
-		String vertShader = Gdx.files.internal("res/testVertex.glsl").readString();		
-		testShader = new ShaderProgram(vertShader, fragShader);	
-		compiled.add(testShader.isCompiled());
+		String fragShader = Gdx.files.internal("res/corruptionFrag.glsl").readString();
+		String vertShader = Gdx.files.internal("res/corruptionVertex.glsl").readString();		
+		corruptionShader = new ShaderProgram(vertShader, fragShader);	
+		compiled.add(corruptionShader.isCompiled());
 		
 		String blurfragShader = Gdx.files.internal("res/blurFragment.glsl").readString();
 		String blurvertShader = Gdx.files.internal("res/blurVertex.glsl").readString();		

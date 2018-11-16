@@ -204,9 +204,9 @@ public class Chunks {
 	 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	 		SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
 	 		 		
-			Shaders.testShader.begin();
-			Shaders.testShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
-			Shaders.testShader.setUniformi("u_texture", 0);			
+			Shaders.corruptionShader.begin();
+			Shaders.corruptionShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
+			Shaders.corruptionShader.setUniformi("u_texture", 0);			
 			    
 	 		for (Section s : sectionsInView) {	   	 
 	 			if (s.needsCorruptionMeshUpdate(layer) == true) {		
@@ -214,13 +214,11 @@ public class Chunks {
 			    	s.getCorruptionMesh(layer).setIndices(s.getCorruptionIndices(layer));
 	 				s.updatedCorruptionMesh(layer);
 	 			}
-	 			//Shaders.testShader.setUniformf("shade", 1f - (0.5f * ((float)(layer + 1) / (Base.MAX_CREEP + 1))));
-	 			
 	 			//float f = layer % 2 == 0 ? 1f : 0f;
-	 			Shaders.testShader.setUniformf("shade", 1f - (float)layer/(float)Base.MAX_CREEP);
-	 			s.getCorruptionMesh(layer).render(Shaders.testShader, GL20.GL_TRIANGLES);
+	 			//Shaders.testShader.setUniformf("shade", 1f - (float)layer/(float)Base.MAX_CREEP);
+	 			s.getCorruptionMesh(layer).render(Shaders.corruptionShader, GL20.GL_TRIANGLES);
 	 		}	 	 		
-	 		Shaders.testShader.end();
+	 		Shaders.corruptionShader.end();
 	 		
 	 		GameScreen.corrBuffers.get(layer).end();	
 	 		GameScreen.blurBuffer(GameScreen.corrBuffers.get(layer), GameScreen.blurBuffer, GameScreen.corrBuffers.get(layer).getColorBufferTexture(), 0, 0);
@@ -304,7 +302,7 @@ public class Chunks {
 		  	        float u2 = 1;
 		  	        float v2 = 1;
 		  	        
-		  	        float shade = 0;
+		  	        float shade = 1 - (0.9f * ((level - c.height)/(float)Base.MAX_CREEP));
 		  	        
 		  	      	AtlasRegion t = null;
 		  	        if (corr) {
@@ -313,7 +311,7 @@ public class Chunks {
 		  	        	t = c.getTerrainTexture();
 		  	        }
 		  	           
-		  	        if (t == null && corr) {  
+		  	        if (t == null) {  
 		  	        	nullTiles++;
 		  	        } else {
 			  	        u = t.getU();
@@ -337,7 +335,6 @@ public class Chunks {
 				        
 			  	        float f = 0;
 			  	        if (corr) {
-			  	        	//float tint = 1.0f - (Base.range((int)(c.getCreeperLevel()), 0f, Base.MAX_CREEP, 0f, 0.6f));
 			  	        	//f = Color.toFloatBits(tint, tint, tint, 0.9f);
 			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
 			  	        } else {
@@ -535,23 +532,12 @@ public class Chunks {
 	}
 	
 	public Pixmap generateHeights(Pixmap pixmap) {
-		Pixmap patchPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.RGBA8888);
+ 		Pixmap patchPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.RGBA8888);
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
 				Color c = new Color(pixmap.getPixel(x, y));				
-				//if (c.r > 0.1f) {
-					//float height = Base.range(c.r, Base.TERRAIN_THRESHOLD, 1f, 0.1f, 1.0f);
-					int val = (int) (c.r / 0.2f);
-					if (val > 4) {
-						val = 4;
-					} else if (val < 0) {
-						val = 0;
-					}
-					chunks[x][y].setHeight(val);
-					
-				/*} else {
-					chunks[x][y].setHeight(-1);
-				}*/
+				int val = (int) Base.range(c.r, 0, 1f, 0, Base.MAX_CREEP);
+				chunks[x][y].setHeight(val);
 			}
 		}
 		return patchPixmap;

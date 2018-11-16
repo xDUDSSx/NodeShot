@@ -65,12 +65,11 @@ public class DesktopInputProcessor implements InputProcessor {
 					GameScreen.builtBuilding.build();
 					
 					if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
-						try {
-							builtBuilding.getClass();						
+						try {					
 							Class<? extends Building> buildingClass = GameScreen.builtBuilding.getClass();
 							Constructor buildingConstructor;
 							buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
-							Object[]    buildingArgs             = new Object[] { new Float(0), new Float(0) };
+							Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
 							GameScreen.builtBuilding = (Building) buildingConstructor.newInstance(buildingArgs);		
 						} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
 								| InvocationTargetException e) {

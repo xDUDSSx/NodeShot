@@ -593,7 +593,7 @@ public class GameScreen implements Screen {
         //Mesh vertexes that correspond to a single quad covering the screen
         float[] verts = new float[] {0, 0, Color.toFloatBits(1f, 0, 0, 1f), 0, 0, WIDTH, 0, Color.toFloatBits(1f, 0, 0, 1f), 1, 0, WIDTH, HEIGHT, Color.toFloatBits(1f, 0, 0, 1f), 1, 1, 0, HEIGHT, Color.toFloatBits(1f, 0, 0, 1f), 0, 1};        
         //cloud scale that is normalized to some predefined values
-        float clampedScale = Base.range(cam.zoom*0.5f, Base.MIN_ZOOM, Base.WORLD_SIZE/cam.viewportWidth, 2f, 5f);
+        float clampedScale = Base.range(cam.zoom*0.5f, Base.MIN_ZOOM, Base.WORLD_SIZE/cam.viewportWidth, 2f, 4f);
         
         //Setting the shader uniforms
  		Shaders.solidCloudShader.begin();
@@ -710,13 +710,13 @@ public class GameScreen implements Screen {
         
         layout.setText(font, "FPS: " + Gdx.graphics.getFramesPerSecond());
         float textwidth = layout.width;
-        layout.setText(font, "sFPS: " + sfps);
+        layout.setText(font, "sFPS: " + sfps + " (" + SimulationThread.TICKS_PER_SECOND + ")");
         float text2width = layout.width;
         layout.setText(font, "simFac: " + df.format(simFac));
         float text3width = layout.width;
         
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond() , 5, HEIGHT - textheight + 2);
-        font.draw(batch, "sFPS: " + sfps , 5 + 5 + textwidth, HEIGHT - textheight + 2);
+        font.draw(batch, "sFPS: " + sfps + " (" + SimulationThread.TICKS_PER_SECOND + ")", 5 + 5 + textwidth, HEIGHT - textheight + 2);
         font.draw(batch, "simFac: " + df.format(simFac) , 5, HEIGHT - textheight*2 - 2);
         font.draw(batch, "simTick: " + SimulationThread.simTick , 5 + 5 + text3width, HEIGHT - textheight*2 - 2);
     }
@@ -889,16 +889,13 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
         	if (prevTick != Integer.MAX_VALUE - 1) SimulationThread.recalculateSpeed(++prevTick);
-        	System.out.println("Increasing simSpeed! (+) current tick rate: " + SimulationThread.TICKS_PER_SECOND);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
         	if (prevTick != 1) {SimulationThread.recalculateSpeed(--prevTick);}
-        	System.out.println("Decreasing simSpeed! (-) current tick rate: " + SimulationThread.TICKS_PER_SECOND);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_5)) {
         	SimulationThread.recalculateSpeed(30);
-        	System.out.println("Resetting simSpeed! (reset) current tick rate: " + SimulationThread.TICKS_PER_SECOND);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             cam.translate(-3, 0, 0);
@@ -929,16 +926,19 @@ public class GameScreen implements Screen {
         }
         
         //Zoom clamping, min max
-        cam.zoom = MathUtils.clamp(cam.zoom, Base.MIN_ZOOM, Base.WORLD_SIZE/cam.viewportWidth);
+        cam.zoom = MathUtils.clamp(cam.zoom, Base.MIN_ZOOM, Base.WORLD_SIZE*3/cam.viewportWidth);
 
-        
+        /*
         float effectiveViewportWidth = cam.viewportWidth * cam.zoom;
-        float effectiveViewportHeight = cam.viewportHeight * cam.zoom;
-
-        //Making sure the camera doesnt go beyond the world limit
+        float effectiveViewportHeight = cam.viewportHeight * cam.zoom;  
         cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f - effectiveViewportWidth / 2f);
         cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f -  Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f - effectiveViewportHeight / 2f);
-   		
+   		*/
+        
+        
+        //Making sure the camera doesn't go beyond the world limit
+        cam.position.x = MathUtils.clamp(cam.position.x, Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f);
+        cam.position.y = MathUtils.clamp(cam.position.y, Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f);   		
     }
 
     public static Entity checkHighlights(boolean select) {

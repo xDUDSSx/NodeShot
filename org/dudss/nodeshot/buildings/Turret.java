@@ -20,7 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Turret extends BasicStorage {
 
 	int rechargeRate = 32;
-	int nextShot = SimulationThread.simTick += rechargeRate;
+	int nextShot = SimulationThread.simTick + rechargeRate;
 	
 	int lastShot = 0;
 	Vector2 lastTarget;
