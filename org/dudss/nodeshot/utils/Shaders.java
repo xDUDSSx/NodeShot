@@ -14,6 +14,7 @@ public class Shaders {
 	public static ShaderProgram cloudShader;
 	public static ShaderProgram solidCloudShader;
 	public static ShaderProgram rotatingCloudShader;
+	public static ShaderProgram terrainShader;
 	
 	public static void load() {
 		List<Boolean> compiled = new ArrayList<Boolean>();
@@ -27,6 +28,11 @@ public class Shaders {
 		String vertShader = Gdx.files.internal("res/corruptionVertex.glsl").readString();		
 		corruptionShader = new ShaderProgram(vertShader, fragShader);	
 		compiled.add(corruptionShader.isCompiled());
+		
+		String terrainVertShader = Gdx.files.internal("res/terrainVertex.glsl").readString();
+		String terrainFragShader = Gdx.files.internal("res/terrainFragment.glsl").readString();
+		terrainShader = new ShaderProgram(terrainVertShader, terrainFragShader);
+		compiled.add(terrainShader.isCompiled());
 		
 		String blurfragShader = Gdx.files.internal("res/blurFragment.glsl").readString();
 		String blurvertShader = Gdx.files.internal("res/blurVertex.glsl").readString();		

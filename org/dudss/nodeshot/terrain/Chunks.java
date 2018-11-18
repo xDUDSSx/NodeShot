@@ -182,26 +182,26 @@ public class Chunks {
 				
 	public void drawTerrain() {
 			SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
-		    Shaders.defaultShader.begin();
-		    Shaders.defaultShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
-		    Shaders.defaultShader.setUniformi("u_texture", 0);
+		    Shaders.terrainShader.begin();
+		    Shaders.terrainShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
+		    Shaders.terrainShader.setUniformi("u_texture", 0);
 		    for (Section s : sectionsInView) {
 		    	if (s.needsTerrainUpdate() == true) {		
 		    		s.getTerrainMesh().setVertices(s.getTerrainVerts());
 			    	s.getTerrainMesh().setIndices(s.getTerrainIndices());	 
 	 				s.updatedTerrain();
 	 			}
-		    	s.getTerrainMesh().render(Shaders.defaultShader, GL20.GL_TRIANGLES);
+		    	s.getTerrainMesh().render(Shaders.terrainShader, GL20.GL_TRIANGLES);
 		    }
-		    Shaders.defaultShader.end();	
+		    Shaders.terrainShader.end();	
 	}	
 	
 	public void drawCorruption(int layer) {
 		 	Gdx.gl.glEnable(GL20.GL_BLEND);
 	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      	       			
-		    GameScreen.corrBuffers.get(layer).begin();
-	        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		    //GameScreen.corrBuffers.get(layer).begin();
+	        //Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	 		SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
 	 		 		
 			Shaders.corruptionShader.begin();
@@ -220,8 +220,8 @@ public class Chunks {
 	 		}	 	 		
 	 		Shaders.corruptionShader.end();
 	 		
-	 		GameScreen.corrBuffers.get(layer).end();	
-	 		GameScreen.blurBuffer(GameScreen.corrBuffers.get(layer), GameScreen.blurBuffer, GameScreen.corrBuffers.get(layer).getColorBufferTexture(), 0, 0);
+	 		//GameScreen.corrBuffers.get(layer).end();	
+	 		//GameScreen.blurBuffer(GameScreen.corrBuffers.get(layer), GameScreen.blurBuffer, GameScreen.corrBuffers.get(layer).getColorBufferTexture(), 0, 0);
 	}
 	
 	/**Generates and initializes a terrain or a corruption mesh. Should be only called once 
@@ -318,8 +318,7 @@ public class Chunks {
 			  	        v = t.getV();
 			  	        u2 = t.getU2();
 			  	        v2 = t.getV2();
-			  	        
-			  	  	       
+			  	          
 					    float width = u2 - u;
 					    //float height = v2 - v;
 			  	        float fix = width * 0.1f;
@@ -332,10 +331,9 @@ public class Chunks {
 				        v = nV;
 				        u2 = nU2;
 				        v2 = nV2;
-				        
+				  	        
 			  	        float f = 0;
 			  	        if (corr) {
-			  	        	//f = Color.toFloatBits(tint, tint, tint, 0.9f);
 			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
 			  	        } else {
 			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
@@ -346,11 +344,11 @@ public class Chunks {
 			  	      	v = t.getV();
 			  	        u2 = t.getU2();
 			  	        v2 = t.getV2();
-			  	        
-			  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY, f, shade, rectangleOffsetInArray, 0);
-			  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY, f, shade, rectangleOffsetInArray, 1);
-			  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, shade, rectangleOffsetInArray, 2);
-			  	        setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY + Base.CHUNK_SIZE, f, shade, rectangleOffsetInArray, 3);
+			  	        			  	        
+			  	     	setValuesInArrayForVertex(verticesWithColor, u, v2, tileX, tileY, f, shade, rectangleOffsetInArray, 0);
+			  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tileX + Base.CHUNK_SIZE, tileY, f, shade, rectangleOffsetInArray, 1);
+			  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, shade, rectangleOffsetInArray, 2);
+			  	        setValuesInArrayForVertex(verticesWithColor, u, v, tileX, tileY + Base.CHUNK_SIZE, f, shade, rectangleOffsetInArray, 3);			  	       
 			  	        
 			  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
 			  	        vertexIndices[i * 6 + 1] = (short) (i * 4 + 1);

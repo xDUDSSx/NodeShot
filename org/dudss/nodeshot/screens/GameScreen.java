@@ -937,8 +937,8 @@ public class GameScreen implements Screen {
         
         
         //Making sure the camera doesn't go beyond the world limit
-        cam.position.x = MathUtils.clamp(cam.position.x, Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f);
-        cam.position.y = MathUtils.clamp(cam.position.y, Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f);   		
+        cam.position.x = MathUtils.clamp(cam.position.x, 0 - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE * 1.2f);
+        cam.position.y = MathUtils.clamp(cam.position.y, 0 - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE * 1.2f);   		
     }
 
     public static Entity checkHighlights(boolean select) {

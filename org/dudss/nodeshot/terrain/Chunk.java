@@ -123,7 +123,7 @@ public class Chunk {
 	}
 	
 	/**Returns an AtlasRegion representing this tiles terrain*/
-	public AtlasRegion getTerrainTexture() {
+	public AtlasRegion getTerrainTexture2() {
 		if (coalOre != 0) {	
 			AtlasRegion desiredRegion = null;
 			if (coalOre <= 0.25) {
@@ -143,28 +143,28 @@ public class Chunk {
 					minusx.getOreLevel() > 0 && 
 					minusy.getOreLevel() > 0)
 				{
-					return SpriteLoader.tileAtlas.findRegion("tiledCoalTL");
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalBL");
 				} else
 				if (plusy.getOreLevel() == 0 && 
 					minusx.getOreLevel() == 0 &&
 					plusx.getOreLevel() > 0 &&
 				    minusy.getOreLevel() > 0)  
 				{
-					return SpriteLoader.tileAtlas.findRegion("tiledCoalTR");
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalBR");
 				} else
 				if (minusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 &&
 				    plusy.getOreLevel() > 0 &&
 				    minusx.getOreLevel() > 0)  
 				{
-					return SpriteLoader.tileAtlas.findRegion("tiledCoalBL");
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalTL");
 				} else
 				if (minusy.getOreLevel() == 0 && 
 					minusx.getOreLevel() == 0 && 
 				    plusx.getOreLevel() > 0 &&
 				    plusy.getOreLevel() > 0)  
 				{
-					return SpriteLoader.tileAtlas.findRegion("tiledCoalBR");
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalTR");
 				} else
 				if (plusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 && 
@@ -215,28 +215,28 @@ public class Chunk {
 					minusx.getOreLevel() > 0 && 
 					minusy.getOreLevel() > 0)
 				{
-					return SpriteLoader.tileAtlas.findRegion("tiledIronTL");
+					return SpriteLoader.tileAtlas.findRegion("tiledIronBL");
 				} else
 				if (plusy.getOreLevel() == 0 && 
 					minusx.getOreLevel() == 0 &&
 					plusx.getOreLevel() > 0 &&
 				    minusy.getOreLevel() > 0)  
 				{
-					return SpriteLoader.tileAtlas.findRegion("tiledIronTR");
+					return SpriteLoader.tileAtlas.findRegion("tiledIronBR");
 				} else
 				if (minusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 &&
 				    plusy.getOreLevel() > 0 &&
 				    minusx.getOreLevel() > 0)  
 				{
-					return SpriteLoader.tileAtlas.findRegion("tiledIronBL");
+					return SpriteLoader.tileAtlas.findRegion("tiledIronTL");
 				} else
 				if (minusy.getOreLevel() == 0 && 
 					minusx.getOreLevel() == 0 && 
 				    plusx.getOreLevel() > 0 &&
 				    plusy.getOreLevel() > 0)  
 				{
-					return SpriteLoader.tileAtlas.findRegion("tiledIronBR");
+					return SpriteLoader.tileAtlas.findRegion("tiledIronTR");
 				} else
 				if (plusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 && 
@@ -297,6 +297,298 @@ public class Chunk {
 		return SpriteLoader.tileAtlas.findRegion("transparent16");				
 	}
 	
+	private AtlasRegion resolveOres() {
+		if (coalOre != 0) {	
+			AtlasRegion desiredRegion = null;
+			if (coalOre <= 0.25) {
+				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoallow");
+			} else 
+			if (coalOre <= 0.5) {		;
+				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoallower");
+			} else
+			if (coalOre > 0.5) {
+				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoal");
+			}		
+			
+			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {				
+				
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 &&
+					minusx.getOreLevel() > 0 && 
+					minusy.getOreLevel() > 0)
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalBL");
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusx.getOreLevel() > 0 &&
+				    minusy.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalBR");
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 &&
+				    plusy.getOreLevel() > 0 &&
+				    minusx.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalTL");
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 && 
+				    plusx.getOreLevel() > 0 &&
+				    plusy.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalTR");
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusy.getOreLevel() == 0 &&
+					minusx.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalEL");
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 && 
+					minusy.getOreLevel() == 0 &&
+					plusx.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalER");
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					minusy.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalET");
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusy.getOreLevel() > 0)  
+				{		
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalEB");
+				} else 
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusy.getOreLevel() == 0)  
+				{		
+					return SpriteLoader.tileAtlas.findRegion("tiledCoalS");
+				}
+			}
+				
+			return desiredRegion;
+		} else
+		if (ironOre != 0) {
+			boolean triangleDrawn = false;
+			AtlasRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledIron");
+			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
+				
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 &&
+					minusx.getOreLevel() > 0 && 
+					minusy.getOreLevel() > 0)
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledIronBL");
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusx.getOreLevel() > 0 &&
+				    minusy.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledIronBR");
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 &&
+				    plusy.getOreLevel() > 0 &&
+				    minusx.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledIronTL");
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 && 
+				    plusx.getOreLevel() > 0 &&
+				    plusy.getOreLevel() > 0)  
+				{
+					return SpriteLoader.tileAtlas.findRegion("tiledIronTR");
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusy.getOreLevel() == 0 &&
+					minusx.getOreLevel() > 0)  
+				{	
+					return desiredRegion;
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 && 
+					minusy.getOreLevel() == 0 &&
+					plusx.getOreLevel() > 0)  
+				{
+					return desiredRegion;	
+				} else
+				if (plusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					minusy.getOreLevel() > 0)  
+				{
+					return desiredRegion;
+				} else
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusy.getOreLevel() > 0)  
+				{	
+					return desiredRegion;
+				} else 
+				if (minusy.getOreLevel() == 0 && 
+					plusx.getOreLevel() == 0 && 
+					minusx.getOreLevel() == 0 &&
+					plusy.getOreLevel() == 0)  
+				{
+					return desiredRegion;
+				}
+			}
+		
+			if (!triangleDrawn) {
+				return desiredRegion;
+			}
+		}
+		return null;
+	}
+	
+	/**Returns an AtlasRegion representing this tiles terrain*/
+	public AtlasRegion getTerrainTexture() {	
+		if (this.getOreLevel() > 0) {
+			AtlasRegion ore = resolveOres();
+			if (ore != null) {
+				return ore;
+			}
+		}
+		
+		switch(height) {
+			case 0: return null;
+			case 1: return resolveTerrainEdges(1, "1rock");
+			case 2: return resolveTerrainEdges(2, "2rock");
+			case 3: return resolveTerrainEdges(3, "3rock");
+			case 4: return resolveTerrainEdges(4, "4sand");
+			case 5: return resolveTerrainEdges(5, "5sand");
+			case 6: return resolveTerrainEdges(6, "6dirt");
+			case 7: return resolveTerrainEdges(7, "7grass");
+			case 8: return resolveTerrainEdges(8, "8stone");
+			case 9: return resolveTerrainEdges(9, "9concrete");
+			case 10: return resolveTerrainEdges(10, "10concrete");			
+		}
+		
+		return SpriteLoader.tileAtlas.findRegion("transparent16");				
+	}
+	
+	/**Returns the appropriate {@link AtlasRegion} for the specified height
+	 * @param level Target height level
+	 * @param textureRoot Name of the default texture variation <br> (names are defined in {@link SpriteLoader#tileAtlas})
+	 * */
+	private AtlasRegion resolveTerrainEdges(int level, String textureRoot) {
+		if (x > Base.CHUNK_SIZE && y > Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
+			if (plusy.getHeight() < level &&
+				plusx.getHeight() < level &&
+				minusx.getHeight() >= level && 
+				minusy.getHeight() >= level)
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "BL");
+			} else
+			if (plusy.getHeight() < level && 
+				plusx.getHeight() >= level &&
+				minusx.getHeight() < level &&				 
+			    minusy.getHeight() >= level)  
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "BR");
+			} else
+			if (minusy.getHeight() < level && 
+				plusx.getHeight() < level &&
+			    plusy.getHeight() >= level &&
+			    minusx.getHeight() >= level)  
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "TL");
+			} else
+			if (minusy.getHeight() < level && 
+				minusx.getHeight() < level && 
+			    plusx.getHeight() >= level &&
+			    plusy.getHeight() >= level)  
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "TR");
+			} else
+				
+			//Straight line borders
+			if (plusx.getHeight() < level && 
+				minusx.getHeight() >= level && 
+				plusy.getHeight() >= level &&
+				minusy.getHeight() >= level)  
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "SR");
+			} else
+			if (plusx.getHeight() >= level && 
+				minusx.getHeight() >= level && 
+				plusy.getHeight() >= level &&
+				minusy.getHeight() < level)  
+			{	
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "SB");
+			} else
+			if (plusx.getHeight() >= level && 
+				minusx.getHeight() < level &&
+				plusy.getHeight()  >= level &&
+				minusy.getHeight()  >= level)  
+			{	
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "SL");
+			} else
+			if (plusx.getHeight()  >= level && 
+				minusx.getHeight() >= level && 
+				plusy.getHeight()  < level &&
+				minusy.getHeight() >= level)  
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "ST");	
+			} else
+				
+			//Tile ends
+			if (plusy.getHeight() < level && 
+				plusx.getHeight() < level && 
+				minusy.getHeight() < level &&
+				minusx.getHeight() >= level)  
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "LB");	
+			} else
+			if (plusy.getHeight() < level && 
+				minusx.getHeight() < level && 
+				minusy.getHeight() < level &&
+				plusx.getHeight() >= level)  
+			{	
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "RB");
+			} else
+			if (plusy.getHeight() < level && 
+				plusx.getHeight() < level && 
+				minusx.getHeight() < level &&
+				minusy.getHeight() >= level)  
+			{	
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "TB");
+			} else
+			if (minusy.getHeight() < level && 
+				plusx.getHeight() < level && 
+				minusx.getHeight() < level &&
+				plusy.getHeight() >= level)  
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "BB");	
+			} else 
+				
+			//Single creeper tile
+			if (minusy.getHeight() < level && 
+				plusx.getHeight() < level && 
+				minusx.getHeight() < level &&
+				plusy.getHeight() < level)  
+			{
+				return SpriteLoader.tileAtlas.findRegion(textureRoot + "Single");  
+			}
+		}
+		return SpriteLoader.tileAtlas.findRegion(textureRoot);
+	}
+	
 	public AtlasRegion getCorruptionTexture(int level) {
  		if (this.creeper != 0) {
 			if (this.getAbsoluteCreeperLevel() > level) {
@@ -321,28 +613,28 @@ public class Chunk {
 				minusx.getAbsoluteCreeperLevel() > level && 
 				minusy.getAbsoluteCreeperLevel() > level)
 			{
-				return SpriteLoader.tileAtlas.findRegion("corrTL");
+				return SpriteLoader.tileAtlas.findRegion("corrBL");
 			} else
 			if (plusy.getAbsoluteCreeperLevel() <= level && 
 				plusx.getAbsoluteCreeperLevel() > level &&
 				minusx.getAbsoluteCreeperLevel() <= level &&				 
 			    minusy.getAbsoluteCreeperLevel() > level)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("corrTR");
+				return SpriteLoader.tileAtlas.findRegion("corrBR");
 			} else
 			if (minusy.getAbsoluteCreeperLevel() <= level && 
 				plusx.getAbsoluteCreeperLevel() <= level &&
 			    plusy.getAbsoluteCreeperLevel() > level &&
 			    minusx.getAbsoluteCreeperLevel() > level)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("corrBL");
+				return SpriteLoader.tileAtlas.findRegion("corrTL");
 			} else
 			if (minusy.getAbsoluteCreeperLevel() <= level && 
 				minusx.getAbsoluteCreeperLevel() <= level && 
 			    plusx.getAbsoluteCreeperLevel() > level &&
 			    plusy.getAbsoluteCreeperLevel() > level)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("corrBR");
+				return SpriteLoader.tileAtlas.findRegion("corrTR");
 			} else
 				
 			//Straight line borders
@@ -358,7 +650,7 @@ public class Chunk {
 				plusy.getAbsoluteCreeperLevel() > level &&
 				minusy.getAbsoluteCreeperLevel() <= level)  
 			{	
-				return SpriteLoader.tileAtlas.findRegion("corrST");
+				return SpriteLoader.tileAtlas.findRegion("corrSB");
 			} else
 			if (plusx.getAbsoluteCreeperLevel() > level && 
 				minusx.getAbsoluteCreeperLevel() <= level &&
@@ -372,7 +664,7 @@ public class Chunk {
 				plusy.getAbsoluteCreeperLevel()  <= level &&
 				minusy.getAbsoluteCreeperLevel() > level)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("corrSB");	
+				return SpriteLoader.tileAtlas.findRegion("corrST");	
 			} else
 				
 			//Tile ends
@@ -395,14 +687,14 @@ public class Chunk {
 				minusx.getAbsoluteCreeperLevel() <= level &&
 				minusy.getAbsoluteCreeperLevel() > level)  
 			{	
-				return SpriteLoader.tileAtlas.findRegion("corrBB");
+				return SpriteLoader.tileAtlas.findRegion("corrTB");
 			} else
 			if (minusy.getAbsoluteCreeperLevel() <= level && 
 				plusx.getAbsoluteCreeperLevel() <= level && 
 				minusx.getAbsoluteCreeperLevel() <= level &&
 				plusy.getAbsoluteCreeperLevel() > level)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("corrTB");	
+				return SpriteLoader.tileAtlas.findRegion("corrBB");	
 			} else 
 				
 			//Single creeper tile
