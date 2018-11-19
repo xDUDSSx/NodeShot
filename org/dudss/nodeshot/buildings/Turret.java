@@ -136,7 +136,7 @@ public class Turret extends BasicStorage {
             y += dy;
             ++segment_passed;
             
-            //Check if the chunk has any corruption in it (Since we are sprialing outwards from the turrets cx, cy, the first corrupted chunk
+            //Check if the chunk has any corruption in it (Since we are spiraling outwards from the turrets cx, cy, the first corrupted chunk
             //we encounter is going to be the closest as well (No guarantee that this is the only closest one)
             chunk = GameScreen.chunks.getChunk(x, y);
             if (chunk != null) {

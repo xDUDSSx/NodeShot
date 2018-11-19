@@ -33,6 +33,7 @@ public class Shaders {
 		String terrainFragShader = Gdx.files.internal("res/terrainFragment.glsl").readString();
 		terrainShader = new ShaderProgram(terrainVertShader, terrainFragShader);
 		compiled.add(terrainShader.isCompiled());
+		//System.out.println(terrainShader.getLog());
 		
 		String blurfragShader = Gdx.files.internal("res/blurFragment.glsl").readString();
 		String blurvertShader = Gdx.files.internal("res/blurVertex.glsl").readString();		

@@ -6,56 +6,56 @@ filter: MipMapNearestLinear,Nearest
 repeat: none
 10concrete
   rotate: false
-  xy: 364, 156
+  xy: 804, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteBB
   rotate: false
-  xy: 540, 68
+  xy: 804, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteBL
   rotate: false
-  xy: 1156, 684
+  xy: 1332, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteBR
   rotate: false
-  xy: 364, 772
+  xy: 540, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteLB
   rotate: false
-  xy: 276, 772
+  xy: 364, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteRB
   rotate: false
-  xy: 628, 244
+  xy: 716, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteSB
   rotate: false
-  xy: 1156, 860
+  xy: 1244, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteSL
   rotate: false
-  xy: 1068, 508
+  xy: 1156, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -76,56 +76,56 @@ repeat: none
   index: -1
 10concreteSingle
   rotate: false
-  xy: 276, 508
+  xy: 628, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteTB
   rotate: false
-  xy: 188, 772
+  xy: 276, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteTL
   rotate: false
-  xy: 628, 420
+  xy: 980, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 10concreteTR
   rotate: false
-  xy: 804, 420
+  xy: 452, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rock
   rotate: false
-  xy: 364, 948
+  xy: 12, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rockBB
   rotate: false
-  xy: 716, 860
+  xy: 188, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rockBL
   rotate: false
-  xy: 1244, 860
+  xy: 628, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rockBR
   rotate: false
-  xy: 716, 244
+  xy: 980, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -139,42 +139,42 @@ repeat: none
   index: -1
 1rockRB
   rotate: false
-  xy: 1068, 772
+  xy: 364, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rockSB
   rotate: false
-  xy: 628, 156
+  xy: 892, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rockSL
   rotate: false
-  xy: 1244, 772
+  xy: 1420, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rockSR
   rotate: false
-  xy: 364, 860
+  xy: 628, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rockST
   rotate: false
-  xy: 804, 244
+  xy: 892, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 1rockSingle
   rotate: false
-  xy: 1156, 596
+  xy: 1244, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -195,147 +195,147 @@ repeat: none
   index: -1
 1rockTR
   rotate: false
-  xy: 276, 860
+  xy: 364, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rock
   rotate: false
-  xy: 892, 772
+  xy: 12, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockBB
   rotate: false
-  xy: 540, 156
+  xy: 628, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockBL
   rotate: false
-  xy: 276, 684
+  xy: 364, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockBR
   rotate: false
-  xy: 804, 508
+  xy: 100, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockLB
   rotate: false
-  xy: 188, 332
+  xy: 540, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockRB
   rotate: false
-  xy: 628, 508
+  xy: 12, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockSB
   rotate: false
-  xy: 452, 244
+  xy: 12, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockSL
   rotate: false
-  xy: 364, 684
+  xy: 452, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockSR
   rotate: false
-  xy: 276, 244
+  xy: 364, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockST
   rotate: false
-  xy: 540, 860
+  xy: 188, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockSingle
   rotate: false
-  xy: 892, 596
+  xy: 1068, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockTB
   rotate: false
-  xy: 540, 772
+  xy: 12, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockTL
   rotate: false
-  xy: 540, 684
+  xy: 12, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 2rockTR
   rotate: false
-  xy: 628, 772
+  xy: 100, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rock
   rotate: false
-  xy: 100, 596
+  xy: 188, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockBB
   rotate: false
-  xy: 12, 332
+  xy: 276, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockBL
   rotate: false
-  xy: 364, 420
+  xy: 716, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockBR
   rotate: false
-  xy: 716, 772
+  xy: 188, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockLB
   rotate: false
-  xy: 452, 332
+  xy: 892, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockRB
   rotate: false
-  xy: 628, 68
+  xy: 716, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -349,63 +349,63 @@ repeat: none
   index: -1
 3rockSL
   rotate: false
-  xy: 804, 332
+  xy: 716, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockSR
   rotate: false
-  xy: 188, 420
+  xy: 804, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockST
   rotate: false
-  xy: 716, 684
+  xy: 980, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockSingle
   rotate: false
-  xy: 540, 596
+  xy: 892, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockTB
   rotate: false
-  xy: 188, 68
+  xy: 540, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockTL
   rotate: false
-  xy: 364, 68
+  xy: 980, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3rockTR
   rotate: false
-  xy: 804, 684
+  xy: 364, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sand
   rotate: false
-  xy: 540, 244
+  xy: 716, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandBB
   rotate: false
-  xy: 892, 332
+  xy: 980, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -426,70 +426,70 @@ repeat: none
   index: -1
 4sandLB
   rotate: false
-  xy: 188, 508
+  xy: 540, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandRB
   rotate: false
-  xy: 892, 420
+  xy: 1068, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandSB
   rotate: false
-  xy: 12, 684
+  xy: 540, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandSL
   rotate: false
-  xy: 100, 684
+  xy: 188, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandSR
   rotate: false
-  xy: 12, 508
+  xy: 100, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandST
   rotate: false
-  xy: 188, 684
+  xy: 276, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandSingle
   rotate: false
-  xy: 188, 596
+  xy: 276, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandTB
   rotate: false
-  xy: 452, 860
+  xy: 716, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandTL
   rotate: false
-  xy: 276, 596
+  xy: 628, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 4sandTR
   rotate: false
-  xy: 540, 420
+  xy: 100, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -503,399 +503,406 @@ repeat: none
   index: -1
 5sandBB
   rotate: false
-  xy: 628, 948
+  xy: 276, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandBL
   rotate: false
-  xy: 364, 596
+  xy: 716, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandBR
   rotate: false
-  xy: 12, 156
+  xy: 276, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandLB
   rotate: false
-  xy: 452, 684
+  xy: 540, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandRB
   rotate: false
-  xy: 540, 948
+  xy: 188, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandSB
   rotate: false
-  xy: 716, 948
+  xy: 188, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandSL
   rotate: false
-  xy: 452, 596
+  xy: 804, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandSR
   rotate: false
-  xy: 804, 948
+  xy: 276, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandST
   rotate: false
-  xy: 100, 156
+  xy: 452, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandSingle
   rotate: false
-  xy: 1332, 948
+  xy: 716, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandTB
   rotate: false
-  xy: 628, 684
+  xy: 100, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandTL
   rotate: false
-  xy: 892, 508
+  xy: 980, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 5sandTR
   rotate: false
-  xy: 540, 508
+  xy: 452, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirt
   rotate: false
-  xy: 100, 508
+  xy: 188, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtBB
   rotate: false
-  xy: 716, 420
+  xy: 892, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtBL
   rotate: false
-  xy: 452, 948
+  xy: 12, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtBR
   rotate: false
-  xy: 452, 68
+  xy: 540, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtLB
   rotate: false
-  xy: 1420, 948
+  xy: 628, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtRB
   rotate: false
-  xy: 892, 684
+  xy: 1156, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtSB
   rotate: false
-  xy: 1244, 948
+  xy: 716, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtSL
   rotate: false
-  xy: 980, 684
+  xy: 892, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtSR
   rotate: false
-  xy: 980, 596
+  xy: 1244, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtST
   rotate: false
-  xy: 1068, 684
+  xy: 1332, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtSingle
   rotate: false
-  xy: 980, 772
+  xy: 540, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtTB
   rotate: false
-  xy: 980, 508
+  xy: 1156, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtTL
   rotate: false
-  xy: 716, 156
+  xy: 804, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 6dirtTR
   rotate: false
-  xy: 980, 420
+  xy: 1068, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grass
   rotate: false
-  xy: 1156, 772
+  xy: 804, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassBB
   rotate: false
-  xy: 276, 332
+  xy: 628, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassBL
   rotate: false
-  xy: 804, 860
+  xy: 276, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassBR
   rotate: false
-  xy: 188, 156
+  xy: 1156, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassLB
   rotate: false
-  xy: 716, 596
+  xy: 276, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassRB
   rotate: false
-  xy: 364, 508
+  xy: 364, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassSB
   rotate: false
-  xy: 100, 68
+  xy: 1068, 948
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassSL
   rotate: false
-  xy: 628, 596
+  xy: 892, 860
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+7grassSR
+  rotate: false
+  xy: 716, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassST
   rotate: false
-  xy: 980, 948
+  xy: 1068, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassSingle
   rotate: false
-  xy: 100, 332
+  xy: 540, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassTB
   rotate: false
-  xy: 364, 244
+  xy: 628, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassTL
   rotate: false
-  xy: 1068, 860
+  xy: 364, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 7grassTR
   rotate: false
-  xy: 980, 860
+  xy: 364, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stone
   rotate: false
-  xy: 804, 772
+  xy: 188, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneBB
   rotate: false
-  xy: 100, 420
+  xy: 452, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneBL
   rotate: false
-  xy: 452, 772
+  xy: 100, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneBR
   rotate: false
-  xy: 12, 244
+  xy: 452, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneLB
   rotate: false
-  xy: 452, 508
+  xy: 804, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneRB
   rotate: false
-  xy: 12, 420
+  xy: 100, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneSB
   rotate: false
-  xy: 1332, 860
+  xy: 364, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneSL
   rotate: false
-  xy: 628, 860
+  xy: 100, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneSR
   rotate: false
-  xy: 100, 244
+  xy: 452, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneST
   rotate: false
-  xy: 276, 420
+  xy: 628, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneSingle
   rotate: false
-  xy: 716, 332
+  xy: 452, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneTB
   rotate: false
-  xy: 188, 244
+  xy: 540, 596
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneTL
   rotate: false
-  xy: 1068, 596
+  xy: 1244, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 8stoneTR
   rotate: false
-  xy: 892, 948
+  xy: 1156, 772
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concrete
   rotate: false
-  xy: 1156, 948
+  xy: 980, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteBB
   rotate: false
-  xy: 892, 860
+  xy: 276, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteBL
   rotate: false
-  xy: 276, 156
+  xy: 452, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -909,140 +916,140 @@ repeat: none
   index: -1
 9concreteLB
   rotate: false
-  xy: 276, 68
+  xy: 452, 156
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteRB
   rotate: false
-  xy: 12, 68
+  xy: 364, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteSB
   rotate: false
-  xy: 364, 332
+  xy: 804, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteSL
   rotate: false
-  xy: 716, 508
+  xy: 452, 244
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteSR
   rotate: false
-  xy: 452, 420
+  xy: 540, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteST
   rotate: false
-  xy: 1068, 948
+  xy: 628, 420
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteSingle
   rotate: false
-  xy: 540, 332
+  xy: 892, 684
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteTB
   rotate: false
-  xy: 804, 596
+  xy: 1068, 860
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteTL
   rotate: false
-  xy: 452, 156
+  xy: 628, 332
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 9concreteTR
   rotate: false
-  xy: 628, 332
+  xy: 804, 508
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 corr32
   rotate: false
-  xy: 516, 12
+  xy: 460, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBB
   rotate: false
-  xy: 460, 12
+  xy: 404, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBL
   rotate: false
-  xy: 1508, 980
+  xy: 684, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBLn
   rotate: false
-  xy: 1244, 716
+  xy: 1332, 804
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBR
   rotate: false
-  xy: 804, 188
+  xy: 892, 276
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrBRn
   rotate: false
-  xy: 1420, 892
+  xy: 1508, 980
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrLB
   rotate: false
-  xy: 236, 12
+  xy: 292, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrRB
   rotate: false
-  xy: 572, 12
+  xy: 516, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrSB
   rotate: false
-  xy: 348, 12
+  xy: 804, 188
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrSL
   rotate: false
-  xy: 1332, 804
+  xy: 1420, 892
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -1063,7 +1070,7 @@ corrST
   index: -1
 corrSingle
   rotate: false
-  xy: 684, 12
+  xy: 628, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -1084,56 +1091,56 @@ corrTL
   index: -1
 corrTLn
   rotate: false
-  xy: 628, 12
+  xy: 572, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrTR
   rotate: false
-  xy: 292, 12
+  xy: 236, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 corrTRn
   rotate: false
-  xy: 404, 12
+  xy: 348, 12
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 tiledCoal
   rotate: false
-  xy: 892, 292
+  xy: 980, 380
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalBL
   rotate: false
-  xy: 716, 76
+  xy: 1244, 604
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalBR
   rotate: false
-  xy: 1108, 468
+  xy: 1068, 428
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalEB
   rotate: false
-  xy: 1156, 516
+  xy: 1108, 468
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalEL
   rotate: false
-  xy: 1068, 428
+  xy: 1156, 516
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -1147,49 +1154,49 @@ tiledCoalER
   index: -1
 tiledCoalET
   rotate: false
-  xy: 756, 116
+  xy: 1284, 644
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalS
   rotate: false
-  xy: 980, 380
+  xy: 756, 116
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalTL
   rotate: false
-  xy: 892, 252
+  xy: 1564, 996
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoalTR
   rotate: false
-  xy: 716, 116
+  xy: 1156, 556
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoallow
   rotate: false
-  xy: 1156, 556
+  xy: 1244, 644
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledCoallower
   rotate: false
-  xy: 980, 340
+  xy: 1020, 380
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIron
   rotate: false
-  xy: 1564, 996
+  xy: 1332, 764
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -1203,28 +1210,28 @@ tiledIronBL
   index: -1
 tiledIronBR
   rotate: false
-  xy: 932, 292
+  xy: 980, 340
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronTL
   rotate: false
-  xy: 1244, 636
+  xy: 1332, 724
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiledIronTR
   rotate: false
-  xy: 1244, 676
+  xy: 716, 116
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 transparent16
   rotate: false
-  xy: 1020, 380
+  xy: 716, 76
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

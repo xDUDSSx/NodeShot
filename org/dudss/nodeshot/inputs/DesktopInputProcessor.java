@@ -25,7 +25,6 @@ import com.badlogic.gdx.math.Vector3;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-
 public class DesktopInputProcessor implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {		
@@ -37,7 +36,20 @@ public class DesktopInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		
+		switch (keycode) {
+			case Keys.NUMPAD_0: GameScreen.terrainLayerSelected = 10; break;
+			case Keys.NUMPAD_1: GameScreen.terrainLayerSelected = 1; break;
+			case Keys.NUMPAD_2: GameScreen.terrainLayerSelected = 2; break;
+			case Keys.NUMPAD_3: GameScreen.terrainLayerSelected = 3; break;
+			case Keys.NUMPAD_4: GameScreen.terrainLayerSelected = 4; break;
+			case Keys.NUMPAD_5: GameScreen.terrainLayerSelected = 5; break;
+			case Keys.NUMPAD_6: GameScreen.terrainLayerSelected = 6; break;
+			case Keys.NUMPAD_7: GameScreen.terrainLayerSelected = 7; break;
+			case Keys.NUMPAD_8: GameScreen.terrainLayerSelected = 8; break;
+			case Keys.NUMPAD_9: GameScreen.terrainLayerSelected = 9; break;
+		}
+		
 		return false;
 	}
 
@@ -275,38 +287,24 @@ public class DesktopInputProcessor implements InputProcessor {
 				}
 				
 			}
-		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.B)) {
+		} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.T)) {
 			if (draggingConnection == false) {			
-				Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE), (int)(worldMousePos.y/Base.CHUNK_SIZE));
-				if (c != null) {
-					c.setHeight((int)GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE), (int)(worldMousePos.y/Base.CHUNK_SIZE)).getHeight() + 1);
-				}
-				
-				int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-				int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-				if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
-					GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], false, -1);
-				}
-				
-			}	
-		}
-		else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.N)) {
-			if (draggingConnection == false) {
-				for (int y = 0; y < 1; y++) {
-					for (int x = 0; x < 1; x++) {
+				for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
+					for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
 						Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
 						if (c != null) {
-							c.setHeight((int)GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getHeight() - 1);
+							c.setHeight(GameScreen.terrainLayerSelected);
 						}
 					}
-				}		
-				int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				}
+				/*int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
 				int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
 				if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
 					GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], false, -1);
-				}
+				}*/
 				
-			}
+				GameScreen.chunks.updateAllSectionMeshes(false, -1);		
+			}	
 		} else if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			if (draggingConnection == false) {
 				float xPos = previousWorldMousePos.x - worldMousePos.x;
@@ -355,13 +353,24 @@ public class DesktopInputProcessor implements InputProcessor {
 		GameScreen.rightClickMenuManager.removeMenu();
 		
 		if (amount == 1) {
-			cam.zoom += 0.2f;
-			cam.zoom = Base.round(cam.zoom, 2);
-			GameScreen.chunks.updateView(cam);
+			if (Gdx.input.isKeyPressed(Keys.T)) {
+				GameScreen.terrainBrushSize -= 1;
+				if (GameScreen.terrainBrushSize < 0) {
+					GameScreen.terrainBrushSize = 0;
+				}
+			} else {
+				cam.zoom += 0.2f;
+				cam.zoom = Base.round(cam.zoom, 2);
+				GameScreen.chunks.updateView(cam);
+			}
 		} else {
-			cam.zoom -= 0.2f;
-			cam.zoom = Base.round(cam.zoom, 2);						
-			GameScreen.chunks.updateView(cam);
+			if (Gdx.input.isKeyPressed(Keys.T)) {
+				GameScreen.terrainBrushSize += 1;
+			} else {
+				cam.zoom -= 0.2f;
+				cam.zoom = Base.round(cam.zoom, 2);						
+				GameScreen.chunks.updateView(cam);
+			}
 		}
 		return false;
 	}

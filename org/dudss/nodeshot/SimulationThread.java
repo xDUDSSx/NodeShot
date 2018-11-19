@@ -15,6 +15,11 @@ public class SimulationThread implements Runnable {
     static long next_game_tick = getTickCount() + SKIP_TICKS;
     
     int next_chunk_tick = 10;
+    int next_terrain_tick = 10;
+    
+    int chunkUpdateRate = 5;
+    int terrainMeshUpdateRate = 30;
+    
     public static int lastTicksPerSecond = 30;
     
     public static int simTick;
@@ -101,12 +106,23 @@ public class SimulationThread implements Runnable {
 		//Updating projectiles
 		GameScreen.bulletHandler.updateAll();
 		
-		//Updating chunks and geometry of each section corruption mesh
+		//Updating chunks and geometry of each section corruption mesh every chunkUpdateRate ticks
+		//Terrain geometry is updated every terrainMeshUpdateRate ticks
 		if (simTick >= next_chunk_tick) {
-			next_chunk_tick += 5;
+			next_chunk_tick += chunkUpdateRate;
 			GameScreen.chunks.updateAllChunks();
+			
+			boolean terrainUpdate = false;
+			if (simTick >= next_terrain_tick) {
+				terrainUpdate = true;
+				next_terrain_tick += terrainMeshUpdateRate;
+			}
+			
 			for (Section s : GameScreen.chunks.sectionsInView) {
 				GameScreen.chunks.updateSectionMesh(s, true, -1);
+				if (terrainUpdate) {
+					//GameScreen.chunks.updateSectionMesh(s, false, -1);
+				}
 			}
 		}		
 		

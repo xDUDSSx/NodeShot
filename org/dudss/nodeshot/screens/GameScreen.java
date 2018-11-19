@@ -140,6 +140,8 @@ public class GameScreen implements Screen {
 	//Terrain
 	public static Chunks chunks;
 	public static Chunk hoverChunk = null;
+	public static int terrainLayerSelected = 2;
+	public static int terrainBrushSize = 2;
 	
 	public static float viewportWidth = 312f;
     FreeTypeFontGenerator generator;
@@ -335,7 +337,7 @@ public class GameScreen implements Screen {
         handleInput();
         hudMenu.update();
         cam.update();	
-        
+                
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
      
@@ -391,7 +393,22 @@ public class GameScreen implements Screen {
 	        }
 	        r.end();
 	    }
-           
+        
+        //Shows terrain edges in blue
+        /*r.begin(ShapeType.Filled);
+        r.setColor(Color.WHITE);
+        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+        		if (chunks.getChunk(x, y).isEdge() == true) {       			
+        			Color c = new Color(Color.rgba8888(0/255f, 0/255f, 255/255f, 1.0f));
+        			r.setColor(c);
+        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+        		}	      
+        	}
+        }
+        r.end();
+        */
+         
  
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r, batch);
@@ -734,10 +751,18 @@ public class GameScreen implements Screen {
 			sb.append(", ");
 			sb.append("Ore level: (" + GameScreen.hoverChunk.getOreType().toString() + ") " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
 			
+			StringBuilder sb2 = new StringBuilder();
+			sb2.append("Layer: " + GameScreen.terrainLayerSelected);
+			sb2.append(", ");
+			sb2.append("Brush: " + GameScreen.terrainBrushSize);
+			
 			layout.setText(font, sb.toString());
 			float textwidth = layout.width;
+			layout.setText(font, sb2.toString());
+			float textwidth2 = layout.width;
 	
-			font.draw(batch, sb.toString(), WIDTH/2 - textwidth/2, HEIGHT - textheight + 2);      
+			font.draw(batch, sb.toString(), WIDTH/2 - textwidth/2, HEIGHT - textheight + 2);    
+			font.draw(batch, sb2.toString(), WIDTH/2 - textwidth2/2, HEIGHT - textheight*2 - 2);    
     	}
     }
 
@@ -886,15 +911,15 @@ public class GameScreen implements Screen {
             cam.zoom -= 0.1f;
 			GameScreen.chunks.updateView(cam);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
         	if (prevTick != Integer.MAX_VALUE - 1) SimulationThread.recalculateSpeed(++prevTick);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
         	if (prevTick != 1) {SimulationThread.recalculateSpeed(--prevTick);}
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_5)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
         	SimulationThread.recalculateSpeed(30);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {

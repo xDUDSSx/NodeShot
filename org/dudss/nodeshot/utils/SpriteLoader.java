@@ -81,7 +81,7 @@ public class SpriteLoader {
         	corrTex = new Texture("res/corr16.png");
         	sectionOutline = new Texture("res/sectionOutline.png");
         }
-	
+		
 		corrTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
