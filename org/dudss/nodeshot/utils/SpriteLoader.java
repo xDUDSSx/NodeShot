@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
+/**Class that holds and loads all texture resources*/
 public class SpriteLoader {
 	
 	public static Texture spriteSheet;
@@ -53,9 +54,7 @@ public class SpriteLoader {
 	public static Sprite turretHead;
 	public static Sprite bullet;
 	
-	public SpriteLoader() {
-	}
-	
+	/**Loads all textures*/
 	public static void loadAll() {
 		System.out.println("Loading sprites ...");
 		double currentTime = System.currentTimeMillis();

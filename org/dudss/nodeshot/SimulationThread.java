@@ -4,11 +4,13 @@ import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Section;
 
-//SIMULATION THREAD
-public class SimulationThread implements Runnable {
+/**The simulation daemon thread, runs a simulation loop*/
+public class SimulationThread extends Thread {
     //double interpolation; //TODO: implement interpolation
 	int loops;
- 
+	
+	boolean paused = false;
+	
     public static int TICKS_PER_SECOND = 30;
     static int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     int MAX_FRAMESKIP = 15; //30 (15)
@@ -21,21 +23,38 @@ public class SimulationThread implements Runnable {
     int terrainMeshUpdateRate = 30;
     
     public static int lastTicksPerSecond = 30;
-    
     public static int simTick;
     
+    /**The simulation daemon thread, runs a simulation loop*/
+    public SimulationThread() {
+    	setDaemon(true);
+    }
+    
     public void run() {
-    	System.out.println("SimThread daemon running!");    
-    	
+    	System.out.println("SimThread daemon running!");       	
     	GameScreen.simFac = 1.0;
     	
+    	//Start the simulation loop
+    	simLoop();
+	}   
+    
+    public void simLoop() {
     	long remainder;
     	long t1;
     	long t2;
     	long timeElapsed;
    
     	while(Base.running)
-   	    {
+   	    {	
+    		if(paused) {
+    			next_game_tick = getTickCount() + SKIP_TICKS;
+    			try {
+					Thread.sleep(next_game_tick - getTickCount());
+					continue;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+    		}
     		//long startTime = System.currentTimeMillis();		   	 	
    	        if(getTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {	
    	        	next_game_tick += (SKIP_TICKS/GameScreen.simFac); //Set next expected sim calc, modify with simFactor
@@ -94,7 +113,7 @@ public class SimulationThread implements Runnable {
     		// interpolation = ((getTickCount() + SKIP_TICKS - next_game_tick ) / SKIP_TICKS );       
     		//render game with interpolation parameter if necessary (drawGame(interpolation) //TODO: create custom method for this and implement interpolation  	    
    	    }
-	}   
+    }
     
     static long getTickCount() {
 		return System.currentTimeMillis();
@@ -102,7 +121,7 @@ public class SimulationThread implements Runnable {
 	
 	void updateLogic() {
 		simTick++;
-		
+
 		//Updating projectiles
 		GameScreen.bulletHandler.updateAll();
 		
@@ -139,12 +158,22 @@ public class SimulationThread implements Runnable {
 		GameScreen.rightClickMenuManager.update();
 	}
 	
-	public static void recalculateSpeed(int newTick) {
+	public void recalculateSpeed(int newTick) {
 	   	TICKS_PER_SECOND = newTick;
 	   	SKIP_TICKS = 1000 / newTick;
 	}
 	
-	public static void pauseSim() {
+	
+	
+	public void resumeSim() {
+		paused = false;
+		System.out.println("SimThread - Resuming at tick: " + simTick);
+	}
+	
+	public void pauseSim() {
+		paused = true;
+		System.out.println("SimThread - Pausing at tick: " + simTick);
+		
 		/*System.out.println("SimThread - Pausing at tick: " + simTick);
 		if (TICKS_PER_SECOND > 0) {
 			lastTicksPerSecond = TICKS_PER_SECOND;

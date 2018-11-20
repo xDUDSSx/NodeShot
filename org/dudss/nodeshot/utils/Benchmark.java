@@ -12,7 +12,8 @@ import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.Gdx;
 
-public class Benchmark implements Runnable{
+@Deprecated
+public class Benchmark implements Runnable {
 
 	ScheduledExecutorService service;
 	List<BenchmarkContainer> values = new ArrayList<BenchmarkContainer>();

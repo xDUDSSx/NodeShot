@@ -28,22 +28,28 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MenuScreen implements Screen {
 
     Game nodeshotGame;
-
+    
+    float aspectRatio;
+    
     public static String ver;
-     
+    
     private SpriteBatch batch;
     protected Stage stage;
-    private Viewport viewport;
+    private FillViewport viewport;
     private OrthographicCamera camera;
     private TextureAtlas atlas;
     protected Skin skin;
 
+    Table mainTable;
+    
     Label version;
     Label emptyLabel;
     
@@ -73,16 +79,16 @@ public class MenuScreen implements Screen {
         	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
         	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
         	
-        	logoTex = new Texture(Gdx.files.internal("nodelogo.png"));
+        	logoTex = new Texture(Gdx.files.internal("nodeenginelogo.png"));
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
         	atlas = new TextureAtlas("res/data/uiskin.atlas");
         	skin = new Skin(Gdx.files.classpath("res/data/uiskin.json"), atlas);
-        	logoTex = new Texture(Gdx.files.classpath("res/data/nodelogo.png"));
+        	logoTex = new Texture(Gdx.files.classpath("res/data/nodeenginelogo.png"));
         }
        
         batch = new SpriteBatch();
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(), camera);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport = new FillViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(), camera);
         viewport.apply();
 
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
@@ -98,9 +104,6 @@ public class MenuScreen implements Screen {
         closeButton = new TextButton("Close node", skin, "hoverfont30");
 
         logo = new Image(logoTex);
-        
-        coalheightmap = new Image();
-        ironheightmap = new Image();
 
         stage = new Stage(viewport, batch);
     }
@@ -116,7 +119,7 @@ public class MenuScreen implements Screen {
         b = new SpriteBatch();
         
         //Create Table
-        Table mainTable = new Table();
+        mainTable = new Table();
         
         mainTable.setSize((float)(Gdx.graphics.getWidth()) * 0.5f, Gdx.graphics.getHeight() * 0.9f);
         mainTable.top();
@@ -125,26 +128,31 @@ public class MenuScreen implements Screen {
         
         //Add buttons to table
         logo.setScaling(Scaling.fit);
-        logo.setScale(0.6f);
+        //logo.setScale(0.6f);
         mainTable.add(logo).fill(true).colspan(2);
         mainTable.row();
-        mainTable.add(version).pad(10).center().fill(true);
+        mainTable.add(version).pad(10).padTop(4).center().fill(true);
         mainTable.row();
         mainTable.add(playButton).pad(10).colspan(2).fill(true).padTop(60);
         mainTable.row();
         mainTable.add(exitButton).pad(10).colspan(2).fill(true);
         mainTable.row();
-        mainTable.add(generateButton).pad(10).colspan(2).fill(true);
+        /*mainTable.add(generateButton).pad(10).colspan(2).fill(true);
         mainTable.row();
         mainTable.add(coalheightmap).fill(true).width(mainTable.getWidth()/2 - 100).height(mainTable.getWidth()/2 - 100);
         mainTable.add(ironheightmap).fill(true).width(mainTable.getWidth()/2 - 100).height(mainTable.getWidth()/2 - 100);
         mainTable.row();
         mainTable.add(new Label("coal", skin, "font30")).fill(true);
         mainTable.add(new Label("iron ore", skin, "font30")).fill(true);
+        */
         //mainTable.add(newImg).fill(true);
         
         //Add table to stage
         stage.addActor(mainTable);
+        
+        if (GameScreen.startedOnce) {
+        	playButton.setText("Resume");
+        }
         
         //Add listeners to buttons
         playButton.addListener(new ClickListener(){
@@ -152,7 +160,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {           	
                 nodeshotGame.setScreen(BaseClass.mainGameScreen);
                 if (GameScreen.startedOnce == false) {
-                	GameScreen.startSim();
+                	GameScreen.startSimulationThread();
                 	GameScreen.startedOnce = true;
                 }
             }
@@ -172,8 +180,18 @@ public class MenuScreen implements Screen {
         });
     }
 
+    private void updateMenuTable(int width, int height) {
+    	 mainTable.setSize(width * 0.5f, height * 0.8f);
+         mainTable.top();
+         //mainTable.debugAll();        
+         mainTable.setPosition(width * 0.25f, 100);
+    }
+    
     @Override
     public void render(float delta) {
+    	b.setProjectionMatrix(camera.combined);
+        sR.setProjectionMatrix(camera.combined);
+         
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -181,7 +199,7 @@ public class MenuScreen implements Screen {
         
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);      
-        
+                
         sR.begin(ShapeType.Filled);      
         sR.rect((Gdx.graphics.getWidth()) * 0.25f - 25, 0,((float)(Gdx.graphics.getWidth()) * 0.5f) + 50 , Gdx.graphics.getHeight(), semi, semi, Color.BLACK, Color.BLACK);
         sR.end();
@@ -194,15 +212,18 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-    	//Updating the viewport
-        viewport.update(width, height);
+		aspectRatio = (float)width/(float)height;
+	     
+	    camera.viewportWidth = width;
+	    camera.viewportHeight = height;
+	    camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+	    camera.update();
+		        
+        Viewport stageViewport = new FillViewport(width, height);
+        stage.setViewport(stageViewport);
+        stage.getViewport().update(width, height, true);
         
-        //Updating the shape renderer projection matrix (adapting it to the new size)
-        Matrix4 m = new Matrix4();
-        sR.setProjectionMatrix(m.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        camera.update();
+        updateMenuTable(width, height);      
     }
 
     @Override
@@ -234,7 +255,7 @@ public class MenuScreen implements Screen {
     	
     	//Creating a basic screen matrix
         Matrix4 uiMatrix = new Matrix4();
-        uiMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
+        uiMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         //Mesh vertexes that correspond to a single quad covering the screen
         float[] verts = new float[] {0, 0, Color.toFloatBits(1f, 0, 0, 1f), 0, 0, Gdx.graphics.getWidth(), 0, Color.toFloatBits(1f, 0, 0, 1f), 1, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.toFloatBits(1f, 0, 0, 1f), 1, 1, 0, Gdx.graphics.getHeight(), Color.toFloatBits(1f, 0, 0, 1f), 0, 1};        

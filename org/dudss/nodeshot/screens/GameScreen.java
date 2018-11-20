@@ -30,6 +30,7 @@ import org.dudss.nodeshot.terrain.Chunks;
 import org.dudss.nodeshot.terrain.Section;
 import org.dudss.nodeshot.ui.BuildMenu;
 import org.dudss.nodeshot.ui.HudMenu;
+import org.dudss.nodeshot.ui.PauseMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.Shaders;
@@ -70,6 +71,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kotcrab.vis.ui.VisUI;
 
 public class GameScreen implements Screen {
 
@@ -87,10 +89,13 @@ public class GameScreen implements Screen {
 	public static long currentSimTimeTick;
 	public static long nextSimTimeTick;
 
+	public static SimulationThread simulationThread;
+	
 	public static int sfps;
 	public static int simFrameCount;
 	public static double simFac;
-
+	public static boolean gamePaused = false;
+	
 	public static Vector2 mousePos = new Vector2();
 
 	//Collections
@@ -160,7 +165,7 @@ public class GameScreen implements Screen {
 
     public static OrthographicCamera cam;
     public static Vector3 lastCamPos;
-    public float lastZoom;
+    public static float lastZoom;
     public static Boolean zooming = false;
     //Background shader helper vars
     public static float off = 0.5f;
@@ -179,6 +184,7 @@ public class GameScreen implements Screen {
     public static RightClickMenuManager rightClickMenuManager;
     public static BuildMenu buildMenu;
     public static HudMenu hudMenu;
+    public static PauseMenu pauseMenu;
     
     public static GLProfiler glProfiler;
     
@@ -199,22 +205,18 @@ public class GameScreen implements Screen {
         chunks = new Chunks();        
         rightClickMenuManager = new RightClickMenuManager();             
         
-        //Loading item sprites
-        Shaders.load();
-        SpriteLoader.loadAll();
-        
-        //LineWidth
-        Gdx.gl.glLineWidth(2);
-    }
-
-    public static int getWidth() {return WIDTH;}
-    public static int getHeight() {return HEIGHT;}
-
-    @Override
-    public void show() {
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
         aspectRatio = (float)WIDTH/(float)HEIGHT;
+        
+        //Loading item sprites
+        Shaders.load();
+        SpriteLoader.loadAll();
+        VisUI.load();
+        
+        //LineWidth
+        Gdx.gl.glLineWidth(2);
+        System.out.println("CONSTRUCTOR");
         
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
@@ -230,11 +232,14 @@ public class GameScreen implements Screen {
         lastCamPos = cam.position;
         lastZoom = cam.zoom;
         
-        Shaders.blurShader.begin();
-        Shaders.blurShader.setUniformf("resolution", cam.zoom * 100);
-        Shaders.blurShader.end();
-
-		blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
+        
+        chunks.create(cam);
+        //Generate terrain if not generated already
+        if (chunks.generated == false) {       	
+        	chunks.generateAll();
+        }       
+        
+        blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
 		
 		corrBuffers = new ArrayList<FrameBuffer>();
 		for (int i = 0; i < Base.MAX_CREEP; i++) {
@@ -246,7 +251,7 @@ public class GameScreen implements Screen {
         
         //font generation
         font = new BitmapFont();
-        layout = new GlyphLayout();         
+        layout = new GlyphLayout();              
         generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/data/Helvetica-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Base.HUD_FONT_SIZE;
@@ -254,7 +259,7 @@ public class GameScreen implements Screen {
         font = generator.generateFont(parameter);
         generator.dispose();
        
-        //User Interface
+        //User Interface             
         if (Gdx.app.getType() == ApplicationType.Android) {
         	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
         	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
@@ -264,8 +269,15 @@ public class GameScreen implements Screen {
         }
         stageViewport = new StretchViewport(WIDTH, HEIGHT);
         stage = new Stage(stageViewport);         
-
-        buildMenu = new BuildMenu("Build menu", skin);
+       
+        buildMenu = new BuildMenu("Build menu", skin);    
+        stage.addActor(buildMenu);
+                
+        hudMenu = new HudMenu("HUD menu", skin);
+        stage.addActor(hudMenu);
+        
+        pauseMenu = new PauseMenu(false);
+        stage.addActor(pauseMenu);
         
         TextButton imgButton = new TextButton("Build", skin, "hoverfont15");
         imgButton.addListener(new ClickListener(){
@@ -278,11 +290,23 @@ public class GameScreen implements Screen {
         imgButton.setSize(64, 64);
         imgButton.setPosition(10, 10);        
         stage.addActor(imgButton);
-        stage.addActor(buildMenu);
-                
-        hudMenu = new HudMenu("HUD menu", skin);
-        stage.addActor(hudMenu);
+    }
+
+    public static int getWidth() {return WIDTH;}
+    public static int getHeight() {return HEIGHT;}
+
+    @Override
+    public void show() {
+        WIDTH = Gdx.graphics.getWidth();
+        HEIGHT = Gdx.graphics.getHeight();
+        aspectRatio = (float)WIDTH/(float)HEIGHT;
         
+        System.out.println("SHOW");
+               
+        Shaders.blurShader.begin();
+        Shaders.blurShader.setUniformf("resolution", cam.zoom * 100);
+        Shaders.blurShader.end();
+		       
         //Ingame HUD buttons (Android) (//TODO: remove, utilize proper scene UI) //Kinda finished, not for mobile tho
         if (Gdx.app.getType() == ApplicationType.Android) {
 	        backButton.set( 10, 10, 180, 180);
@@ -307,29 +331,21 @@ public class GameScreen implements Screen {
         }  
         */     	
         Gdx.input.setInputProcessor(multiplexer); 
-        
-        chunks.create(cam);
-        //Generate terrain if not generated already
-        if (chunks.generated == false) {       	
-        	chunks.generateAll();
-        }       
-        
-        
     }
 
     @Override
     public void pause() {
-
+    	System.out.println("PASUE");
     }
 
     @Override
     public void resume() {
-    
+    	System.out.println("RESUME");
     }
 
     @Override
     public void hide() {
-
+    	System.out.println("HIDE");
     }
 
     @Override
@@ -727,13 +743,21 @@ public class GameScreen implements Screen {
         
         layout.setText(font, "FPS: " + Gdx.graphics.getFramesPerSecond());
         float textwidth = layout.width;
-        layout.setText(font, "sFPS: " + sfps + " (" + SimulationThread.TICKS_PER_SECOND + ")");
+        if (GameScreen.gamePaused) {
+        	layout.setText(font, "sFPS: " + "PAUSED" + " (" + SimulationThread.TICKS_PER_SECOND + ")");
+        } else {
+        	layout.setText(font, "sFPS: " + sfps + " (" + SimulationThread.TICKS_PER_SECOND + ")");
+        }
         float text2width = layout.width;
         layout.setText(font, "simFac: " + df.format(simFac));
         float text3width = layout.width;
         
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond() , 5, HEIGHT - textheight + 2);
-        font.draw(batch, "sFPS: " + sfps + " (" + SimulationThread.TICKS_PER_SECOND + ")", 5 + 5 + textwidth, HEIGHT - textheight + 2);
+        if (GameScreen.gamePaused) {
+        	font.draw(batch, "sFPS: " + "PAUSED" + " (" + SimulationThread.TICKS_PER_SECOND + ")", 5 + 5 + textwidth, HEIGHT - textheight + 2);
+        } else {
+        	font.draw(batch, "sFPS: " + sfps + " (" + SimulationThread.TICKS_PER_SECOND + ")", 5 + 5 + textwidth, HEIGHT - textheight + 2);
+        }
         font.draw(batch, "simFac: " + df.format(simFac) , 5, HEIGHT - textheight*2 - 2);
         font.draw(batch, "simTick: " + SimulationThread.simTick , 5 + 5 + text3width, HEIGHT - textheight*2 - 2);
     }
@@ -913,14 +937,14 @@ public class GameScreen implements Screen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
-        	if (prevTick != Integer.MAX_VALUE - 1) SimulationThread.recalculateSpeed(++prevTick);
+        	if (prevTick != Integer.MAX_VALUE - 1) simulationThread.recalculateSpeed(++prevTick);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
         	int prevTick = SimulationThread.TICKS_PER_SECOND;
-        	if (prevTick != 1) {SimulationThread.recalculateSpeed(--prevTick);}
+        	if (prevTick != 1) {simulationThread.recalculateSpeed(--prevTick);}
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-        	SimulationThread.recalculateSpeed(30);
+        	simulationThread.recalculateSpeed(30);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             cam.translate(-3, 0, 0);
@@ -939,12 +963,6 @@ public class GameScreen implements Screen {
           	GameScreen.chunks.updateView(cam);
         }
         
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-        	lastZoom = cam.zoom;
-        	lastCamPos = cam.position;
-        	nodeshotGame.setScreen(new MenuScreen(nodeshotGame));
-        }
-
         //Initial clamping fix TODO: resolve
         if (SimulationThread.simTick < 1) {
         	chunks.updateView(cam);
@@ -1059,11 +1077,8 @@ public class GameScreen implements Screen {
         return intersectedConnector;
     }
    
-    public static void startSim() {
-        //Simulation thread
-        SimulationThread sT = new SimulationThread();      
-        Thread simulationThread = new Thread(sT);
-        simulationThread.setDaemon(true);
+    public static void startSimulationThread() {
+        simulationThread = new SimulationThread();        
         simulationThread.start();  
     }
     
@@ -1084,14 +1099,24 @@ public class GameScreen implements Screen {
         
         buildMenu.resize();
         hudMenu.resize();
+        pauseMenu.resize();
     }
 
     @Override
     public void dispose () {
         batch.dispose();
-        //img.dispose();
+        font.dispose();
         r.dispose();
         terrainBuffer.dispose();
 		blurBuffer.dispose();
+		stage.dispose();
+		
+		for (int i = 0; i < Base.MAX_CREEP; i++) {
+			corrBuffers.get(i).dispose();
+		}
+		
+		VisUI.dispose();
+		
+		System.out.println("DISPOSE");
     }  
 }

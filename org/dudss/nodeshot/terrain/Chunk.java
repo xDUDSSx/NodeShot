@@ -183,37 +183,59 @@ public class Chunk {
 	private TextureContainer resolveTerrainEdges(int level) {
 		if (x > Base.CHUNK_SIZE && y > Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
 			edge = true;
+			int lowerLevel = 0;
 			if (plusy.getHeight() < level &&
 				plusx.getHeight() < level &&
 				minusx.getHeight() >= level && 
 				minusy.getHeight() >= level) 
-			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));
+			{	
+				int h1 = (int) plusx.getHeight();
+				int h2 = (int) plusy.getHeight();
+				if (h1 == h2) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				}
+				
 			} else
 			if (plusy.getHeight() < level && 
 				plusx.getHeight() >= level &&
 				minusx.getHeight() < level &&				 
 			    minusy.getHeight() >= level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));
+				int h1 = (int) plusy.getHeight();
+				int h2 = (int) minusx.getHeight();
+				if (h1 == h2) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				}
 			} else
 			if (minusy.getHeight() < level && 
 				plusx.getHeight() < level &&
 			    plusy.getHeight() >= level &&
 			    minusx.getHeight() >= level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));
+				int h1 = (int) minusy.getHeight();
+				int h2 = (int) plusx.getHeight();
+				if (h1 == h2) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				}
 			} else
 			if (minusy.getHeight() < level && 
 				minusx.getHeight() < level && 
 			    plusx.getHeight() >= level &&
 			    plusy.getHeight() >= level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));
+				int h1 = (int) minusy.getHeight();
+				int h2 = (int) minusx.getHeight();
+				if (h1 == h2) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				}
 			} else
 				
 			//Straight line borders
@@ -254,32 +276,56 @@ public class Chunk {
 				minusy.getHeight() < level &&
 				minusx.getHeight() >= level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "RB"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));
+				int h1 = (int) plusx.getHeight();
+				int h2 = (int) plusy.getHeight();
+				int h3 = (int) minusy.getHeight();
+				if ((h1 == h2) && (h2 == h3)) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "RB"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				}
 			} else
 			if (plusy.getHeight() < level && 
 				minusx.getHeight() < level && 
 				minusy.getHeight() < level &&
 				plusx.getHeight() >= level)  
 			{	
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "LB"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));
+				int h1 = (int) plusy.getHeight();
+				int h2 = (int) minusx.getHeight();
+				int h3 = (int) minusy.getHeight();
+				if ((h1 == h2) && (h2 == h3)) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "LB"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				}
 			} else
 			if (plusy.getHeight() < level && 
 				plusx.getHeight() < level && 
 				minusx.getHeight() < level &&
 				minusy.getHeight() >= level)  
 			{	
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TB"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));
+				int h1 = (int) plusx.getHeight();
+				int h2 = (int) plusy.getHeight();
+				int h3 = (int) minusx.getHeight();
+				if ((h1 == h2) && (h2 == h3)) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TB"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				}
 			} else
 			if (minusy.getHeight() < level && 
 				plusx.getHeight() < level && 
 				minusx.getHeight() < level &&
 				plusy.getHeight() >= level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BB"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));	
+				int h1 = (int) plusx.getHeight();
+				int h2 = (int) minusy.getHeight();
+				int h3 = (int) minusx.getHeight();
+				if ((h1 == h2) && (h2 == h3)) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BB"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));	
+				}
 			} else 
 				
 			//Single creeper tile
@@ -288,8 +334,15 @@ public class Chunk {
 				minusx.getHeight() < level &&
 				plusy.getHeight() < level)  
 			{ 
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "Single"),
-											SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-1]));
+				int h1 = (int) plusx.getHeight();
+				int h2 = (int) plusy.getHeight();
+				int h3 = (int) minusx.getHeight();
+				int h4 = (int) minusy.getHeight();
+				if ((h1 == h2) && (h2 == h3) && (h3 == h4)) {
+					lowerLevel = level - h1;
+					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "Single"),
+												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				}
 			}
 		}
 		edge = false;

@@ -31,8 +31,6 @@ public class HudMenu extends Window {
 	public HudMenu(String title, Skin skin) {
 		super(title, skin);
 		this.skin = skin;
-		this.setMovable(false);
-		this.setResizable(true);
 
 		setSize();
 		
