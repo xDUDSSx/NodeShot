@@ -8,8 +8,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
 import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.terrain.Chunk.TextureContainer;
 import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
+import org.dudss.nodeshot.terrain.datasubsets.TextureContainer;
+import org.dudss.nodeshot.terrain.datasubsets.AtlasRegionContainer;
 import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -20,9 +21,11 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -371,8 +374,8 @@ public class Chunks {
 		  	        float tv;
 		  	        float tu2;
 		  	        float tv2;
-		  	        
-		  	        TextureContainer tC;
+
+		  	        AtlasRegionContainer tC;
 		  	        if (corr) {
 		  	        	tC = c.getCorruptionTexture(level);
 		  	        } else {
@@ -524,8 +527,11 @@ public class Chunks {
 		}
 	}
 	
-	/**Generates the terrain relief and spawns ores*/
-	public void generateAll() {
+	/**Generates the terrain relief and ores.
+	 * @return Returns a {@link TextureContainer} that holds gray-scale pixmaps of generated maps.<br>
+	 * Textures are in the following order: 1. terrain height map, 2. coal map, 3. iron map
+	 * */
+	public TextureContainer generateAll() {
 		SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
 		System.out.println("\nGenerating noise (1/3)");
 		float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.45f, 0.018f);
@@ -561,15 +567,15 @@ public class Chunks {
  	   		}
  	   	}
  	   	
- 	   Pixmap heightPixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
-	   	for (int x2 = 0; x2 < Base.CHUNK_AMOUNT; x2++) {
-	   		for (int y2 = 0; y2 < Base.CHUNK_AMOUNT; y2++) {   	    		
-	    	    //Converting [-1.0,1.0] to [0,1]
-	    	    float val = (((heightMap[x2][y2] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;	    	    
-	    	    heightPixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
-	    	    heightPixmap.drawPixel(x2, y2);
-	   		}
-	   	}
+ 	   	Pixmap heightPixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
+ 	   	for (int x2 = 0; x2 < Base.CHUNK_AMOUNT; x2++) {
+ 	   		for (int y2 = 0; y2 < Base.CHUNK_AMOUNT; y2++) {   	    		
+ 	   			//Converting [-1.0,1.0] to [0,1]
+ 	   			float val = (((heightMap[x2][y2] - (-1.0f)) * (1.0f - 0)) / (1.0f - (-1.0f))) + 0;	    	    
+ 	   			heightPixmap.setColor(Color.rgba8888(val, val, val, 1.0f));
+ 	   			heightPixmap.drawPixel(x2, y2);
+ 	   		}
+ 	   	}
 
 		//CHUNK GEN
 		System.out.println("Generating chunks (n. " + Base.CHUNK_AMOUNT*Base.CHUNK_AMOUNT + ")");
@@ -579,9 +585,9 @@ public class Chunks {
 		coalPixmap = generateCoalPatches(coalPixmap);
 		System.out.println("Generating iron ore");
 		ironPixmap = generateIronPatches(ironPixmap);
-		System.out.println("Generating sections");
-		generateSections();
 		generated = true;
+				
+		return new TextureContainer(new Texture(heightPixmap), new Texture(coalPixmap), new Texture(ironPixmap));
 	}
 	
 	public Pixmap generateCoalPatches(Pixmap pixmap) {
@@ -592,6 +598,8 @@ public class Chunks {
 				if (c.r > Base.COAL_THRESHOLD) {
 					float level = Base.range(c.r, Base.COAL_THRESHOLD, 1f, 0.2f, 1.0f);
 					chunks[x][y].setCoalLevel(level);
+				} else {
+					chunks[x][y].setCoalLevel(0);
 				}
 			}
 		}
@@ -606,6 +614,8 @@ public class Chunks {
 				if (c.r > Base.IRON_THRESHOLD) {
 					float level = Base.range(c.r, Base.IRON_THRESHOLD, 1f, 0.2f, 1.0f);
 					chunks[x][y].setIronLevel(level);
+				} else {
+					chunks[x][y].setIronLevel(0);
 				}
 			}
 		}

@@ -73,6 +73,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
 
+/**The main game screen*/
 public class GameScreen implements Screen {
 
     public static Game nodeshotGame;
@@ -194,6 +195,8 @@ public class GameScreen implements Screen {
     public static FrameBuffer terrainBuffer;
     public static FrameBuffer blurBuffer;
     
+    /**The main game screen
+     * @param game The {@link Game} object that is passed on {@link Screen} switches.*/
     public GameScreen(Game game)
     {
         nodeshotGame = game;
@@ -217,7 +220,6 @@ public class GameScreen implements Screen {
         
         //LineWidth
         Gdx.gl.glLineWidth(2);
-        System.out.println("CONSTRUCTOR");
         
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
@@ -284,7 +286,7 @@ public class GameScreen implements Screen {
         stage.addActor(buildMenu);
                 
         hudMenu = new HudMenu("HUD menu", skin);
-        stage.addActor(hudMenu);
+        //stage.addActor(hudMenu);
         
         pauseMenu = new PauseMenu(false);
         stage.addActor(pauseMenu);
@@ -310,9 +312,7 @@ public class GameScreen implements Screen {
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
         aspectRatio = (float)WIDTH/(float)HEIGHT;
-        
-        System.out.println("SHOW");
-               
+                       
         Shaders.blurShader.begin();
         Shaders.blurShader.setUniformf("resolution", cam.zoom * 100);
         Shaders.blurShader.end();
@@ -345,23 +345,23 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-    	System.out.println("PASUE");
+    	
     }
 
     @Override
     public void resume() {
-    	System.out.println("RESUME");
+    	
     }
 
     @Override
     public void hide() {
-    	System.out.println("HIDE");
+    	
     }
 
     @Override
     public void render (float delta) {
         handleInput();
-        hudMenu.update();
+        //hudMenu.update();
         cam.update();	
                 
         Gdx.gl.glClearColor(0, 0, 0, 1f);
@@ -1132,7 +1132,7 @@ public class GameScreen implements Screen {
         stage.getViewport().update(width, height, true);
         
         buildMenu.resize();
-        hudMenu.resize();
+        //hudMenu.resize();
         pauseMenu.resize();
     }
 

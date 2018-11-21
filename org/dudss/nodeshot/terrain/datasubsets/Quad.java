@@ -2,6 +2,7 @@ package org.dudss.nodeshot.terrain.datasubsets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+/**Holds vertex data of a single quad (rectangle)*/
 public class Quad {
 	float[] vertices;
 	

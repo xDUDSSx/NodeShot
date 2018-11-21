@@ -40,7 +40,7 @@ public class DesktopInputProcessor implements InputProcessor {
 	public boolean keyUp(int keycode) {
 		
 		switch (keycode) {
-			case Keys.NUMPAD_0: GameScreen.terrainLayerSelected = 10; break;
+			case Keys.NUMPAD_0: GameScreen.terrainLayerSelected = 0; break;
 			case Keys.NUMPAD_1: GameScreen.terrainLayerSelected = 1; break;
 			case Keys.NUMPAD_2: GameScreen.terrainLayerSelected = 2; break;
 			case Keys.NUMPAD_3: GameScreen.terrainLayerSelected = 3; break;
@@ -50,6 +50,7 @@ public class DesktopInputProcessor implements InputProcessor {
 			case Keys.NUMPAD_7: GameScreen.terrainLayerSelected = 7; break;
 			case Keys.NUMPAD_8: GameScreen.terrainLayerSelected = 8; break;
 			case Keys.NUMPAD_9: GameScreen.terrainLayerSelected = 9; break;
+			case Keys.STAR: GameScreen.terrainLayerSelected = 10; break;
 		}
 		
 		if (keycode == Keys.ESCAPE) {
@@ -264,8 +265,8 @@ public class DesktopInputProcessor implements InputProcessor {
 				} 			
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.C)) {
 				if (draggingConnection == false) {
-					for (int y = -1; y < 1; y++) {
-						for (int x = -1; x < 1; x++) {
+					for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
+						for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
 							Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
 							if (c != null) {
 								c.setCreeperLevel(GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 1);
@@ -281,8 +282,8 @@ public class DesktopInputProcessor implements InputProcessor {
 				}
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
 				if (draggingConnection == false) {
-					for (int y = -5; y < 5; y++) {
-						for (int x = -5; x < 5; x++) {
+					for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
+						for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
 							Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
 							if (c != null) {
 								c.setCreeperLevel(GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() - Base.MAX_CREEP * 0.02f);

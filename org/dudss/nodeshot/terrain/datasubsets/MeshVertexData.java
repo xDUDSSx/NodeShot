@@ -7,6 +7,10 @@ public class MeshVertexData {
 	float[] verts;
 	short[] indices;
 	
+	/**An object wrapper enclosing {@link Mesh} vertices and indices data arrays.
+	 * @param verts Mesh vertices.
+	 * @param indices Mesh indices.
+	 * */
 	public MeshVertexData(float[] verts, short[] indices) {
 		this.verts = verts;
 		this.indices = indices;

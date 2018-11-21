@@ -1,5 +1,6 @@
 package org.dudss.nodeshot;
 
+import java.awt.Dimension;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -73,7 +74,14 @@ public class Base {
 	public static boolean hoverChunkHighlight = false;
 	public static boolean drawTerrainEdges = false;
 	public static boolean drawOres = true;
-	public static boolean drawGeneralStats = true;
+	public static boolean drawGeneralStats = false;
+	
+	//Graphical settings
+	public static boolean vSyncEnabled = true;
+	public static boolean fullscreen = false;
+	public static int foregroundFps = 144;
+	public static Dimension defaultWindowSize = new Dimension(1300, 795);
+	public static int MSAAsamples = 10;
 	
 	
 	Base() {

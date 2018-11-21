@@ -9,6 +9,8 @@ import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
 
 import com.badlogic.gdx.graphics.Mesh;
 
+/**Represents a rectangular grid of {@link Chunk}s with a fixed size ({@link Base#SECTION_SIZE}).
+ * It also holds terrain and corruption {@link Mesh} data for this particular map section.*/
 public class Section {
 	Chunk[][] sectionChunks;
 	
@@ -16,29 +18,22 @@ public class Section {
 	 
 	boolean full = false;
 	
-	SubSection sw;
-	SubSection se;
-	SubSection nw;
-	SubSection ne;
-	
 	Mesh terrainMesh;
-	
-	float[] terrainVerts;
-	short[] terrainIndices;
-	
-	List<Mesh> corrMeshes;
+	MeshVertexData terrainVertexData;
 	boolean terrainUpdate = false;
 	
+	List<Mesh> corrMeshes;
 	List<MeshVertexData> corrVertexData;
 	List<Boolean> updates;
  	
 	/**Section is an object representing a square grid of chunks with a fixed size.
-	 * It also holds vertex info about under laying chunk terrain and corruption
-	 * @param chunks
+	 * It also holds vertex info about under laying chunk terrain and corruption.
+	 * @param chunks {@linkplain Chunk}s that form this {@linkplain Section}. The array size must be the same as {@link Base#SECTION_SIZE}.
 	 */
 	public Section(Chunk[][] chunks) {
 		sectionChunks = chunks;
 		
+		terrainVertexData = new MeshVertexData(null, null);
 		corrVertexData = new ArrayList<MeshVertexData>();
 		corrMeshes = new ArrayList<Mesh>();
 		
@@ -48,69 +43,58 @@ public class Section {
 		}
 		
 		updates = new ArrayList<>(Collections.nCopies(60, false));
-		
-		Chunk[][] swChunks = new Chunk[size/2][size/2];
-		Chunk[][] seChunks = new Chunk[size/2][size/2];
-		Chunk[][] nwChunks = new Chunk[size/2][size/2];
-		Chunk[][] neChunks = new Chunk[size/2][size/2];
-		
-		int h = (int)size/2;
-		for (int y = 0; y < size; y++) {
-			for (int x = 0; x < size; x++) {	
-				if (y < size/2 && x < size/2) {
-					swChunks[x][y] = sectionChunks[x][y];
-				}
-				if (y < size/2 && x >= size/2) {
-					seChunks[x-h][y] = sectionChunks[x][y];
-				}
-				if (y >= size/2 && x < size/2) {
-					nwChunks[x][y-h] = sectionChunks[x][y];
-				}
-				if (y >= size/2 && x >= size/2) {
-					neChunks[x-h][y-h] = sectionChunks[x][y];
-				}
-			}
-		}
-		
-		sw = new SubSection(swChunks, size/2);
-		se = new SubSection(seChunks, size/2);
-		nw = new SubSection(nwChunks, size/2);
-		ne = new SubSection(neChunks, size/2);
 	}
 	
+	/**@param x coordinate
+	 * @param y coordinate
+	 * @return A {@link Chunk} at coordinates relative to the bottom left {@linkplain Section} corner
+	 * */
 	public Chunk getChunk(int x, int y) {
 		return sectionChunks[x][y];
 	}
 	
+	/**Updates the {@linkplain Section} terrain mesh data. Can be called from other threads. 
+	 * The actual terrain {@link #terrainMesh} will not be updated directly. Use in combination with {@link #requestTerrainUpdate()}
+	 * to request {@link #terrainMesh} update from the OpenGL draw thread.*/
 	public void updateTerrainMesh(float[] verts, short[] indices) {
-		this.terrainVerts = verts;
-		this.terrainIndices = indices;		
+		terrainVertexData.setVerts(verts);
+		terrainVertexData.setIndices(indices);	
 	}
 	
 	public float[] getTerrainVerts() {
-		return terrainVerts;
+		return terrainVertexData.getVerts();
 	}
 	
 	public short[] getTerrainIndices() {
-		return terrainIndices;
+		return terrainVertexData.getIndices();
 	}
 	
+	/**@return The sections {@link #terrainMesh}*/
 	public Mesh getTerrainMesh() {
 		return terrainMesh;
 	}
 	
+	/**Nullifies the {@link #requestTerrainUpdate()} call. Flags the {@link #terrainMesh} as updated*/
 	public void updatedTerrain() {
 		terrainUpdate = false;
 	}
 	
+	/**Requests {@link #terrainMesh} update from the OpenGL draw thread.
+	 * The mesh cannot be updated directly because OpenGL context is single-threaded.*/
 	public void requestTerrainUpdate() {
 		terrainUpdate = true;
 	}
 	
+	/**@return Whether the {@link #terrainMesh} update is requested*/
 	public boolean needsTerrainUpdate() {
 		return terrainUpdate;
 	}
 	
+	/**Updates the {@linkplain Section} corruption mesh data of the specified layer. Can be called from other threads. 
+	 * The actual corruption mesh will not be updated directly. Use in combination with {@link #requestCorruptionUpdate()}
+	 * to request corruption mesh update from the OpenGL draw thread.
+	 * @param layer Layer of corruption mesh that should be updated.
+	 * */
 	public void updateCorruptionMesh(int layer, float[] verts, short[] indices) {
 		this.corrVertexData.get(layer).setVerts(verts);
 		this.corrVertexData.get(layer).setIndices(indices);	
@@ -124,18 +108,28 @@ public class Section {
 		return corrVertexData.get(layer).getIndices();
 	}
 	
+	/**@return The sections corruption mesh of a particular layer.
+	 * @param layer Layer of the corruption mesh
+	 * */
 	public Mesh getCorruptionMesh(int layer) {
 		return corrMeshes.get(layer);
 	}
 	
+	/**Nullifies the {@link #requestCorruptionUpdate()} call. Flags the corruption mesh of that particular layer as updated.
+	 * @param layer Layer of the corruption mesh
+	 * */
 	public void updatedCorruptionMesh(int layer) {
 		updates.set(layer, false);
 	}
 	
+	/**Requests a corruption mesh of the particular layer update from the OpenGL draw thread.
+	 * The mesh cannot be updated directly because OpenGL context is single-threaded.*/
 	public void requestCorruptionUpdate(int layer) {
 		updates.set(layer, true);
 	}
 	
+	/**@return Whether the corruption mesh update of the particular layer is requested.
+	 * @param layer Layer of the corruption mesh*/
 	public boolean needsCorruptionMeshUpdate(int layer) {
 		return updates.get(layer);
 	}

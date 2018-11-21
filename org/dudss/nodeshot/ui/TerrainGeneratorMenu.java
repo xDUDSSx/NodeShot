@@ -6,28 +6,25 @@ import org.dudss.nodeshot.screens.MenuScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
-public class PauseMenu extends VisWindow {
-
+public class TerrainGeneratorMenu extends VisWindow {
 	VisTable table;
 	
-	public PauseMenu(boolean showWindowBorder) {
-		super("Pause menu" , showWindowBorder);
-		setVisible(false);
+	public TerrainGeneratorMenu(boolean showWindowBorder) {
+		super("Terrain generator", showWindowBorder);
+		setVisible(true);
 		setMovable(true);
 		setResizable(true);
 		resize();
 		//debugAll();
 		align(Align.top);
 		addVisWidgets();
-		
+		this.addCloseButton();
 	}
 
 	public void resize() {
@@ -48,9 +45,6 @@ public class PauseMenu extends VisWindow {
 		buttonTable.row();
 		VisTextButton settingsButton = new VisTextButton("Settings");	
 		buttonTable.add(settingsButton).fill(true);
-		buttonTable.row();
-		VisTextButton regenerateTerrain = new VisTextButton("Regenerate terrain");
-		buttonTable.add(regenerateTerrain).fill();
 		buttonTable.row();
 		
 		VisTextButton closeButton = new VisTextButton("Unpause");
@@ -80,13 +74,6 @@ public class PauseMenu extends VisWindow {
 				}
 		    }
 	    });
-		regenerateTerrain.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 	
-				GameScreen.chunks.generateAll();
-				GameScreen.chunks.updateAllSectionMeshes(false, -1);
-		    }
-	    });		
 		closeButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		

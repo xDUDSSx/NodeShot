@@ -7,6 +7,7 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunks.OreType;
+import org.dudss.nodeshot.terrain.datasubsets.AtlasRegionContainer;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -116,47 +117,14 @@ public class Chunk {
 		creeperChange = 0;
 	}
 		
-	/**Container class that can hold multiple {@link AtlasRegion}s*/
-	class TextureContainer {	
-		int size = 0;
-		AtlasRegion[] textures;
-		
-		/**Container class that can hold multiple {@link AtlasRegion}s
-		 * @param textures Array of specified textures, they can be accessed with {@link #getTexture(int)} method
-		 * with an index corresponding to their position in this array*/
-		public TextureContainer(AtlasRegion... textures) {
-			size = textures.length;
-			this.textures = new AtlasRegion[textures.length];
-			for (int i = 0; i < textures.length; i++) {
-				this.textures[i] = textures[i];
-			}
-		}
-		
-		/**Returns an {@linkplain AtlasRegion} corresponding to the index
-		 * @param index Index of the {@linkplain AtlasRegion}
-		 * @return {@link AtlasRegion}, null if the index is out of bounds
-		 * */
-		public AtlasRegion getTexture(int index) {
-			if (index > textures.length - 1) {
-				return null;
-			}
-			return textures[index];
-		}
-		
-		/**Get number of textures in this container*/
-		public int getSize() {
-			return size;
-		}
-	}
-	
 	/**Returns an AtlasRegion representing this tiles terrain*/
-	public TextureContainer getTerrainTexture() {	
+	public AtlasRegionContainer getTerrainTexture() {	
 		//Ore detection
 		if (Base.drawOres) {
 			if (this.getOreLevel() > 0) {
 				AtlasRegion ore = getOreTexture();
 				if (ore != null) {
-					return new TextureContainer(ore);
+					return new AtlasRegionContainer(ore);
 				}
 			}
 		}
@@ -182,7 +150,7 @@ public class Chunk {
 	 * @param level Target height level
 	 * @param textureRoot Name of the default texture variation <br> (names are defined in {@link SpriteLoader#tileAtlas})
 	 * */
-	private TextureContainer resolveTerrainEdges(int level) {
+	private AtlasRegionContainer resolveTerrainEdges(int level) {
 		if (x > Base.CHUNK_SIZE && y > Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
 			edge = true;
 			int lowerLevel = 0;
@@ -195,7 +163,7 @@ public class Chunk {
 				int h2 = (int) plusy.getHeight();
 				if (h1 == h2) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 				
@@ -209,7 +177,7 @@ public class Chunk {
 				int h2 = (int) minusx.getHeight();
 				if (h1 == h2) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
@@ -222,7 +190,7 @@ public class Chunk {
 				int h2 = (int) plusx.getHeight();
 				if (h1 == h2) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
@@ -235,7 +203,7 @@ public class Chunk {
 				int h2 = (int) minusx.getHeight();
 				if (h1 == h2) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
@@ -247,28 +215,28 @@ public class Chunk {
 				plusy.getHeight() >= level &&
 				minusy.getHeight() >= level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SR"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SR"));
 			} else
 			if (plusx.getHeight() >= level && 
 				minusx.getHeight() >= level && 
 				plusy.getHeight() >= level &&
 				minusy.getHeight() < level)  
 			{	
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SB"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SB"));
 			} else
 			if (plusx.getHeight() >= level && 
 				minusx.getHeight() < level &&
 				plusy.getHeight()  >= level &&
 				minusy.getHeight()  >= level)  
 			{	
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SL"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SL"));
 			} else
 			if (plusx.getHeight()  >= level && 
 				minusx.getHeight() >= level && 
 				plusy.getHeight()  < level &&
 				minusy.getHeight() >= level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "ST"));	
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "ST"));	
 			} else
 				
 			//Tile ends
@@ -283,7 +251,7 @@ public class Chunk {
 				int h3 = (int) minusy.getHeight();
 				if ((h1 == h2) && (h2 == h3)) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "RB"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "RB"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
@@ -297,7 +265,7 @@ public class Chunk {
 				int h3 = (int) minusy.getHeight();
 				if ((h1 == h2) && (h2 == h3)) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "LB"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "LB"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
@@ -311,7 +279,7 @@ public class Chunk {
 				int h3 = (int) minusx.getHeight();
 				if ((h1 == h2) && (h2 == h3)) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TB"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TB"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
@@ -325,7 +293,7 @@ public class Chunk {
 				int h3 = (int) minusx.getHeight();
 				if ((h1 == h2) && (h2 == h3)) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BB"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BB"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));	
 				}
 			} else 
@@ -342,13 +310,13 @@ public class Chunk {
 				int h4 = (int) minusy.getHeight();
 				if ((h1 == h2) && (h2 == h3) && (h3 == h4)) {
 					lowerLevel = level - h1;
-					return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "Single"),
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "Single"),
 												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			}
 		}
 		edge = false;
-		return new TextureContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level]));
+		return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level]));
 	}
 	
 	private AtlasRegion getOreTexture() {
@@ -510,7 +478,7 @@ public class Chunk {
 		return null;
 	}
 	
-	public TextureContainer getCorruptionTexture(int level) {
+	public AtlasRegionContainer getCorruptionTexture(int level) {
 		this.edgeCreeper = 0;
  		if (this.creeper != 0) {
 			if (this.getAbsoluteCreeperLevel() > level) {
@@ -520,7 +488,7 @@ public class Chunk {
 				
 				if (this.getAbsoluteCreeperLevel() > level + 1 && this.getAbsoluteCreeperLevel() <= level + 2 && this.getCreeperLevel() > 1) {		
 					if (resolveCorruptionEdges(level+1).getTexture(0).name != SpriteLoader.tileAtlas.findRegion("corr32").name) {
-						return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corr32"));
+						return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corr32"));
 					}					
 				}
 			} 					
@@ -568,7 +536,7 @@ public class Chunk {
 		return null;
 	}
 	
-	private TextureContainer resolveCorruptionEdges(int level) {
+	private AtlasRegionContainer resolveCorruptionEdges(int level) {
 		if (x > Base.CHUNK_SIZE && y > Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
 			if (plusy.getAbsoluteCreeperLevel() <= level &&
 				plusx.getAbsoluteCreeperLevel() <= level &&
@@ -576,7 +544,7 @@ public class Chunk {
 				minusy.getAbsoluteCreeperLevel() > level) //&&
 		    	//(!plusx.isEdge() || !plusy.isEdge()))				
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrBL"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrBL"));
 			} else
 			if (plusy.getAbsoluteCreeperLevel() <= level && 
 				plusx.getAbsoluteCreeperLevel() > level &&
@@ -584,7 +552,7 @@ public class Chunk {
 			    minusy.getAbsoluteCreeperLevel() > level) //&&
 			    //(!plusy.isEdge() || !minusx.isEdge()))  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrBR"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrBR"));
 			} else
 			if (minusy.getAbsoluteCreeperLevel() <= level && 
 				plusx.getAbsoluteCreeperLevel() <= level &&
@@ -592,7 +560,7 @@ public class Chunk {
 			    minusx.getAbsoluteCreeperLevel() > level) //&&
 		    	//(!plusx.isEdge() || !minusy.isEdge()))  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrTL"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTL"));
 			} else
 			if (minusy.getAbsoluteCreeperLevel() <= level && 
 				minusx.getAbsoluteCreeperLevel() <= level && 
@@ -600,7 +568,7 @@ public class Chunk {
 			    plusy.getAbsoluteCreeperLevel() > level) //&&
 		    	//(!minusx.isEdge() || !minusy.isEdge()))  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrTR"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTR"));
 			} else
 				
 			//Straight line borders
@@ -609,28 +577,28 @@ public class Chunk {
 				plusy.getAbsoluteCreeperLevel() > level &&
 				minusy.getAbsoluteCreeperLevel() > level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrSR"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrSR"));
 			} else
 			if (plusx.getAbsoluteCreeperLevel() > level && 
 				minusx.getAbsoluteCreeperLevel() > level && 
 				plusy.getAbsoluteCreeperLevel() > level &&
 				minusy.getAbsoluteCreeperLevel() <= level)  
 			{	
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrSB"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrSB"));
 			} else
 			if (plusx.getAbsoluteCreeperLevel() > level && 
 				minusx.getAbsoluteCreeperLevel() <= level &&
 				plusy.getAbsoluteCreeperLevel()  > level &&
 				minusy.getAbsoluteCreeperLevel()  > level)  
 			{	
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrSL"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrSL"));
 			} else
 			if (plusx.getAbsoluteCreeperLevel()  > level && 
 				minusx.getAbsoluteCreeperLevel() > level && 
 				plusy.getAbsoluteCreeperLevel()  <= level &&
 				minusy.getAbsoluteCreeperLevel() > level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrST"));	
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrST"));	
 			} else
 				
 			//Tile ends
@@ -639,28 +607,28 @@ public class Chunk {
 				minusy.getAbsoluteCreeperLevel() <= level &&
 				minusx.getAbsoluteCreeperLevel() > level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrLB"));	
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrLB"));	
 			} else
 			if (plusy.getAbsoluteCreeperLevel() <= level && 
 				minusx.getAbsoluteCreeperLevel() <= level && 
 				minusy.getAbsoluteCreeperLevel() <= level &&
 				plusx.getAbsoluteCreeperLevel() > level)  
 			{	
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrRB"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrRB"));
 			} else
 			if (plusy.getAbsoluteCreeperLevel() <= level && 
 				plusx.getAbsoluteCreeperLevel() <= level && 
 				minusx.getAbsoluteCreeperLevel() <= level &&
 				minusy.getAbsoluteCreeperLevel() > level)  
 			{	
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrTB"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTB"));
 			} else
 			if (minusy.getAbsoluteCreeperLevel() <= level && 
 				plusx.getAbsoluteCreeperLevel() <= level && 
 				minusx.getAbsoluteCreeperLevel() <= level &&
 				plusy.getAbsoluteCreeperLevel() > level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrBB"));	
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrBB"));	
 			} else 
 				
 			//Single creeper tile
@@ -669,10 +637,10 @@ public class Chunk {
 				minusx.getAbsoluteCreeperLevel() <= level &&
 				plusy.getAbsoluteCreeperLevel() <= level)  
 			{
-				return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corrSingle"));
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrSingle"));
 			}
 		}
-		return new TextureContainer(SpriteLoader.tileAtlas.findRegion("corr32"));
+		return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corr32"));
 	}
 	
 	/**Method that populates all the neighbour chunks*/
