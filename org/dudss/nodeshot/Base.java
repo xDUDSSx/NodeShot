@@ -47,7 +47,8 @@ public class Base {
 
 	public static int lineWidth = 3;
 	public static int HUD_FONT_SIZE = 16;  //Mobile 32
-
+	public static int HUD_FONT_LARGE_SIZE = 36;
+	
 	static int paint_spacing = 2;
 	
 	//TERRAIN
@@ -65,6 +66,14 @@ public class Base {
 	
 	public static int CHUNK_AMOUNT = WORLD_SIZE / CHUNK_SIZE;
 	public static int SECTION_AMOUNT = CHUNK_AMOUNT / SECTION_SIZE;
+	
+	//UI ELEMENT STATES
+	public static boolean settingsOpened = false;
+	public static boolean enableGlProgilerLogging = false;
+	public static boolean hoverChunkHighlight = false;
+	public static boolean drawTerrainEdges = false;
+	public static boolean drawOres = true;
+	public static boolean drawGeneralStats = true;
 	
 	
 	Base() {

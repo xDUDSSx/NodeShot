@@ -53,15 +53,7 @@ public class DesktopInputProcessor implements InputProcessor {
 		}
 		
 		if (keycode == Keys.ESCAPE) {
-			GameScreen.pauseMenu.setVisible(!GameScreen.pauseMenu.isVisible());
-			GameScreen.gamePaused = GameScreen.pauseMenu.isVisible();
-			
-			if (GameScreen.gamePaused) {
-				GameScreen.simulationThread.pauseSim();
-			} else {
-				GameScreen.simulationThread.resumeSim();
-			}
-			
+			GameScreen.callPauseMenu();		
 		}		
 		return false;
 	}

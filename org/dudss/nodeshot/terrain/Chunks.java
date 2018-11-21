@@ -69,7 +69,7 @@ public class Chunks {
 	Rectangle viewBounds;
 	Rectangle imageBounds = new Rectangle();
 	
-	//No viewport set, needs to have updateCam() called
+	/**Initializes chunks, sections and camera culling utilities.*/
 	public void create() {		
 		chunks = new Chunk[Base.CHUNK_AMOUNT][Base.CHUNK_AMOUNT];		
 		sections = new Section[Base.CHUNK_AMOUNT/Base.SECTION_SIZE][Base.CHUNK_AMOUNT/Base.SECTION_SIZE];
@@ -99,16 +99,12 @@ public class Chunks {
 		created = true;
 	}
 	
-	public void create(OrthographicCamera cam) {		
-		create();		
-		updateView(cam);	
-	}
-	
 	public void updateChunk(Chunk ch) {
 		ch.update();
 	}
 	
-	/**Updates section camera culling and updates sections that got into the camera view
+	/**Updates section camera culling and updates sections that got into the camera view and aren't updated yet.
+	 * This method has a inbuilt polling feature that prevents unnecessary view updates. The rate is defined by {@link #pollRate}.
 	 * @param cam The main game camera
 	 * */
 	public void updateView(OrthographicCamera cam) {
@@ -528,7 +524,7 @@ public class Chunks {
 		}
 	}
 	
-	/**Generates terrain and sections*/
+	/**Generates the terrain relief and spawns ores*/
 	public void generateAll() {
 		SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
 		System.out.println("\nGenerating noise (1/3)");

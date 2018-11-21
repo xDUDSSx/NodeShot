@@ -152,12 +152,14 @@ public class Chunk {
 	/**Returns an AtlasRegion representing this tiles terrain*/
 	public TextureContainer getTerrainTexture() {	
 		//Ore detection
-		/*if (this.getOreLevel() > 0) {
-			AtlasRegion ore = getOreTexture();
-			if (ore != null) {
-				return new TextureContainer(ore);
+		if (Base.drawOres) {
+			if (this.getOreLevel() > 0) {
+				AtlasRegion ore = getOreTexture();
+				if (ore != null) {
+					return new TextureContainer(ore);
+				}
 			}
-		}*/
+		}
 		
 		switch(height) {
 			case 0: return null;

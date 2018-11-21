@@ -161,6 +161,7 @@ public class GameScreen implements Screen {
     ShapeRenderer r;
     
     public static BitmapFont font;
+    public static BitmapFont fontLarge;
     GlyphLayout layout;
 
     public static OrthographicCamera cam;
@@ -232,12 +233,14 @@ public class GameScreen implements Screen {
         lastCamPos = cam.position;
         lastZoom = cam.zoom;
         
-        
-        chunks.create(cam);
+        //Initializes chunks and sections
+        chunks.create();
         //Generate terrain if not generated already
         if (chunks.generated == false) {       	
         	chunks.generateAll();
         }       
+        //Updates the view
+        chunks.updateView(cam);
         
         blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
 		
@@ -251,12 +254,19 @@ public class GameScreen implements Screen {
         
         //font generation
         font = new BitmapFont();
-        layout = new GlyphLayout();              
+        fontLarge = new BitmapFont();
+        layout = new GlyphLayout();
         generator = new FreeTypeFontGenerator(Gdx.files.classpath("res/data/Helvetica-Regular.ttf"));
+        
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Base.HUD_FONT_SIZE;
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'()>?:%+-*/";        
         font = generator.generateFont(parameter);
+        
+        FreeTypeFontGenerator.FreeTypeFontParameter parameterLarge = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameterLarge.size = Base.HUD_FONT_LARGE_SIZE;
+        parameterLarge.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'()>?:%+-*/";     
+        fontLarge = generator.generateFont(parameterLarge);
         generator.dispose();
        
         //User Interface             
@@ -379,12 +389,15 @@ public class GameScreen implements Screen {
 		}
         
 		//OpenGL performance logging
-        /*LOGGER.info("\n\nDraw calls: " + glProfiler.getDrawCalls() + 
-        			"\nCalls: " + glProfiler.getCalls() +
-        			"\nTexture binding " + glProfiler.getTextureBindings() + 
-        			"\nShaderSwitches: " + glProfiler.getShaderSwitches()
-        );*/
-
+        if (Base.enableGlProgilerLogging) {
+        	LOGGER.info(
+        	"\n\nDraw calls: " + glProfiler.getDrawCalls() + 
+			"\nCalls: " + glProfiler.getCalls() +
+			"\nTexture binding " + glProfiler.getTextureBindings() + 
+			"\nShaderSwitches: " + glProfiler.getShaderSwitches()
+        	);
+        }
+        
         r.setAutoShapeType(true);      
         if (buildMode == true) {
 	        r.begin(ShapeType.Filled);
@@ -411,19 +424,20 @@ public class GameScreen implements Screen {
 	    }
         
         //Shows terrain edges in blue
-        /*r.begin(ShapeType.Filled);
-        r.setColor(Color.WHITE);
-        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-        		if (chunks.getChunk(x, y).isEdge() == true) {       			
-        			Color c = new Color(Color.rgba8888(0/255f, 0/255f, 255/255f, 1.0f));
-        			r.setColor(c);
-        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-        		}	      
-        	}
+        if (Base.drawTerrainEdges) {
+	        r.begin(ShapeType.Line);
+	        r.setColor(Color.WHITE);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunk(x, y).isEdge() == true) {       			
+	        			Color c = new Color(Color.rgba8888(0/255f, 0/255f, 255/255f, 1.0f));
+	        			r.setColor(c);
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        		}	      
+	        	}
+	        }
+	        r.end();
         }
-        r.end();
-        */
          
  
         r.begin(ShapeType.Filled);
@@ -436,13 +450,8 @@ public class GameScreen implements Screen {
         		r.begin(ShapeType.Filled);
 	        	r.setColor(Color.WHITE);
 	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
-	        	r.end();
-        	} else if ((hoverChunk.getCoalLevel() > 0 || hoverChunk.getIronLevel() > 0)) {
-	        	r.begin(ShapeType.Line);
-	        	r.setColor(Color.WHITE);
-	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
-	        	r.end();
-        	} else if (this.debug == true) {
+	        	r.end();        	
+        	} else if (Base.hoverChunkHighlight) {
         		r.begin(ShapeType.Line);
 	        	r.setColor(Color.WHITE);
 	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
@@ -522,12 +531,17 @@ public class GameScreen implements Screen {
 	        drawButtons(batch, r);
 	        batch.begin();
 	    }      
-        drawStats(batch);
+        if (Base.drawGeneralStats) drawStats(batch);
         drawFps(batch);
         //drawInfo(batch);
         drawCoords(batch);
         drawTerrainInfo(batch);
-
+        if (gamePaused) {
+	        batch.setColor(Color.RED);
+	        drawPauseIndicator(batch);
+	        batch.setColor(Color.WHITE);
+        }
+        
         batch.end();
         
         //Stage UI drawing
@@ -790,6 +804,15 @@ public class GameScreen implements Screen {
     	}
     }
 
+    void drawPauseIndicator(SpriteBatch batch) {
+		float textheight = fontLarge.getCapHeight();
+		String s = "SIM PAUSED";
+		layout.setText(fontLarge, s);
+		float textwidth = layout.width;
+		fontLarge.setColor(Color.RED);
+		fontLarge.draw(batch, s, WIDTH/2 - textwidth/2, HEIGHT - textheight*3);     
+    }
+    
     void drawInfo(SpriteBatch batch) {
         float textheight = font.getCapHeight();
         font.setColor(Color.YELLOW);
@@ -1077,6 +1100,17 @@ public class GameScreen implements Screen {
         return intersectedConnector;
     }
    
+    public static void callPauseMenu() {
+    	GameScreen.pauseMenu.setVisible(!GameScreen.pauseMenu.isVisible());
+		GameScreen.gamePaused = GameScreen.pauseMenu.isVisible();
+		
+		if (GameScreen.gamePaused) {
+			GameScreen.simulationThread.pauseSim();
+		} else {
+			GameScreen.simulationThread.resumeSim();
+		}
+    }
+    
     public static void startSimulationThread() {
         simulationThread = new SimulationThread();        
         simulationThread.start();  
@@ -1106,6 +1140,7 @@ public class GameScreen implements Screen {
     public void dispose () {
         batch.dispose();
         font.dispose();
+        fontLarge.dispose();
         r.dispose();
         terrainBuffer.dispose();
 		blurBuffer.dispose();
