@@ -1,0 +1,15 @@
+org.dudss.nodeshot
+org.dudss.nodeshot.algorithms
+org.dudss.nodeshot.buildings
+org.dudss.nodeshot.desktop
+org.dudss.nodeshot.entities
+org.dudss.nodeshot.entities.connectors
+org.dudss.nodeshot.entities.nodes
+org.dudss.nodeshot.inputs
+org.dudss.nodeshot.items
+org.dudss.nodeshot.misc
+org.dudss.nodeshot.screens
+org.dudss.nodeshot.terrain
+org.dudss.nodeshot.terrain.datasubsets
+org.dudss.nodeshot.ui
+org.dudss.nodeshot.utils
