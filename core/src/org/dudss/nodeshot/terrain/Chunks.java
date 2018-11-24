@@ -60,7 +60,7 @@ public class Chunks {
 	
 	/**Time of the last {@link #updateView(OrthographicCamera)}, used to prevent unnecessary view updates*/
 	public long lastViewPoll = System.currentTimeMillis();
-	/**Minimum delay(ms) inbetween {@link #updateView(OrthographicCamera)} calls*/
+	/**Minimum delay(ms) in-between {@link #updateView(OrthographicCamera)} calls*/
 	public long pollRate = 2;
 	
 	public boolean created = false;
@@ -356,10 +356,10 @@ public class Chunks {
 		  	        int rectangleOffsetInArray = i * valuesPerVertex * 4;  	        
 
 		  	        //Calculating the shade factor based on current chunk height
-		  	        if (c.edge && c.getAbsoluteCreeperLevel() == 0) {
+		  	        if (c.terrainEdge && c.getAbsoluteCreeperLevel() == 0) {
 		  	        	
 		  	        }
-		  	        float shade = 1 - (0.9f * ((level - c.height)/(float)Base.MAX_CREEP));		  	     
+		  	        float shade = 1 - (0.9f * ((level - c.c_height)/(float)Base.MAX_CREEP));		  	     
 		  	        
 		  	        //Two texture regions and texture coordinates are used for mixing multiple texture variants using a shader
 		  	        //Currently used when rendering terrain (eg. terrainShader)

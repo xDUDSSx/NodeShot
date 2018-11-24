@@ -58,6 +58,10 @@ public class PauseMenu extends VisWindow {
 		buttonTable.add(closeButton).fill(true);
 		buttonTable.row();
 		
+		VisTextButton exitButton = new VisTextButton("Exit");
+		buttonTable.add(exitButton).fill(true);
+		buttonTable.row();
+		
 		add(buttonTable).row();
 		
 		pack();
@@ -91,6 +95,12 @@ public class PauseMenu extends VisWindow {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
 				GameScreen.callPauseMenu();
+		    }
+	    });
+		exitButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Gdx.app.exit();
 		    }
 	    });
 	}

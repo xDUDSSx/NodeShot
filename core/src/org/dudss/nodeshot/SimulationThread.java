@@ -107,7 +107,7 @@ public class SimulationThread extends Thread {
 				Thread.sleep(remainder);
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
-				System.out.println("Simulation thread encountered an exception while sleeping inbetween ticks!");
+				System.out.println("Simulation thread encountered an exception while sleeping in-between ticks!");
 				e.printStackTrace();
 			}
     		// interpolation = ((getTickCount() + SKIP_TICKS - next_game_tick ) / SKIP_TICKS );       

@@ -5,6 +5,7 @@ org.dudss.nodeshot.desktop
 org.dudss.nodeshot.entities
 org.dudss.nodeshot.entities.connectors
 org.dudss.nodeshot.entities.nodes
+org.dudss.nodeshot.error
 org.dudss.nodeshot.inputs
 org.dudss.nodeshot.items
 org.dudss.nodeshot.misc

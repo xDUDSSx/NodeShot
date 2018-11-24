@@ -70,10 +70,12 @@ public class Base {
 	public static int SECTION_AMOUNT = CHUNK_AMOUNT / SECTION_SIZE;
 	
 	//UI ELEMENT STATES
-	public static boolean settingsOpened = false;
+	public static boolean settingsOpened = true;
 	public static boolean enableGlProgilerLogging = false;
 	public static boolean hoverChunkHighlight = false;
 	public static boolean drawTerrainEdges = false;
+	public static boolean drawCorruptionEdges = false;
+	public static boolean drawCHeightInequality = false;
 	public static boolean drawOres = true;
 	public static boolean drawGeneralStats = false;
 	

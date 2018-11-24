@@ -32,6 +32,7 @@ import org.dudss.nodeshot.ui.BuildMenu;
 import org.dudss.nodeshot.ui.HudMenu;
 import org.dudss.nodeshot.ui.PauseMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
+import org.dudss.nodeshot.ui.SettingsMenu;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -304,6 +305,9 @@ public class GameScreen implements Screen {
         imgButton.setSize(64, 64);
         imgButton.setPosition(10, 10);        
         stage.addActor(imgButton);
+        
+        SettingsMenu settings = new SettingsMenu("Settings", GameScreen.skin);	
+		GameScreen.stage.addActor(settings);
     }
 
     public static int getWidth() {return WIDTH;}
@@ -425,17 +429,15 @@ public class GameScreen implements Screen {
 	        r.setColor(Color.WHITE);
 	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-	        		if (chunks.getChunk(x, y).isEdge() == true) {       			
+	        		if (chunks.getChunk(x, y).isTerrainEdge() == true) {       			
 	        			Color c = new Color(Color.rgba8888(0/255f, 0/255f, 255/255f, 1.0f));
 	        			r.setColor(c);
 	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-	        		}	      
+	        		}	        		
 	        	}
 	        }
 	        r.end();
         }
-         
- 
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r, batch);
         r.end();
@@ -513,6 +515,40 @@ public class GameScreen implements Screen {
         
         bulletHandler.drawAll(r, batch);
         
+        if (Base.drawCorruptionEdges) {
+	        r.begin(ShapeType.Line);
+	        r.setColor(Color.WHITE);
+	        Gdx.gl.glLineWidth(1);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunk(x, y).isCorruptionEdge()) {       			
+	        			Color c = new Color(Color.rgba8888(255/255f, 0/255f, 0/255f, 1.0f));
+	        			r.setColor(c);	        			
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        		}	      
+	        	}
+	        }
+	        Gdx.gl.glLineWidth(2);
+	        r.end();
+        }
+        
+        if (Base.drawCHeightInequality) {
+	        r.begin(ShapeType.Line);
+	        r.setColor(Color.WHITE);
+	        //Gdx.gl.glLineWidth(1);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunk(x, y).getCHeight() != chunks.getChunk(x, y).getHeight()) {       			
+	        			Color c = new Color(Color.rgba8888(0/255f, 255/255f, 0/255f, 1.0f));
+	        			r.setColor(c);	        			
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        		}	      
+	        	}
+	        }
+	        //Gdx.gl.glLineWidth(2);
+	        r.end();
+        }
+
         //Draw debug infographics
         if (debug) drawDebug(batch, r);
            
@@ -779,6 +815,8 @@ public class GameScreen implements Screen {
 	
 			StringBuilder sb = new StringBuilder();
 			sb.append("Height: " + GameScreen.hoverChunk.getHeight());
+			sb.append(", ");
+			sb.append("c_Height: " + GameScreen.hoverChunk.getCHeight());
 			sb.append(", ");
 			sb.append("Creeper: " + Base.round(GameScreen.hoverChunk.getCreeperLevel(), 3));
 			sb.append(", ");

@@ -4,8 +4,6 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
-import org.dudss.nodeshot.error.ErrorManager;
-import org.dudss.nodeshot.error.ErrorReporter;
 import org.dudss.nodeshot.screens.MenuScreen;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -36,7 +34,7 @@ public class DesktopLauncher {
 			@Override
 			public void uncaughtException (Thread thread, final Throwable ex) {	  	        					
 				//Call the global error manager and invoke a reporter to display the exception.
-				org.dudss.nodeshot.BaseClass.errorManager.report(ex, "An unexpected runtime error occurred!");				
+				org.dudss.nodeshot.BaseClass.errorManager.report(ex, "An unexpected runtime error occurred!");						
 			}
 		});
 		

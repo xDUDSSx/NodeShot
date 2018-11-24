@@ -57,7 +57,9 @@ public class SettingsMenu extends Window {
 		VisCheckBox debugCheckbox = new VisCheckBox("Debug", GameScreen.debug);
 		VisCheckBox drawGeneralStatsCheckbox = new VisCheckBox("Draw general stats", Base.drawGeneralStats);
 		VisCheckBox hoverChunkHighlightCheckbox = new VisCheckBox("Highlight chunks with cursor", Base.hoverChunkHighlight);
-		VisCheckBox drawTerrainEdgesCheckbox = new VisCheckBox("Hightlight terrain edges", Base.drawTerrainEdges);
+		VisCheckBox drawTerrainEdgesCheckbox = new VisCheckBox("Highlight terrain edges", Base.drawTerrainEdges);
+		VisCheckBox drawCorruptionEdgesCheckbox = new VisCheckBox("Highlight corruption edges", Base.drawCorruptionEdges);
+		VisCheckBox drawCHeightInequalityCheckbox = new VisCheckBox("Highlight c_height inequal areas", Base.drawCHeightInequality);
 		VisCheckBox drawOresCheckbox = new VisCheckBox("Draw ores", Base.drawOres);
 		VisCheckBox errorCheckbox = new VisCheckBox("Test error", false);
 		
@@ -65,9 +67,12 @@ public class SettingsMenu extends Window {
 		engineSettingsTable.add(debugCheckbox).left().row();
 		engineSettingsTable.add(drawGeneralStatsCheckbox).left().row();
 		engineSettingsTable.add(hoverChunkHighlightCheckbox).left().row();
-		engineSettingsTable.add(drawTerrainEdgesCheckbox).left().row();
 		engineSettingsTable.add(drawOresCheckbox).left().row();		
-		engineSettingsTable.add(errorCheckbox).left().row();		
+		engineSettingsTable.add(errorCheckbox).left().row();	
+		engineSettingsTable.add(drawTerrainEdgesCheckbox).left().row();
+		engineSettingsTable.add(drawCorruptionEdgesCheckbox).left().row();
+		engineSettingsTable.add(drawCHeightInequalityCheckbox).left().row();
+			
 		
 		table.add(engineSettingsButton).fillX().row();
 		table.add(engineSettingsCollapsibleWidget).expandX().fillX().row();
@@ -126,6 +131,18 @@ public class SettingsMenu extends Window {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
 				Base.drawTerrainEdges = drawTerrainEdgesCheckbox.isChecked();
+		    }
+	    });		
+		drawCorruptionEdgesCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Base.drawCorruptionEdges = drawCorruptionEdgesCheckbox.isChecked();
+		    }
+	    });		
+		drawCHeightInequalityCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Base.drawCHeightInequality = drawCHeightInequalityCheckbox.isChecked();
 		    }
 	    });		
 		drawOresCheckbox.addListener(new ClickListener(){
