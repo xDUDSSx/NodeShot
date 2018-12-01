@@ -117,6 +117,6 @@ public class SpriteLoader {
 		bullet = new Sprite(spriteSheet, 49, 92, 7, 3);
 		
 		double nextTime = System.currentTimeMillis();	
-		System.out.println("Loading finished (time: " + (nextTime - currentTime) + " ms)");
+		System.out.println("Sprites loaded! (time: " + (nextTime - currentTime) + " ms)");
 	}
 }

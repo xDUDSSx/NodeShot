@@ -88,7 +88,7 @@ public class PauseMenu extends VisWindow {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 	
 				GameScreen.chunks.generateAll();
-				GameScreen.chunks.updateAllSectionMeshes(false, -1);
+				GameScreen.chunks.updateAllSectionMeshes(false);
 		    }
 	    });		
 		closeButton.addListener(new ClickListener(){

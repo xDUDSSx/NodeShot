@@ -1,12 +1,11 @@
 package org.dudss.nodeshot;
 
-import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Section;
 
 /**The simulation daemon thread, runs a simulation loop*/
 public class SimulationThread extends Thread {
-    //double interpolation; //TODO: implement interpolation
+	//double interpolation; //TODO: implement interpolation
 	int loops;
 	
 	boolean paused = false;
@@ -28,6 +27,7 @@ public class SimulationThread extends Thread {
     /**The simulation daemon thread, runs a simulation loop*/
     public SimulationThread() {
     	setDaemon(true);
+    	this.setName("SimulationThread");
     }
     
     public void run() {
@@ -52,7 +52,7 @@ public class SimulationThread extends Thread {
 					Thread.sleep(next_game_tick - getTickCount());
 					continue;
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					BaseClass.errorManager.report(e, "Simulation thread pause sleep got interrupted.");
 				}
     		}
     		//long startTime = System.currentTimeMillis();		   	 	
@@ -64,9 +64,8 @@ public class SimulationThread extends Thread {
    				t2 = getTickCount();
    				timeElapsed = t2 - t1;
    				//System.out.println("Sim calculation finished on: " + Thread.currentThread().getName() + ", time elapsed: " + timeElapsed + ", loops: " + loops);
-   				//System.out.println("Nodelist size: " + nodelist.size());
    				
-   				//Cant keep up?
+   				//Can't keep up?
    				if (timeElapsed > SKIP_TICKS) {
    					//double prevSimFac = simFac;
    					GameScreen.simFac = ((double)SKIP_TICKS/(double)timeElapsed);
@@ -107,11 +106,10 @@ public class SimulationThread extends Thread {
 				Thread.sleep(remainder);
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
-				System.out.println("Simulation thread encountered an exception while sleeping in-between ticks!");
-				e.printStackTrace();
+				BaseClass.errorManager.report(e, "Simulation thread encountered an exception while sleeping in-between ticks!");
 			}
     		// interpolation = ((getTickCount() + SKIP_TICKS - next_game_tick ) / SKIP_TICKS );       
-    		//render game with interpolation parameter if necessary (drawGame(interpolation) //TODO: create custom method for this and implement interpolation  	    
+    		//TODO: create custom method for this and implement interpolation  	    
    	    }
     }
     
@@ -119,8 +117,11 @@ public class SimulationThread extends Thread {
 		return System.currentTimeMillis();
 	}
 	
+    /**Call a single global game logic update*/
 	void updateLogic() {
 		simTick++;
+		
+		GameScreen.chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2).setCreeperLevel(10);
 		
 		//Updating projectiles
 		GameScreen.bulletHandler.updateAll();
@@ -138,7 +139,7 @@ public class SimulationThread extends Thread {
 			}
 			
 			for (Section s : GameScreen.chunks.sectionsInView) {
-				GameScreen.chunks.updateSectionMesh(s, true, -1);
+				GameScreen.chunks.updateSectionMesh(s, true);
 				if (terrainUpdate) {
 					//GameScreen.chunks.updateSectionMesh(s, false, -1);
 				}
@@ -158,33 +159,23 @@ public class SimulationThread extends Thread {
 		GameScreen.rightClickMenuManager.update();
 	}
 	
+	/**Sets the targeted simulation loop tick rate
+	 * @param newTick The new desired tick rate (in ticks per second).
+	 * */
 	public void recalculateSpeed(int newTick) {
 	   	TICKS_PER_SECOND = newTick;
 	   	SKIP_TICKS = 1000 / newTick;
 	}
 	
-	
-	
+	/**Resumes the simulation loop*/
 	public void resumeSim() {
 		paused = false;
-		System.out.println("SimThread - Resuming at tick: " + simTick);
+		//System.out.println("SimThread - Resuming at tick: " + simTick);
 	}
 	
+	/**Pauses the simulation loop*/
 	public void pauseSim() {
 		paused = true;
-		System.out.println("SimThread - Pausing at tick: " + simTick);
-		
-		/*System.out.println("SimThread - Pausing at tick: " + simTick);
-		if (TICKS_PER_SECOND > 0) {
-			lastTicksPerSecond = TICKS_PER_SECOND;
-			TICKS_PER_SECOND = 0;
-			SKIP_TICKS = 0;
-			next_game_tick = getTickCount() + SKIP_TICKS;
-		} else {
-			TICKS_PER_SECOND = lastTicksPerSecond;
-			SKIP_TICKS = 1000 / TICKS_PER_SECOND;
-			next_game_tick = getTickCount() + SKIP_TICKS;
-		}
-		*/
+		//System.out.println("SimThread - Pausing at tick: " + simTick);
 	}	
 }

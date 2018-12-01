@@ -22,9 +22,9 @@ public class Section {
 	MeshVertexData terrainVertexData;
 	boolean terrainUpdate = false;
 	
-	List<Mesh> corrMeshes;
-	List<MeshVertexData> corrVertexData;
-	List<Boolean> updates;
+	Mesh corrMesh;
+	MeshVertexData corrVertexData;
+	boolean corrUpdate = false;
  	
 	/**Section is an object representing a square grid of chunks with a fixed size.
 	 * It also holds vertex info about under laying chunk terrain and corruption.
@@ -34,15 +34,7 @@ public class Section {
 		sectionChunks = chunks;
 		
 		terrainVertexData = new MeshVertexData(null, null);
-		corrVertexData = new ArrayList<MeshVertexData>();
-		corrMeshes = new ArrayList<Mesh>();
-		
-		for (int i = 0; i < Base.MAX_CREEP; i++) {
-			corrMeshes.add(null);
-			corrVertexData.add(new MeshVertexData(null, null));
-		}
-		
-		updates = new ArrayList<>(Collections.nCopies(60, false));
+		corrVertexData = new MeshVertexData(null, null);
 	}
 	
 	/**@param x coordinate
@@ -90,47 +82,42 @@ public class Section {
 		return terrainUpdate;
 	}
 	
-	/**Updates the {@linkplain Section} corruption mesh data of the specified layer. Can be called from other threads. 
-	 * The actual corruption mesh will not be updated directly. Use in combination with {@link #requestCorruptionUpdate(int)}
+	/**Updates the {@linkplain Section} corruption mesh data. Can be called from other threads. 
+	 * The actual corruption mesh will not be updated directly. Use in combination with {@link #requestCorruptionUpdate()}
 	 * to request corruption mesh update from the OpenGL draw thread.
-	 * @param layer Layer of corruption mesh that should be updated.
 	 * */
-	public void updateCorruptionMesh(int layer, float[] verts, short[] indices) {
-		this.corrVertexData.get(layer).setVerts(verts);
-		this.corrVertexData.get(layer).setIndices(indices);	
+	public void updateCorruptionMesh(float[] verts, short[] indices) {
+		this.corrVertexData.setVerts(verts);
+		this.corrVertexData.setIndices(indices);	
 	}
 	
-	public float[] getCorruptionVerts(int layer) {
-		return corrVertexData.get(layer).getVerts();
+	public float[] getCorruptionVerts() {
+		return corrVertexData.getVerts();
 	}
 	
-	public short[] getCorruptionIndices(int layer) {
-		return corrVertexData.get(layer).getIndices();
+	public short[] getCorruptionIndices() {
+		return corrVertexData.getIndices();
 	}
 	
-	/**@return The sections corruption mesh of a particular layer.
-	 * @param layer Layer of the corruption mesh
+	/**@return The sections corruption mesh of this {@link Section}.
 	 * */
-	public Mesh getCorruptionMesh(int layer) {
-		return corrMeshes.get(layer);
+	public Mesh getCorruptionMesh() {
+		return corrMesh;
 	}
 	
-	/**Nullifies the {@link #requestCorruptionUpdate(int)} call. Flags the corruption mesh of that particular layer as updated.
-	 * @param layer Layer of the corruption mesh
-	 * */
-	public void updatedCorruptionMesh(int layer) {
-		updates.set(layer, false);
+	/**Nullifies the {@link #requestCorruptionUpdate()} call. Flags the corruption mesh as updated.*/
+	public void updatedCorruptionMesh() {
+		corrUpdate = false;
 	}
 	
 	/**Requests a corruption mesh update of the particular layer from the OpenGL draw thread.
 	 * The mesh cannot be updated directly because OpenGL context is single-threaded.*/
-	public void requestCorruptionUpdate(int layer) {
-		updates.set(layer, true);
+	public void requestCorruptionUpdate() {
+		corrUpdate = true;
 	}
 	
-	/**@return Whether the corruption mesh update of the particular layer is requested.
-	 * @param layer Layer of the corruption mesh*/
-	public boolean needsCorruptionMeshUpdate(int layer) {
-		return updates.get(layer);
+	/**@return Whether the corruption mesh update.*/
+	public boolean needsCorruptionMeshUpdate() {
+		return corrUpdate;
 	}
 }

@@ -442,21 +442,6 @@ public class GameScreen implements Screen {
         buildingHandler.drawAll(r, batch);
         r.end();
         
-        //Highlight of the chunk the mouse is hovering on
-        if (hoverChunk != null) {
-        	if (buildMode == true && builtConnector != null) {
-        		r.begin(ShapeType.Filled);
-	        	r.setColor(Color.WHITE);
-	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
-	        	r.end();        	
-        	} else if (Base.hoverChunkHighlight) {
-        		r.begin(ShapeType.Line);
-	        	r.setColor(Color.WHITE);
-	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
-	        	r.end();
-        	}
-        }
-      
         //Connector rendering
         drawConnectors(r);
     
@@ -509,9 +494,12 @@ public class GameScreen implements Screen {
         
         //Drawing all the corruption layers
         //Corruption is currently drawn as individual mesh layers
-        for(int i = 0; i < Base.MAX_CREEP; i++) {
-        	chunks.drawCorruption(i);
-        }
+        //for(int i = 0; i < Base.MAX_CREEP; i++) {
+        	//chunks.drawCorruption(i);
+        //}
+        
+        //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
+        chunks.drawCorruption();
         
         bulletHandler.drawAll(r, batch);
         
@@ -548,7 +536,35 @@ public class GameScreen implements Screen {
 	        //Gdx.gl.glLineWidth(2);
 	        r.end();
         }
-
+        
+        if (Base.drawFlowlines) {
+	        r.begin(ShapeType.Filled);
+	        r.setColor(Color.RED);
+	        //Gdx.gl.glLineWidth(1);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	   	 
+	        		r.rectLine((float) (x * Base.CHUNK_SIZE) + Base.CHUNK_SIZE/2f, (float) (y * Base.CHUNK_SIZE) + Base.CHUNK_SIZE/2f, (float) (x * Base.CHUNK_SIZE) + Base.CHUNK_SIZE/2f + chunks.getChunk(x, y).direction.x*10, (float) (y * Base.CHUNK_SIZE) + Base.CHUNK_SIZE/2f + chunks.getChunk(x, y).direction.y*10, 1f);
+	        	}
+	        }
+	        //Gdx.gl.glLineWidth(2);
+	        r.end();
+        }
+        
+        //Highlight of the chunk the mouse is hovering on
+        if (hoverChunk != null) {
+        	if (buildMode == true && builtConnector != null) {
+        		r.begin(ShapeType.Filled);
+	        	r.setColor(Color.WHITE);
+	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
+	        	r.end();        	
+        	} else if (Base.hoverChunkHighlight) {
+        		r.begin(ShapeType.Line);
+	        	r.setColor(Color.WHITE);
+	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
+	        	r.end();
+        	}
+        }
+        
         //Draw debug infographics
         if (debug) drawDebug(batch, r);
            
@@ -623,8 +639,8 @@ public class GameScreen implements Screen {
     	fboB.begin();
     	Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
-    	Shaders.blurShader.setUniformf("radius", 0.0f);
-        Shaders.blurShader.setUniformf("resolution", (cam.zoom * 200) * aspectRatio);
+    	Shaders.blurShader.setUniformf("radius", 0.05f);
+        Shaders.blurShader.setUniformf("resolution", (cam.zoom * 300) * aspectRatio);
     	Shaders.blurShader.end();
 		batch.setShader(Shaders.blurShader);   	
 				
@@ -643,8 +659,8 @@ public class GameScreen implements Screen {
 		
 		Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
-    	Shaders.blurShader.setUniformf("radius", 0.0f);
-    	Shaders.blurShader.setUniformf("resolution", cam.zoom * 200);
+    	Shaders.blurShader.setUniformf("radius", 0.05f);
+    	Shaders.blurShader.setUniformf("resolution", cam.zoom * 300);
     	Shaders.blurShader.end();
 		  	
     	batch.setShader(Shaders.blurShader);   	
@@ -818,9 +834,9 @@ public class GameScreen implements Screen {
 			sb.append(", ");
 			sb.append("c_Height: " + GameScreen.hoverChunk.getCHeight());
 			sb.append(", ");
-			sb.append("Creeper: " + Base.round(GameScreen.hoverChunk.getCreeperLevel(), 3));
+			sb.append("Creeper: " + GameScreen.hoverChunk.getCreeperLevel());
 			sb.append(", ");
-			sb.append("AbsCreeper: " + Base.round(GameScreen.hoverChunk.getAbsoluteCreeperLevel(), 3));
+			sb.append("AbsCreeper: " + GameScreen.hoverChunk.getAbsoluteCreeperLevel());
 			sb.append(", ");
 			sb.append("Ore level: (" + GameScreen.hoverChunk.getOreType().toString() + ") " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
 			
@@ -1181,12 +1197,13 @@ public class GameScreen implements Screen {
 		blurBuffer.dispose();
 		stage.dispose();
 		
+		SpriteLoader.tileAtlas.dispose();
+		skin.dispose();
+		
 		for (int i = 0; i < Base.MAX_CREEP; i++) {
 			corrBuffers.get(i).dispose();
 		}
 		
 		VisUI.dispose();
-		
-		System.out.println("DISPOSE");
     }  
 }

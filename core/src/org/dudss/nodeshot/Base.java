@@ -78,11 +78,13 @@ public class Base {
 	public static boolean drawCHeightInequality = false;
 	public static boolean drawOres = true;
 	public static boolean drawGeneralStats = false;
+	public static boolean drawFlowlines = false;
+	public static boolean useNewUpdate = false;
 	
 	//Graphical settings
-	public static boolean vSyncEnabled = true;
+	public static boolean vSyncEnabled = false;
 	public static boolean fullscreen = false;
-	public static int foregroundFps = 144;
+	public static int foregroundFps = 0;
 	public static Dimension defaultWindowSize = new Dimension(1300, 795);
 	public static int MSAAsamples = 10;
 	

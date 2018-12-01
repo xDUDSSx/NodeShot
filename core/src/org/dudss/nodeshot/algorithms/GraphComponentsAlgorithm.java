@@ -3,6 +3,7 @@ package org.dudss.nodeshot.algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
@@ -34,7 +35,7 @@ public class GraphComponentsAlgorithm {
 					try {
 						goThrough(n);
 					} catch (InterruptedException e) {
-							e.printStackTrace();
+						BaseClass.errorManager.report(e, "GCA InterruptedException");
 					}
 							
 					webNodesList.add(new ArrayList<Node>(bufferNodes));

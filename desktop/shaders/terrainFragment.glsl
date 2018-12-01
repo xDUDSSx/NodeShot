@@ -10,8 +10,10 @@ uniform sampler2D u_texture;
 varying float useTex1;
 
 void main()                                 
-{                                           
+{       
+    //The main (top) texture                                    
     vec4 tex = texture2D(u_texture, v_texCoords); 
+    //The lower (bottom) texture
     vec4 tex1 = texture2D(u_texture, v_texCoords1);    
      
     gl_FragColor = vec4(tex * v_color);
@@ -22,12 +24,11 @@ void main()
         }  
  
         if (tex.a > 0 && tex.a < 1) {
-	    gl_FragColor = (tex * v_color) * (tex1 * v_color);
+	    gl_FragColor = vec4((tex.rgb * tex1.rgb), 1.0) * v_color;
         }
 
         if (tex.a == 0) {
             gl_FragColor = tex1 * v_color;
-            //gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
         }  
     }
 }

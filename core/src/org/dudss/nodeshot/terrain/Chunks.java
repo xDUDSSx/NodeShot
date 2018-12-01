@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 
 /**Manages terrain and corruption generation, updating, optimising and rendering.
@@ -151,8 +152,8 @@ public class Chunks {
 
 			//All the new sections get updated (just the ones that weren't in the view before}
 			for (Section s : differenceSections) {
-				updateSectionMesh(s, true, -1);	//Updates all corruption in the section
-				updateSectionMesh(s, false, 0);	//Updates terrain
+				updateSectionMesh(s, true);	//Updates all corruption in the section
+				updateSectionMesh(s, false);	//Updates terrain
 			}
 						
 			lastViewPoll = System.currentTimeMillis();			
@@ -163,60 +164,36 @@ public class Chunks {
 	 * If layer == -1, all corruption meshes of the section will be updated
 	 * @param s The assigned section
 	 * @param corr Whether a terrain or corruption mesh should be updated
-	 * @param level Which corruption level should be updated
 	 * **/
-	public void updateSectionMesh(Section s, boolean corr, int level) {      
+	public void updateSectionMesh(Section s, boolean corr) {      
     	if (!corr) {
-        	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false, 0);
+        	MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false);
         	s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
         	s.requestTerrainUpdate();
-    	} else {
-    		if (level == -1) {
-    			for (int i = 0; i < Base.MAX_CREEP; i++) {
-    				MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, i);
-    	        	s.updateCorruptionMesh(i, mvdCorruption.getVerts(), mvdCorruption.getIndices());
-    	        	for (int c = 0; c < Base.MAX_CREEP; c++) {
-    	        		s.requestCorruptionUpdate(c);
-    	        	}
-    			}
-    		} else {
-	        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, level);
-	        	s.updateCorruptionMesh(level, mvdCorruption.getVerts(), mvdCorruption.getIndices());   
-	        	s.requestCorruptionUpdate(level);
-    		}
+    	} else {    		
+        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true);
+        	s.updateCorruptionMesh(mvdCorruption.getVerts(), mvdCorruption.getIndices());   
+        	s.requestCorruptionUpdate();
     	}
 	}
 	
 	/**Updates terrain or corruption meshes of all the sections in main camera view, if corr == true, corruption mesh of a selected layer will be updated
 	 * If layer == -1, all corruption meshes of the section will be updated
 	 * @param corr Whether a terrain or corruption mesh should be updated
-	 * @param level Which corruption level should be updated
 	 * **/
-	public void updateAllSectionMeshes(boolean corr, int level) {
+	public void updateAllSectionMeshes(boolean corr) {
 		if (!corr) {
 			for (Section s : GameScreen.chunks.sectionsInView) {
-				MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false, 0);
+				MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false);
         		s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
         		s.requestTerrainUpdate();
         	}
     	} else {
-    		if (level == -1) {
-    			for (Section s : GameScreen.chunks.sectionsInView) {
-	    			for (int i = 0; i < Base.MAX_CREEP; i++) {
-	    				MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, i);
-	    	        	s.updateCorruptionMesh(i, mvdCorruption.getVerts(), mvdCorruption.getIndices());
-	    	        	for (int c = 0; c < Base.MAX_CREEP; c++) {
-	    	        		s.requestCorruptionUpdate(c);
-	    	        	}
-	    			}
-    			}
-    		} else {
-    			for (Section s : GameScreen.chunks.sectionsInView) {
-		        	MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true, level);
-		        	s.updateCorruptionMesh(level, mvdCorruption.getVerts(), mvdCorruption.getIndices());   
-		        	s.requestCorruptionUpdate(level);
-    			}
-    		}
+    		for (Section s : GameScreen.chunks.sectionsInView) {	    			
+				MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true);
+	        	s.updateCorruptionMesh(mvdCorruption.getVerts(), mvdCorruption.getIndices());
+	        	s.requestCorruptionUpdate();
+    		}   			
     	}
 	}
 	
@@ -224,7 +201,12 @@ public class Chunks {
 	public void updateAllChunks() {
 		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
-				chunks[x][y].update();
+				if (Base.useNewUpdate) {
+					chunks[x][y].update();
+				} else {
+					chunks[x][y].updateOld();
+				}
+				
 			}
 		}
 		
@@ -254,9 +236,17 @@ public class Chunks {
 		    Gdx.gl.glDisable(GL20.GL_BLEND);
 	}	
 	
-	public void drawCorruption(int layer) {
+	/**Draws the {@link Section#corrMesh} of every {@link Section} in the {@link #sectionsInView} list. Corruption is drawn as a textured grid rendered using
+	 * the OpenGL GL_TRIANGLES primitive and a custom glsl corruption shader ({@link Shaders}).
+	 * @since As of the version <b>v5.0 (30.11.2018)</b>. Corruption and its edge resolving operates in a single mesh. Before, there were separate meshes for
+	 * every corruption layer. That allowed me to tint different layers a specific shade. I've overcome this need by using a glsl shader that blends textures together.
+	 * Thus I didn't need to keep corruption layers as separate meshes but as a single mesh (per {@link Section}) which increases performance.
+	 * @see {@link Chunk#getCorruptionTexture()}*/
+	public void drawCorruption() {
 		 	Gdx.gl.glEnable(GL20.GL_BLEND);
-	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      	       			
+	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	    
+	        
+	        //For blur
 		    //GameScreen.corrBuffers.get(layer).begin();
 	        //Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -267,16 +257,15 @@ public class Chunks {
 			Shaders.corruptionShader.setUniformi("u_texture", 0);			
 			    
 	 		for (Section s : sectionsInView) {	   	 
-	 			if (s.needsCorruptionMeshUpdate(layer) == true) {		
-	 				s.getCorruptionMesh(layer).setVertices(s.getCorruptionVerts(layer));
-			    	s.getCorruptionMesh(layer).setIndices(s.getCorruptionIndices(layer));
-	 				s.updatedCorruptionMesh(layer);
+	 			if (s.needsCorruptionMeshUpdate() == true) {		
+	 				s.getCorruptionMesh().setVertices(s.getCorruptionVerts());
+			    	s.getCorruptionMesh().setIndices(s.getCorruptionIndices());
+	 				s.updatedCorruptionMesh();
 	 			}
-	 			//float f = layer % 2 == 0 ? 1f : 0f;
-	 			//Shaders.testShader.setUniformf("shade", 1f - (float)layer/(float)Base.MAX_CREEP);
-	 			s.getCorruptionMesh(layer).render(Shaders.corruptionShader, GL20.GL_TRIANGLES);
+	 			s.getCorruptionMesh().render(Shaders.corruptionShader, GL20.GL_TRIANGLES);
 	 		}	 	 		
 	 		Shaders.corruptionShader.end();
+	 		
 	 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	 		//GameScreen.corrBuffers.get(layer).end();	
 	 		//GameScreen.blurBuffer(GameScreen.corrBuffers.get(layer), GameScreen.blurBuffer, GameScreen.corrBuffers.get(layer).getColorBufferTexture(), 0, 0);
@@ -286,27 +275,26 @@ public class Chunks {
 	 * and the initialized mesh than can get updated using the the {@link #generateMeshVertexData(Section, boolean, int)} method.
 	 * @param s The assigned section.
 	 * @param corr Whether a terrain or a corruption mesh should be generated
-	 * @param level The layer of the corruption mesh (In case of corruption mesh generation)
 	 * @return Returns the generated Mesh object*/
-	public Mesh generateMesh(Section s, boolean corr, int level) {		
+	public Mesh generateMesh(Section s, boolean corr) {		
 	    int numberOfRectangles = Base.SECTION_SIZE*Base.SECTION_SIZE;
 	    int numberOfVertices = 4 * numberOfRectangles;
 	    
-	    MeshVertexData newMeshData = generateVertexArrays(s, corr, level, numberOfRectangles, numberOfVertices);
+	    MeshVertexData newMeshData = generateVertexArrays(s, corr, numberOfRectangles, numberOfVertices);
 	    
 	    Mesh mesh = new Mesh(false, numberOfVertices, numberOfRectangles * 6, 
 				new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
 				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
 				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"),
 				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "1"),
-				new VertexAttribute(Usage.Generic, 1, "a_shade"));
+				new VertexAttribute(Usage.Generic, 2, "a_shade")); //Two shade components, for each texture (max of 2 corruption textures per tile)
 	    
 	    
 	    mesh.setVertices(newMeshData.getVerts());
 	    mesh.setIndices(newMeshData.getIndices());
 	    
 	    if (corr) {
-	    	s.updateCorruptionMesh(level, newMeshData.getVerts(), newMeshData.getIndices());
+	    	s.updateCorruptionMesh(newMeshData.getVerts(), newMeshData.getIndices());
 	    } else {
 	    	s.updateTerrainMesh(newMeshData.getVerts(), newMeshData.getIndices());
 	    }
@@ -317,27 +305,25 @@ public class Chunks {
 	/**Returns an updated {@link MeshVertexData} object used to update the {@link Section} meshes.
 	 * @param s The assigned section.
 	 * @param corr Whether a terrain or a corruption mesh should be generated
-	 * @param level The layer of the corruption mesh (In case of corruption mesh generation)
 	 * @return Updated {@link MeshVertexData} object.*/
-	public MeshVertexData generateMeshVertexData(Section s, boolean corr, int level) {	
+	public MeshVertexData generateMeshVertexData(Section s, boolean corr) {	
 		int numberOfRectangles = Base.SECTION_SIZE*Base.SECTION_SIZE;
 	    int numberOfVertices = 4 * numberOfRectangles;
-	    return generateVertexArrays(s, corr, level, numberOfRectangles, numberOfVertices);
+	    return generateVertexArrays(s, corr, numberOfRectangles, numberOfVertices);
 	}
 
-	/**Generates the vertices and indices arrays for a Mesh with 6 vertex attributes
+	/**Generates the vertices and indices arrays for a Mesh with 9 vertex attributes
 	 * @param s The assigned section.
 	 * @param corr Whether a terrain or a corruption mesh should b e generated
-	 * @param level The layer of the corruption mesh (In case of corruption mesh generation)
 	 * @param numberOfRectangles Number of rectangles in the vertex array
 	 * @param numberOfVertices Number of vertices in the vertex array
 	 * @return Updated {@link MeshVertexData} object.
 	 * */
-	private MeshVertexData generateVertexArrays(Section s, boolean corr, int level, int numberOfRectangles, int numberOfVertices) {			      			
+	private MeshVertexData generateVertexArrays(Section s, boolean corr, int numberOfRectangles, int numberOfVertices) {			      			
 			int vertexPositionValue = 2; //x,y position values
 			int vertexColorValue = 1; //A single packed color value
 		    int vertexTexCordsValue = 4; //u,v texture1 and 2 coordinates
-		    int vertexShadeValue = 1; //Custom value representing shade of corruption
+		    int vertexShadeValue = 2; //Custom value representing shade of corruption
 		    
 		    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue + vertexShadeValue; //6
 		    
@@ -354,15 +340,9 @@ public class Chunks {
 					float tileY = c.getY();						
 					
 		  	        int rectangleOffsetInArray = i * valuesPerVertex * 4;  	        
-
-		  	        //Calculating the shade factor based on current chunk height
-		  	        if (c.terrainEdge && c.getAbsoluteCreeperLevel() == 0) {
-		  	        	
-		  	        }
-		  	        float shade = 1 - (0.9f * ((level - c.c_height)/(float)Base.MAX_CREEP));		  	     
 		  	        
 		  	        //Two texture regions and texture coordinates are used for mixing multiple texture variants using a shader
-		  	        //Currently used when rendering terrain (eg. terrainShader)
+		  	        //Currently used when rendering terrain (eg. terrainShader, corruptionShader)
 		  	      	
 		  	      	//Texture 1 texture coordinates
 		  	      	float u = 0;
@@ -378,7 +358,7 @@ public class Chunks {
 
 		  	        AtlasRegionContainer tC;
 		  	        if (corr) {
-		  	        	tC = c.getCorruptionTexture(level);
+		  	        	tC = c.getCorruptionTexture();
 		  	        } else {
 		  	        	tC = c.getTerrainTexture();
 		  	        }
@@ -387,55 +367,55 @@ public class Chunks {
 		  	        	continue;
 		  	        }
 		  	        if (tC.getTexture(0) != null) {  
-			  	        /*u = t.getU();
-			  	        v = t.getV();
-			  	        u2 = t.getU2();
-			  	        v2 = t.getV2();
-			  	          
-					    float width = u2 - u;
-					    //float height = v2 - v;
-			  	        float fix = width * 0.1f;
-				        float nU = (u + fix);
-				        float nV = (v + fix);
-				        float nU2 = (u2 - fix);
-				        float nV2 = (v2 - fix);
-				        
-				        u = nU;
-				        v = nV;
-				        u2 = nU2;
-				        v2 = nV2;
-				  	    */
-				  	        
-			  	        float f = 0;
-			  	        if (corr) {
-			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
-			  	        } else {
-			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
-			  	        }
-		  	       
+		  	        	
+		  	        	float shade = 0; //Main texture shade
+		  	        	float shade1 = 0; //Secondary texture shade (Only used when a tile has mutiple shades)
+		  	        					  	        	
 			  	        //First set of texture coordinates for the texture1
 			  	        u = tC.getTexture(0).getU();
 			  	      	v = tC.getTexture(0).getV();
 			  	        u2 = tC.getTexture(0).getU2();
-			  	        v2 = tC.getTexture(0).getV2();
+			  	        v2 = tC.getTexture(0).getV2();	
 			  	        
+			  	        //Second set of texture coordinates IF supplied by the AtlasRegionContainer
 			  	        if (tC.getTexture(1) != null) {
 			  	        	tu = tC.getTexture(1).getU();  
 			  	        	tv = tC.getTexture(1).getV();  
 			  	        	tu2 = tC.getTexture(1).getU2();
 			  	        	tv2 = tC.getTexture(1).getV2();
+			  	        	
+			  	        	//Get the shade of the secondary texture
+			  	        	if (corr) shade1 = tC.getSecondaryShade();			  	        		 
 			  	        } else {
 			  	        	tu = 0;
 			  	        	tv = 0;
 			  	        	tu2 = 0;
 			  	        	tv2 = 0;
 			  	        }
+
+			  	        //Assign a color attribute for further color / alpha modifications.
+			  	        /*The color attribute is a 4 component vector and I can use its positions to indicate
+			  	         *alpha changes that depend on different shade values. I don't want to recalculate the alpha value 
+			  	         *on the gpu. I can do it here on the cpu and then pass the values through color attribute.
+			  	        */
+			  	        float f = 0;
+			  	        if (corr) {
+			  	        	shade = c.calculateShade();	  	        				  	        	
+			  	        	float alpha = Interpolation.PowOut.pow5Out.apply(0.75f, 0.96f, (1f - shade));			  	        	
+			  	        	float alpha1 = Interpolation.PowOut.pow5Out.apply(0.75f, 0.96f, (1f - shade1));			  	        	
+			  	        	f = Color.toFloatBits(alpha, alpha1, 1f, 1f);	
+			  	        } else {
+			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
+			  	        }
 			  	        
-			  	     	setValuesInArrayForVertex(verticesWithColor, u, v2, tu, tv2, tileX, tileY, f, shade, rectangleOffsetInArray, 0);
-			  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tu2, tv2, tileX + Base.CHUNK_SIZE, tileY, f, shade, rectangleOffsetInArray, 1);
-			  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tu2, tv, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, shade, rectangleOffsetInArray, 2);
-			  	        setValuesInArrayForVertex(verticesWithColor, u, v, tu, tv, tileX, tileY + Base.CHUNK_SIZE, f, shade, rectangleOffsetInArray, 3);			  	       
 			  	        
+			  	        //Set the individual vertex attributes to each of the 4 vertexes of this square
+			  	     	setValuesInArrayForVertex(verticesWithColor, u, v2, tu, tv2, tileX, tileY, f, shade, shade1, rectangleOffsetInArray, 0);
+			  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tu2, tv2, tileX + Base.CHUNK_SIZE, tileY, f, shade, shade1, rectangleOffsetInArray, 1);
+			  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tu2, tv, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, shade, shade1, rectangleOffsetInArray, 2);
+			  	        setValuesInArrayForVertex(verticesWithColor, u, v, tu, tv, tileX, tileY + Base.CHUNK_SIZE, f, shade, shade1, rectangleOffsetInArray, 3);			  	       
+			  	        
+			  	        //Set the index buffer object (IBO) indices that specify the triangle structure
 			  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
 			  	        vertexIndices[i * 6 + 1] = (short) (i * 4 + 1);
 			  	        vertexIndices[i * 6 + 2] = (short) (i * 4 + 3);
@@ -464,8 +444,8 @@ public class Chunks {
 	 * @param rectangeOffsetInArray Index of the current position in the array
 	 * @param vertexNumberInRect Rectangle (tile) vertex which attributes are being set
 	 * */
-	private void setValuesInArrayForVertex(float[] vertices, float u, float v, float tu, float tv, float x, float y, float c, float shade, int rectangleOffsetInArray, int vertexNumberInRect) {
-	    int valuesPerVertex = 8; //Constant representing the number of individual attributes (x,y,c,u,v,tu,tv,shade)
+	private void setValuesInArrayForVertex(float[] vertices, float u, float v, float tu, float tv, float x, float y, float c, float shade, float shade1, int rectangleOffsetInArray, int vertexNumberInRect) {
+	    int valuesPerVertex = 9; //Constant representing the number of individual attributes (x,y,c,u,v,tu,tv,shade)
 		int vertexOffsetInArray = rectangleOffsetInArray + vertexNumberInRect * valuesPerVertex; 
 
 	    // x position
@@ -482,8 +462,10 @@ public class Chunks {
 	    vertices[vertexOffsetInArray + 5] = tu;
 	    // tv texture2 coord
 	    vertices[vertexOffsetInArray + 6] = tv;
-	    // shade
+	    // texture shade
 	    vertices[vertexOffsetInArray + 7] = shade;
+	    // texture1 shade (if used)
+	    vertices[vertexOffsetInArray + 8] = shade1;
 	}
 	
 	public void setCoalLevel(float level, int x, int y) {
@@ -517,11 +499,8 @@ public class Chunks {
 				}
 
 				Section s = new Section(sectionChunks);
-				s.terrainMesh = generateMesh(s, false, 0);
-				
-				for (int i = 0; i < Base.MAX_CREEP; i++) {
-					s.corrMeshes.set(i, generateMesh(s, true, i));
-				}
+				s.terrainMesh = generateMesh(s, false);
+				s.corrMesh = generateMesh(s, true);
 				
 				sections[x/Base.SECTION_SIZE][y/Base.SECTION_SIZE] = s;				
 			}

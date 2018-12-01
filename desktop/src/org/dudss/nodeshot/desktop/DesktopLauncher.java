@@ -13,7 +13,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class DesktopLauncher {
 	
 	/**NodeEngine development version*/
-	public static final String ver = "v4.0";
+	public static final String ver = "v5.0";
 	
 	/**The main method*/
 	public static void main (String[] arg) {
@@ -34,7 +34,7 @@ public class DesktopLauncher {
 			@Override
 			public void uncaughtException (Thread thread, final Throwable ex) {	  	        					
 				//Call the global error manager and invoke a reporter to display the exception.
-				org.dudss.nodeshot.BaseClass.errorManager.report(ex, "An unexpected runtime error occurred!");						
+				org.dudss.nodeshot.BaseClass.errorManager.report(ex, "An unexpected runtime error occurred! (in Thread: " + thread.getName() + ")");						
 			}
 		});
 		

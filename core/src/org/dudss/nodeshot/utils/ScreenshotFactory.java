@@ -2,6 +2,8 @@ package org.dudss.nodeshot.utils;
 
 import java.nio.ByteBuffer;
 
+import org.dudss.nodeshot.BaseClass;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -20,8 +22,8 @@ public class ScreenshotFactory {
             Pixmap pixmap = getScreenshot(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
             PixmapIO.writePNG(fh, pixmap);
             pixmap.dispose();
-        } catch (Exception e) {           
-        	System.out.println(e.getLocalizedMessage());
+        } catch (Exception e) {
+        	BaseClass.errorManager.report(e, "An exception occurred while creating a screenshot");
         }
     }
 

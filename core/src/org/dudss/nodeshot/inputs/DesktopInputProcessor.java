@@ -10,6 +10,7 @@ import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.ui.PauseMenu;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.Building;
 
@@ -90,9 +91,8 @@ public class DesktopInputProcessor implements InputProcessor {
 								buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
 								Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
 								GameScreen.builtBuilding = (Building) buildingConstructor.newInstance(buildingArgs);		
-							} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
-									| InvocationTargetException e) {
-								e.printStackTrace();
+							} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
+								BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
 							}
 												
 						} else {
@@ -272,12 +272,8 @@ public class DesktopInputProcessor implements InputProcessor {
 								c.setCreeperLevel(GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 1);
 							}
 						}
-					}		
-					int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-					int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-					if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
-						GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true, -1);
-					}
+					}						
+					GameScreen.chunks.updateAllSectionMeshes(true);
 					
 				}
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
@@ -289,14 +285,8 @@ public class DesktopInputProcessor implements InputProcessor {
 								c.setCreeperLevel(GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() - Base.MAX_CREEP * 0.02f);
 							}
 						}
-					}		
-						
-					int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-					int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-					if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
-						GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true, -1);
-					}
-					
+					}							
+					GameScreen.chunks.updateAllSectionMeshes(true);					
 				}
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.T)) {
 				if (draggingConnection == false) {			
@@ -314,7 +304,7 @@ public class DesktopInputProcessor implements InputProcessor {
 						GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], false, -1);
 					}*/
 					
-					GameScreen.chunks.updateAllSectionMeshes(false, -1);		
+					GameScreen.chunks.updateAllSectionMeshes(false);		
 				}	
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 				if (draggingConnection == false) {

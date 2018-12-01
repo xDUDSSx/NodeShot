@@ -1,9 +1,7 @@
 package org.dudss.nodeshot.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.dudss.nodeshot.BaseClass;
@@ -22,16 +20,15 @@ public class Shaders {
 	public static ShaderProgram rotatingCloudShader;
 	public static ShaderProgram terrainShader;
 	
-	/**Loads and compiles all GLSL shaders*/
+	/**Loads and compiles all GLSL shaders
+	 * @throws Throws {@link RuntimeException} when one or more shaders did not compile successfully. Also dumps the compilation logs to the {@link ErrorManager}. 
+	 * */
 	public static void load() {
-		//List<Boolean> compiled = new ArrayList<Boolean>();
 		HashMap<ShaderProgram, String> compiled = new HashMap<ShaderProgram, String>();
 	
 		String vertexDefaultShader = Gdx.files.internal("shaders/defaultVertex.glsl").readString();
 		String fragmentDefaultShader = Gdx.files.internal("shaders/defaultFragment.glsl").readString();
 		defaultShader = new ShaderProgram(vertexDefaultShader, fragmentDefaultShader);			
-		
-		System.out.println(defaultShader.isCompiled());
 		
 		String fragShader = Gdx.files.internal("shaders/corruptionFrag.glsl").readString();
 		String vertShader = Gdx.files.internal("shaders/corruptionVertex.glsl").readString();		

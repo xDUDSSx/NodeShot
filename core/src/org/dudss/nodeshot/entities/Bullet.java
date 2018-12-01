@@ -84,7 +84,7 @@ public class Bullet extends Sprite implements Entity {
 		}		
 		int sx = (int)(targetCoords.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
 		int sy = (int)(targetCoords.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-		GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true, -1);
+		GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true);
 	}
 	
 	@Override
