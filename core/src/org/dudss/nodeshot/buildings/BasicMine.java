@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+/**Building that generates items at a rate.*/
 public abstract class BasicMine extends Building {
 
 		//Building node - outputs Item
@@ -27,8 +28,8 @@ public abstract class BasicMine extends Building {
 		//Target node - where is Item sent
 		Node target;
 
-		float width = 48;
-		float height = 48;
+		static float width = 48;
+		static float height = 48;
 		
 		public int productionRate = 600;
 		public int nextSimTick = -1;
@@ -38,11 +39,7 @@ public abstract class BasicMine extends Building {
 		Color prefabColor;
 		
 		public BasicMine(float cx, float cy) {
-			this.cx = cx;
-			this.cy = cy;
-			
-			x = cx - (width/2);
-			y = cy - (height/2);
+			super(cx, cy, width, height);
 		}
 		
 		@Override

@@ -13,39 +13,29 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class CreeperGenerator extends Building {
-	
+public class CreeperGenerator extends Generator {
+
 	OutputNode output;
-	
 	protected Color prefabColor = new Color(49f/255f, 209f/255f, 12f/255f, 0.5f);
 	protected Color color = new Color(35/255f, 175/255f, 3/255f, 1f);
 	
-	public int productionRate = 20;
-	public int nextSimTick = -1;
+	public float spawnRate;
 	
-	public CreeperGenerator(float cx, float cy) {		
-		this.cx = cx;
-		this.cy = cy;
-		
-		x = cx - (width/2);
-		y = cy - (height/2);
+	//Building constructor
+	public CreeperGenerator(float cx, float cy) {
+		super(cx, cy);
 	}
 	
 	@Override
 	public void update() {
-		if (nextSimTick <= SimulationThread.simTick) {
-			nextSimTick = SimulationThread.simTick + productionRate; 
-			generate();
-		}
+		generate();
 	}
 	
-	public void generate() {
+	@Override
+	protected void generate() {
 		int tileX = (int) (this.x / Base.CHUNK_SIZE);
 		int tileY = (int) (this.y / Base.CHUNK_SIZE);
-
-		if (GameScreen.chunks.getChunk(tileX + 1, tileY + 1) != null) {
-			GameScreen.chunks.getChunk(tileX + 1, tileY + 1).setCreeperLevel(10f);	
-		}	
+		GameScreen.chunks.getChunk(tileX, tileY).setCreeperLevel(10f);	
 	}
 
 	@Override
@@ -78,7 +68,6 @@ public class CreeperGenerator extends Building {
 
 	@Override
 	public void build() {
-		nextSimTick = SimulationThread.simTick + productionRate;
 		output = new OutputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
 		buildingHandler.addBuilding(this);
 		GameScreen.nodelist.add(output);

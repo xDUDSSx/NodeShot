@@ -18,7 +18,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class Turret extends BasicStorage {
-
+	static float width = 32;
+	static float height = 32;
+	
 	int rechargeRate = 32;
 	int nextShot = SimulationThread.simTick + rechargeRate;
 	
@@ -35,7 +37,7 @@ public class Turret extends BasicStorage {
 	Bullet b;
 	
 	public Turret(float cx, float cy) {
-		super(cx, cy);
+		super(cx, cy, width, height);
 		accepted = Arrays.asList(ItemType.AMMO);
 		color = new Color(255/255f, 144/255f, 0, 1.0f);
 		prefabColor = new Color(255/255f, 144/255f, 0, 0.5f);
@@ -75,7 +77,7 @@ public class Turret extends BasicStorage {
 		} else {
 			r.setColor(Color.RED);
 		}	
-		r.rectLine(this.x, this.y - 2, this.x + (this.width*((float) (storage/maxStorage))), this.y - 2, 3);
+		r.rectLine(this.x, this.y - 2, this.x + (width*((float) (storage/maxStorage))), this.y - 2, 3);
 		
 		r.end();
 		batch.begin();

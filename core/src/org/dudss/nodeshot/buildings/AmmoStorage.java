@@ -11,8 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class AmmoStorage extends BasicStorage  {
 	
+	static float width = 32;
+	static float height = 32;
+	
 	public AmmoStorage(float cx, float cy) {
-		super(cx, cy);
+		super(cx, cy, width, height);
 
 		accepted = Arrays.asList(ItemType.AMMO);
 		

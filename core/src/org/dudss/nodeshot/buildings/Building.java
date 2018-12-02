@@ -9,9 +9,21 @@ import org.dudss.nodeshot.entities.Package;
 public abstract class Building {
 	float x,y;
 	float cx,cy;
-	float width = 48;
-	float height = 48;
-
+	
+	float width;
+	float height;
+	
+	public Building(float cx, float cy, float width, float height) {		
+		this.cx = cx;
+		this.cy = cy;
+		
+		this.width = width;
+		this.height = height;
+		
+		x = cx - (width/2);
+		y = cy - (height/2);
+	}
+	
 	public void setLocation(float cx, float cy, boolean snap) {
 		if (snap) {
 			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));

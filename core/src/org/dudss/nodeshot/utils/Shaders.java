@@ -19,6 +19,7 @@ public class Shaders {
 	public static ShaderProgram solidCloudShader;
 	public static ShaderProgram rotatingCloudShader;
 	public static ShaderProgram terrainShader;
+	public static ShaderProgram fogOfWarShader;
 	
 	/**Loads and compiles all GLSL shaders
 	 * @throws Throws {@link RuntimeException} when one or more shaders did not compile successfully. Also dumps the compilation logs to the {@link ErrorManager}. 
@@ -33,6 +34,10 @@ public class Shaders {
 		String fragShader = Gdx.files.internal("shaders/corruptionFrag.glsl").readString();
 		String vertShader = Gdx.files.internal("shaders/corruptionVertex.glsl").readString();		
 		corruptionShader = new ShaderProgram(vertShader, fragShader);		
+		
+		String fogVertShader = Gdx.files.internal("shaders/fogVertex.glsl").readString();
+		String fogFragShader = Gdx.files.internal("shaders/fogFragment.glsl").readString();
+		fogOfWarShader = new ShaderProgram(fogVertShader, fogFragShader);			
 		
 		String terrainVertShader = Gdx.files.internal("shaders/terrainVertex.glsl").readString();
 		String terrainFragShader = Gdx.files.internal("shaders/terrainFragment.glsl").readString();
@@ -54,6 +59,7 @@ public class Shaders {
 		//Shader compilation diagnostics and logging
 		compiled.put(defaultShader, "default shader");
 		compiled.put(defaultShader, "corruption shader");
+		compiled.put(fogOfWarShader, "fog of war shader");
 		compiled.put(terrainShader, "terrain shader");
 		compiled.put(blurShader, "blur shader");
 		compiled.put(cloudShader, "cloud shader");

@@ -21,7 +21,7 @@ public class ErrorManager {
 	 * A visual window will not be displayed if there are {@value MAX_ACTIVE_REPORTERS} displayed already to prevent overwhelming the user.
 	 * @param t Exception throwable.
 	 * @param message Additional exception description.
-	 * @see {@link ErrprReporter}*/
+	 * @see {@link ErrorReporter}*/
 	public void report(Throwable t, String message) {
 		t.printStackTrace();
 		if (activeErrorReporters.size() >= MAX_ACTIVE_REPORTERS) {
@@ -46,7 +46,7 @@ public class ErrorManager {
 	 * @param t Exception throwable.
 	 * @param message Additional exception description.
 	 * @param customDetails Additional details added after the stacktrace.
-	 * @see {@link ErrprReporter}*/
+	 * @see {@link ErrorReporter}*/
 	public void reportWithCustomDetails(Throwable t, String message, String customDetails) {
 		t.printStackTrace();
 		if (activeErrorReporters.size() >= MAX_ACTIVE_REPORTERS) {

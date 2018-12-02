@@ -191,9 +191,7 @@ public class GameScreen implements Screen {
     
     public static GLProfiler glProfiler;
     
-    public static List<FrameBuffer> corrBuffers;
-    
-    public static FrameBuffer terrainBuffer;
+    public static FrameBuffer corrBuffer;
     public static FrameBuffer blurBuffer;
     
     /**The main game screen
@@ -248,11 +246,7 @@ public class GameScreen implements Screen {
         chunks.updateView(cam);
         
         blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
-		
-		corrBuffers = new ArrayList<FrameBuffer>();
-		for (int i = 0; i < Base.MAX_CREEP; i++) {
-			corrBuffers.add(new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false));
-		}
+		corrBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
 		
         batch = new SpriteBatch();
         r = new ShapeRenderer();
@@ -393,7 +387,7 @@ public class GameScreen implements Screen {
         	"\n\nDraw calls: " + glProfiler.getDrawCalls() + 			
 			"\nTexture binding " + glProfiler.getTextureBindings() + 
 			"\nShaderSwitches: " + glProfiler.getShaderSwitches() +
-			"\nVertexCount: " + glProfiler.getVertexCount() +
+			"\nVertexCount: " + glProfiler.getVertexCount().average +
 			"\nCalls: " + glProfiler.getCalls()
         	);
         }
@@ -421,7 +415,7 @@ public class GameScreen implements Screen {
 	        	}
 	        }
 	        r.end();
-	    }
+	    }       
         
         //Shows terrain edges in blue
         if (Base.drawTerrainEdges) {
@@ -490,16 +484,12 @@ public class GameScreen implements Screen {
             
             p.draw(batch);
         }           
-        batch.end();
-        
-        //Drawing all the corruption layers
-        //Corruption is currently drawn as individual mesh layers
-        //for(int i = 0; i < Base.MAX_CREEP; i++) {
-        	//chunks.drawCorruption(i);
-        //}
+        batch.end();     
         
         //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
         chunks.drawCorruption();
+               
+        chunks.drawFogOfWar();
         
         bulletHandler.drawAll(r, batch);
         
@@ -1193,17 +1183,11 @@ public class GameScreen implements Screen {
         font.dispose();
         fontLarge.dispose();
         r.dispose();
-        terrainBuffer.dispose();
+        corrBuffer.dispose();
 		blurBuffer.dispose();
 		stage.dispose();
-		
 		SpriteLoader.tileAtlas.dispose();
 		skin.dispose();
-		
-		for (int i = 0; i < Base.MAX_CREEP; i++) {
-			corrBuffers.get(i).dispose();
-		}
-		
 		VisUI.dispose();
     }  
 }

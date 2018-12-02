@@ -15,12 +15,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+/**Building that can accept and hold items*/
 public class BasicStorage extends Building implements Storage {
 	
 	InputNode input;
-	
-	float width = 32;
-	float height = 32;
 	
 	public float storage = 0;
 	float maxStorage = 50;
@@ -32,14 +30,9 @@ public class BasicStorage extends Building implements Storage {
 	protected Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
 	protected Color color = Color.GOLDENROD;
 	
-	public BasicStorage(float cx, float cy) {
-		this.cx = cx;
-		this.cy = cy;
-
-		x = cx - (width/2);
-		y = cy - (height/2);
-				
-		accepted = new ArrayList<ItemType>();			
+	public BasicStorage(float cx, float cy, float width, float height) {
+		super(cx, cy, width, height);
+		accepted = new ArrayList<ItemType>();				
 	}
 		
 	@Override
@@ -63,7 +56,7 @@ public class BasicStorage extends Building implements Storage {
 		} else {
 			r.setColor(Color.RED);
 		}	
-		r.rectLine(this.x, this.y - 2, this.x + (this.width*((float) (storage/maxStorage))), this.y - 2, 3);
+		r.rectLine(this.x, this.y - 2, this.x + (width*((float) (storage/maxStorage))), this.y - 2, 3);
 	}
 	
 	@Override

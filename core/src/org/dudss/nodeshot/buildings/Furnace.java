@@ -22,9 +22,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Furnace extends Building implements Storage {
-
-	float width = 48;
-	float height = 48;
+	static float width = 48;
+	static float height = 48;
 	
 	private Color prefabColor = new Color(244f/255f, 100f/255f, 17f/255f, 0.5f);
 	private Color color = new Color(244f/255f, 100f/255f, 17f/255f, 1f);
@@ -45,14 +44,9 @@ public class Furnace extends Building implements Storage {
 	
 	//List of items accepted by this building
 	List<ItemType> accepted;
-	
+
 	public Furnace(float cx, float cy) {
-		this.cx = cx;
-		this.cy = cy;
-		
-		x = cx - (width/2);
-		y = cy - (height/2);
-		
+		super(cx, cy, width, height);
 		accepted = Arrays.asList(ItemType.COAL, ItemType.IRON);
 	}
 		
@@ -86,6 +80,14 @@ public class Furnace extends Building implements Storage {
 		r.set(ShapeType.Filled);
 		r.setColor(this.color);
 		r.rect(x, y, width, height);	
+		
+		r.end();
+		batch.begin();
+		input1.draw(batch);
+		input2.draw(batch);
+		output.draw(batch);
+		batch.end();
+		r.begin();
 	}
 
 	@Override

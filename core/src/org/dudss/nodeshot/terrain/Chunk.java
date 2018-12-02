@@ -73,6 +73,7 @@ public class Chunk {
 		BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT,
 		END_LEFT, END_RIGHT, END_TOP, END_BOTTOM,
 		STRAIGHT_LEFT, STRAIGHT_RIGHT, STRAIGHT_TOP, STRAIGHT_BOTTOM,
+		DOUBLE_X, DOUBLE_Y,
 		SINGLE, NONE
 	}
 	
@@ -602,8 +603,7 @@ public class Chunk {
 				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoal");
 			}		
 			
-			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) {				
-				
+			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) {								
 				if (plusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 &&
 					minusx.getOreLevel() > 0 && 
@@ -674,7 +674,7 @@ public class Chunk {
 		if (ironOre != 0) {
 			boolean triangleDrawn = false;
 			AtlasRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledIron");
-			if (x >= 64 && y >= 64 && x < Base.WORLD_SIZE-64 && y < Base.WORLD_SIZE-64) {
+			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) {
 				
 				if (plusy.getOreLevel() == 0 && 
 					plusx.getOreLevel() == 0 &&
@@ -771,8 +771,19 @@ public class Chunk {
 		if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) {
 			//Diagonal edges
 			float level = this.getAbsoluteCreeperLayer();
-			if (plusy.getAbsoluteCreeperLayer() < level && 
-				plusx.getAbsoluteCreeperLayer() < level &&
+			
+			/*if (minusy.getHeight() > level && minusy.getCreeperLevel() == 0 &&
+				minusx.getHeight() > level && minusx.getCreeperLevel() == 0 &&
+			    plusx.getAbsoluteCreeperLayer() >= level &&
+			    plusy.getAbsoluteCreeperLayer() >= level)
+			{
+				setCorruptionEdge(true, EdgeType.TOP_RIGHT);	
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrCBL"));	
+			} else
+			*/
+			
+			if ((plusy.getAbsoluteCreeperLayer() < level )&& 
+				(plusx.getAbsoluteCreeperLayer() < level )&&
 				minusx.getAbsoluteCreeperLayer() >= level &&
 				minusy.getAbsoluteCreeperLayer() >= level)
 			{
@@ -795,6 +806,8 @@ public class Chunk {
 				setCorruptionEdge(true, EdgeType.BOTTOM_RIGHT);		
 				if (minusx.getCreeperLevel() == 0 && plusy.getCreeperLevel() == 0) {
 					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrBR"));	
+				} else if ((minusx.getCreeperLevel() == 0 && minusx.getHeight() > level) && (plusy.getCreeperLevel() == 0 && plusy.getHeight() > level)) {
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrCBR"));	
 				} else if (minusx.getAbsoluteCreeperLayer() == plusy.getAbsoluteCreeperLayer()) {
 					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBR"), SpriteLoader.tileAtlas.findRegion("corr32"));									
 				} else if (minusx.getAbsoluteCreeperLayer() > plusy.getAbsoluteCreeperLayer()) {
@@ -810,7 +823,7 @@ public class Chunk {
 			{
 				setCorruptionEdge(true, EdgeType.TOP_LEFT);				
 				if (minusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTL"));	
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTL"));					
 				} else if (minusy.getAbsoluteCreeperLayer() == plusx.getAbsoluteCreeperLayer()) {
 					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTL"), SpriteLoader.tileAtlas.findRegion("corr32"));									
 				} else if (minusy.getAbsoluteCreeperLayer() > plusx.getAbsoluteCreeperLayer()) {
@@ -827,6 +840,8 @@ public class Chunk {
 				setCorruptionEdge(true, EdgeType.TOP_RIGHT);	
 				if (minusx.getCreeperLevel() == 0 && minusy.getCreeperLevel() == 0) {
 					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTR"));	
+				} else if ((minusx.getCreeperLevel() == 0 && minusx.getHeight() > level) && (minusy.getCreeperLevel() == 0 && minusy.getHeight() > level)) {
+					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrCTR"));	
 				} else if (minusx.getAbsoluteCreeperLayer() == minusy.getAbsoluteCreeperLayer()) {
 					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTR"), SpriteLoader.tileAtlas.findRegion("corr32"));									
 				} else if (minusx.getAbsoluteCreeperLayer() > minusy.getAbsoluteCreeperLayer()) {
@@ -868,6 +883,24 @@ public class Chunk {
 			{
 				setCorruptionEdge(true, EdgeType.STRAIGHT_TOP);
 				return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrST"), SpriteLoader.tileAtlas.findRegion("corr32"));		
+			} else
+			
+			//Double edges
+			if (plusx.getAbsoluteCreeperLayer() < level && 
+				minusx.getAbsoluteCreeperLayer() < level && 
+				plusy.getAbsoluteCreeperLayer() >= level &&
+				minusy.getAbsoluteCreeperLayer() >= level)  
+			{
+				setCorruptionEdge(true, EdgeType.DOUBLE_X);
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrXBS"));									
+			} else
+			if (plusx.getAbsoluteCreeperLayer() >= level && 
+				minusx.getAbsoluteCreeperLayer() >= level && 
+				plusy.getAbsoluteCreeperLayer() < level &&
+				minusy.getAbsoluteCreeperLayer() < level)  
+			{	
+				setCorruptionEdge(true, EdgeType.DOUBLE_Y);
+				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrYBS"));		
 			} else
 				
 			//Tile ends
@@ -979,161 +1012,6 @@ public class Chunk {
 		return new AtlasRegionContainer(1f, SpriteLoader.tileAtlas.findRegion("corr32"));					
 	}
 	
-	/**Returns the appropriate edge {@link AtlasRegion}.
-	 * @param level The corruption layer.
-	 * */
-	/*private AtlasRegionContainer resolveCorruptionEdges(int level) {
-		if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) {
-			//Diagonal edges
-			if (plusy.getAbsoluteCreeperLevel() <= level && 
-				plusx.getAbsoluteCreeperLevel() <= level &&
-				minusx.getAbsoluteCreeperLevel() > level && //!diagonalEdges.contains(minusx.getTerrainEdgeType()) &&
-				minusy.getAbsoluteCreeperLevel() > level) //&& !diagonalEdges.contains(minusy.getTerrainEdgeType()) )	
-			{
-				setCorruptionEdge(true, EdgeType.BOTTOM_LEFT);
-				if (plusx.getCHeight() == plusy.getCHeight()) {
-					return new AtlasRegionContainer((int)plusx.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrBL"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-				}			
-			} else
-			if (plusy.getAbsoluteCreeperLevel() <= level && 
-				plusx.getAbsoluteCreeperLevel() > level &&
-				minusx.getAbsoluteCreeperLevel() <= level &&				 
-			    minusy.getAbsoluteCreeperLevel() > level) //&&
-			{
-				setCorruptionEdge(true, EdgeType.BOTTOM_RIGHT);					
-				if (minusx.getCHeight() == plusy.getCHeight()) {
-					return new AtlasRegionContainer((int)minusx.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrBR"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-				}			
-			} else
-			if (minusy.getAbsoluteCreeperLevel() <= level && 
-				plusx.getAbsoluteCreeperLevel() <= level &&
-			    plusy.getAbsoluteCreeperLevel() > level &&
-			    minusx.getAbsoluteCreeperLevel() > level) //&&
-			{
-				setCorruptionEdge(true, EdgeType.TOP_LEFT);				
-				if (minusy.getCHeight() == plusx.getCHeight()) {
-					return new AtlasRegionContainer((int)plusx.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrTL"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-				}	
-			} else
-			if (minusy.getAbsoluteCreeperLevel() <= level && 
-				minusx.getAbsoluteCreeperLevel() <= level && 
-			    plusx.getAbsoluteCreeperLevel() > level &&
-			    plusy.getAbsoluteCreeperLevel() > level) //&& 
-			{
-				setCorruptionEdge(true, EdgeType.TOP_RIGHT);					
-				if (minusx.getCHeight() == minusy.getCHeight()) {
-					return new AtlasRegionContainer((int)minusx.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrTR"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-				}	
-			} else
-				
-			//Straight line borders
-			if (plusx.getAbsoluteCreeperLevel() <= level && 
-				minusx.getAbsoluteCreeperLevel() > level && 
-				plusy.getAbsoluteCreeperLevel() > level &&
-				minusy.getAbsoluteCreeperLevel() > level)  
-			{
-				setCorruptionEdge(true, EdgeType.STRAIGHT_RIGHT);
-				return new AtlasRegionContainer((int)plusx.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrSR"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-			} else
-			if (plusx.getAbsoluteCreeperLevel() > level && 
-				minusx.getAbsoluteCreeperLevel() > level && 
-				plusy.getAbsoluteCreeperLevel() > level &&
-				minusy.getAbsoluteCreeperLevel() <= level)  
-			{	
-				setCorruptionEdge(true, EdgeType.STRAIGHT_BOTTOM);
-				return new AtlasRegionContainer((int)minusy.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrSB"), SpriteLoader.tileAtlas.findRegion("corr32"));		
-			} else
-			if (plusx.getAbsoluteCreeperLevel() > level && 
-				minusx.getAbsoluteCreeperLevel() <= level &&
-				plusy.getAbsoluteCreeperLevel()  > level &&
-				minusy.getAbsoluteCreeperLevel()  > level)  
-			{	
-				setCorruptionEdge(true, EdgeType.STRAIGHT_LEFT);
-				return new AtlasRegionContainer((int)minusx.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrSL"), SpriteLoader.tileAtlas.findRegion("corr32"));		
-			} else
-			if (plusx.getAbsoluteCreeperLevel()  > level && 
-				minusx.getAbsoluteCreeperLevel() > level && 
-				plusy.getAbsoluteCreeperLevel()  <= level &&
-				minusy.getAbsoluteCreeperLevel() > level)  
-			{
-				setCorruptionEdge(true, EdgeType.STRAIGHT_TOP);
-				return new AtlasRegionContainer((int)plusy.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrST"), SpriteLoader.tileAtlas.findRegion("corr32"));		
-			} else
-				
-			//Tile ends
-			if (plusy.getAbsoluteCreeperLevel() <= level && 
-				plusx.getAbsoluteCreeperLevel() <= level && 
-				minusy.getAbsoluteCreeperLevel() <= level &&
-				minusx.getAbsoluteCreeperLevel() > level)  
-			{
-				setCorruptionEdge(true, EdgeType.END_LEFT);
-				int h1 = (int) plusy.getCHeight();
-				int h2 = (int) plusx.getCHeight();
-				int h3 = (int) minusy.getCHeight();
-				if ((h1 == h2) && (h2 == h3)) {
-					return new AtlasRegionContainer((int)plusy.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrLB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-				}	
-			} else
-			if (plusy.getAbsoluteCreeperLevel() <= level && 
-				minusx.getAbsoluteCreeperLevel() <= level && 
-				minusy.getAbsoluteCreeperLevel() <= level &&
-				plusx.getAbsoluteCreeperLevel() > level)  
-			{	
-				setCorruptionEdge(true, EdgeType.END_RIGHT);
-				int h1 = (int) plusy.getCHeight();
-				int h2 = (int) minusx.getCHeight();
-				int h3 = (int) minusy.getCHeight();
-				if ((h1 == h2) && (h2 == h3)) {
-					return new AtlasRegionContainer((int)plusy.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrRB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-				}	
-			} else
-			if (plusy.getAbsoluteCreeperLevel() <= level && 
-				plusx.getAbsoluteCreeperLevel() <= level && 
-				minusx.getAbsoluteCreeperLevel() <= level &&
-				minusy.getAbsoluteCreeperLevel() > level)  
-			{	
-				setCorruptionEdge(true, EdgeType.END_TOP);
-				int h1 = (int) plusy.getCHeight();
-				int h2 = (int) minusx.getCHeight();
-				int h3 = (int) plusx.getCHeight();
-				if ((h1 == h2) && (h2 == h3)) {
-					return new AtlasRegionContainer((int)plusy.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrTB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-				}	
-			} else
-			if (minusy.getAbsoluteCreeperLevel() <= level && 
-				plusx.getAbsoluteCreeperLevel() <= level && 
-				minusx.getAbsoluteCreeperLevel() <= level &&
-				plusy.getAbsoluteCreeperLevel() > level)  
-			{
-				setCorruptionEdge(true, EdgeType.END_BOTTOM);
-				int h1 = (int) minusy.getCHeight();
-				int h2 = (int) minusx.getCHeight();
-				int h3 = (int) plusx.getCHeight();
-				if ((h1 == h2) && (h2 == h3)) {
-					return new AtlasRegionContainer((int)plusx.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrBB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
-				}	
-			} else 
-				
-			//Single creeper tile
-			if (minusy.getAbsoluteCreeperLevel() <= level && 
-				plusx.getAbsoluteCreeperLevel() <= level && 
-				minusx.getAbsoluteCreeperLevel() <= level &&
-				plusy.getAbsoluteCreeperLevel() <= level)  
-			{
-				setCorruptionEdge(true, EdgeType.SINGLE);
-				int h1 = (int) plusx.getCHeight();
-				int h2 = (int) plusy.getCHeight();
-				int h3 = (int) minusx.getCHeight();
-				int h4 = (int) minusy.getCHeight();
-				if ((h1 == h2) && (h2 == h3) && (h3 == h4)) { }
-				return new AtlasRegionContainer((int)plusx.getCHeight(), SpriteLoader.tileAtlas.findRegion("corrSingle"), SpriteLoader.tileAtlas.findRegion("corr32"));					
-			}
-		}
-		setCorruptionEdge(false, EdgeType.NONE);
-		return new AtlasRegionContainer(0, SpriteLoader.tileAtlas.findRegion("corr32"));					
-	}
-	*/
-	
 	/**Method that populates all the neighbour chunks. Called by {@link Chunks#create()} at initialisation.*/
 	public void updateNeighbour() {
 		ax = Math.round(x/Base.CHUNK_SIZE);
@@ -1222,8 +1100,8 @@ public class Chunk {
 	 * @param newCreeper The new creeper value
 	 * */
 	public void setCreeperLevel(float newCreeper) {	
-		if (newCreeper > Base.MAX_CREEP - height) {
-			newCreeper = Base.MAX_CREEP - height;
+		if (newCreeper > Base.MAX_CREEP - c_height) {
+			newCreeper = Base.MAX_CREEP - c_height;
 		}
 		if (newCreeper < creeperMinimum) {
 			newCreeper = 0;
@@ -1304,7 +1182,8 @@ public class Chunk {
 	
 	/**Calculates the shade color factor that is used to tint the final texture*/
 	public float calculateShade() {
-		return 1f - Interpolation.PowOut.pow2Out.apply(0.05f, 1f, ((int)creeper/(float)Base.MAX_CREEP));
+		return (int)creeper/(float)Base.MAX_CREEP;
+		//return (1f - Interpolation.exp5Out.apply(0.45f, 1f, ((int)creeper/(float)Base.MAX_CREEP)));
 	}
 	
 	/**@return Returns the {@link EdgeType} of this chunk, makes sure that this chunk is a terrain edge.*/

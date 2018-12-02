@@ -26,6 +26,10 @@ public class Section {
 	MeshVertexData corrVertexData;
 	boolean corrUpdate = false;
  	
+	Mesh fogMesh;
+	MeshVertexData fogVertexData;
+	boolean fogUpdate = false;
+	
 	/**Section is an object representing a square grid of chunks with a fixed size.
 	 * It also holds vertex info about under laying chunk terrain and corruption.
 	 * @param chunks {@linkplain Chunk}s that form this {@linkplain Section}. The array size must be the same as {@link Base#SECTION_SIZE}.
@@ -35,6 +39,7 @@ public class Section {
 		
 		terrainVertexData = new MeshVertexData(null, null);
 		corrVertexData = new MeshVertexData(null, null);
+		fogVertexData = new MeshVertexData(null, null);
 	}
 	
 	/**@param x coordinate
@@ -110,14 +115,53 @@ public class Section {
 		corrUpdate = false;
 	}
 	
-	/**Requests a corruption mesh update of the particular layer from the OpenGL draw thread.
+	/**Requests a corruption mesh update from the OpenGL draw thread.
 	 * The mesh cannot be updated directly because OpenGL context is single-threaded.*/
 	public void requestCorruptionUpdate() {
 		corrUpdate = true;
 	}
 	
-	/**@return Whether the corruption mesh update.*/
+	/**@return Whether the corruption mesh needs update.*/
 	public boolean needsCorruptionMeshUpdate() {
 		return corrUpdate;
+	}
+	
+	/**Updates the {@linkplain Section} FogOfWar mesh data. Can be called from other threads. 
+	 * The actual FogOfWar mesh will not be updated directly. Use in combination with {@link #requestFogOfWarUpdate()}
+	 * to request FogOfWar mesh update from the OpenGL draw thread.
+	 * */
+	public void updateFogOfWarMesh(float[] verts, short[] indices) {
+		this.fogVertexData.setVerts(verts);
+		this.fogVertexData.setIndices(indices);	
+	}
+	
+	public float[] getFogOfWarVerts() {
+		return fogVertexData.getVerts();
+	}
+	
+	public short[] getFogOfWarIndices() {
+		return fogVertexData.getIndices();
+	}
+	
+	/**@return The sections FogOfWar mesh of this {@link Section}.
+	 * */
+	public Mesh getFogOfWarMesh() {
+		return fogMesh;
+	}
+	
+	/**Nullifies the {@link #requestFogOfWarUpdate()} call. Flags the FogOfWar mesh as updated.*/
+	public void updatedFogOfWarMesh() {
+		fogUpdate = false;
+	}
+	
+	/**Requests a FogOfWar mesh update from the OpenGL draw thread.
+	 * The mesh cannot be updated directly because OpenGL context is single-threaded.*/
+	public void requestFogOfWarUpdate() {
+		fogUpdate = true;
+	}
+	
+	/**@return Whether the FogOfWar mesh update is requested.*/
+	public boolean needsFogOfWarMeshUpdate() {
+		return fogUpdate;
 	}
 }

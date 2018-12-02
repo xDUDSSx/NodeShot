@@ -121,8 +121,6 @@ public class SimulationThread extends Thread {
 	void updateLogic() {
 		simTick++;
 		
-		GameScreen.chunks.getChunk(Base.CHUNK_AMOUNT/2, Base.CHUNK_AMOUNT/2).setCreeperLevel(10);
-		
 		//Updating projectiles
 		GameScreen.bulletHandler.updateAll();
 		

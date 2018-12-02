@@ -181,7 +181,7 @@ public class BuildMenu extends Window {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null && GameScreen.builtConnector == null) {
 					GameScreen.buildMode = true;
-					GameScreen.builtConnector = new Node(0 ,0 , Base.RADIUS);
+					GameScreen.builtConnector = new Node(0, 0, Base.RADIUS);
 				}	
 		    }
 	    });
@@ -190,8 +190,8 @@ public class BuildMenu extends Window {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new BasicStorage(0, 0);
+					//GameScreen.buildMode = true;
+					//GameScreen.builtBuilding = new BasicStorage(0, 0);
 				}		
 		    }
 	    });

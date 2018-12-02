@@ -24,14 +24,6 @@ import com.badlogic.gdx.math.Matrix4;
 public class Base {
 
 	static Boolean running = true;
-	static Boolean noupdate = false;
-	static Boolean toggleBrush = false;
-	public static Boolean randomMovement = false;
-	static Boolean logFirst = false;
-	static Boolean showWeb = true;
-
-	public static int WIDTH = 250;
-	public static int HEIGHT = 400;
 
 	public static int SCREEN_WIDTH;
 	public static int SCREEN_HEIGHT;
@@ -51,20 +43,45 @@ public class Base {
 	public static int HUD_FONT_SIZE = 16;  //Mobile 32
 	public static int HUD_FONT_LARGE_SIZE = 36;
 	
-	static int paint_spacing = 2;
-	
 	//TERRAIN
-	public static int WORLD_SIZE = 2048;
+	public static int WORLD_SIZE = 2048*4;
 	
 	public static float COAL_THRESHOLD = 0.74f;
 	public static float IRON_THRESHOLD = 0.74f;
 	public static float TERRAIN_THRESHOLD = 0.6f;
 	
-	public static int MAX_CREEP = 10;
+	public static int MAX_CREEP = 15;
 	public static int MAX_HEIGHT = 10; 
 	
 	public static int CHUNK_SIZE = 16;
-	public static int SECTION_SIZE = 16;
+	
+	public static int SECTION_SIZE = 32;
+	/*SECTION_SIZE directly affects the number of draw calls. A single section mesh takes 1 draw call.
+
+	Tested 1.12.18 with 8192 world size. (GTX 1070 @ i5 6600k 4.1Ghz)
+	
+	+--------------+-----+------------+
+	| Section size | FPS | Draw calls |
+	+--------------+-----+------------+
+	| 128          | 408 |            |
+	+--------------+-----+------------+
+	| 64           | 405 | 64         |
+	+--------------+-----+------------+
+	| 32           | 397 | 257        |
+	+--------------+-----+------------+
+	| 16           | 242 | 1024       |
+	+--------------+-----+------------+
+	| 8            | 71  |            |
+	+--------------+-----+------------+
+	| 4            | 25  |            |
+	+--------------+-----+------------+
+	| 2            | 4   |            |
+	+--------------+-----+------------+
+	| 1            | 3   |            |
+	+--------------+-----+------------+
+	
+	*/
+	
 	
 	public static int CHUNK_AMOUNT = WORLD_SIZE / CHUNK_SIZE;
 	public static int SECTION_AMOUNT = CHUNK_AMOUNT / SECTION_SIZE;

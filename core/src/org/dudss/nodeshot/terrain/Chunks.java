@@ -183,13 +183,13 @@ public class Chunks {
 	 * **/
 	public void updateAllSectionMeshes(boolean corr) {
 		if (!corr) {
-			for (Section s : GameScreen.chunks.sectionsInView) {
+			for (Section s : this.sectionsInView) {
 				MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false);
         		s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
         		s.requestTerrainUpdate();
         	}
     	} else {
-    		for (Section s : GameScreen.chunks.sectionsInView) {	    			
+    		for (Section s : this.sectionsInView) {	    			
 				MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true);
 	        	s.updateCorruptionMesh(mvdCorruption.getVerts(), mvdCorruption.getIndices());
 	        	s.requestCorruptionUpdate();
@@ -245,7 +245,7 @@ public class Chunks {
 	public void drawCorruption() {
 		 	Gdx.gl.glEnable(GL20.GL_BLEND);
 	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	    
-	        
+
 	        //For blur
 		    //GameScreen.corrBuffers.get(layer).begin();
 	        //Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -271,8 +271,97 @@ public class Chunks {
 	 		//GameScreen.blurBuffer(GameScreen.corrBuffers.get(layer), GameScreen.blurBuffer, GameScreen.corrBuffers.get(layer).getColorBufferTexture(), 0, 0);
 	}
 	
-	/**Generates and initializes a terrain or a corruption mesh. Should be only called once 
-	 * and the initialized mesh than can get updated using the the {@link #generateMeshVertexData(Section, boolean, int)} method.
+	public void drawFogOfWar() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
+	    Shaders.fogOfWarShader.begin();
+	    //Shaders.fogOfWarShader.pedantic = false;
+	    Shaders.fogOfWarShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
+	    Shaders.fogOfWarShader.setUniformi("u_texture", 0);	
+	    for (Section s : sectionsInView) {
+	    	if (s.needsFogOfWarMeshUpdate() == true) {		
+	    		s.getFogOfWarMesh().setVertices(s.getFogOfWarVerts());
+		    	s.getFogOfWarMesh().setIndices(s.getFogOfWarIndices());	 
+ 				s.updatedFogOfWarMesh();
+ 			}
+	    	s.getFogOfWarMesh().render(Shaders.fogOfWarShader, GL20.GL_LINE_STRIP);
+	    }
+	    
+	    Shaders.fogOfWarShader.end();	
+	    Gdx.gl.glDisable(GL20.GL_BLEND);
+	}
+	
+	public Mesh generateFogOfWarMesh(Section s) {
+		int sizeX = 33;
+		int sizeY = 33;
+		
+		int numberOfRectangles = sizeX * sizeY;
+	    int numberOfVertices = numberOfRectangles;
+	    
+		int vertexPositionValue = 2; //x,y position values
+		int vertexColorValue = 1; //A single packed color value
+		int vertexTexCoordValue = 2; //Unnecessary uv values
+	    
+	    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCoordValue; //5
+	    
+	    int ax = s.sectionChunks[0][0].ax;
+	    int ay = s.sectionChunks[0][0].ay;
+	    
+	    if (this.chunks[ax][ay].ax + sizeX >= Base.CHUNK_AMOUNT) {
+	    	sizeX -= 1;
+	    }
+	    
+	    if (this.chunks[ax][ay].ay + sizeY >= Base.CHUNK_AMOUNT) {
+	    	sizeY -= 1;
+	    }
+	    
+	    short[] indices = new short[((sizeY-1)*(sizeX*2)) + (2*(sizeY-2)) + 2];
+	    float[] vertices = new float[numberOfVertices * valuesPerVertex];
+	    
+	    try {
+	    int i = 0;
+	    int pointer = 0;
+	    for (int y = sizeY-1; y >= 0; y--) {
+	    	for (int x = 0; x < sizeX; x++) {	    		
+	    		Chunk c = this.chunks[ax + x][ay + y];
+	    		
+	    		vertices[i * valuesPerVertex + 0] = c.getX() + Base.CHUNK_SIZE/2;
+	    		vertices[i * valuesPerVertex + 1] = c.getY() + Base.CHUNK_SIZE/2;
+	    		vertices[i * valuesPerVertex + 2] = Color.toFloatBits(1f, 0f, 0f, 1f);
+	    		vertices[i * valuesPerVertex + 3] = 0;
+	    		vertices[i * valuesPerVertex + 4] = 0;
+	    		
+	    		if (y > 0) {
+	    			indices[pointer++] = (short) i;
+	    			indices[pointer++] = (short) (i + sizeX);
+	    		}
+	    		i++;
+	    	}
+	    	if (y > 0) {
+	    		indices[pointer++] = (short) indices[pointer-2];
+	    		indices[pointer++] = (short) i;
+	    	}
+	    }
+	    
+	    
+	    int indicesSize = ((sizeY-1)*(sizeX*2)) + (2*(sizeY-2)) + 2;
+	    Mesh mesh = new Mesh(false, numberOfVertices, indicesSize, 
+				new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
+				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+	    
+	    mesh.setVertices(vertices);
+	    mesh.setIndices(indices);
+	    return mesh;
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
+		return null;
+	  
+	}
+	
+	/**Generates and initialises a terrain or a corruption mesh. Should be only called once 
+	 * and the initialised mesh than can get updated using the the {@link #generateMeshVertexData(Section, boolean, int)} method.
 	 * @param s The assigned section.
 	 * @param corr Whether a terrain or a corruption mesh should be generated
 	 * @return Returns the generated Mesh object*/
@@ -401,13 +490,15 @@ public class Chunks {
 			  	        float f = 0;
 			  	        if (corr) {
 			  	        	shade = c.calculateShade();	  	        				  	        	
-			  	        	float alpha = Interpolation.PowOut.pow5Out.apply(0.75f, 0.96f, (1f - shade));			  	        	
-			  	        	float alpha1 = Interpolation.PowOut.pow5Out.apply(0.75f, 0.96f, (1f - shade1));			  	        	
+			  	        	float alpha = Interpolation.exp5Out.apply(0.8f, 1f, shade);			  	        	
+			  	        	float alpha1 = Interpolation.exp5Out.apply(0.8f, 1f, shade1);			  	        	
 			  	        	f = Color.toFloatBits(alpha, alpha1, 1f, 1f);	
+			  	        	shade = 0.3f + (0.65f - (Interpolation.exp5Out.apply(0.3f, 0.95f, shade) - 0.3f));
+			  	        	shade1 = 0.3f + (0.65f - (Interpolation.exp5Out.apply(0.3f, 0.95f, shade1) - 0.3f));
 			  	        } else {
 			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
 			  	        }
-			  	        
+
 			  	        
 			  	        //Set the individual vertex attributes to each of the 4 vertexes of this square
 			  	     	setValuesInArrayForVertex(verticesWithColor, u, v2, tu, tv2, tileX, tileY, f, shade, shade1, rectangleOffsetInArray, 0);
@@ -501,6 +592,7 @@ public class Chunks {
 				Section s = new Section(sectionChunks);
 				s.terrainMesh = generateMesh(s, false);
 				s.corrMesh = generateMesh(s, true);
+				s.fogMesh = generateFogOfWarMesh(s);
 				
 				sections[x/Base.SECTION_SIZE][y/Base.SECTION_SIZE] = s;				
 			}
@@ -520,7 +612,7 @@ public class Chunks {
 		float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.45f, 0.018f);
 		sn.randomizeMutatorTable();
 		System.out.println("Generating noise (3/3)");
-		float[][] heightMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.5f, 0.012f);
+		float[][] heightMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 5, 0.5f, 0.009f);
 		
 		System.out.println("Creating pixmaps");
 		Pixmap coalPixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
@@ -607,7 +699,7 @@ public class Chunks {
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
 				Color c = new Color(pixmap.getPixel(x, y));				
-				int val = (int) Base.range(c.r, 0, 1f, 0, Base.MAX_CREEP);
+				int val = (int) Base.range(c.r, 0, 1f, 0, Base.MAX_HEIGHT);
 				chunks[x][y].setHeight(val);
 			}
 		}
