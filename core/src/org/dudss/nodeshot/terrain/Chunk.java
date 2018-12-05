@@ -7,6 +7,7 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunks.OreType;
+import org.dudss.nodeshot.terrain.Chunks.Visibility;
 import org.dudss.nodeshot.terrain.datasubsets.AtlasRegionContainer;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -23,6 +24,21 @@ public class Chunk {
 	/**World space width and height of this {@linkplain Chunk}*/
 	float size = Base.CHUNK_SIZE;
 	
+	/**Fog of war visibility value
+	 * 0.8f -> deactivated
+	 * 0.4f -> activated but not in vision
+	 * 0f -> active vision
+	 * */
+	public float visibility = deactivated;
+	int visionProviderNumber = 0;
+	
+	public static float active = 0f;
+	public static float semiactive = 0.3f;
+	public static float deactivated = 0.5f;
+	
+	boolean borderChunk = false;
+	Section section;
+	
 	/**Coal ore level*/
 	float coalOre = 0f;
 	/**Iron ore level*/
@@ -37,22 +53,12 @@ public class Chunk {
 	/**Absolute creeper ({@link #c_height} + {@link #creeper} when {@linkplain #creeper} > 0)*/
 	float absCreeper = 0;
 	
-	public Vector2 direction = new Vector2(0,0);
-	public Vector2 newDirection = new Vector2(0,0);
-	float strenght = 0.0f;
-	
-	//T = Threshold
-	float neutralT = 360f;
-	float minT = 220f;
-	float maxT = 60f;
-	
-	float[][] vecs = new float[8][2];
-	float[] diffs = new float[8];
-	float[] dist = new float[8];
-	
 	float flowRate = 0.25f;
 	float spreadThreshold = 0.5f;
+	
+	/**A buffer that holds the creeper change between simulation ticks*/
 	public float creeperChange = 0;
+	
 	long lastUpdate = SimulationThread.simTick;
 	long updateRate = 5;		
 	
@@ -64,6 +70,7 @@ public class Chunk {
 	 * All creeper updates and edge detection uses c_height instead of {@linkplain height} and this allows it to partially flood
 	 * terrain edges (which removes visual gaps in-between terrain and corruption edges).*/
 	int c_height;
+	
 	/**The offset between {@link height} and {@link c_height}. Tells what terrain layer is the lower terrain part of the edge.<br>
 	 * <b>Example:</b> An edge between height 5 and 2. Height is 5, edgeLowerHeight is (5-2) 3 and thus c_height is (height - edgeLowerHeight) 2.*/
 	int edgeLowerHeight = 0;
@@ -130,238 +137,55 @@ public class Chunk {
 	/**Current corruption update method, creeper is distributed along the tiles with lower creeper in relation to the difference from this chunks {@link #creeper}.
 	 * The resulting creeper level changes are saved into respectable {@link #creeperChange} variables and the actual creeper is set later
 	 * using the {@link #applyUpdate()} method.
-	 * This is done to remove an axial bias in the direction of the subsequent updates
+	 * This is done to remove an axial bias in the direction of the subsequent updates.
+	 * @return Returns whether an actual corruption update happened or not, used for optimisation.
 	 */
-	public void updateOld() {		
-		//if (lastUpdate + updateRate <= SimulationThread.simTick && c_height + creeper > c_height + 0.05f) {
-		if (lastUpdate + updateRate <= SimulationThread.simTick) {
+	public boolean update() {		
+		if (this.getCreeperLevel() != 0 && visibility != deactivated) {
+	        float thisTotal = this.c_height + this.getCreeperLevel();
 			
-			/*//if (i + 1 < this.world.size.x) {
-	            var height2 = this.getHighestTerrain(new Vector(i + 1, j));
-	            this.transferCreeper(height, height2, this.world.tiles[i][j][0], this.world.tiles[i + 1][j][0]);
-	        //}
-	        // bottom right neighbour
-	        //if (i - 1 > -1) {
-	            var height2 = this.getHighestTerrain(new Vector(i - 1, j));
-	            this.transferCreeper(height, height2, this.world.tiles[i][j][0], this.world.tiles[i - 1][j][0]);
-	        //}
-	        // bottom neighbour
-	        	if (j + 1 < this.world.size.y) {
-	        	var height2 = this.getHighestTerrain(new Vector(i, j + 1));
-	            this.transferCreeper(height, height2, this.world.tiles[i][j][0], this.world.tiles[i][j + 1][0]);
-	        //}
-	        // bottom left neighbour
-	        //if (j - 1 > -1) {
-	            var height2 = this.getHighestTerrain(new Vector(i, j - 1));
-	            this.transferCreeper(height, height2, this.world.tiles[i][j][0], this.world.tiles[i][j - 1][0]);
-	        //}
-			*/
-			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 				
-	            for (int i = 0; i < 4; i++) {
-	            	float transferRate = 0.25f;
-	
-	                float sourceAmount = this.getCreeperLevel();
-	                float sourceTotal = this.c_height + this.getCreeperLevel();
-	
-	                if (neighbours[i].c_height >= 0) {
-	                    float targetAmount = neighbours[i].getCreeperLevel();
-	                    if (sourceAmount > 0 || targetAmount > 0) {
-	                        float targetTotal = neighbours[i].c_height + neighbours[i].getCreeperLevel();
-	                        float delta = 0f;
-	                        if (sourceTotal > targetTotal) {
-	                            delta = sourceTotal - targetTotal;
-	                            if (delta > sourceAmount) {
-	                            	delta = sourceAmount;
-	                            }
-	                            float adjustedDelta = delta * transferRate;
-	                            this.creeperChange -= adjustedDelta;
-	                            neighbours[i].creeperChange += adjustedDelta;
-	                        }
-	                        /*else {
-	                         delta = targetTotal - sourceTotal;
-	                         if (delta > targetAmount)
-	                         delta = targetAmount;
-	                         var adjustedDelta = delta * transferRate;
-	                         source.newcreep += adjustedDelta;
-	                         target.newcreep -= adjustedDelta;
-	                         }*/
-	                    }
-	                }
-	            }
-			}
-			/*float spore = creeper*flowRate;
-			
-			float[] diffs = new float[8];
-			for (int i = 0; i < 8; i++) {
-				if (neighbours[i] != null && neighbours[i].c_height < c_height + creeper) {
-					diffs[i] = (c_height + creeper) - (neighbours[i].c_height + neighbours[i].creeper);
-				} else {
-					diffs[i] = 0;
-				}
-			}		
-			
-			float total = 0;
-			for (int i = 0; i < 8; i++) {
-				if (!(diffs[i] <= 0)) {
-					total += diffs[i];
-				}
-			}
-			
-			float totalAdded = 0;
-			for (int i = 0; i < 8; i++) {
-				if (!(diffs[i] <= 0)) {
-					float toAdd = (diffs[i]/total) * spore;
-					neighbours[i].creeperChange += toAdd;
-					totalAdded += toAdd;					
-				}
-			}		
-			
-			creeperChange -= totalAdded;
-			//System.out.println("creeper: " + creeper + " spore: " + spore + " change: " + currentCreeperChange);
-			*/
-			
-			lastUpdate = SimulationThread.simTick;	
-		} else {
-			return;
+	        //Top neighbour
+	        if (this.ay < Base.CHUNK_AMOUNT - 1) {
+	        	this.transferCreeper(thisTotal, plusy);
+	        }        
+	        //Bottom neighbour
+	        if (this.ay > 0) {
+	        	this.transferCreeper(thisTotal, minusy);
+	        }
+	        //Right neighbour
+	        if (this.ax < Base.CHUNK_AMOUNT - 1) {
+	        	this.transferCreeper(thisTotal, plusx);
+	        }
+	        //Left neighbour
+	        if (this.ax > 0) {
+	        	this.transferCreeper(thisTotal, minusx);
+	        }
+	        return true;
 		}
+		return false;
 	}
 	
-	/*Creeper UPDATE stages:
-	 * 1. Neighbour difference calculation. 
-	 * 2. Direction and strength modification. (Point vectors)
-	 * 3. Creeper distribution dictated by the direction. (Angle factors)
-	 */
-	public void update() {
-		if (lastUpdate + updateRate <= SimulationThread.simTick) {
-			if (c_height + creeper > c_height + 0.05f) {
-				
-				//Total creeper available for distribution this update
-				float spore = creeper*flowRate;
-				
-				//System.out.println("\n");			
-				//STAGE 1 and 2
-				int n = 0;
-				newDirection.setZero();
-				for (int i = 0; i < 8; i++) {
-					if (neighbours[i] != null && neighbours[i].c_height < c_height + creeper) {
-						diffs[i] = (c_height + creeper) - (neighbours[i].c_height + neighbours[i].creeper);
-						if (diffs[i] > 0) {
-							switch(i) {
-								case 0: vecs[i][0] = 0f; vecs[i][1] = diffs[i];
-								break; 
-								case 1:
-									vecs[i][0] = (diffs[i]) * (diffs[i] / (float) Math.hypot(diffs[i], diffs[i]));
-									vecs[i][1] = (diffs[i]) * (diffs[i] / (float) Math.hypot(diffs[i], diffs[i]));
-								break; 
-								case 2: vecs[i][0] = diffs[i]; vecs[i][1] = 0f; 
-								break; 
-								case 3: 
-									vecs[i][0] = (diffs[i]) * (diffs[i] / (float) Math.hypot(diffs[i], -diffs[i])); ;
-									vecs[i][1] = (-diffs[i]) * (diffs[i] / (float) Math.hypot(diffs[i], -diffs[i])); ;
-								break; 
-								case 4: vecs[i][0] = 0f; vecs[i][1] = -diffs[i]; 
-								break; 
-								case 5:
-									vecs[i][0] = (-diffs[i]) * (diffs[i] / (float) Math.hypot(-diffs[i], -diffs[i])); 
-									vecs[i][1] = (-diffs[i]) * (diffs[i] / (float) Math.hypot(-diffs[i], -diffs[i]));
-								break; 
-								case 6: vecs[i][0] = -diffs[i]; vecs[i][1] = 0f; 
-								break; 
-								case 7: 
-									vecs[i][0] = (-diffs[i]) * (diffs[i] / (float) Math.hypot(-diffs[i], diffs[i])); 
-									vecs[i][1] = (diffs[i]) * (diffs[i] / (float) Math.hypot(-diffs[i], diffs[i])); 
-								break; 
-							}
-						} else {
-							diffs[i] = 0;
-							vecs[i][0] = 0;
-							vecs[i][1] = 0;
-						}
-						//System.out.print(diffs[i] + "(" + vecs[i][0] + ", " + vecs[i][1] + "), ");
-					} else {
-						diffs[i] = 0;
-						vecs[i][0] = 0;
-						vecs[i][1] = 0;
-						//System.out.print(diffs[i] + "(" + vecs[i][0] + ", " + vecs[i][1] + "), ");
-					}
-					if (!(vecs[i][0] == 0 && vecs[i][1] == 0)) {
-						newDirection.add(vecs[i][0], vecs[i][1]);
-						n++;
-					}
-					
-				}		
-				//Get the newDirection average mean
-				if (n != 0) {
-					float mulFac = 1f/n;
-					newDirection.x *= mulFac;
-					newDirection.y *= mulFac;
-				}
-				
-				//System.out.println("\noldDiretion: " + direction.toString() + " newDirection: " + newDirection.toString());
-				//System.out.println("oldDiretionL: " + direction.len() + " newDirectionL: " + newDirection.len());
-				
-				if(direction.isZero()) {
-					direction.add(newDirection.scl(100));
-				} else {
-					//direction.add(newDirection.scl(100).scl(0.05f));
-				}
-				
-				//Average of newDirection and the old one
-				//direction.add(newDirection.scl(0.1f));
-				//direction.x = direction.x/2f;
-				//direction.y = direction.y/2f;	
-				strenght = direction.len();
-				
-				//STAGE 3
-				if (creeper > spreadThreshold) {
-					float total = 0;
-					
-					if (strenght > 0.001f) {
-		 				float angularThreshold = neutralT;
-						if (strenght > 0) angularThreshold = minT - (strenght * ((minT - maxT)/Base.MAX_CREEP));
-						for (int i = 0; i < 8; i++) {
-							float a1 = i * 45f;
-							float t1 = (-(direction.angle()) + 90f) % 360f;
-							float angularDistanceFromFlowDirection = Math.abs((((a1)-t1) + 180f) % 360f - 180f);
-							
-							if (angularDistanceFromFlowDirection <= angularThreshold/2f && diffs[i] > 0) {
-								dist[i] = 1f - ((angularDistanceFromFlowDirection/((angularThreshold/2f) / 100f))/ 100f);
-							} else {
-								dist[i] = 0f;
-							}			
-							total += dist[i];
-							//System.out.println("a1: " + a1 + " t1: " + t1 + " a: " + angularDistanceFromFlowDirection);
-							//System.out.println("dir: " + direction.angle() + " angularThresh: " + angularThreshold + " strenght: " + strenght + " angularDistFromF: " + angularDistanceFromFlowDirection + " dist" + i + ": " + dist[i]);
-						}
-					} else {
-						for (int i = 0; i < 8; i++) {
-							dist[i] = 1f;
-							total += dist[i];
-						}
-					}
-					
-					float totalPercentage = total*0.01f;
-					
-					if (total != 0) {
-						float totalAdded = 0;
-						for (int i = 0; i < 8; i++) {
-							float toAdd = ((dist[i]/totalPercentage)*0.01f) * spore;
-							neighbours[i].creeperChange += toAdd;
-							totalAdded += toAdd;
-							//System.out.println(i + " added " + toAdd + " of total spore: " + spore);
-						}				
-						creeperChange -= totalAdded;
-					}			
-				}
-				
-				lastUpdate = SimulationThread.simTick;	
-			} else {
-				if (creeper <= 0) {
-					direction.setZero();
-				}
-				return;
-			}
-		}
+	private void transferCreeper(float thisTotal, Chunk to) {
+        if (to.c_height >= 0) {
+            if (this.getCreeperLevel() > 0 || to.getCreeperLevel() > 0) {
+                float targetTotal = to.c_height + to.getCreeperLevel();
+                float delta = 0f;
+                if (thisTotal > targetTotal) {
+                    delta = thisTotal - targetTotal;
+                    if (delta > this.getCreeperLevel()) {
+                    	delta = this.getCreeperLevel();
+                    }
+                    float adjustedDelta = delta * flowRate;
+                    this.creeperChange -= adjustedDelta;
+                    to.creeperChange += adjustedDelta;
+                    if (to.isBorderChunk()) {
+                    	if (to.getSection() != this.getSection()) {
+                    		to.getSection().setActive(true);
+                    	}
+                    }
+                }
+            }
+        }
 	}
 	
 	/**Called after all the other {@link Chunk}s had been updated using the {@link #update()} method in the current simulation tick*/
@@ -1230,6 +1054,22 @@ public class Chunk {
 	/**@return Returns true if this tile is a corr edge.*/
 	public boolean isCorruptionEdge() {
 		return corrEdge;
+	}
+	
+	public void setBorderChunk(boolean border) {
+		borderChunk = border;
+	}
+	
+	public boolean isBorderChunk() {
+		return borderChunk;
+	}
+	
+	public void setSection(Section s) {
+		section = s;
+	}
+	
+	public Section getSection() {
+		return section;
 	}
 	
 	/**@return Current terrain {@link #height}.*/

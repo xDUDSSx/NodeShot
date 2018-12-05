@@ -73,6 +73,11 @@ public class Chunks {
 		COAL, IRON, NONE
 	}
 	
+	/**Fog of war visibility types*/
+	public enum Visibility {
+		ACTIVE, SEMIACTIVE, DEACTIVATED
+	}
+	
 	Rectangle viewBounds;
 	Rectangle imageBounds = new Rectangle();
 	
@@ -100,7 +105,7 @@ public class Chunks {
 		viewBounds = new Rectangle();
 		imageBounds = new Rectangle();
 		
-		//Initializing sections
+		//Initialising sections
         generateSections();
         
 		created = true;
@@ -153,9 +158,11 @@ public class Chunks {
 			//All the new sections get updated (just the ones that weren't in the view before}
 			for (Section s : differenceSections) {
 				updateSectionMesh(s, true);	//Updates all corruption in the section
-				updateSectionMesh(s, false);	//Updates terrain
+				updateSectionMesh(s, false); //Updates terrain
+				updateFogOfWarMesh(s);
 			}
-						
+				
+			
 			lastViewPoll = System.currentTimeMillis();			
 		}
 	}
@@ -198,15 +205,11 @@ public class Chunks {
 	}
 	
 	//TODO: Make this depend and be handled by a section (for performance reasons, no need to update chunks with no corruption or buildings)
+	@Deprecated
 	public void updateAllChunks() {
 		for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
-				if (Base.useNewUpdate) {
-					chunks[x][y].update();
-				} else {
-					chunks[x][y].updateOld();
-				}
-				
+				chunks[x][y].update();
 			}
 		}
 		
@@ -217,6 +220,22 @@ public class Chunks {
 		}
 	}
 				
+	/**Update fog mesh data of a {@link Section}.*/
+	public void updateFogOfWarMesh(Section s) {
+		MeshVertexData mvdFogOfWar = this.generateFogOfWarMeshVertexData(s, Base.SECTION_SIZE+1, Base.SECTION_SIZE+1);
+    	s.updateFogOfWarMesh(mvdFogOfWar.getVerts(), mvdFogOfWar.getIndices());
+    	s.requestFogOfWarUpdate();
+	}
+	
+	/**Update fog mesh data of all {@link #sectionsInView}s.*/
+	public void updateAllFogOfWarMeshes() {
+		for (Section s : sectionsInView) {
+			MeshVertexData mvdFogOfWar = this.generateFogOfWarMeshVertexData(s, Base.SECTION_SIZE+1, Base.SECTION_SIZE+1);
+    		s.updateFogOfWarMesh(mvdFogOfWar.getVerts(), mvdFogOfWar.getIndices());
+    		s.requestFogOfWarUpdate();
+		}
+	}
+	
 	public void drawTerrain() {
 			Gdx.gl.glEnable(GL20.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
@@ -275,26 +294,89 @@ public class Chunks {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
 	    Shaders.fogOfWarShader.begin();
-	    //Shaders.fogOfWarShader.pedantic = false;
 	    Shaders.fogOfWarShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
-	    Shaders.fogOfWarShader.setUniformi("u_texture", 0);	
 	    for (Section s : sectionsInView) {
 	    	if (s.needsFogOfWarMeshUpdate() == true) {		
 	    		s.getFogOfWarMesh().setVertices(s.getFogOfWarVerts());
 		    	s.getFogOfWarMesh().setIndices(s.getFogOfWarIndices());	 
  				s.updatedFogOfWarMesh();
  			}
-	    	s.getFogOfWarMesh().render(Shaders.fogOfWarShader, GL20.GL_LINE_STRIP);
+	    	s.getFogOfWarMesh().render(Shaders.fogOfWarShader, GL20.GL_TRIANGLE_STRIP);
 	    }
 	    
 	    Shaders.fogOfWarShader.end();	
 	    Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 	
+	/**
+	 * Changes the fog of war visibility around an origin (in world space coordinates) and sets the appropriate visibility in the surrounding circular radius (in tiles).
+	 * The radius cannot be more than 2*{@link Base#SECTION_SIZE}, because only the current, and neighbouring {@link Section}s are updated! TODO: improve.
+	 * @param x Origin x world space coordinate.
+	 * @param y Origin y world space coordinate.
+	 * @param radius The radius of the circle, in tiles.
+	 * @param visibility Type of visibility.
+	 */
+	public void setVisibility(float x, float y, int radius, Visibility visibility) {
+		List<Section> sectionsToUpdate = Base.getSectionsAroundThePoint(x, y);
+		for (Section sec : sectionsToUpdate) {
+			for (int sx = 0; sx < Base.SECTION_SIZE; sx++) {
+				for (int sy = 0; sy < Base.SECTION_SIZE; sy++) {
+					Chunk c = sec.getChunk(sx, sy);
+					if (Math.hypot(x - c.getX(), y - c.getY()) < radius*Base.CHUNK_SIZE) {						
+						switch(visibility) {
+							case ACTIVE: c.visibility = Chunk.active; c.visionProviderNumber++; break;
+							case SEMIACTIVE: c.visibility = Chunk.semiactive; c.visionProviderNumber--; break;
+							case DEACTIVATED: c.visibility = Chunk.deactivated; c.visionProviderNumber--; break;
+						}
+						if (c.visionProviderNumber > 0) {
+							c.visibility = Chunk.active;
+						} else {
+							c.visibility = Chunk.semiactive;
+						}
+					}
+				}
+			}
+		};
+	
+		for (Section s : sectionsToUpdate) {
+			s.updateAll();
+			GameScreen.chunks.updateFogOfWarMesh(s);
+		}
+	}
+	
+	/**Generates the fog of war {@link Mesh} for the specified {@link Section}. The generated mesh uses GL_TRIANGLE_STRIP and degenerate
+	 * triangles at the end of rows.
+	 * @param s The mesh section.
+	 * @return The generated {@link Mesh}.
+	 */
 	public Mesh generateFogOfWarMesh(Section s) {
-		int sizeX = 33;
-		int sizeY = 33;
+		//The grid size is bigger by one so that section borders are filled.
+		int sizeX = Base.SECTION_SIZE+1;
+		int sizeY = Base.SECTION_SIZE+1;
 		
+		int numberOfRectangles = sizeX * sizeY;
+	    int numberOfVertices = numberOfRectangles;
+		
+		MeshVertexData fogOfWarData = generateFogOfWarMeshVertexData(s, sizeX, sizeY);
+	    
+	    int indicesSize = ((sizeY-1)*(sizeX*2)) + (2*(sizeY-2)) + 2;
+	    Mesh mesh = new Mesh(false, numberOfVertices, indicesSize, 
+				new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
+				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+	    
+	    mesh.setVertices(fogOfWarData.getVerts());
+	    mesh.setIndices(fogOfWarData.getIndices());
+	    
+	    return mesh;    
+	}
+	
+	/**Generates the fog of war {@link MeshVertexData} for the specified {@link Section}. The generated mesh uses GL_TRIANGLE_STRIP and degenerate
+	 * triangles at the end of rows.
+	 * @param s The mesh section.
+	 * @return The generated {@link MeshVertexData}.
+	 */
+	public MeshVertexData generateFogOfWarMeshVertexData(Section s, int sizeX, int sizeY) {
 		int numberOfRectangles = sizeX * sizeY;
 	    int numberOfVertices = numberOfRectangles;
 	    
@@ -307,10 +389,10 @@ public class Chunks {
 	    int ax = s.sectionChunks[0][0].ax;
 	    int ay = s.sectionChunks[0][0].ay;
 	    
+	    //Grid size adjusted to map edges
 	    if (this.chunks[ax][ay].ax + sizeX >= Base.CHUNK_AMOUNT) {
 	    	sizeX -= 1;
 	    }
-	    
 	    if (this.chunks[ax][ay].ay + sizeY >= Base.CHUNK_AMOUNT) {
 	    	sizeY -= 1;
 	    }
@@ -318,7 +400,6 @@ public class Chunks {
 	    short[] indices = new short[((sizeY-1)*(sizeX*2)) + (2*(sizeY-2)) + 2];
 	    float[] vertices = new float[numberOfVertices * valuesPerVertex];
 	    
-	    try {
 	    int i = 0;
 	    int pointer = 0;
 	    for (int y = sizeY-1; y >= 0; y--) {
@@ -327,7 +408,7 @@ public class Chunks {
 	    		
 	    		vertices[i * valuesPerVertex + 0] = c.getX() + Base.CHUNK_SIZE/2;
 	    		vertices[i * valuesPerVertex + 1] = c.getY() + Base.CHUNK_SIZE/2;
-	    		vertices[i * valuesPerVertex + 2] = Color.toFloatBits(1f, 0f, 0f, 1f);
+	    		vertices[i * valuesPerVertex + 2] = Color.toFloatBits(0f, 0f, 0f, c.visibility);
 	    		vertices[i * valuesPerVertex + 3] = 0;
 	    		vertices[i * valuesPerVertex + 4] = 0;
 	    		
@@ -342,22 +423,7 @@ public class Chunks {
 	    		indices[pointer++] = (short) i;
 	    	}
 	    }
-	    
-	    
-	    int indicesSize = ((sizeY-1)*(sizeX*2)) + (2*(sizeY-2)) + 2;
-	    Mesh mesh = new Mesh(false, numberOfVertices, indicesSize, 
-				new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
-				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
-	    
-	    mesh.setVertices(vertices);
-	    mesh.setIndices(indices);
-	    return mesh;
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    }
-		return null;
-	  
+		return new MeshVertexData(vertices, indices);
 	}
 	
 	/**Generates and initialises a terrain or a corruption mesh. Should be only called once 
@@ -578,23 +644,36 @@ public class Chunks {
 		chunks[x][y] = chunk;
 	}
 	
-	/**Generates all the {@link Section}s and initializes their terrain and corruption meshes */
+	public Section getSection(int x, int y) {
+		if (x < 0 || y < 0 || x > Base.SECTION_AMOUNT-1 || y > Base.SECTION_AMOUNT-1) {
+			return null;
+		}
+		return sections[x][y];
+	}
+	
+	/**Generates all the {@link Section}s and initialises their terrain and corruption meshes */
 	public void generateSections() {
 		for (int y = 0; y < Base.CHUNK_AMOUNT; y+=Base.SECTION_SIZE) {
 			for (int x = 0; x < Base.CHUNK_AMOUNT; x+=Base.SECTION_SIZE) {
+				Section s = new Section(null);
 				Chunk[][] sectionChunks = new Chunk[Base.SECTION_SIZE][Base.SECTION_SIZE];
 				for(int y1 = 0; y1 < Base.SECTION_SIZE; y1++) {
-					for (int x1 = 0; x1 < Base.SECTION_SIZE; x1++) {
+					for (int x1 = 0; x1 < Base.SECTION_SIZE; x1++) {					
 						sectionChunks[x1][y1] = chunks[x + x1][y + y1]; 
+						sectionChunks[x1][y1].setSection(s);
+						if (x1 == 0 || x1 == Base.SECTION_SIZE-1 || y1 == 0 || y1 == Base.SECTION_SIZE-1) {
+							sectionChunks[x1][y1].setBorderChunk(true);
+						}
 					}
 				}
 
-				Section s = new Section(sectionChunks);
+				s.setChunks(sectionChunks);
 				s.terrainMesh = generateMesh(s, false);
 				s.corrMesh = generateMesh(s, true);
 				s.fogMesh = generateFogOfWarMesh(s);
 				
 				sections[x/Base.SECTION_SIZE][y/Base.SECTION_SIZE] = s;				
+				s.updateNeighbours();
 			}
 		}
 	}

@@ -1,11 +1,14 @@
 package org.dudss.nodeshot.utils;
  
-import com.badlogic.gdx.Gdx;
+import org.dudss.nodeshot.Base;
+
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**Class that holds and loads all texture resources*/
 public class SpriteLoader {
@@ -48,6 +51,9 @@ public class SpriteLoader {
 	public static Sprite ironTileSprite;
 	
 	public static TextureAtlas tileAtlas;
+	public static TextureAtlas hqanimAtlas;
+	public static TextureRegion[] hqanimFrames;
+	
 	public static Texture corrTex;
 	
 	public static Sprite turret;
@@ -77,9 +83,24 @@ public class SpriteLoader {
         	coalLowerTex = new Texture("res/tiledCoallower.png");
         	coalLowTex = new Texture("res/tiledCoallow.png");       	
         	tileAtlas = new TextureAtlas("res/tiles.atlas");
+        	hqanimAtlas = new TextureAtlas("res/animtiles.atlas");
         	corrTex = new Texture("res/corr16.png");
         	sectionOutline = new Texture("res/sectionOutline.png");
         }
+		
+		Sprite s = new Sprite();
+		hqanimFrames = new TextureRegion[72];
+		for (int i = 0; i < 72; i++) {
+			String n;
+			if (i < 9) {
+				n = "0" + Integer.toString(i + 1);
+			} else {
+				n = Integer.toString(i + 1);
+			}
+			hqanimFrames[i] = (TextureRegion) hqanimAtlas.findRegion("hqframe00" + n);
+			//s.setTexture(hqanimAtlas.findRegion("hqframe00" + n).getTexture());
+			//s.setSize(3*Base.CHUNK_SIZE, 3*Base.CHUNK_SIZE);
+		}
 		
 		corrTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		

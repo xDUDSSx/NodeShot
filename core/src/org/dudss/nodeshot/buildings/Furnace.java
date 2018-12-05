@@ -21,7 +21,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class Furnace extends Building implements Storage {
+public class Furnace extends AbstractBuilding implements Storage {
 	static float width = 48;
 	static float height = 48;
 	
@@ -91,7 +91,7 @@ public class Furnace extends Building implements Storage {
 	}
 
 	@Override
-	public void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap) {		
+	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {		
 		float prefX;
 		float prefY;
 		
@@ -138,6 +138,8 @@ public class Furnace extends Building implements Storage {
 		GameScreen.nodelist.add(output);
 		GameScreen.nodelist.add(export);
 		GameScreen.buildingHandler.addBuilding(this);
+		
+		updateFogOfWar(true);
 	}
 
 	@Override
@@ -147,6 +149,8 @@ public class Furnace extends Building implements Storage {
 		this.input2.remove();
 		this.export.remove();
 		this.output.remove();
+		
+		updateFogOfWar(false);
 	}
 
 	@Override

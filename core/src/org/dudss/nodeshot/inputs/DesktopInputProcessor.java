@@ -12,7 +12,7 @@ import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.buildings.Building;
+import org.dudss.nodeshot.buildings.AbstractBuilding;
 
 import static org.dudss.nodeshot.screens.GameScreen.*;
 
@@ -86,11 +86,11 @@ public class DesktopInputProcessor implements InputProcessor {
 						
 						if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
 							try {					
-								Class<? extends Building> buildingClass = GameScreen.builtBuilding.getClass();
+								Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
 								Constructor buildingConstructor;
 								buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
 								Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
-								GameScreen.builtBuilding = (Building) buildingConstructor.newInstance(buildingArgs);		
+								GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
 							} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
 								BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
 							}

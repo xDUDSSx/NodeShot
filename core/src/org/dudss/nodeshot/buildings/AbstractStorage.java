@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**Building that can accept and hold items*/
-public class BasicStorage extends Building implements Storage {
+public abstract class AbstractStorage extends AbstractBuilding implements Storage {
 	
 	InputNode input;
 	
@@ -30,7 +30,7 @@ public class BasicStorage extends Building implements Storage {
 	protected Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
 	protected Color color = Color.GOLDENROD;
 	
-	public BasicStorage(float cx, float cy, float width, float height) {
+	public AbstractStorage(float cx, float cy, float width, float height) {
 		super(cx, cy, width, height);
 		accepted = new ArrayList<ItemType>();				
 	}
@@ -60,7 +60,7 @@ public class BasicStorage extends Building implements Storage {
 	}
 	
 	@Override
-	public void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap) {		
+	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {		
 		float prefX;
 		float prefY;
 		
@@ -86,12 +86,16 @@ public class BasicStorage extends Building implements Storage {
 		//GameScreen.nodelist.add(input);
 		GameScreen.buildingHandler.addBuilding(this);
 		GameScreen.nodelist.add(input);
+		
+		updateFogOfWar(true);
 	}
 
 	@Override
 	public void demolish() {
 		GameScreen.buildingHandler.removeBuilding(this);
 		this.input.remove();
+		
+		updateFogOfWar(false);
 	}
 	
 	public void empty() {

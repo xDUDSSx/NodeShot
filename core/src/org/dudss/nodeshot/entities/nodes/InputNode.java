@@ -1,6 +1,6 @@
 package org.dudss.nodeshot.entities.nodes;
 
-import org.dudss.nodeshot.buildings.Building;
+import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.buildings.Storage;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
@@ -13,7 +13,6 @@ public class InputNode extends Node {
 
 	Storage assignedBuilding;
 
-	
 	public InputNode(float cx, float cy, int radius, Storage building) {
 		super(cx, cy, radius);		
 		assignedBuilding = building;
@@ -36,14 +35,14 @@ public class InputNode extends Node {
 									c.remove(p);
 									p.destroy();
 									//System.out.println("Alerting building PPH");
-									((Building) assignedBuilding).alert(p);
+									((AbstractBuilding) assignedBuilding).alert(p);
 								}
 								break;
 							case IndefinitePathHandler: 
 								c.remove(p);
 								p.destroy();
 								//System.out.println("Alerting building");
-								((Building) assignedBuilding).alert(p);
+								((AbstractBuilding) assignedBuilding).alert(p);
 								break;
 						}
 					}

@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class AmmoStorage extends BasicStorage  {
+public class AmmoStorage extends AbstractStorage  {
 	
 	static float width = 32;
 	static float height = 32;

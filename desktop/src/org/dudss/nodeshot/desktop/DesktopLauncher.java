@@ -13,7 +13,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class DesktopLauncher {
 	
 	/**NodeEngine development version*/
-	public static final String ver = "v5.0";
+	public static final String ver = "v5.1";
 	
 	/**The main method*/
 	public static void main (String[] arg) {

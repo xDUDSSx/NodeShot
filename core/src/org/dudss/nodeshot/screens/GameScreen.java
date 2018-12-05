@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.buildings.Building;
+import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.Package;
@@ -84,8 +84,6 @@ public class GameScreen implements Screen {
     public static int HEIGHT;
     public static float aspectRatio;
 
-	public static Logger LOGGER = Logger.getLogger(GameScreen.class.getSimpleName());
-    
     public static boolean startedOnce = false;
     
 	public static long currentSimTimeTick;
@@ -97,6 +95,9 @@ public class GameScreen implements Screen {
 	public static int simFrameCount;
 	public static double simFac;
 	public static boolean gamePaused = false;
+	
+	/**Animation state time, used for animation frame looping*/
+	public static float stateTime = 0f;
 	
 	public static Vector2 mousePos = new Vector2();
 
@@ -154,7 +155,7 @@ public class GameScreen implements Screen {
     FreeTypeFontGenerator generator;
 	
 	public static boolean buildMode = false;
-	public static Building builtBuilding = null;
+	public static AbstractBuilding builtBuilding = null;
 	public static Node builtConnector = null;
 	
     //libGDX
@@ -250,6 +251,7 @@ public class GameScreen implements Screen {
 		
         batch = new SpriteBatch();
         r = new ShapeRenderer();
+        r.setAutoShapeType(true);
         
         //font generation
         font = new BitmapFont();
@@ -302,6 +304,17 @@ public class GameScreen implements Screen {
         
         SettingsMenu settings = new SettingsMenu("Settings", GameScreen.skin);	
 		GameScreen.stage.addActor(settings);
+		
+		/*for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
+				Chunk c = chunks.getChunk(x, y);
+				float dist = (float) Math.hypot(Base.WORLD_SIZE/2 - c.getX(), Base.WORLD_SIZE/2 - c.getY());
+				if (dist <= 1000) {
+					c.visibility = 0f;
+				}
+			}
+		}
+		chunks.updateAllFogOfWarMeshes();*/
     }
 
     public static int getWidth() {return WIDTH;}
@@ -353,10 +366,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+    	stateTime += delta;
+
         handleInput();
-        //hudMenu.update();
-        cam.update();	
-                
+        cam.update();	        	
+        
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
      
@@ -383,8 +397,8 @@ public class GameScreen implements Screen {
         
 		//OpenGL performance logging
         if (Base.enableGlProgilerLogging) {
-        	LOGGER.info(
-        	"\n\nDraw calls: " + glProfiler.getDrawCalls() + 			
+        	BaseClass.logger.info(
+        	"\nDraw calls: " + glProfiler.getDrawCalls() + 			
 			"\nTexture binding " + glProfiler.getTextureBindings() + 
 			"\nShaderSwitches: " + glProfiler.getShaderSwitches() +
 			"\nVertexCount: " + glProfiler.getVertexCount().average +
@@ -392,46 +406,6 @@ public class GameScreen implements Screen {
         	);
         }
         
-        r.setAutoShapeType(true);      
-        if (buildMode == true) {
-	        r.begin(ShapeType.Filled);
-	        r.setColor(Color.WHITE);
-	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-	        		if (chunks.getChunk(x, y).getOreLevel() > 0) {
-	        			float n = chunks.getChunk(x, y).getOreLevel() * 100;
-	        			//System.out.println(n);
-	        			if (n == 100) {
-	        				n = 99;
-	        			}
-	        			float rc = (255 * n) / 100;
-	        			float g = (255 * (100 - n)) / 100 ;
-	        			float b = 0;
-	        			//System.out.println(rc + " " + g + " " + b);
-	        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));
-	        			r.setColor(c);
-	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-	        		}	      
-	        	}
-	        }
-	        r.end();
-	    }       
-        
-        //Shows terrain edges in blue
-        if (Base.drawTerrainEdges) {
-	        r.begin(ShapeType.Line);
-	        r.setColor(Color.WHITE);
-	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-	        		if (chunks.getChunk(x, y).isTerrainEdge() == true) {       			
-	        			Color c = new Color(Color.rgba8888(0/255f, 0/255f, 255/255f, 1.0f));
-	        			r.setColor(c);
-	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-	        		}	        		
-	        	}
-	        }
-	        r.end();
-        }
         r.begin(ShapeType.Filled);
         buildingHandler.drawAll(r, batch);
         r.end();
@@ -443,11 +417,11 @@ public class GameScreen implements Screen {
         	r.begin(ShapeType.Filled);
         	Gdx.gl.glEnable(GL20.GL_BLEND);       
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);                  	
-        	drawPrefab(r);
+        	drawPrefab(r, batch);
         	r.end();         	 
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
-         
+        
         batch.begin();      
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
@@ -488,11 +462,29 @@ public class GameScreen implements Screen {
         
         //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
         chunks.drawCorruption();
-               
+        
+        //Drawing the fog of war.
         chunks.drawFogOfWar();
         
         bulletHandler.drawAll(r, batch);
         
+        //Shows terrain edges in blue
+        if (Base.drawTerrainEdges) {
+	        r.begin(ShapeType.Line);
+	        r.setColor(Color.WHITE);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunk(x, y).isTerrainEdge() == true) {       			
+	        			Color c = new Color(Color.rgba8888(0/255f, 0/255f, 255/255f, 1.0f));
+	        			r.setColor(c);
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        		}	        		
+	        	}
+	        }
+	        r.end();
+        }
+        
+        //Shows corruption edges in red
         if (Base.drawCorruptionEdges) {
 	        r.begin(ShapeType.Line);
 	        r.setColor(Color.WHITE);
@@ -510,6 +502,7 @@ public class GameScreen implements Screen {
 	        r.end();
         }
         
+        //Shows chunks where height != c_height in green
         if (Base.drawCHeightInequality) {
 	        r.begin(ShapeType.Line);
 	        r.setColor(Color.WHITE);
@@ -525,20 +518,41 @@ public class GameScreen implements Screen {
 	        }
 	        //Gdx.gl.glLineWidth(2);
 	        r.end();
-        }
+        }    
         
-        if (Base.drawFlowlines) {
-	        r.begin(ShapeType.Filled);
-	        r.setColor(Color.RED);
-	        //Gdx.gl.glLineWidth(1);
+        //Shows chunks at the edges of Sections in yellow
+        if (Base.drawBorderChunks) {
+	        r.begin(ShapeType.Line);
+	        r.setColor(Color.WHITE);
 	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	   	 
-	        		r.rectLine((float) (x * Base.CHUNK_SIZE) + Base.CHUNK_SIZE/2f, (float) (y * Base.CHUNK_SIZE) + Base.CHUNK_SIZE/2f, (float) (x * Base.CHUNK_SIZE) + Base.CHUNK_SIZE/2f + chunks.getChunk(x, y).direction.x*10, (float) (y * Base.CHUNK_SIZE) + Base.CHUNK_SIZE/2f + chunks.getChunk(x, y).direction.y*10, 1f);
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunk(x, y).isBorderChunk()) {       			
+	        			Color c = new Color(Color.rgba8888(255/255f, 255/255f, 0/255f, 1.0f));
+	        			r.setColor(c);	        			
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        		}	      
 	        	}
 	        }
-	        //Gdx.gl.glLineWidth(2);
 	        r.end();
-        }
+        }    
+        
+        //Shows sections that are currently being updated by the corruption thread in sky-blue
+        if (Base.drawActiveSections ) {
+	        r.begin(ShapeType.Line);
+	        r.setColor(Color.WHITE);
+	        for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.SECTION_AMOUNT; y++) {	    
+	        		if (chunks.getSection(x, y).isActive()) {       			
+	        			Color c = new Color(Color.rgba8888(0/255f, 255/255f, 255/255f, 1.0f));
+	        			r.setColor(c);	        			
+	        			r.rect((float) (x * Base.SECTION_SIZE*Base.CHUNK_SIZE), (float) (y * Base.SECTION_SIZE*Base.CHUNK_SIZE), Base.SECTION_SIZE*Base.CHUNK_SIZE, Base.SECTION_SIZE*Base.CHUNK_SIZE);
+	        			r.line((x * Base.SECTION_SIZE*Base.CHUNK_SIZE), (y * Base.SECTION_SIZE*Base.CHUNK_SIZE), (x * Base.SECTION_SIZE*Base.CHUNK_SIZE) + Base.SECTION_SIZE*Base.CHUNK_SIZE, (y * Base.SECTION_SIZE*Base.CHUNK_SIZE) + Base.SECTION_SIZE*Base.CHUNK_SIZE);
+	        			r.line((x * Base.SECTION_SIZE*Base.CHUNK_SIZE) + Base.SECTION_SIZE*Base.CHUNK_SIZE, (y * Base.SECTION_SIZE*Base.CHUNK_SIZE), (x * Base.SECTION_SIZE*Base.CHUNK_SIZE), (y * Base.SECTION_SIZE*Base.CHUNK_SIZE) + Base.SECTION_SIZE*Base.CHUNK_SIZE);
+	        		}	      
+	        	}
+	        }
+	        r.end();
+        }    
         
         //Highlight of the chunk the mouse is hovering on
         if (hoverChunk != null) {
@@ -724,9 +738,9 @@ public class GameScreen implements Screen {
         }
     }
 
-    void drawPrefab(ShapeRenderer sR) {
+    void drawPrefab(ShapeRenderer sR, SpriteBatch batch) {
     	Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
-    	builtBuilding.drawPrefab(r, worldPos.x, worldPos.y, true);
+    	builtBuilding.drawPrefab(r, batch, worldPos.x, worldPos.y, true);
     }
     
     void drawStats(SpriteBatch batch) {
@@ -1153,7 +1167,11 @@ public class GameScreen implements Screen {
     }
     
     public static void startSimulationThread() {
-        simulationThread = new SimulationThread();        
+        try {
+			simulationThread = new SimulationThread();
+		} catch (InterruptedException e) {
+			BaseClass.errorManager.report(e, "SimulationThread initialisation error.");
+		}        
         simulationThread.start();  
     }
     

@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class IronMine extends BasicMine {
+public class IronMine extends AbstractMine {
 	
 	public IronMine(float cx, float cy) {
 		super(cx, cy);
@@ -70,6 +70,8 @@ public class IronMine extends BasicMine {
 		}
 			
 		nextSimTick = SimulationThread.simTick + productionRate;		
+		
+		updateFogOfWar(true);
 	}
 }
 

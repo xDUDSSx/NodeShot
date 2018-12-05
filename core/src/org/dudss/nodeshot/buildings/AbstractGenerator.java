@@ -1,11 +1,13 @@
 package org.dudss.nodeshot.buildings;
 
 /**Generator that spawns creeper*/
-public abstract class Generator extends Building {
+public abstract class AbstractGenerator extends AbstractBuilding {
 	static float width = 16;
 	static float height = 16;
 	
-	public Generator(float cx, float cy) {
+	boolean active = false;
+	
+	public AbstractGenerator(float cx, float cy) {
 		super(cx, cy, width, height);
 	}
 
@@ -17,4 +19,16 @@ public abstract class Generator extends Building {
 	}
 	
 	protected abstract void generate();
+	
+	void setActive (boolean active) {
+		this.active = active;
+		
+		if (active) {
+			
+		}
+	}
+	
+	boolean isActive() {
+		return active;
+	}
 }

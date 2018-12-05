@@ -3,7 +3,7 @@ package org.dudss.nodeshot.misc;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.dudss.nodeshot.buildings.Building;
+import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.entities.Bullet;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

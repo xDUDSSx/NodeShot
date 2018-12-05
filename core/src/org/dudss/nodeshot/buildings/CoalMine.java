@@ -4,6 +4,7 @@ import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
+import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.items.Coal;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class CoalMine extends BasicMine {
+public class CoalMine extends AbstractMine {
 	
 	Color color = new Color(Color.argb8888(0.2f, 0.2f, 0.2f, 1f));
 	
@@ -71,7 +72,9 @@ public class CoalMine extends BasicMine {
 		}
 			
 		nextSimTick = SimulationThread.simTick + productionRate;		
-	}	
+		
+		updateFogOfWar(true);
+	}
 }
 
 

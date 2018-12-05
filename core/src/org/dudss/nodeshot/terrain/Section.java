@@ -1,10 +1,8 @@
 package org.dudss.nodeshot.terrain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
 
 import com.badlogic.gdx.graphics.Mesh;
@@ -16,7 +14,12 @@ public class Section {
 	
 	int size = Base.SECTION_SIZE;
 	 
-	boolean full = false;
+	/**Corruption update optimisation*/
+	boolean active = false;
+
+	boolean creeperUpdateOccured = false;
+	
+	public Section[] neighbours;
 	
 	Mesh terrainMesh;
 	MeshVertexData terrainVertexData;
@@ -48,6 +51,53 @@ public class Section {
 	 * */
 	public Chunk getChunk(int x, int y) {
 		return sectionChunks[x][y];
+	}
+	
+	/**Sets the section chunks array*/
+	public void setChunks(Chunk[][] chunks) {
+		sectionChunks = chunks;
+	}
+	
+	/**Sends an update call to every {@link Chunk} in this section. Also determines if this section needs further updates.
+	 * @since <b>v5.1</b> (3.12.18) Part of the corruption optimisation update.*/
+	public void updateAll() {
+		creeperUpdateOccured = false;
+		for (int x = 0; x < Base.SECTION_SIZE; x++) {
+			for (int y = 0; y < Base.SECTION_SIZE; y++) {
+				boolean b = sectionChunks[x][y].update();
+				if (b && !creeperUpdateOccured) {
+					creeperUpdateOccured = b;
+				}
+			}
+		}
+		if (!creeperUpdateOccured) {
+			setActive(false);
+			BaseClass.logger.info("Section update deactivation");
+		}
+	}
+	
+	/**Calls the {@link Chunk#applyUpdate()} method for every {@link Chunk} in the section.*/
+	public void applyUpdates() {
+		for (int x = 0; x < Base.SECTION_SIZE; x++) {
+			for (int y = 0; y < Base.SECTION_SIZE; y++) {
+				sectionChunks[x][y].applyUpdate();
+			}
+		}
+	}
+	
+	public void updateNeighbours() {
+		int ax = this.sectionChunks[0][0].ax/Base.SECTION_SIZE;
+		int ay = this.sectionChunks[0][0].ay/Base.SECTION_SIZE;
+		
+		neighbours = new Section[8];
+		neighbours[0] = GameScreen.chunks.getSection(ax, ay + 1);
+		neighbours[1] = GameScreen.chunks.getSection(ax + 1, ay + 1);
+		neighbours[2] = GameScreen.chunks.getSection(ax + 1, ay);
+		neighbours[3] = GameScreen.chunks.getSection(ax + 1, ay - 1);
+		neighbours[4] = GameScreen.chunks.getSection(ax, ay - 1);
+		neighbours[5] = GameScreen.chunks.getSection(ax - 1, ay - 1);
+		neighbours[6] = GameScreen.chunks.getSection(ax - 1, ay);
+		neighbours[7] = GameScreen.chunks.getSection(ax + 1, ay - 1);
 	}
 	
 	/**Updates the {@linkplain Section} terrain mesh data. Can be called from other threads. 
@@ -163,5 +213,17 @@ public class Section {
 	/**@return Whether the FogOfWar mesh update is requested.*/
 	public boolean needsFogOfWarMeshUpdate() {
 		return fogUpdate;
+	}
+	
+	/**Corruption update optimisation
+	 * @since <b>v5.1</b> (3.12.18) Part of the corruption optimisation update.*/
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	/**Corruption update optimisation
+	 * @since <b>v5.1</b> (3.12.18) Part of the corruption optimisation update.*/
+	public boolean isActive() {
+		return active;
 	}
 }

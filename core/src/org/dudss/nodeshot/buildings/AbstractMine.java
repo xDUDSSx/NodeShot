@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**Building that generates items at a rate.*/
-public abstract class BasicMine extends Building {
+public abstract class AbstractMine extends AbstractBuilding {
 
 		//Building node - outputs Item
 		OutputNode output;
@@ -38,7 +38,7 @@ public abstract class BasicMine extends Building {
 		
 		Color prefabColor;
 		
-		public BasicMine(float cx, float cy) {
+		public AbstractMine(float cx, float cy) {
 			super(cx, cy, width, height);
 		}
 		
@@ -60,7 +60,7 @@ public abstract class BasicMine extends Building {
 		}
 		
 		@Override
-		public void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap) {		
+		public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {		
 			float prefX;
 			float prefY;
 			
@@ -107,6 +107,8 @@ public abstract class BasicMine extends Building {
 			}
 				
 			nextSimTick = SimulationThread.simTick + productionRate;		
+			
+			updateFogOfWar(true);
 		}
 		
 		@Override
@@ -114,12 +116,13 @@ public abstract class BasicMine extends Building {
 			GameScreen.buildingHandler.removeBuilding(this);
 			this.output.remove();
 			this.export.remove();
+			
+			updateFogOfWar(false);
 		}
 
 		@Override
 		public void alert(Package p) {
-			// TODO Auto-generated method stub
-			
+			// TODO Auto-generated method stub		
 		}
 
 }

@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
-public class Turret extends BasicStorage {
+public class Turret extends AbstractStorage {
 	static float width = 32;
 	static float height = 32;
 	
@@ -118,6 +118,7 @@ public class Turret extends BasicStorage {
 		return target;
 	}
 	
+	//TODO: trash, rewrite
 	protected Chunk getClosestChunk() {
 		//(dx, dy) is a vector - direction in which we move right now
         int dx = 0;

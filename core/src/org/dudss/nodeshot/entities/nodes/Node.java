@@ -269,6 +269,10 @@ public class Node extends Sprite implements Entity {
 		}
 	}
 
+	public void add() {
+		GameScreen.nodelist.add(this);
+	}
+	
 	public void remove() {
 		for (Node n : connected_to) {
 			n.connected_by.remove(this);

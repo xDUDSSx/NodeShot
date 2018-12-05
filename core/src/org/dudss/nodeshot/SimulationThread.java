@@ -1,37 +1,60 @@
 package org.dudss.nodeshot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Section;
 
 /**The simulation daemon thread, runs a simulation loop*/
 public class SimulationThread extends Thread {
 	//double interpolation; //TODO: implement interpolation
-	int loops;
 	
 	boolean paused = false;
+	
+	/**The corruption update calculation worker thread*/
+	CorruptionUpdateThread corruptionUpdateThread;
+	
+	List<Section> updatedSections;
 	
     public static int TICKS_PER_SECOND = 30;
     static int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     int MAX_FRAMESKIP = 15; //30 (15)
     static long next_game_tick = getTickCount() + SKIP_TICKS;
     
+    /**Corruption update speed in game ticks
+     * Corruption is updated on separate thread because its calculation takes long and thus its update speed is reduced.
+     * To prevent stalling of the main logic loop this calculation is moved to a separate thread so it can calculate within its slower loops free time.
+     * */
     int next_chunk_tick = 10;
-    int next_terrain_tick = 10;
+    int next_terrain_tick = 30;
     
-    int chunkUpdateRate = 5;
+    int chunkUpdateRate = 10;
     int terrainMeshUpdateRate = 30;
     
     public static int lastTicksPerSecond = 30;
     public static int simTick;
     
-    /**The simulation daemon thread, runs a simulation loop*/
-    public SimulationThread() {
+    /**The simulation daemon thread, runs a simulation loop
+     * @throws InterruptedException */
+    public SimulationThread() throws InterruptedException {
     	setDaemon(true);
     	this.setName("SimulationThread");
+    	
+    	updatedSections = new ArrayList<Section>();
+    	
+    	if (corruptionUpdateThread == null) {
+    		BaseClass.logger.info("Starting the CorruptionUpdateThread daemon!");
+    		corruptionUpdateThread = new CorruptionUpdateThread();
+    		corruptionUpdateThread.setDaemon(true);
+    		//CorruptionUpdateThread.start();
+    		//corruptionUpdateThread.wait();
+    		//corruptionUpdateThread.notify();
+    	}
     }
     
     public void run() {
-    	System.out.println("SimThread daemon running!");       	
+    	BaseClass.logger.info("SimulationThread daemon running!");       	
     	GameScreen.simFac = 1.0;
     	
     	//Start the simulation loop
@@ -54,31 +77,21 @@ public class SimulationThread extends Thread {
 				} catch (InterruptedException e) {
 					BaseClass.errorManager.report(e, "Simulation thread pause sleep got interrupted.");
 				}
-    		}
-    		//long startTime = System.currentTimeMillis();		   	 	
-   	        if(getTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {	
+    		}   	 	
+   	        if(getTickCount() > next_game_tick) {	
    	        	next_game_tick += (SKIP_TICKS/GameScreen.simFac); //Set next expected sim calc, modify with simFactor
    	        	
    	        	t1 = getTickCount();
    	        	updateLogic();
    				t2 = getTickCount();
    				timeElapsed = t2 - t1;
-   				//System.out.println("Sim calculation finished on: " + Thread.currentThread().getName() + ", time elapsed: " + timeElapsed + ", loops: " + loops);
    				
    				//Can't keep up?
    				if (timeElapsed > SKIP_TICKS) {
-   					//double prevSimFac = simFac;
    					GameScreen.simFac = ((double)SKIP_TICKS/(double)timeElapsed);
-   					/*System.out.println("Sim calculation thread: " + Thread.currentThread().getName() + " can't keep up! "
-   							+ "(" + timeElapsed + " vs " + SKIP_TICKS +"),"
-   							+ "decreasing simFac (" + prevSimFac + "->" + simFac + ")");
-   					*/
    				} else if (GameScreen.simFac < 1.0) {
-   					//System.out.println("Sim thread is keeping up.");
    					GameScreen.simFac = 1.0;
    				}
-   				
-   				loops++;  
    				
    				//sFPS calculation
    				GameScreen.currentSimTimeTick = System.currentTimeMillis();
@@ -87,13 +100,8 @@ public class SimulationThread extends Thread {
 	   	        	GameScreen.nextSimTimeTick = GameScreen.currentSimTimeTick + 1000;
 	   	        	GameScreen.sfps = GameScreen.simFrameCount;
 	   	        	GameScreen.simFrameCount = 0;
-   	            }
-	   	        
-	   	        if (loops > 1) {
-	   	        	Thread.yield();             
-	   	        }		
-   	        }  	        
-    		loops = 0;       
+   	            }	       
+   	        }  	          
     		
     		//calculate remainder (with 1ms threshold for safe operation) (<- might make it unstable)
     		remainder = (next_game_tick - getTickCount());
@@ -104,12 +112,12 @@ public class SimulationThread extends Thread {
     		//sleep the remainder
     		try {
 				Thread.sleep(remainder);
-				Thread.sleep(1);
+				if (remainder == 0) {
+					Thread.sleep(1);
+				}			
 			} catch (InterruptedException e) {
 				BaseClass.errorManager.report(e, "Simulation thread encountered an exception while sleeping in-between ticks!");
-			}
-    		// interpolation = ((getTickCount() + SKIP_TICKS - next_game_tick ) / SKIP_TICKS );       
-    		//TODO: create custom method for this and implement interpolation  	    
+			}    
    	    }
     }
     
@@ -124,26 +132,52 @@ public class SimulationThread extends Thread {
 		//Updating projectiles
 		GameScreen.bulletHandler.updateAll();
 		
+		//Updating creeper generators
+		GameScreen.buildingHandler.updateAllGenerators();
+		
 		//Updating chunks and geometry of each section corruption mesh every chunkUpdateRate ticks
 		//Terrain geometry is updated every terrainMeshUpdateRate ticks
 		if (simTick >= next_chunk_tick) {
+			//Notifying the corruption update thread, this will perform a single corruption update running on a different thread
 			next_chunk_tick += chunkUpdateRate;
-			GameScreen.chunks.updateAllChunks();
-			
-			boolean terrainUpdate = false;
-			if (simTick >= next_terrain_tick) {
-				terrainUpdate = true;
-				next_terrain_tick += terrainMeshUpdateRate;
-			}
-			
-			for (Section s : GameScreen.chunks.sectionsInView) {
-				GameScreen.chunks.updateSectionMesh(s, true);
-				if (terrainUpdate) {
-					//GameScreen.chunks.updateSectionMesh(s, false, -1);
+			long lastTick = System.currentTimeMillis();
+	    	
+	    	//Selective per section updating, sections are only updated if they are active
+	    	for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
+				for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
+					if (GameScreen.chunks.sections[x][y].isActive()) {
+						updatedSections.add(GameScreen.chunks.sections[x][y]);
+						GameScreen.chunks.sections[x][y].updateAll();
+					}
 				}
-			}
+	    	}
+	    	
+	    	//Applies the update in all updated sections
+	    	for (Section s : updatedSections) {
+	    		s.applyUpdates();
+	    	}
+	    	
+	    	//BaseClass.logger.info("CorruptionUpdateThread update report: " + updatedSections.size() + " out of " + Base.SECTION_AMOUNT*Base.SECTION_AMOUNT + " sections updated.");
+	    	
+	    	for (Section s : updatedSections) {
+				GameScreen.chunks.updateSectionMesh(s, true);
+	    	}
+	    	updatedSections.clear();
+	    	BaseClass.logger.info("res: " + (System.currentTimeMillis() - lastTick));
+			/*synchronized(corruptionUpdateThread) {
+				corruptionUpdateThread.notify();
+			}*/
 		}		
 		
+		//Terrain update, currently unused
+		if (simTick >= next_terrain_tick) {
+			next_terrain_tick += terrainMeshUpdateRate;
+			
+			/*for (Section s : GameScreen.chunks.sectionsInView) {
+				GameScreen.chunks.updateSectionMesh(s, false);
+			}*/
+		}
+
 		//Updating pathHandler logic
 		GameScreen.packageHandler.update();
 		

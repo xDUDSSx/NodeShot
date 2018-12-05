@@ -1,15 +1,15 @@
 package org.dudss.nodeshot.entities.nodes;
 
-import org.dudss.nodeshot.buildings.Building;
+import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 public class OutputNode extends Node {
 	
-	Building assignedBuilding;
+	AbstractBuilding assignedBuilding;
 	
-	public OutputNode(float cx, float cy, int radius, Building building) {
+	public OutputNode(float cx, float cy, int radius, AbstractBuilding building) {
 		super(cx, cy, radius);
 		
 		assignedBuilding = building;
@@ -21,7 +21,7 @@ public class OutputNode extends Node {
 		
 	}
 
-	public Building getAssignedBuilding() {
+	public AbstractBuilding getAssignedBuilding() {
 		return assignedBuilding;
 	}
 	

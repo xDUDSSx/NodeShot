@@ -5,15 +5,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.terrain.Chunks;
 
-public abstract class Building {
+public abstract class AbstractBuilding {
 	float x,y;
 	float cx,cy;
 	
 	float width;
 	float height;
 	
-	public Building(float cx, float cy, float width, float height) {		
+	public AbstractBuilding(float cx, float cy, float width, float height) {		
 		this.cx = cx;
 		this.cy = cy;
 		
@@ -47,11 +49,21 @@ public abstract class Building {
 	
 	//Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)
 	public abstract void draw(ShapeRenderer r, SpriteBatch batch);	
-	public abstract void drawPrefab(ShapeRenderer r, float cx, float cy, boolean snap);	
+	public abstract void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap);	
 	
 	//Method used by InputNodes used to alert the building that a following package had been accepted
 	public abstract void alert(Package p);
 	
 	public abstract void build();	
 	public abstract void demolish();
+	
+	protected void updateFogOfWar(boolean show) {
+		if (show) {
+			GameScreen.chunks.setVisibility(this.cx, this.cy, Base.SECTION_SIZE, Chunks.Visibility.ACTIVE);
+		} else {
+			GameScreen.chunks.setVisibility(this.cx, this.cy, Base.SECTION_SIZE, Chunks.Visibility.SEMIACTIVE);
+		}
+		
+	}
+
 }

@@ -60,8 +60,9 @@ public class SettingsMenu extends Window {
 		VisCheckBox drawTerrainEdgesCheckbox = new VisCheckBox("Highlight terrain edges", Base.drawTerrainEdges);
 		VisCheckBox drawCorruptionEdgesCheckbox = new VisCheckBox("Highlight corruption edges", Base.drawCorruptionEdges);
 		VisCheckBox drawCHeightInequalityCheckbox = new VisCheckBox("Highlight c_height inequal areas", Base.drawCHeightInequality);	
-		VisCheckBox newUpdateCheckbox = new VisCheckBox("Use new update", Base.useNewUpdate);
-		VisCheckBox drawFlowlines = new VisCheckBox("Draw flowlines", Base.drawFlowlines);
+		VisCheckBox drawBorderChunksCheckbox = new VisCheckBox("Highlight border chunks", Base.drawBorderChunks);
+		
+		VisCheckBox drawActiveSectionsCheckbox = new VisCheckBox("Highlight active update sections", Base.drawActiveSections);
 		VisCheckBox drawOresCheckbox = new VisCheckBox("Draw ores", Base.drawOres);
 		VisCheckBox errorCheckbox = new VisCheckBox("Test error", false);
 		
@@ -74,8 +75,8 @@ public class SettingsMenu extends Window {
 		engineSettingsTable.add(drawTerrainEdgesCheckbox).left().row();
 		engineSettingsTable.add(drawCorruptionEdgesCheckbox).left().row();
 		engineSettingsTable.add(drawCHeightInequalityCheckbox).left().row();
-		engineSettingsTable.add(newUpdateCheckbox).left().row();
-		engineSettingsTable.add(drawFlowlines).left().row();
+		engineSettingsTable.add(drawBorderChunksCheckbox).left().row();
+		engineSettingsTable.add(drawActiveSectionsCheckbox).left().row();
 		
 		table.add(engineSettingsButton).fillX().row();
 		table.add(engineSettingsCollapsibleWidget).expandX().fillX().row();
@@ -147,24 +148,24 @@ public class SettingsMenu extends Window {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				Base.drawCHeightInequality = drawCHeightInequalityCheckbox.isChecked();
 		    }
-	    });		
+	    });	
+		drawBorderChunksCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Base.drawBorderChunks = drawBorderChunksCheckbox.isChecked();
+		    }
+	    });	
+		drawActiveSectionsCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Base.drawActiveSections = drawActiveSectionsCheckbox.isChecked();
+		    }
+	    });	
 		drawOresCheckbox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
 				Base.drawOres = drawOresCheckbox.isChecked();
 				GameScreen.chunks.updateAllSectionMeshes(false);
-		    }
-	    });		
-		newUpdateCheckbox.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				Base.useNewUpdate = newUpdateCheckbox.isChecked();
-		    }
-	    });		
-		drawFlowlines.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				Base.drawFlowlines = drawFlowlines.isChecked();
 		    }
 	    });		
 		errorCheckbox.addListener(new ClickListener(){
