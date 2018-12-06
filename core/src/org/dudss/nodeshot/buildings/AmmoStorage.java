@@ -32,4 +32,10 @@ public class AmmoStorage extends AbstractStorage  {
 		}
 		return false;
 	}
+
+	@Override
+	public void outline(boolean outline) {
+		// TODO Auto-generated method stub
+		
+	}
 }

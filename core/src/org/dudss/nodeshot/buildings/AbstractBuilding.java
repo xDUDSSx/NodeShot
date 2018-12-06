@@ -4,18 +4,27 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunks;
 
-public abstract class AbstractBuilding {
+public abstract class AbstractBuilding implements Entity {
 	float x,y;
 	float cx,cy;
 	
 	float width;
 	float height;
 	
+	boolean outlined = false;
+	
+	int id;
+	
 	public AbstractBuilding(float cx, float cy, float width, float height) {		
+		this.id = java.lang.System.identityHashCode(this);
+		
 		this.cx = cx;
 		this.cy = cy;
 		
@@ -57,6 +66,10 @@ public abstract class AbstractBuilding {
 	public abstract void build();	
 	public abstract void demolish();
 	
+	public void outline(boolean outline) {
+		outlined = outline;
+	}
+	
 	protected void updateFogOfWar(boolean show) {
 		if (show) {
 			GameScreen.chunks.setVisibility(this.cx, this.cy, Base.SECTION_SIZE, Chunks.Visibility.ACTIVE);
@@ -64,6 +77,39 @@ public abstract class AbstractBuilding {
 			GameScreen.chunks.setVisibility(this.cx, this.cy, Base.SECTION_SIZE, Chunks.Visibility.SEMIACTIVE);
 		}
 		
+	}
+	
+	public float getWidth() {
+		return width;
+	}
+	
+	public float getHeight() {
+		return height;
+	}
+	
+	@Override
+	public int getID() {
+		return id;
+	}
+
+	@Override
+	public int getIndex() {
+		return GameScreen.buildingHandler.getAllBuildings().indexOf(this);
+	}
+
+	@Override
+	public EntityType getType() {
+		return EntityType.BUILDING;
+	}
+
+	@Override
+	public float getX() {
+		return x;
+	}
+
+	@Override
+	public float getY() {
+		return y;
 	}
 
 }

@@ -72,7 +72,7 @@ public class Section {
 		}
 		if (!creeperUpdateOccured) {
 			setActive(false);
-			BaseClass.logger.info("Section update deactivation");
+			//BaseClass.logger.info("Section update deactivation");
 		}
 	}
 	

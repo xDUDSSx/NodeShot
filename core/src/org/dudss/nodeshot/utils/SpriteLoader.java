@@ -51,8 +51,10 @@ public class SpriteLoader {
 	public static Sprite ironTileSprite;
 	
 	public static TextureAtlas tileAtlas;
+	
 	public static TextureAtlas hqanimAtlas;
 	public static TextureRegion[] hqanimFrames;
+	public static TextureRegion[] hqanimoutlineFrames;
 	
 	public static Texture corrTex;
 	
@@ -98,8 +100,17 @@ public class SpriteLoader {
 				n = Integer.toString(i + 1);
 			}
 			hqanimFrames[i] = (TextureRegion) hqanimAtlas.findRegion("hqframe00" + n);
-			//s.setTexture(hqanimAtlas.findRegion("hqframe00" + n).getTexture());
-			//s.setSize(3*Base.CHUNK_SIZE, 3*Base.CHUNK_SIZE);
+		}
+		
+		hqanimoutlineFrames = new TextureRegion[72];
+		for (int i = 0; i < 72; i++) {
+			String n;
+			if (i < 9) {
+				n = "0" + Integer.toString(i + 1);
+			} else {
+				n = Integer.toString(i + 1);
+			}
+			hqanimoutlineFrames[i] = (TextureRegion) hqanimAtlas.findRegion("outline_hqframe00" + n);
 		}
 		
 		corrTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);

@@ -15,15 +15,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Headquarters extends AbstractBuilding {
 
-	static float width = Base.CHUNK_SIZE*5, height = Base.CHUNK_SIZE*5;
+	static float width = Base.CHUNK_SIZE*3, height = Base.CHUNK_SIZE*3;
 	
 	Animation<TextureRegion> hqAnimation;
+	Animation<TextureRegion> hqOutlinedAnimation;
 	
 	BuildingNode hqNode;
 	
 	public Headquarters(float cx, float cy) {
 		super(cx, cy, width, height);
 		hqAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.hqanimFrames);	
+		hqOutlinedAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.hqanimoutlineFrames);	
 	}
 
 	@Override
@@ -33,10 +35,15 @@ public class Headquarters extends AbstractBuilding {
 
 	@Override
 	public void draw(ShapeRenderer r, SpriteBatch batch) {
-		TextureRegion currentFrame = hqAnimation.getKeyFrame(GameScreen.stateTime, true);
 		batch.begin();
-		batch.setColor(1f, 1f, 1f, 1f);
-		batch.draw(currentFrame, x, y, width, height);
+		batch.setColor(1f, 1f, 1f, 1f);		
+		if (outlined) {
+			TextureRegion currentFrame = hqOutlinedAnimation.getKeyFrame(GameScreen.stateTime, true);
+			batch.draw(currentFrame, x, y, width, height);
+		} else {
+			TextureRegion currentFrame = hqAnimation.getKeyFrame(GameScreen.stateTime, true);
+			batch.draw(currentFrame, x, y, width, height);
+		}		
 		batch.end();
 	}
 

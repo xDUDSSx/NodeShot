@@ -140,7 +140,6 @@ public class SimulationThread extends Thread {
 		if (simTick >= next_chunk_tick) {
 			//Notifying the corruption update thread, this will perform a single corruption update running on a different thread
 			next_chunk_tick += chunkUpdateRate;
-			long lastTick = System.currentTimeMillis();
 	    	
 	    	//Selective per section updating, sections are only updated if they are active
 	    	for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
@@ -163,7 +162,6 @@ public class SimulationThread extends Thread {
 				GameScreen.chunks.updateSectionMesh(s, true);
 	    	}
 	    	updatedSections.clear();
-	    	BaseClass.logger.info("res: " + (System.currentTimeMillis() - lastTick));
 			/*synchronized(corruptionUpdateThread) {
 				corruptionUpdateThread.notify();
 			}*/

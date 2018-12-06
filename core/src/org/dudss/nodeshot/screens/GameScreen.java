@@ -137,6 +137,7 @@ public class GameScreen implements Screen {
 	}
 	public static MouseType lastMousePressType;
 
+	public static Entity selectedEntity = null;
 	public static int selectedID = -1;
 	public static int selectedIndex = -1;
 	public static EntityType selectedType = EntityType.NONE;
@@ -1072,9 +1073,12 @@ public class GameScreen implements Screen {
         if (highlightedEntity == null) {
         	highlightedEntity = checkPackages(rect, worldPos, select);
         	if (highlightedEntity == null) {
-        		highlightedEntity = checkConnectors(rect, worldPos, select);
+        		highlightedEntity = checkBuildings(rect, worldPos, select);
         		if (highlightedEntity == null) {
-        			return null;
+        			highlightedEntity = checkConnectors(rect, worldPos, select);
+        			if (highlightedEntity == null) {
+        				return null;
+        			}
         		}
         	}
         }
@@ -1082,7 +1086,30 @@ public class GameScreen implements Screen {
         return highlightedEntity;
     }
 
-    static Node checkNodes(Rectangle rect, Vector3 worldPos, boolean select) {
+    private static AbstractBuilding checkBuildings(Rectangle rect, Vector3 worldPos, boolean select) {
+    	Boolean buildingIntersected = false;
+    	AbstractBuilding intersectedBuilding = null;
+        if ((buildingHandler.getAllBuildings().size() > 0)) {
+            for(int i = 0; i < buildingHandler.getAllBuildings().size(); i++) {
+                AbstractBuilding b = buildingHandler.getAllBuildings().get(i);
+                Rectangle r = new Rectangle(b.getX(), b.getY(), b.getWidth(), b.getHeight());
+                if(r.overlaps(rect)) {
+                	if (select) Selector.selectBuilding(b);
+                    buildingIntersected = true;
+                    intersectedBuilding = b;
+                    break;
+                }
+            }
+            if (!buildingIntersected) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+                	if (select) Selector.deselect();
+                }
+            }
+        }
+        return intersectedBuilding;
+	}
+
+	static Node checkNodes(Rectangle rect, Vector3 worldPos, boolean select) {
     	Boolean nodeIntersected = false;
     	Node intersectedNode = null;
         if ((nodelist.size() > 0)) {
