@@ -54,6 +54,28 @@ public abstract class AbstractBuilding implements Entity {
 		}		
 	}
 	
+	public float getPrefabX(float cx, boolean snap) {
+		float prefX;
+		if (snap) {
+			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
+			prefX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
+		} else {
+			prefX = cx - (width/2);
+		}
+		return prefX;
+	}
+	
+	public float getPrefabY(float cy, boolean snap) {
+		float prefY;
+		if (snap) {;
+			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
+			prefY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
+		} else {
+			prefY = cy - (height/2);
+		}
+		return prefY;
+	}
+	
 	public abstract void update();	
 	
 	//Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)

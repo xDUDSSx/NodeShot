@@ -34,7 +34,7 @@ public class DesktopInputProcessor implements InputProcessor {
 		if (keycode == Keys.SPACE) {
 			//SimulationThread.pauseSim();
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -67,108 +67,106 @@ public class DesktopInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		//if (!GameScreen.gamePaused) {
-			switch (button) {
-				case Input.Buttons.LEFT: 				
-					mouseX = Gdx.input.getX();
-					mouseY = Gdx.input.getY();		
-					mousePos.x = mouseX;;
-					mousePos.y = mouseY;		
-		
-					Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
-					lastMousePress = worldPos;
-					lastMousePressType = MouseType.MOUSE_1;
+		switch (button) {
+			case Input.Buttons.LEFT: 				
+				mouseX = Gdx.input.getX();
+				mouseY = Gdx.input.getY();		
+				mousePos.x = mouseX;;
+				mousePos.y = mouseY;		
+	
+				Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
+				lastMousePress = worldPos;
+				lastMousePressType = MouseType.MOUSE_1;
+				
+				//Building
+				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {
+					GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true);
+					GameScreen.builtBuilding.build();
 					
-					//Building
-					if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {
-						GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true);
-						GameScreen.builtBuilding.build();
-						
-						if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
-							try {					
-								Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
-								Constructor buildingConstructor;
-								buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
-								Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
-								GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
-							} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
-								BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
-							}
-												
-						} else {
-							GameScreen.builtBuilding = null;
-							GameScreen.builtConnector = null;
-							GameScreen.buildMode = false;
+					if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
+						try {					
+							Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
+							Constructor buildingConstructor;
+							buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
+							Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
+							GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
+						} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
+							BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
 						}
-					} else if (GameScreen.builtConnector != null) {
-						Node newNode = null;
-						if (builtConnector instanceof ConveyorNode) {					
-							newNode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
-						} else {
-							newNode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
-						}					
-						Selector.selectNode(newNode);
-						nodelist.add(newNode);
-						newNode.setLocation(worldPos.x, worldPos.y, true);
-						
+											
+					} else {
 						GameScreen.builtBuilding = null;
 						GameScreen.builtConnector = null;
 						GameScreen.buildMode = false;
-					} else if (draggingConnection != true){
-						GameScreen.checkHighlights(true);	
 					}
+				} else if (GameScreen.builtConnector != null) {
+					Node newNode = null;
+					if (builtConnector instanceof ConveyorNode) {					
+						newNode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
+					} else {
+						newNode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
+					}					
+					Selector.selectNode(newNode);
+					nodelist.add(newNode);
+					newNode.setLocation(worldPos.x, worldPos.y, true);
 					
-					//Cancel right click menu if one is present
-					GameScreen.rightClickMenuManager.removeMenu();
-					
-					if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-						Node newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
-						Selector.selectNode(newnode);
-						nodelist.add(newnode);
-					}							
-				break;
-				
-				case Input.Buttons.RIGHT:
-					mouseX = Gdx.input.getX();
-					mouseY = Gdx.input.getY();		
-					mousePos.x = mouseX;
-					mousePos.y = mouseY;		
-	
-					worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
-					lastMousePress = worldPos;
-					lastMousePressType = MouseType.MOUSE_3;
-	
-					Entity clickedEntity = GameScreen.checkHighlights(true);				
-	
-					GameScreen.buildMode = false;
 					GameScreen.builtBuilding = null;
-					
-					if (clickedEntity == null && GameScreen.selectedID != -1) {
-						Selector.deselect();
-						GameScreen.rightClickMenuManager.removeMenu();
-					} else {					
-						if (rightClickMenuManager.rightClickMenu != null && (!(clickedEntity == rightClickMenuManager.rightClickMenu.getAssignedEntity()))) {
-							GameScreen.rightClickMenuManager.createMenu(clickedEntity);
-						} else {
-							GameScreen.rightClickMenuManager.createMenu(clickedEntity);
-						}
-					}	
-					if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-						if(nodelist.size() != 0) {
-							nodelist.get(nodelist.size() - 1).remove();
-						}
-					}			
-				break;
-					case Input.Buttons.MIDDLE: mouseX = Gdx.input.getX();
-					mouseY = Gdx.input.getY();		
-					mousePos.x = mouseX;
-					mousePos.y = mouseY;		
-		
-					worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
-					lastMousePress = worldPos;
-					lastMousePressType = MouseType.MOUSE_2;
-			}
-		//}
+					GameScreen.builtConnector = null;
+					GameScreen.buildMode = false;
+				} else if (draggingConnection != true){
+					GameScreen.checkHighlights(true);	
+				}
+				
+				//Cancel right click menu if one is present
+				GameScreen.rightClickMenuManager.removeMenu();
+				
+				if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+					Node newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
+					Selector.selectNode(newnode);
+					nodelist.add(newnode);
+				}							
+			break;
+			
+			case Input.Buttons.RIGHT:
+				mouseX = Gdx.input.getX();
+				mouseY = Gdx.input.getY();		
+				mousePos.x = mouseX;
+				mousePos.y = mouseY;		
+
+				worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
+				lastMousePress = worldPos;
+				lastMousePressType = MouseType.MOUSE_3;
+
+				Entity clickedEntity = GameScreen.checkHighlights(true);				
+
+				GameScreen.buildMode = false;
+				GameScreen.builtBuilding = null;
+				
+				if (clickedEntity == null && GameScreen.selectedID != -1) {
+					Selector.deselect();
+					GameScreen.rightClickMenuManager.removeMenu();
+				} else {					
+					if (rightClickMenuManager.rightClickMenu != null && (!(clickedEntity == rightClickMenuManager.rightClickMenu.getAssignedEntity()))) {
+						GameScreen.rightClickMenuManager.createMenu(clickedEntity);
+					} else {
+						GameScreen.rightClickMenuManager.createMenu(clickedEntity);
+					}
+				}	
+				if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+					if(nodelist.size() != 0) {
+						nodelist.get(nodelist.size() - 1).remove();
+					}
+				}			
+			break;
+				case Input.Buttons.MIDDLE: mouseX = Gdx.input.getX();
+				mouseY = Gdx.input.getY();		
+				mousePos.x = mouseX;
+				mousePos.y = mouseY;		
+	
+				worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
+				lastMousePress = worldPos;
+				lastMousePressType = MouseType.MOUSE_2;
+		}
 		return false;
 	}
 
@@ -344,12 +342,10 @@ public class DesktopInputProcessor implements InputProcessor {
 		float ny = Math.round((worldPos.y - (worldPos.y % Base.CHUNK_SIZE)) / Base.CHUNK_SIZE);		
 			
 		GameScreen.hoverChunk = GameScreen.chunks.getChunk((int)nx, (int)ny);
-		GameScreen.hudMenu.update();
 	}
 	
 	@Override
 	public boolean scrolled(int amount) {
-		//if (!GameScreen.gamePaused) {
 			//Cancel right click menu if one is present
 			GameScreen.rightClickMenuManager.removeMenu();
 			
@@ -373,7 +369,6 @@ public class DesktopInputProcessor implements InputProcessor {
 					GameScreen.chunks.updateView(cam);
 				}
 			}
-		//}
-		return false;
+		return true;
 	}
 }

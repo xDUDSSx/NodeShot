@@ -33,6 +33,7 @@ import org.dudss.nodeshot.ui.HudMenu;
 import org.dudss.nodeshot.ui.PauseMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
 import org.dudss.nodeshot.ui.SettingsMenu;
+import org.dudss.nodeshot.ui.ToolbarMenu;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -190,6 +191,7 @@ public class GameScreen implements Screen {
     public static BuildMenu buildMenu;
     public static HudMenu hudMenu;
     public static PauseMenu pauseMenu;
+    public static ToolbarMenu toolbarMenu;
     
     public static GLProfiler glProfiler;
     
@@ -203,7 +205,12 @@ public class GameScreen implements Screen {
         nodeshotGame = game;
         glProfiler = new GLProfiler(Gdx.graphics);
         
-        if (Base.enableGlProgilerLogging) glProfiler.enable();
+        if (Base.enableGlProgilerLogging) glProfiler.enable();  
+        
+        //Loading resources
+        Shaders.load();
+        SpriteLoader.loadAll();
+        VisUI.load();
         
         packageHandler = new PackageHandler();
         connectorHandler = new ConnectorHandler();
@@ -215,11 +222,6 @@ public class GameScreen implements Screen {
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
         aspectRatio = (float)WIDTH/(float)HEIGHT;
-        
-        //Loading item sprites
-        Shaders.load();
-        SpriteLoader.loadAll();
-        VisUI.load();
         
         //LineWidth
         Gdx.gl.glLineWidth(2);
@@ -238,7 +240,7 @@ public class GameScreen implements Screen {
         lastCamPos = cam.position;
         lastZoom = cam.zoom;
         
-        //Initializes chunks and sections
+        //Initialises chunks and sections
         chunks.create();
         //Generate terrain if not generated already
         if (chunks.generated == false) {       	
@@ -285,8 +287,8 @@ public class GameScreen implements Screen {
         buildMenu = new BuildMenu("Build menu", skin);    
         stage.addActor(buildMenu);
                 
-        hudMenu = new HudMenu("HUD menu", skin);
-        //stage.addActor(hudMenu);
+        toolbarMenu = new ToolbarMenu("Menu");
+        stage.addActor(toolbarMenu);
         
         pauseMenu = new PauseMenu(false);
         stage.addActor(pauseMenu);
@@ -296,7 +298,6 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
             	buildMenu.setVisible(!(buildMenu.isVisible()));
-            	GameScreen.hudMenu.setVisible(!(buildMenu.isVisible()));
             }
         });
         imgButton.setSize(64, 64);
@@ -305,17 +306,6 @@ public class GameScreen implements Screen {
         
         SettingsMenu settings = new SettingsMenu("Settings", GameScreen.skin);	
 		GameScreen.stage.addActor(settings);
-		
-		/*for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-			for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {
-				Chunk c = chunks.getChunk(x, y);
-				float dist = (float) Math.hypot(Base.WORLD_SIZE/2 - c.getX(), Base.WORLD_SIZE/2 - c.getY());
-				if (dist <= 1000) {
-					c.visibility = 0f;
-				}
-			}
-		}
-		chunks.updateAllFogOfWarMeshes();*/
     }
 
     public static int getWidth() {return WIDTH;}
@@ -332,12 +322,12 @@ public class GameScreen implements Screen {
         Shaders.blurShader.end();
 		       
         //Input processors
-        InputMultiplexer multiplexer = new InputMultiplexer();       
-        multiplexer.addProcessor(stage);
-        
+        InputMultiplexer multiplexer = new InputMultiplexer();           
         DesktopInputProcessor dip = new DesktopInputProcessor();
-    	multiplexer.addProcessor(dip);
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(dip);
         
+    	
         //Android not supported anymore
         /*if (Gdx.app.getType() == ApplicationType.Android) {
         	MobileGestureListener mgl = new MobileGestureListener();
@@ -368,7 +358,7 @@ public class GameScreen implements Screen {
     @Override
     public void render (float delta) {
     	stateTime += delta;
-
+    	 	
         handleInput();
         cam.update();	        	
         
@@ -391,7 +381,7 @@ public class GameScreen implements Screen {
 			batch.begin();    	        
 	        for (Section s : chunks.sectionsInView) {	   
 	        	Chunk c = s.getChunk(0, 0);	        	
-	        	batch.draw(SpriteLoader.gridOverlay2, c.getX() , c.getY(), 256, 256);	
+	        	batch.draw(SpriteLoader.gridOverlay, c.getX() , c.getY(), 512, 512);	
 	        }
 	        batch.end();
 		}
@@ -464,11 +454,13 @@ public class GameScreen implements Screen {
         //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
         chunks.drawCorruption();
         
+        buildingHandler.drawAllGenerators(r, batch);
+        
         //Drawing the fog of war.
         chunks.drawFogOfWar();
         
         bulletHandler.drawAll(r, batch);
-        
+
         //Shows terrain edges in blue
         if (Base.drawTerrainEdges) {
 	        r.begin(ShapeType.Line);
@@ -1218,7 +1210,7 @@ public class GameScreen implements Screen {
         stage.getViewport().update(width, height, true);
         
         buildMenu.resize();
-        //hudMenu.resize();
+        toolbarMenu.updateBounds();
         pauseMenu.resize();
     }
 

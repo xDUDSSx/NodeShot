@@ -38,8 +38,7 @@ public class SimplexNoiseGenerator {
 				totalNoise[x][y] = Base.range(totalNoise[x][y], min, max, -1.0f, 1.0f);
 			}
 		}
-
-		System.out.println("Min: " + min + " Max: " + max);
+		
 		return totalNoise;
 	}
 	

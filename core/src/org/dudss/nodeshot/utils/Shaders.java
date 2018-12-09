@@ -82,7 +82,7 @@ public class Shaders {
 		if (sb.length() > 0) {
 			BaseClass.errorManager.reportWithCustomDetails(new RuntimeException(), "Some shaders did not compile successfully!", sb.toString());
 		} else {
-			System.out.println("All shaders compiled successfully!");
+			BaseClass.logger.info("All shaders compiled successfully!");
 		}
 	}
 }

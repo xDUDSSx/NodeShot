@@ -28,8 +28,7 @@ public abstract class AbstractMine extends AbstractBuilding {
 		//Target node - where is Item sent
 		Node target;
 
-		static float width = 48;
-		static float height = 48;
+		static float width = Base.CHUNK_SIZE*3, height = Base.CHUNK_SIZE*3;
 		
 		public int productionRate = 600;
 		public int nextSimTick = -1;
@@ -60,24 +59,10 @@ public abstract class AbstractMine extends AbstractBuilding {
 		}
 		
 		@Override
-		public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {		
-			float prefX;
-			float prefY;
-			
-			if (snap) {
-				float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-				float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-				
-				prefX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
-				prefY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
-			} else {
-				prefX = cx - (width/2);
-				prefY = cy - (height/2);
-			}
-			
+		public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {					
 			r.set(ShapeType.Filled);
 			r.setColor(prefabColor);
-			r.rect(prefX, prefY, width, height);
+			r.rect(getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
 		}
 		
 		@Override

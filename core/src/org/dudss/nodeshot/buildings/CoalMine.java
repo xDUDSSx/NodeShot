@@ -9,18 +9,26 @@ import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class CoalMine extends AbstractMine {
 	
+	Animation<TextureRegion> genAnimation;
+	Animation<TextureRegion> genOutlinedAnimation;
+	
 	Color color = new Color(Color.argb8888(0.2f, 0.2f, 0.2f, 1f));
 	
 	public CoalMine(float cx, float cy) {
 		super(cx, cy);
+		genAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.genanimFrames);	
+		genOutlinedAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.genanimoutlineFrames);
 		prefabColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
 	}
 
@@ -37,9 +45,25 @@ public class CoalMine extends AbstractMine {
 	
 	@Override
 	public void draw(ShapeRenderer r, SpriteBatch batch) {	
-		r.set(ShapeType.Filled);
-		r.setColor(new Color(Color.argb8888(0.2f, 0.2f, 0.2f, 1f)));
-		r.rect(x, y, width, height);
+		batch.begin();
+		batch.setColor(1f, 1f, 1f, 1f);		
+		if (outlined) {
+			TextureRegion currentFrame = genOutlinedAnimation.getKeyFrame(GameScreen.stateTime, true);
+			batch.draw(currentFrame, x, y, width, height);
+		} else {
+			TextureRegion currentFrame = genAnimation.getKeyFrame(GameScreen.stateTime, true);
+			batch.draw(currentFrame, x, y, width, height);
+		}		
+		batch.end();
+	}
+	
+	@Override
+	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {
+		TextureRegion currentFrame = genAnimation.getKeyFrame(GameScreen.stateTime, true);		
+		batch.begin();
+		batch.setColor(1f, 1f, 1f, 0.5f);
+		batch.draw(currentFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
+		batch.end();		
 	}
 	
 	@Override

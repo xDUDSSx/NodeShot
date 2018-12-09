@@ -685,7 +685,6 @@ public class RightClickWindow extends Window {
 		            public void clicked(InputEvent event, float x, float y) {	
 					    Vector3 worldPos = cam.unproject(new Vector3(mouseClickPos.x, mouseClickPos.y, 0));
 		            	Node newnode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
-		            	System.out.println("IX: " + worldPos.x + " WY: " + worldPos.y) ;
 						Selector.selectNode(newnode);
 						nodelist.add(newnode);
 						

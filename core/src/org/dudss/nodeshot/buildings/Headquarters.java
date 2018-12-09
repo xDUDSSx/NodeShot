@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Headquarters extends AbstractBuilding {
 
-	static float width = Base.CHUNK_SIZE*3, height = Base.CHUNK_SIZE*3;
+	static float width = Base.CHUNK_SIZE*4, height = Base.CHUNK_SIZE*4;
 	
 	Animation<TextureRegion> hqAnimation;
 	Animation<TextureRegion> hqOutlinedAnimation;
@@ -50,24 +50,9 @@ public class Headquarters extends AbstractBuilding {
 	@Override
 	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {
 		TextureRegion currentFrame = hqAnimation.getKeyFrame(GameScreen.stateTime, true);
-		
-		float prefX;
-		float prefY;
-		
-		if (snap) {
-			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			
-			prefX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
-			prefY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
-		} else {
-			prefX = cx - (width/2);
-			prefY = cy - (height/2);
-		}
-		
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 0.5f);
-		batch.draw(currentFrame, prefX, prefY, width, height);
+		batch.draw(currentFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
 		batch.end();	
 	}
 

@@ -24,14 +24,14 @@ stripWhitespaceY=false
 wrapX=ClampToEdge
 wrapY=ClampToEdge
 premultiplyAlpha=false
-grid=true
+grid=false
 square=false
 bleed=true
 limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../../../Desktop/NodeShot/HQanimation256textured,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false}]
+inputFiles=[{path:../../../../Desktop/NodeShot/HQanimation256textured,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:../../../../Desktop/NodeShot/previews,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:../../../../Desktop/NodeShot/sprites/creepergenONframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/creepergenOFFframe.png,type:Input,regionName:null}]
 
 
 -PROJ-

@@ -91,24 +91,10 @@ public class Furnace extends AbstractBuilding implements Storage {
 	}
 
 	@Override
-	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {		
-		float prefX;
-		float prefY;
-		
-		if (snap) {
-			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			
-			prefX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
-			prefY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
-		} else {
-			prefX = cx - (width/2);
-			prefY = cy - (height/2);
-		}
-		
+	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {				
 		r.set(ShapeType.Filled);
 		r.setColor(prefabColor);
-		r.rect(prefX, prefY, width, height);
+		r.rect(getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
 	}
 
 	@Override

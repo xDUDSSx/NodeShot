@@ -8,9 +8,11 @@ import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
+import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -40,38 +42,34 @@ public class CreeperGenerator extends AbstractGenerator {
 	@Override
 	protected void generate() {
 		if (active) {
-			int tileX = (int) (this.x / Base.CHUNK_SIZE);
-			int tileY = (int) (this.y / Base.CHUNK_SIZE);
+			int tileX = (int) ((this.x + Base.CHUNK_SIZE) / Base.CHUNK_SIZE);
+			int tileY = (int) ((this.y + Base.CHUNK_SIZE) / Base.CHUNK_SIZE);
 			GameScreen.chunks.getChunk(tileX, tileY).setCreeperLevel(spawnRate);	
 		}
 	}
 
 	@Override
 	public void draw(ShapeRenderer r, SpriteBatch batch) {
-		r.set(ShapeType.Filled);
-		r.setColor(color);
-		r.rect(x, y, width, height);
+		batch.begin();
+		batch.setColor(1f, 1f, 1f, 1f);		
+		if (active) {
+			batch.draw(SpriteLoader.creeperGenOnFrame, x, y, width, height);
+		} else {
+			batch.draw(SpriteLoader.creeperGenOffFrame, x, y, width, height);
+		}		
+		batch.end();
 	}
 
 	@Override
 	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {
-		float prefX;
-		float prefY;
-		
-		if (snap) {
-			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			
-			prefX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
-			prefY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
+		batch.begin();
+		batch.setColor(1f, 1f, 1f, 0.5f);
+		if (active) {
+			batch.draw(SpriteLoader.creeperGenOnFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
 		} else {
-			prefX = cx - (width/2);
-			prefY = cy - (height/2);
-		}
-		
-		r.set(ShapeType.Filled);
-		r.setColor(prefabColor);
-		r.rect(prefX, prefY, width, height);	
+			batch.draw(SpriteLoader.creeperGenOffFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
+		}		
+		batch.end();	
 	}
 
 	@Override

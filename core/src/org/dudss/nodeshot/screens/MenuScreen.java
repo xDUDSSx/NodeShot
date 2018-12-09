@@ -133,15 +133,6 @@ public class MenuScreen implements Screen {
         mainTable.row();
         mainTable.add(exitButton).pad(10).colspan(2).fill(true);
         mainTable.row();
-        /*mainTable.add(generateButton).pad(10).colspan(2).fill(true);
-        mainTable.row();
-        mainTable.add(coalheightmap).fill(true).width(mainTable.getWidth()/2 - 100).height(mainTable.getWidth()/2 - 100);
-        mainTable.add(ironheightmap).fill(true).width(mainTable.getWidth()/2 - 100).height(mainTable.getWidth()/2 - 100);
-        mainTable.row();
-        mainTable.add(new Label("coal", skin, "font30")).fill(true);
-        mainTable.add(new Label("iron ore", skin, "font30")).fill(true);
-        */
-        //mainTable.add(newImg).fill(true);
         
         //Add table to stage
         stage.addActor(mainTable);

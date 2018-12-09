@@ -12,8 +12,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 /**Desktop launcher that initialises and configures the lwjgl application.*/
 public class DesktopLauncher {
 	
-	/**NodeEngine development version*/
-	public static final String ver = "v5.1";
+	/**NodeEngine development version
+	 * v5.0 - corruption optimisation update
+	 * v5.1 - fog of war update
+	 * v6.0 - building update*/
+	public static final String ver = "v6.0";
 	
 	/**The main method*/
 	public static void main (String[] arg) {

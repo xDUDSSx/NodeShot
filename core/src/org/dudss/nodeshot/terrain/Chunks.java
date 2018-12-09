@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
@@ -184,8 +185,7 @@ public class Chunks {
     	}
 	}
 	
-	/**Updates terrain or corruption meshes of all the sections in main camera view, if corr == true, corruption mesh of a selected layer will be updated
-	 * If layer == -1, all corruption meshes of the section will be updated
+	/**Updates terrain or corruption meshes of all the sections in main camera view, if corr == true, corruption mesh will be updated.
 	 * @param corr Whether a terrain or corruption mesh should be updated
 	 * **/
 	public void updateAllSectionMeshes(boolean corr) {
@@ -202,6 +202,50 @@ public class Chunks {
 	        	s.requestCorruptionUpdate();
     		}   			
     	}
+	}
+
+	/**Updates terrain or corruption meshes of all the sections in main camera view, if corr == true, corruption mesh will be updated.
+	 * TheWholeMap boolean states whether to only update {@link #sectionsInView} or the whole {@link #sections} array, eg. every {@link Section} on the map.
+	 * @param corr Whether a terrain or corruption mesh should be updated
+	 * @param theWholeMap Whether all the sections in the world should be updated. If false this method behaves like {@link #updateAllSectionMeshes(boolean)}
+	 * @see Overloaded {@link #updateAllSectionMeshes(boolean)}
+	 */
+	public void updateAllSectionMeshes(boolean corr, boolean theWholeMap) {
+		if (theWholeMap) {
+			if (!corr) {
+				for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
+					for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
+						Section s = sections[x][y];
+						MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false);
+		        		s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
+		        		s.requestTerrainUpdate();
+					}
+				}
+	    	} else {
+	    		for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
+					for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
+						Section s = sections[x][y];
+						MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true);
+			        	s.updateCorruptionMesh(mvdCorruption.getVerts(), mvdCorruption.getIndices());
+			        	s.requestCorruptionUpdate();
+					}
+				}		
+	    	}
+		} else {
+			if (!corr) {
+				for (Section s : this.sectionsInView) {
+					MeshVertexData mvdTerrain = this.generateMeshVertexData(s, false);
+	        		s.updateTerrainMesh(mvdTerrain.getVerts(), mvdTerrain.getIndices());
+	        		s.requestTerrainUpdate();
+	        	}
+	    	} else {
+	    		for (Section s : this.sectionsInView) {	    			
+					MeshVertexData mvdCorruption = this.generateMeshVertexData(s, true);
+		        	s.updateCorruptionMesh(mvdCorruption.getVerts(), mvdCorruption.getIndices());
+		        	s.requestCorruptionUpdate();
+	    		}   			
+	    	}
+		}
 	}
 	
 	//TODO: Make this depend and be handled by a section (for performance reasons, no need to update chunks with no corruption or buildings)
@@ -680,20 +724,21 @@ public class Chunks {
 	
 	/**Generates the terrain relief and ores.
 	 * @return Returns a {@link TextureContainer} that holds gray-scale pixmaps of generated maps.<br>
-	 * Textures are in the following order: 1. terrain height map, 2. coal map, 3. iron map
+	 * Textures are in the following order: 1. terrain height map, 2. coal map, 3. iron map.
+	 * This method has to be called after {@link Chunks#create()}.
 	 * */
 	public TextureContainer generateAll() {
 		SimplexNoiseGenerator sn = new SimplexNoiseGenerator();
-		System.out.println("\nGenerating noise (1/3)");
+		BaseClass.logger.info("Generating noise (1/3)");
 		float[][] coalMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.45f, 0.018f);
 		sn.randomizeMutatorTable();
-		System.out.println("Generating noise (2/3)");
+		BaseClass.logger.info("Generating noise (2/3)");
 		float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.45f, 0.018f);
 		sn.randomizeMutatorTable();
-		System.out.println("Generating noise (3/3)");
+		BaseClass.logger.info("Generating noise (3/3)");
 		float[][] heightMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 5, 0.5f, 0.009f);
 		
-		System.out.println("Creating pixmaps");
+		BaseClass.logger.info("Creating pixmaps");
 		Pixmap coalPixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
 		for (int x1 = 0; x1 < Base.CHUNK_AMOUNT; x1++) {
 			for (int y1 = 0; y1 < Base.CHUNK_AMOUNT; y1++) {   			
@@ -729,12 +774,14 @@ public class Chunks {
  	   	}
 
 		//CHUNK GEN
-		System.out.println("Generating chunks (n. " + Base.CHUNK_AMOUNT*Base.CHUNK_AMOUNT + ")");
-		System.out.println("Generating terrain heights");
+		BaseClass.logger.info("Generating chunks (n. " + Base.CHUNK_AMOUNT*Base.CHUNK_AMOUNT + ")");
+		BaseClass.logger.info("Generating terrain heights");
 		heightPixmap = generateHeights(heightPixmap);
-		System.out.println("Generating coal ore");
+		BaseClass.logger.info("Resolving initial terrain mesh edges!");
+		updateAllSectionMeshes(false, true); //Global mesh update
+		BaseClass.logger.info("Generating coal ore");
 		coalPixmap = generateCoalPatches(coalPixmap);
-		System.out.println("Generating iron ore");
+		BaseClass.logger.info("Generating iron ore");
 		ironPixmap = generateIronPatches(ironPixmap);
 		generated = true;
 				
@@ -746,7 +793,7 @@ public class Chunks {
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
 				Color c = new Color(pixmap.getPixel(x, y));				
-				if (c.r > Base.COAL_THRESHOLD) {
+				if (c.r > Base.COAL_THRESHOLD && !chunks[x][y].isTerrainEdge()) {
 					float level = Base.range(c.r, Base.COAL_THRESHOLD, 1f, 0.2f, 1.0f);
 					chunks[x][y].setCoalLevel(level);
 				} else {
@@ -762,7 +809,7 @@ public class Chunks {
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
 				Color c = new Color(pixmap.getPixel(x, y));						
-				if (c.r > Base.IRON_THRESHOLD) {
+				if (c.r > Base.IRON_THRESHOLD && !chunks[x][y].isTerrainEdge()) {
 					float level = Base.range(c.r, Base.IRON_THRESHOLD, 1f, 0.2f, 1.0f);
 					chunks[x][y].setIronLevel(level);
 				} else {

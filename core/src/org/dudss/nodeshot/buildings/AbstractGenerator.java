@@ -1,9 +1,11 @@
 package org.dudss.nodeshot.buildings;
 
+import org.dudss.nodeshot.Base;
+
 /**Generator that spawns creeper*/
 public abstract class AbstractGenerator extends AbstractBuilding {
-	static float width = 16;
-	static float height = 16;
+	static float width = Base.CHUNK_SIZE*3;
+	static float height = Base.CHUNK_SIZE*3;
 	
 	boolean active = false;
 	

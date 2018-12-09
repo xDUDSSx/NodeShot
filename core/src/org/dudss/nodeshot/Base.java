@@ -82,6 +82,8 @@ public class Base {
 	public static int SECTION_AMOUNT = CHUNK_AMOUNT / SECTION_SIZE;
 	
 	//UI ELEMENT STATES
+	public static int buildMenuImgSize = 80;
+	
 	public static boolean settingsOpened = true;
 	public static boolean enableGlProgilerLogging = false;
 	public static boolean hoverChunkHighlight = false;
@@ -305,14 +307,14 @@ public class Base {
  		int sectionAx = (int) ((int) (sectionOrigin.getX() / Base.CHUNK_SIZE) / Base.SECTION_SIZE);
  		int sectionAy = (int) ((int) (sectionOrigin.getY() / Base.CHUNK_SIZE) / Base.SECTION_SIZE);
  		
- 		if (sectionAy < Base.SECTION_AMOUNT) 									sections.add(GameScreen.chunks.sections[sectionAx][sectionAy + 1]);
- 		if (sectionAy < Base.SECTION_AMOUNT && sectionAx < Base.SECTION_AMOUNT) sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy + 1]);
- 		if (sectionAx < Base.SECTION_AMOUNT) 									sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy]);
- 		if (sectionAy < Base.SECTION_AMOUNT && sectionAy > 0) 					sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy - 1]);
+ 		if (sectionAy < Base.SECTION_AMOUNT-1) 									sections.add(GameScreen.chunks.sections[sectionAx][sectionAy + 1]);
+ 		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAx < Base.SECTION_AMOUNT-1) sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy + 1]);
+ 		if (sectionAx < Base.SECTION_AMOUNT-1) 									sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy]);
+ 		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAy > 0) 					sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy - 1]);
  		if (sectionAy > 0) 														sections.add(GameScreen.chunks.sections[sectionAx][sectionAy - 1]);
  		if (sectionAy > 0 && sectionAx > 0) 									sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy - 1]);
  		if (sectionAx > 0) 														sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy]);
- 		if (sectionAy < Base.SECTION_AMOUNT && sectionAx > 0) 					sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy + 1]);
+ 		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAx > 0) 					sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy + 1]);
  		return sections;
  	}
 }

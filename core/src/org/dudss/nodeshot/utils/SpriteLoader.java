@@ -1,14 +1,16 @@
 package org.dudss.nodeshot.utils;
  
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**Class that holds and loads all texture resources*/
 public class SpriteLoader {
@@ -55,8 +57,15 @@ public class SpriteLoader {
 	public static TextureAtlas hqanimAtlas;
 	public static TextureRegion[] hqanimFrames;
 	public static TextureRegion[] hqanimoutlineFrames;
+	public static TextureRegion[] genanimFrames;
+	public static TextureRegion[] genanimoutlineFrames;
 	
-	public static Texture corrTex;
+	public static TextureRegion creeperGenOnFrame;
+	public static TextureRegion creeperGenOffFrame;
+	
+	public static Drawable creepergenDrawable;
+	public static Drawable hqDrawable;
+	public static Drawable genDrawable;
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
@@ -64,29 +73,19 @@ public class SpriteLoader {
 	
 	/**Loads all textures*/
 	public static void loadAll() {
-		System.out.println("Loading sprites ...");
+		BaseClass.logger.info("Loading sprites ...");
 		double currentTime = System.currentTimeMillis();
 		if (Gdx.app.getType() == ApplicationType.Android) {
-        	spriteSheet = new Texture(Gdx.files.internal("spritesheet16x16.png"));
-        	gridOverlay = new Texture(Gdx.files.internal("res/sectionGridOverlay.png"));
-        	savanaTex = new Texture(Gdx.files.internal("res/seamlesssand32.png"));
-        	ironTex = new Texture(Gdx.files.internal("tiledTex.png"));
-        	coalTex = new Texture(Gdx.files.internal("tiledCoal.png"));
-        	coalLowerTex = new Texture(Gdx.files.internal("tiledCoalLower.png"));
-        	coalLowTex = new Texture(Gdx.files.internal("tiledCoalLow.png"));
-        	tileAtlas = new TextureAtlas(Gdx.files.internal("tiles.atlas"));
+        	//Not supported
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
         	spriteSheet = new Texture("res/spritesheet16x16.png");
-        	gridOverlay = new Texture("res/sectionGridOverlay.png");
-        	gridOverlay2 = new Texture("res/sectionGridOverlay2.png");
-        	savanaTex = new Texture("res/seamlesssand32.png");
+        	gridOverlay = new Texture("res/GridOverlay64x32.png");
         	ironTex = new Texture("res/tiledIron.png");
         	coalTex = new Texture("res/tiledCoal.png");
         	coalLowerTex = new Texture("res/tiledCoallower.png");
         	coalLowTex = new Texture("res/tiledCoallow.png");       	
         	tileAtlas = new TextureAtlas("res/tiles.atlas");
         	hqanimAtlas = new TextureAtlas("res/animtiles.atlas");
-        	corrTex = new Texture("res/corr16.png");
         	sectionOutline = new Texture("res/sectionOutline.png");
         }
 		
@@ -113,7 +112,42 @@ public class SpriteLoader {
 			hqanimoutlineFrames[i] = (TextureRegion) hqanimAtlas.findRegion("outline_hqframe00" + n);
 		}
 		
-		corrTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
+		genanimFrames = new TextureRegion[72];
+		for (int i = 0; i < 72; i++) {
+			String n;
+			if (i < 9) {
+				n = "0" + Integer.toString(i + 1);
+			} else {
+				n = Integer.toString(i + 1);
+			}
+			genanimFrames[i] = (TextureRegion) hqanimAtlas.findRegion("genframe00" + n);
+		}
+		
+		genanimoutlineFrames = new TextureRegion[72];
+		for (int i = 0; i < 72; i++) {
+			String n;
+			if (i < 9) {
+				n = "0" + Integer.toString(i + 1);
+			} else {
+				n = Integer.toString(i + 1);
+			}
+			genanimoutlineFrames [i] = (TextureRegion) hqanimAtlas.findRegion("outline_genframe00" + n);
+		}
+		
+		creeperGenOffFrame = hqanimAtlas.findRegion("creepergenOFFframe");
+		creeperGenOnFrame = hqanimAtlas.findRegion("creepergenONframe");
+
+		creepergenDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("creepergenPreview512")));
+		creepergenDrawable.setMinHeight(Base.buildMenuImgSize);
+		creepergenDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		hqDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("hqPreview512")));
+		hqDrawable.setMinHeight(Base.buildMenuImgSize);
+		hqDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		genDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("generatorPreview512")));
+		genDrawable.setMinHeight(Base.buildMenuImgSize);
+		genDrawable.setMinWidth(Base.buildMenuImgSize);
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);
@@ -135,20 +169,11 @@ public class SpriteLoader {
 		nodeIronSprite = new Sprite(spriteSheet, 51, 34, 16, 16);	
 		nodeConveyorSprite = new Sprite(spriteSheet, 68, 34, 16, 16);
 		
-		dirtTileSprite = new Sprite(spriteSheet, 85, 0, 16, 16);
-		bigdirtTileSprite = new Sprite(savanaTex);
-		
-		coalTileSprite = new Sprite(coalTex);		
-		coalTileLowerSprite = new Sprite(coalLowerTex);	
-		coalTileLowSprite = new Sprite(coalLowTex);
-		
-		ironTileSprite = new Sprite(ironTex);
-		
 		turret = new Sprite(spriteSheet, 0, 68, 48, 48);
 		turretHead = new Sprite(spriteSheet, 49, 68, 64, 23);
 		bullet = new Sprite(spriteSheet, 49, 92, 7, 3);
-		
+				
 		double nextTime = System.currentTimeMillis();	
-		System.out.println("Sprites loaded! (time: " + (nextTime - currentTime) + " ms)");
+		BaseClass.logger.info("Sprites loaded! (time: " + (nextTime - currentTime) + " ms)");
 	}
 }

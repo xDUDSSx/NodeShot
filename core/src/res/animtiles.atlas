@@ -4,254 +4,254 @@ size: 2048,2048
 format: RGBA8888
 filter: MipMapNearestLinear,Nearest
 repeat: none
-hqframe0001
-  rotate: false
-  xy: 32, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0002
-  rotate: false
-  xy: 352, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0003
-  rotate: false
-  xy: 672, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0004
-  rotate: false
-  xy: 992, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0005
-  rotate: false
-  xy: 1312, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0006
-  rotate: false
-  xy: 1632, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0007
-  rotate: false
-  xy: 32, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0008
-  rotate: false
-  xy: 352, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0009
-  rotate: false
-  xy: 672, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0010
+genframe0011
   rotate: false
   xy: 992, 352
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0011
-  rotate: false
-  xy: 1312, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0012
-  rotate: false
-  xy: 1632, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0013
-  rotate: false
-  xy: 32, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0014
-  rotate: false
-  xy: 352, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0015
-  rotate: false
-  xy: 672, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0016
-  rotate: false
-  xy: 992, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0017
-  rotate: false
-  xy: 1312, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0018
-  rotate: false
-  xy: 1632, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0019
-  rotate: false
-  xy: 32, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0020
-  rotate: false
-  xy: 352, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0021
-  rotate: false
-  xy: 672, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0022
-  rotate: false
-  xy: 992, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0023
-  rotate: false
-  xy: 1312, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0024
-  rotate: false
-  xy: 1632, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0025
-  rotate: false
-  xy: 32, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0026
-  rotate: false
-  xy: 352, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0027
-  rotate: false
-  xy: 672, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0028
-  rotate: false
-  xy: 992, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0029
-  rotate: false
-  xy: 1312, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0030
-  rotate: false
-  xy: 1632, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0031
+genframe0036
   rotate: false
   xy: 32, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0032
+genframe0037
   rotate: false
   xy: 352, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0033
+genframe0038
   rotate: false
   xy: 672, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0034
+genframe0039
   rotate: false
   xy: 992, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0035
+genframe0040
+  rotate: false
+  xy: 1312, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0041
+  rotate: false
+  xy: 1632, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0042
+  rotate: false
+  xy: 32, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0043
+  rotate: false
+  xy: 352, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0044
+  rotate: false
+  xy: 672, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0045
+  rotate: false
+  xy: 992, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0046
+  rotate: false
+  xy: 1312, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0048
+  rotate: false
+  xy: 32, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0001
+  rotate: false
+  xy: 1632, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0002
+  rotate: false
+  xy: 32, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0003
+  rotate: false
+  xy: 352, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0004
+  rotate: false
+  xy: 672, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0005
+  rotate: false
+  xy: 992, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0006
+  rotate: false
+  xy: 1312, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0007
+  rotate: false
+  xy: 1632, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0008
+  rotate: false
+  xy: 32, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0009
+  rotate: false
+  xy: 352, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0010
+  rotate: false
+  xy: 672, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0012
+  rotate: false
+  xy: 1312, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0013
+  rotate: false
+  xy: 1632, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0014
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0016
+  rotate: false
+  xy: 672, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0017
+  rotate: false
+  xy: 992, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0018
+  rotate: false
+  xy: 1312, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0019
+  rotate: false
+  xy: 1632, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0041
   rotate: false
   xy: 1312, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0036
+outline_hqframe0045
   rotate: false
-  xy: 1632, 1632
+  xy: 672, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0048
+  rotate: false
+  xy: 1632, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0050
+  rotate: false
+  xy: 352, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0056
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0058
+  rotate: false
+  xy: 992, 992
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -262,254 +262,254 @@ size: 2048,2048
 format: RGBA8888
 filter: MipMapNearestLinear,Nearest
 repeat: none
-hqframe0037
-  rotate: false
-  xy: 32, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0038
-  rotate: false
-  xy: 352, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0039
-  rotate: false
-  xy: 672, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0040
-  rotate: false
-  xy: 992, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0041
-  rotate: false
-  xy: 1312, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0042
-  rotate: false
-  xy: 1632, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0043
-  rotate: false
-  xy: 32, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0044
-  rotate: false
-  xy: 352, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0045
-  rotate: false
-  xy: 672, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0046
-  rotate: false
-  xy: 992, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0047
-  rotate: false
-  xy: 1312, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0048
-  rotate: false
-  xy: 1632, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0049
-  rotate: false
-  xy: 32, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0050
-  rotate: false
-  xy: 352, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0051
-  rotate: false
-  xy: 672, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0052
-  rotate: false
-  xy: 992, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0053
-  rotate: false
-  xy: 1312, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0054
-  rotate: false
-  xy: 1632, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0055
-  rotate: false
-  xy: 32, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0056
-  rotate: false
-  xy: 352, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0057
-  rotate: false
-  xy: 672, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0058
-  rotate: false
-  xy: 992, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0059
-  rotate: false
-  xy: 1312, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0060
-  rotate: false
-  xy: 1632, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0061
-  rotate: false
-  xy: 32, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0062
-  rotate: false
-  xy: 352, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0063
-  rotate: false
-  xy: 672, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0064
-  rotate: false
-  xy: 992, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0065
-  rotate: false
-  xy: 1312, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0066
-  rotate: false
-  xy: 1632, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0067
-  rotate: false
-  xy: 32, 1632
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0068
+genframe0050
   rotate: false
   xy: 352, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0069
+genframe0051
   rotate: false
   xy: 672, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0070
+genframe0052
   rotate: false
   xy: 992, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0071
+genframe0053
   rotate: false
   xy: 1312, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0072
+genframe0054
   rotate: false
   xy: 1632, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0055
+  rotate: false
+  xy: 32, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0056
+  rotate: false
+  xy: 352, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0057
+  rotate: false
+  xy: 672, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0058
+  rotate: false
+  xy: 992, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0059
+  rotate: false
+  xy: 1312, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0060
+  rotate: false
+  xy: 992, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0061
+  rotate: false
+  xy: 1312, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0062
+  rotate: false
+  xy: 1632, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0063
+  rotate: false
+  xy: 32, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0064
+  rotate: false
+  xy: 352, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0065
+  rotate: false
+  xy: 672, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0066
+  rotate: false
+  xy: 992, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0067
+  rotate: false
+  xy: 1312, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0068
+  rotate: false
+  xy: 1632, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0069
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0020
+  rotate: false
+  xy: 1632, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0021
+  rotate: false
+  xy: 32, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0022
+  rotate: false
+  xy: 352, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0023
+  rotate: false
+  xy: 672, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0024
+  rotate: false
+  xy: 992, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0026
+  rotate: false
+  xy: 1632, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0027
+  rotate: false
+  xy: 32, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0028
+  rotate: false
+  xy: 352, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0029
+  rotate: false
+  xy: 672, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0031
+  rotate: false
+  xy: 672, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0033
+  rotate: false
+  xy: 1312, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0034
+  rotate: false
+  xy: 1632, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0056
+  rotate: false
+  xy: 1312, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0063
+  rotate: false
+  xy: 992, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0071
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0072
+  rotate: false
+  xy: 32, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -520,86 +520,1230 @@ size: 2048,2048
 format: RGBA8888
 filter: MipMapNearestLinear,Nearest
 repeat: none
-outline_hqframe0001
+genframe0070
   rotate: false
-  xy: 32, 32
+  xy: 672, 1312
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0002
+genframe0071
   rotate: false
-  xy: 352, 32
+  xy: 992, 1312
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0003
+genframe0072
   rotate: false
-  xy: 672, 32
+  xy: 1312, 1312
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0004
+hqframe0035
   rotate: false
-  xy: 992, 32
+  xy: 32, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0005
+hqframe0036
   rotate: false
-  xy: 1312, 32
+  xy: 352, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0006
+hqframe0037
   rotate: false
-  xy: 1632, 32
+  xy: 672, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0007
+hqframe0038
+  rotate: false
+  xy: 992, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0039
+  rotate: false
+  xy: 1312, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0041
+  rotate: false
+  xy: 32, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0044
+  rotate: false
+  xy: 992, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0045
+  rotate: false
+  xy: 1312, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0046
+  rotate: false
+  xy: 1632, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0047
   rotate: false
   xy: 32, 352
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0008
-  rotate: false
-  xy: 352, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0009
+hqframe0049
   rotate: false
   xy: 672, 352
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0010
+hqframe0050
   rotate: false
-  xy: 992, 352
+  xy: 992, 32
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0011
+hqframe0051
+  rotate: false
+  xy: 1632, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0000
+  rotate: false
+  xy: 1632, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0001
+  rotate: false
+  xy: 32, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0002
+  rotate: false
+  xy: 352, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0003
+  rotate: false
+  xy: 672, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0004
+  rotate: false
+  xy: 992, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0005
+  rotate: false
+  xy: 1312, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0006
+  rotate: false
+  xy: 1632, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0008
+  rotate: false
+  xy: 352, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0009
+  rotate: false
+  xy: 672, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0010
   rotate: false
   xy: 1312, 352
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0012
+outline_genframe0011
   rotate: false
   xy: 1632, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0012
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0013
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0014
+  rotate: false
+  xy: 672, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0016
+  rotate: false
+  xy: 1312, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0040
+  rotate: false
+  xy: 352, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0042
+  rotate: false
+  xy: 1632, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0044
+  rotate: false
+  xy: 352, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0062
+  rotate: false
+  xy: 992, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0066
+  rotate: false
+  xy: 32, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+animtiles4.png
+size: 2048,2048
+format: RGBA8888
+filter: MipMapNearestLinear,Nearest
+repeat: none
+hqframe0025
+  rotate: false
+  xy: 1632, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0052
+  rotate: false
+  xy: 32, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0053
+  rotate: false
+  xy: 1632, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0054
+  rotate: false
+  xy: 672, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0055
+  rotate: false
+  xy: 992, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0056
+  rotate: false
+  xy: 1312, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0057
+  rotate: false
+  xy: 1632, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0058
+  rotate: false
+  xy: 32, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0059
+  rotate: false
+  xy: 352, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0060
+  rotate: false
+  xy: 352, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0061
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0062
+  rotate: false
+  xy: 992, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0064
+  rotate: false
+  xy: 1632, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0065
+  rotate: false
+  xy: 32, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0066
+  rotate: false
+  xy: 352, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0067
+  rotate: false
+  xy: 672, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0068
+  rotate: false
+  xy: 992, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0069
+  rotate: false
+  xy: 1312, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0071
+  rotate: false
+  xy: 992, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0019
+  rotate: false
+  xy: 352, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0020
+  rotate: false
+  xy: 352, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0021
+  rotate: false
+  xy: 672, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0022
+  rotate: false
+  xy: 992, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0023
+  rotate: false
+  xy: 1312, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0024
+  rotate: false
+  xy: 1632, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0025
+  rotate: false
+  xy: 32, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0027
+  rotate: false
+  xy: 672, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0030
+  rotate: false
+  xy: 672, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0031
+  rotate: false
+  xy: 992, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0032
+  rotate: false
+  xy: 1312, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0033
+  rotate: false
+  xy: 1632, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0010
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0039
+  rotate: false
+  xy: 1312, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0046
+  rotate: false
+  xy: 672, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0049
+  rotate: false
+  xy: 1312, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0060
+  rotate: false
+  xy: 32, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+animtiles5.png
+size: 2048,2048
+format: RGBA8888
+filter: MipMapNearestLinear,Nearest
+repeat: none
+hqframe0015
+  rotate: false
+  xy: 672, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0040
+  rotate: false
+  xy: 32, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0042
+  rotate: false
+  xy: 352, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0043
+  rotate: false
+  xy: 1312, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0063
+  rotate: false
+  xy: 1632, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0070
+  rotate: false
+  xy: 672, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0072
+  rotate: false
+  xy: 1312, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0034
+  rotate: false
+  xy: 32, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0035
+  rotate: false
+  xy: 352, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0037
+  rotate: false
+  xy: 992, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0039
+  rotate: false
+  xy: 1632, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0040
+  rotate: false
+  xy: 352, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0041
+  rotate: false
+  xy: 672, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0042
+  rotate: false
+  xy: 992, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0043
+  rotate: false
+  xy: 1312, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0044
+  rotate: false
+  xy: 1632, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0045
+  rotate: false
+  xy: 32, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0046
+  rotate: false
+  xy: 352, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0047
+  rotate: false
+  xy: 672, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0048
+  rotate: false
+  xy: 992, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0049
+  rotate: false
+  xy: 1312, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0050
+  rotate: false
+  xy: 672, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0051
+  rotate: false
+  xy: 992, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0052
+  rotate: false
+  xy: 1312, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0053
+  rotate: false
+  xy: 1632, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0054
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0055
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0057
+  rotate: false
+  xy: 992, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0058
+  rotate: false
+  xy: 1312, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0059
+  rotate: false
+  xy: 1632, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0052
+  rotate: false
+  xy: 1632, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0054
+  rotate: false
+  xy: 672, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0055
+  rotate: false
+  xy: 992, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0059
+  rotate: false
+  xy: 32, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0061
+  rotate: false
+  xy: 352, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0069
+  rotate: false
+  xy: 32, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+animtiles6.png
+size: 2048,2048
+format: RGBA8888
+filter: MipMapNearestLinear,Nearest
+repeat: none
+creepergenOFFframe
+  rotate: false
+  xy: 992, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0016
+  rotate: false
+  xy: 672, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0047
+  rotate: false
+  xy: 32, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0049
+  rotate: false
+  xy: 352, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0030
+  rotate: false
+  xy: 1632, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0032
+  rotate: false
+  xy: 992, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0048
+  rotate: false
+  xy: 32, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0007
+  rotate: false
+  xy: 1312, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0015
+  rotate: false
+  xy: 1312, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0026
+  rotate: false
+  xy: 1632, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0028
+  rotate: false
+  xy: 1312, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0029
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0036
+  rotate: false
+  xy: 352, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0038
+  rotate: false
+  xy: 672, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0060
+  rotate: false
+  xy: 1632, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0061
+  rotate: false
+  xy: 32, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0062
+  rotate: false
+  xy: 352, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0063
+  rotate: false
+  xy: 672, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0064
+  rotate: false
+  xy: 992, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0065
+  rotate: false
+  xy: 1312, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0066
+  rotate: false
+  xy: 1632, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0067
+  rotate: false
+  xy: 32, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0068
+  rotate: false
+  xy: 352, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0069
+  rotate: false
+  xy: 672, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0070
+  rotate: false
+  xy: 672, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0071
+  rotate: false
+  xy: 992, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0072
+  rotate: false
+  xy: 1312, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0001
+  rotate: false
+  xy: 352, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0002
+  rotate: false
+  xy: 992, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0004
+  rotate: false
+  xy: 1632, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0020
+  rotate: false
+  xy: 1632, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0036
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0064
+  rotate: false
+  xy: 992, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0065
+  rotate: false
+  xy: 1312, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0068
+  rotate: false
+  xy: 672, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0070
+  rotate: false
+  xy: 32, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+animtiles7.png
+size: 2048,2048
+format: RGBA8888
+filter: MipMapNearestLinear,Nearest
+repeat: none
+creepergenONframe
+  rotate: false
+  xy: 32, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0000
+  rotate: false
+  xy: 32, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0001
+  rotate: false
+  xy: 352, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0002
+  rotate: false
+  xy: 992, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0003
+  rotate: false
+  xy: 992, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0004
+  rotate: false
+  xy: 1312, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0005
+  rotate: false
+  xy: 1632, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0006
+  rotate: false
+  xy: 32, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0007
+  rotate: false
+  xy: 352, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0008
+  rotate: false
+  xy: 672, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0009
+  rotate: false
+  xy: 992, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0010
+  rotate: false
+  xy: 992, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0012
+  rotate: false
+  xy: 1632, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0013
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0014
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0015
+  rotate: false
+  xy: 672, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0017
+  rotate: false
+  xy: 1312, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0018
+  rotate: false
+  xy: 1632, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0011
+  rotate: false
+  xy: 672, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0018
+  rotate: false
+  xy: 1312, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0003
+  rotate: false
+  xy: 352, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0005
+  rotate: false
+  xy: 1632, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0006
+  rotate: false
+  xy: 352, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0007
+  rotate: false
+  xy: 672, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0008
+  rotate: false
+  xy: 992, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0009
+  rotate: false
+  xy: 1312, 1632
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0011
+  rotate: false
+  xy: 1312, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0012
+  rotate: false
+  xy: 1632, 992
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -648,385 +1792,328 @@ outline_hqframe0018
   index: -1
 outline_hqframe0019
   rotate: false
-  xy: 32, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0020
-  rotate: false
-  xy: 352, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0021
-  rotate: false
-  xy: 672, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0022
-  rotate: false
-  xy: 992, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0023
-  rotate: false
-  xy: 1312, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0024
-  rotate: false
-  xy: 1632, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0025
-  rotate: false
-  xy: 32, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0026
-  rotate: false
-  xy: 352, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0027
-  rotate: false
-  xy: 672, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0028
-  rotate: false
-  xy: 992, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0029
-  rotate: false
-  xy: 1312, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0030
-  rotate: false
-  xy: 1632, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0031
-  rotate: false
-  xy: 32, 1632
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0032
-  rotate: false
-  xy: 352, 1632
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0033
-  rotate: false
-  xy: 672, 1632
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0034
-  rotate: false
-  xy: 992, 1632
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0035
-  rotate: false
-  xy: 1312, 1632
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0036
-  rotate: false
-  xy: 1632, 1632
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-
-animtiles4.png
-size: 2048,2048
-format: RGBA8888
-filter: MipMapNearestLinear,Nearest
-repeat: none
-outline_hqframe0037
-  rotate: false
-  xy: 32, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0038
-  rotate: false
-  xy: 352, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0039
-  rotate: false
-  xy: 672, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0040
-  rotate: false
-  xy: 992, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0041
-  rotate: false
-  xy: 1312, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0042
-  rotate: false
-  xy: 1632, 32
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0043
-  rotate: false
   xy: 32, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0044
-  rotate: false
-  xy: 352, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0045
-  rotate: false
-  xy: 672, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0046
-  rotate: false
-  xy: 992, 352
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0047
   rotate: false
-  xy: 1312, 352
+  xy: 672, 352
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0048
-  rotate: false
-  xy: 1632, 352
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0049
-  rotate: false
-  xy: 32, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0050
-  rotate: false
-  xy: 352, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0051
-  rotate: false
-  xy: 672, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0052
-  rotate: false
-  xy: 992, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0053
-  rotate: false
-  xy: 1312, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0054
-  rotate: false
-  xy: 1632, 672
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0055
-  rotate: false
-  xy: 32, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0056
-  rotate: false
-  xy: 352, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0057
-  rotate: false
-  xy: 672, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0058
-  rotate: false
-  xy: 992, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0059
-  rotate: false
-  xy: 1312, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0060
-  rotate: false
-  xy: 1632, 992
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0061
-  rotate: false
-  xy: 32, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0062
-  rotate: false
-  xy: 352, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0063
-  rotate: false
-  xy: 672, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0064
-  rotate: false
-  xy: 992, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0065
-  rotate: false
-  xy: 1312, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0066
-  rotate: false
-  xy: 1632, 1312
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0067
+
+animtiles8.png
+size: 2048,2048
+format: RGBA8888
+filter: MipMapNearestLinear,Nearest
+repeat: none
+genframe0019
   rotate: false
   xy: 32, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0068
+genframe0020
+  rotate: false
+  xy: 1632, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0021
+  rotate: false
+  xy: 32, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0022
+  rotate: false
+  xy: 352, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0023
+  rotate: false
+  xy: 672, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0024
+  rotate: false
+  xy: 992, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0025
+  rotate: false
+  xy: 1312, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0026
+  rotate: false
+  xy: 1632, 992
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0027
+  rotate: false
+  xy: 32, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0028
+  rotate: false
+  xy: 352, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0029
+  rotate: false
+  xy: 672, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0030
+  rotate: false
+  xy: 1312, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0031
+  rotate: false
+  xy: 1632, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0017
+  rotate: false
+  xy: 672, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0021
   rotate: false
   xy: 352, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0069
+outline_hqframe0022
   rotate: false
   xy: 672, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0070
+outline_hqframe0023
   rotate: false
   xy: 992, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0071
+outline_hqframe0024
   rotate: false
   xy: 1312, 1632
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0072
+outline_hqframe0025
   rotate: false
   xy: 1632, 1632
   size: 256, 256
   orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0026
+  rotate: false
+  xy: 32, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0027
+  rotate: false
+  xy: 352, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0028
+  rotate: false
+  xy: 672, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0029
+  rotate: false
+  xy: 992, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0030
+  rotate: false
+  xy: 672, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0031
+  rotate: false
+  xy: 992, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0032
+  rotate: false
+  xy: 1312, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0033
+  rotate: false
+  xy: 1632, 672
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0034
+  rotate: false
+  xy: 32, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0035
+  rotate: false
+  xy: 352, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0037
+  rotate: false
+  xy: 992, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0038
+  rotate: false
+  xy: 1312, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0043
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0051
+  rotate: false
+  xy: 1312, 1312
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0053
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0057
+  rotate: false
+  xy: 1632, 352
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0067
+  rotate: false
+  xy: 992, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+animtiles9.png
+size: 2048,1024
+format: RGBA8888
+filter: MipMapNearestLinear,Nearest
+repeat: none
+creepergenPreview512
+  rotate: false
+  xy: 608, 352
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+generatorPreview512
+  rotate: false
+  xy: 1184, 352
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+genframe0032
+  rotate: false
+  xy: 1760, 608
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0033
+  rotate: false
+  xy: 1760, 288
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0034
+  rotate: false
+  xy: 32, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0035
+  rotate: false
+  xy: 352, 32
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqPreview512
+  rotate: false
+  xy: 32, 352
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1

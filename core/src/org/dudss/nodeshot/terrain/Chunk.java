@@ -195,32 +195,32 @@ public class Chunk {
 	}
 		
 	/**Returns an {@link AtlasRegion} representing this {@linkplain Chunk}s terrain.*/
-	public AtlasRegionContainer getTerrainTexture() {	
+	public AtlasRegionContainer getTerrainTexture() {			
+		AtlasRegionContainer arc = null;
+		switch(height) {
+			case 0: this.setTerrainEdge(false, 0, EdgeType.NONE); return null; //TODO: ore at level 0?
+			case 1: arc = resolveTerrainEdges(1); break;
+			case 2: arc = resolveTerrainEdges(2); break;
+			case 3: arc = resolveTerrainEdges(3); break;
+			case 4: arc = resolveTerrainEdges(4); break;
+			case 5: arc = resolveTerrainEdges(5); break;
+			case 6: arc = resolveTerrainEdges(6); break;
+			case 7: arc = resolveTerrainEdges(7); break;
+			case 8: arc = resolveTerrainEdges(8); break;
+			case 9: arc = resolveTerrainEdges(9); break;
+			case 10: arc = resolveTerrainEdges(10); break;	
+		}
 		//Ore detection
 		if (Base.drawOres) {
 			if (this.getOreLevel() > 0) {
 				AtlasRegion ore = getOreTexture();
 				if (ore != null) {
-					return new AtlasRegionContainer(ore);
+					arc = new AtlasRegionContainer(ore, arc.getTexture(0));
 				}
 			}
 		}
 		
-		switch(height) {
-			case 0: this.setTerrainEdge(false, 0, EdgeType.NONE); return null;
-			case 1: return resolveTerrainEdges(1);
-			case 2: return resolveTerrainEdges(2);
-			case 3: return resolveTerrainEdges(3);
-			case 4: return resolveTerrainEdges(4);
-			case 5: return resolveTerrainEdges(5);
-			case 6: return resolveTerrainEdges(6);
-			case 7: return resolveTerrainEdges(7);
-			case 8: return resolveTerrainEdges(8);
-			case 9: return resolveTerrainEdges(9);
-			case 10: return resolveTerrainEdges(10);			
-		}
-		
-		return null;		
+		return arc;		
 	}
 
 	/**Returns the appropriate {@link AtlasRegion} for the specified terrain height.
@@ -416,7 +416,13 @@ public class Chunk {
 	/**Returns the appropriate ore {@link AtlasRegion} for this {@linkplain Chunk}.*/
 	private AtlasRegion getOreTexture() {
 		if (coalOre != 0) {	
-			AtlasRegion desiredRegion = null;
+			if (coalOre > 0.25f) {
+				return SpriteLoader.tileAtlas.findRegion("renderedCoalLevel1");
+			} else {
+				return SpriteLoader.tileAtlas.findRegion("renderedCoalLevel0");
+			}
+			
+			/*AtlasRegion desiredRegion = null;
 			if (coalOre <= 0.25) {
 				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoallow");
 			} else 
@@ -493,10 +499,16 @@ public class Chunk {
 				}
 			}
 				
-			return desiredRegion;
+			return desiredRegion;*/
 		} else
 		if (ironOre != 0) {
-			boolean triangleDrawn = false;
+			if (ironOre > 0.25f) {
+				return SpriteLoader.tileAtlas.findRegion("renderedIronLevel1");
+			} else {
+				return SpriteLoader.tileAtlas.findRegion("renderedIronLevel0");
+			}
+		}
+			/*boolean triangleDrawn = false;
 			AtlasRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledIron");
 			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) {
 				
@@ -568,7 +580,7 @@ public class Chunk {
 			if (!triangleDrawn) {
 				return desiredRegion;
 			}
-		}
+		}*/
 		return null;
 	}
 	
