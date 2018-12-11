@@ -177,13 +177,16 @@ public class SimulationThread extends Thread {
 		}
 
 		//Updating pathHandler logic
-		GameScreen.packageHandler.update();
+		//GameScreen.packageHandler.update();
 		
 		//Updating connector logic
 		GameScreen.connectorHandler.update();		
 		
+		//Updating misc buildings (importers/exporters)
+		GameScreen.buildingHandler.updateAllMisc();
+		
 		//Updating buildings
-		GameScreen.buildingHandler.updateAll();
+		GameScreen.buildingHandler.updateAllBuildings();
 		
 		//Updating rightClickMenu text
 		GameScreen.rightClickMenuManager.update();

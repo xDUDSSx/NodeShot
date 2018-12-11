@@ -8,6 +8,7 @@ import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,9 +25,9 @@ public class IronMine extends AbstractMine {
 	public void generate() {
 		if (canGenerate) {
 			if (this.output.getAllConnectedNodes().size() > 0 ) {
-				if (this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
+				if (this.firstConveyor.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
 					Iron coal = new Iron(this.output);
-					output.sendPackage(coal);
+					output.sendPackage(coal, firstConveyor);
 				}
 			}
 		}
@@ -45,7 +46,7 @@ public class IronMine extends AbstractMine {
 		export = new ConveyorNode(x + (width/2), (float) (y + Base.CHUNK_SIZE/2), Base.RADIUS);
 		output.connectTo(export);
 		
-		firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
+		firstConveyor = (Conveyor) GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
 		
 		GameScreen.nodelist.add(output);
 		GameScreen.nodelist.add(export);
@@ -58,8 +59,8 @@ public class IronMine extends AbstractMine {
 		float totalOreLevel = 0;
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
-				if (GameScreen.chunks.getChunk(tileX + x, tileY + y) != null) {
-				totalOreLevel += GameScreen.chunks.getChunk(tileX + x, tileY + y).getIronLevel();				
+				if (GameScreen.chunks.getChunkAtTileSpace(tileX + x, tileY + y) != null) {
+				totalOreLevel += GameScreen.chunks.getChunkAtTileSpace(tileX + x, tileY + y).getIronLevel();				
 				}
 			}
 		}

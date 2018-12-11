@@ -59,13 +59,23 @@ public class SpriteLoader {
 	public static TextureRegion[] hqanimoutlineFrames;
 	public static TextureRegion[] genanimFrames;
 	public static TextureRegion[] genanimoutlineFrames;
+	public static TextureRegion[] factoryanimFrames;
+	public static TextureRegion[] factoryanimoutlineFrames;
+	
 	
 	public static TextureRegion creeperGenOnFrame;
 	public static TextureRegion creeperGenOffFrame;
 	
+	public static TextureRegion factoryOffFrame;
+	public static TextureRegion outlineFactoryOffFrame;
+	
+	public static TextureRegion importerTop;
+	
 	public static Drawable creepergenDrawable;
 	public static Drawable hqDrawable;
 	public static Drawable genDrawable;
+	public static Drawable factoryDrawable;
+	public static Drawable importerTopDrawable;
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
@@ -131,12 +141,40 @@ public class SpriteLoader {
 			} else {
 				n = Integer.toString(i + 1);
 			}
-			genanimoutlineFrames [i] = (TextureRegion) hqanimAtlas.findRegion("outline_genframe00" + n);
+			genanimoutlineFrames[i] = (TextureRegion) hqanimAtlas.findRegion("outline_genframe00" + n);
+		}
+		
+		factoryanimFrames = new TextureRegion[48];
+		for (int i = 0; i < 48; i++) {
+			String n;
+			if (i < 9) {
+				n = "0" + Integer.toString(i + 1);
+			} else {
+				n = Integer.toString(i + 1);
+			}
+			factoryanimFrames[i] = (TextureRegion) hqanimAtlas.findRegion("factoryFrame00" + n);
+		}
+		
+		
+		factoryanimoutlineFrames = new TextureRegion[48];
+		for (int i = 0; i < 48; i++) {
+			String n;
+			if (i < 9) {
+				n = "0" + Integer.toString(i + 1);
+			} else {
+				n = Integer.toString(i + 1);
+			}
+			factoryanimoutlineFrames[i] = (TextureRegion) hqanimAtlas.findRegion("outline_factoryFrame00" + n);
 		}
 		
 		creeperGenOffFrame = hqanimAtlas.findRegion("creepergenOFFframe");
 		creeperGenOnFrame = hqanimAtlas.findRegion("creepergenONframe");
-
+		
+		factoryOffFrame = hqanimAtlas.findRegion("factoryOFFframe");
+		outlineFactoryOffFrame = hqanimAtlas.findRegion("outline_factoryOFFframe");
+		
+		importerTop = hqanimAtlas.findRegion("importerTOP");
+		
 		creepergenDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("creepergenPreview512")));
 		creepergenDrawable.setMinHeight(Base.buildMenuImgSize);
 		creepergenDrawable.setMinWidth(Base.buildMenuImgSize);
@@ -148,6 +186,14 @@ public class SpriteLoader {
 		genDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("generatorPreview512")));
 		genDrawable.setMinHeight(Base.buildMenuImgSize);
 		genDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		factoryDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("factoryPreview512")));
+		factoryDrawable.setMinHeight(Base.buildMenuImgSize);
+		factoryDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		importerTopDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("importerTOPpreview256")));
+		importerTopDrawable.setMinHeight(Base.buildMenuImgSize);
+		importerTopDrawable.setMinWidth(Base.buildMenuImgSize);
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);

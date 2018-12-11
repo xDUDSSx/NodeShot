@@ -72,7 +72,6 @@ public class Section {
 		}
 		if (!creeperUpdateOccured) {
 			setActive(false);
-			//BaseClass.logger.info("Section update deactivation");
 		}
 	}
 	
@@ -215,13 +214,14 @@ public class Section {
 		return fogUpdate;
 	}
 	
-	/**Corruption update optimisation
+	/**Flags the section as active which means that as long as there is a {@link Chunk} with {@link Chunk#creeper} > 0,
+	 * the section {@link Chunk}s are going to be updated by the {@link SimulationThread}.
 	 * @since <b>v5.1</b> (3.12.18) Part of the corruption optimisation update.*/
 	public void setActive(boolean active) {
 		this.active = active;
 	}
 	
-	/**Corruption update optimisation
+	/**@see {@link #setActive(boolean)}.
 	 * @since <b>v5.1</b> (3.12.18) Part of the corruption optimisation update.*/
 	public boolean isActive() {
 		return active;

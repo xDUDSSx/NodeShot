@@ -8,6 +8,7 @@ import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.nodes.InputNode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.items.Item.ItemType;
+import org.dudss.nodeshot.items.StorableItem;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.Color;
@@ -15,15 +16,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-/**Building that can accept and hold items*/
-public abstract class AbstractStorage extends AbstractBuilding implements Storage {
-	
+/**Building that can accept and hold items in a single shared storage pool.*/
+public abstract class AbstractStorage extends AbstractBuilding implements Storage {	
 	InputNode input;
 	
-	public float storage = 0;
+	List<StorableItem> storage = new ArrayList<StorableItem>();
 	float maxStorage = 50;
-	
-	public boolean full = false;
 	
 	List<ItemType> accepted;
 	
@@ -37,11 +35,8 @@ public abstract class AbstractStorage extends AbstractBuilding implements Storag
 		
 	@Override
 	public void update() {
-		if (storage < maxStorage) {
+		if (storage.size() < maxStorage) {
 			input.update();
-			full = false;
-		} else {
-			full = true;
 		}
 	}
 	
@@ -51,12 +46,12 @@ public abstract class AbstractStorage extends AbstractBuilding implements Storag
 		r.setColor(color);
 		r.rect(x, y, width, height);
 		 
-		if (storage < maxStorage) {
+		if (storage.size() < maxStorage) {
 			r.setColor(Color.GREEN);
 		} else {
 			r.setColor(Color.RED);
 		}	
-		r.rectLine(this.x, this.y - 2, this.x + (width*((float) (storage/maxStorage))), this.y - 2, 3);
+		r.rectLine(this.x, this.y - 2, this.x + (width*((float) (storage.size()/maxStorage))), this.y - 2, 3);
 	}
 	
 	@Override
@@ -69,6 +64,7 @@ public abstract class AbstractStorage extends AbstractBuilding implements Storag
 	@Override
 	public void build() {
 		input = new InputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
+		
 		//GameScreen.nodelist.add(input);
 		GameScreen.buildingHandler.addBuilding(this);
 		GameScreen.nodelist.add(input);
@@ -81,25 +77,38 @@ public abstract class AbstractStorage extends AbstractBuilding implements Storag
 		GameScreen.buildingHandler.removeBuilding(this);
 		this.input.remove();
 		
+		clearBuildingChunks();
 		updateFogOfWar(false);
 	}
 	
 	public void empty() {
-		storage = 0;
-		full = false;
+		storage.clear();
 	}
 	
 	public Node getInputNode() {
 		return input;
 	}
-
-	@Override
-	public void alert(Package p) {
-		storage++;	
+	
+	/**Method used by {@link InputNode}s used to alert the building that a following package is trying to be transfered.
+	 * @param p The {@link Package} that is being transfered.
+	 * @return Returns if the {@linkplain Package} transfer was successful.
+	 * */
+	public boolean alert(StorableItem p) {
+		if (canStore(p)) {
+			storage.add(p);	
+			return true;
+		}
+		return false;
 	}
 
 	@Override
-	public boolean canStore(ItemType type) {
+	public boolean canStore(StorableItem p) {
+		if (this.accepted.size() > 0) {
+			if (this.accepted.contains(p.getType()) && storage.size() < maxStorage) {
+				return true;
+			}
+			return false;
+		}
 		return true;
 	}
 	
@@ -111,5 +120,9 @@ public abstract class AbstractStorage extends AbstractBuilding implements Storag
 	@Override	
 	public List<ItemType> getAccepted() {
 		return this.accepted;
+	}
+	
+	public List<StorableItem> getStoredItems() {
+		return this.storage;
 	}
 }

@@ -4,6 +4,6 @@ public class TurretCheat extends Turret {
 
 	public TurretCheat(float cx, float cy) {
 		super(cx, cy);
-		minStorage = 0;
+		//minStorage = 0;
 	}
 }

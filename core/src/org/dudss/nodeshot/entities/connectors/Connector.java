@@ -43,7 +43,7 @@ public class Connector implements Entity{
 		lenght = Math.hypot(from.getCX() - to.getCX(), from.getCY() - to.getCY());
 	}
 	
-	public void reset(Node from, Node to) {
+	public void reposition(Node from, Node to) {
 		this.from = from;
 		this.to = to;
 		
@@ -83,69 +83,68 @@ public class Connector implements Entity{
 		
 		//For every package in the connector
        	for (Package packAge : packages) {
-	 		if(packAge.going == true) {
-	 			Vector2 p1 = new Vector2(packAge.from.getCX(), packAge.from.getCY());
-                Vector2 p2 = new Vector2(packAge.to.getCX(), packAge.to.getCY());
-                Vector2 vector = new Vector2(p2.x - p1.x, p2.y - p1.y);
-	   	 		
-	   	 		Boolean packageJam = false;
-	   	 		
-	   	 		double lenghtFactor = 100/lenght;
-	   	 		
-	   	 		double ACTUAL_PACKAGE_SPEED = PACKAGE_SPEED * lenghtFactor;
-	   	 		double ACTUAL_PACKAGE_BLOCK_RANGE = PACKAGE_BLOCK_RANGE * lenghtFactor;
-	   	 		
-	   	 		//For every OTHER package in the connector
-	   	 		for (Package p : packages) {
-	   	 			if (p != packAge) {
-	   	 				//Checking the direction
-	   	 				if (p.from == packAge.from) {
-	   	 					//Check all packages for colliding movement zones
-		   	 				if (((p.percentage <= (packAge.percentage + ACTUAL_PACKAGE_SPEED + ACTUAL_PACKAGE_BLOCK_RANGE)) && (packAge.percentage <= (p.percentage + ACTUAL_PACKAGE_BLOCK_RANGE))) && p.isFinished() == false) {		   	 				
-		   	 					/*- If the package we are currently checking IS colliding
-		   	 					  	check if the package its colliding with is AHEAD of BEHIND in the current package direction
-			   	 					  BEHIND -> keep going
-			   	 					  AHEAD -> stop (jam)
-			   	 					  
-		   	 					  - If the packages are colliding and both have the same percentages -> make the one created earlier jam
-		   	 					  (comes to play when spawning packages)
-		   	 					*/
-		   	 					if (packAge.percentage > p.percentage) {
-		   	 						packageJam = false;
-		   	 					} else 
-		   	 					if (packAge.percentage == p.percentage) {
-			   	 					if(!(this.packages.indexOf(packAge) > this.packages.indexOf(p))) {
-			   	 						packageJam = true;
-				   	 				}	   	 					
-		   	 					} else {
+ 			Vector2 p1 = new Vector2(packAge.from.getCX(), packAge.from.getCY());
+            Vector2 p2 = new Vector2(packAge.to.getCX(), packAge.to.getCY());
+            Vector2 vector = new Vector2(p2.x - p1.x, p2.y - p1.y);
+   	 		
+   	 		Boolean packageJam = false;
+   	 		
+   	 		double lenghtFactor = 100/lenght;
+   	 		
+   	 		double ACTUAL_PACKAGE_SPEED = PACKAGE_SPEED * lenghtFactor;
+   	 		double ACTUAL_PACKAGE_BLOCK_RANGE = PACKAGE_BLOCK_RANGE * lenghtFactor;
+   	 		
+   	 		//For every OTHER package in the connector
+   	 		for (Package p : packages) {
+   	 			if (p != packAge) {
+   	 				//Checking the direction
+   	 				if (p.from == packAge.from) {
+   	 					//Check all packages for colliding movement zones
+	   	 				if (((p.percentage <= (packAge.percentage + ACTUAL_PACKAGE_SPEED + ACTUAL_PACKAGE_BLOCK_RANGE)) && (packAge.percentage <= (p.percentage + ACTUAL_PACKAGE_BLOCK_RANGE)))) {		   	 				
+	   	 					/*- If the package we are currently checking IS colliding
+	   	 					  	check if the package its colliding with is AHEAD of BEHIND in the current package direction
+		   	 					  BEHIND -> keep going
+		   	 					  AHEAD -> stop (jam)
+		   	 					  
+	   	 					  - If the packages are colliding and both have the same percentages -> make the one created earlier jam
+	   	 					  (comes to play when spawning packages)
+	   	 					*/
+	   	 					if (packAge.percentage > p.percentage) {
+	   	 						packageJam = false;
+	   	 					} else 
+	   	 					if (packAge.percentage == p.percentage) {
+		   	 					if(!(this.packages.indexOf(packAge) > this.packages.indexOf(p))) {
 		   	 						packageJam = true;
-		   	 					}
-		   	 				} 
-	   	 				} else {
-	   	 					//TODO: Interaction with the packages in the opposite direction
-		   	 			}
+			   	 				}	   	 					
+	   	 					} else {
+	   	 						packageJam = true;
+	   	 					}
+	   	 				} 
+   	 				} else {
+   	 					//TODO: Interaction with the packages in the opposite direction
 	   	 			}
-	   	 		}	   	
-	   	 		//Moving packages (when possible)
-	   	 		if (!(packAge.percentage >= 100) && packageJam == false) {
-	   	 			
-	 				packAge.percentage += ACTUAL_PACKAGE_SPEED;	 	
-	 				
-	 				//Entire connector jam indicator
-	 				packageMovement = true;
-	 				
-	 				Vector2 finalVector = new Vector2((float)(vector.x * (0.01 * packAge.percentage)), (float)(vector.y * (0.01 * packAge.percentage)));
-	 				
-	 				packAge.transform((float)((p1.x - packAge.radius/2) + finalVector.x), (float)((p1.y - packAge.radius/2) + finalVector.y));
-	 				packAge.currentMovePos = new Vector2((float)((p1.x - packAge.radius/2) + finalVector.x),  (float)((p1.y - packAge.radius/2) + finalVector.y));
-	 			
-	 			//Handling finished packages
-	   	 		} else if (packAge.percentage >= 100 && packageJam == false && packAge.to.isClosed() == false) {  	 			
-	   	 			//Resetting package to a state picked up by the path handlers
-   	 				packAge.alert();	   	 			
-	   	 		}
-	 		}
-       	}
+   	 			}
+   	 		}	   	
+   	 		//Moving packages (when possible)
+   	 		if (!(packAge.percentage >= 100) && packageJam == false) {
+   	 			
+ 				packAge.percentage += ACTUAL_PACKAGE_SPEED;	 	
+ 				
+ 				//Entire connector jam indicator
+ 				packageMovement = true;
+ 				
+ 				Vector2 finalVector = new Vector2((float)(vector.x * (0.01 * packAge.percentage)), (float)(vector.y * (0.01 * packAge.percentage)));
+ 				
+ 				packAge.transform((float)((p1.x - packAge.radius/2) + finalVector.x), (float)((p1.y - packAge.radius/2) + finalVector.y));
+ 				packAge.currentMovePos = new Vector2((float)((p1.x - packAge.radius/2) + finalVector.x),  (float)((p1.y - packAge.radius/2) + finalVector.y));
+ 			
+ 			//Handling finished packages
+   	 		} else if (packAge.percentage >= 100 && packageJam == false && packAge.to.isClosed() == false) {  	 			
+   	 			//Notifying the package handler
+   	 			packAge.going = false;
+ 				packAge.getPathHandler().nextNode();	   	 			
+   	 		}
+ 		}
        	
        	//Unless there are no packages. Was there any package movement? 
        	if (packageMovement == false && packages.size() != 0) {
@@ -172,21 +171,21 @@ public class Connector implements Entity{
 			if (n == p.from) {  
 				if (this.from == n) {
 					if (p.from == this.from) {
-						if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
+						if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE)) {
 							clear = false;				
 				 		}	
 					} else {
-						if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
+						if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100) {
 							clear = false;				
 				 		}	
 					}
 				} else {
 					if (p.from == this.from) {
-						if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100 && p.isFinished() == false) {
+						if ((100 -  ACTUAL_PACKAGE_BLOCK_RANGE) <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= 100) {
 							clear = false;				
 				 		}	
 					} else {
-						if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.isFinished() == false) {
+						if (0 <= (p.percentage +  ACTUAL_PACKAGE_BLOCK_RANGE) && p.percentage <= (0 +  ACTUAL_PACKAGE_BLOCK_RANGE)) {
 							clear = false;				
 				 		}	
 					}

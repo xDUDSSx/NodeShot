@@ -14,13 +14,15 @@ public class BuildingHandler {
 
 	List<AbstractBuilding> buildings;
 	List<AbstractBuilding> generators;
+	List<AbstractBuilding> misc;
 	
 	public BuildingHandler() {
 		buildings = new CopyOnWriteArrayList<AbstractBuilding>();
 		generators = new CopyOnWriteArrayList<AbstractBuilding>();
+		misc = new CopyOnWriteArrayList<AbstractBuilding>();
 	}
 	
-	public void updateAll() {
+	public void updateAllBuildings() {
 		for (AbstractBuilding b : buildings) {
 			b.update();
 		}
@@ -32,7 +34,13 @@ public class BuildingHandler {
 		}
 	}
 	
-	public void drawAll(ShapeRenderer r, SpriteBatch batch) {
+	public void updateAllMisc() {
+		for (AbstractBuilding b : misc) {
+			b.update();
+		}
+	}
+	
+	public void drawAllBuildings(ShapeRenderer r, SpriteBatch batch) {
 		for (AbstractBuilding b : buildings) {
 			b.draw(r, batch);
 		}
@@ -40,6 +48,12 @@ public class BuildingHandler {
 	
 	public void drawAllGenerators(ShapeRenderer r, SpriteBatch batch) {
 		for (AbstractBuilding b : generators) {
+			b.draw(r, batch);
+		}
+	}
+	
+	public void drawAllMisc(ShapeRenderer r, SpriteBatch batch) {
+		for (AbstractBuilding b : misc) {
 			b.draw(r, batch);
 		}
 	}
@@ -66,5 +80,17 @@ public class BuildingHandler {
 	
 	public List<AbstractBuilding> getAllGenerators() {
 		return generators;
+	}	
+	
+	public void addMisc(AbstractBuilding b) {
+		misc.add(b);
+	}
+	
+	public void removeMisc(AbstractBuilding b) {
+		misc.remove(b);
+	}
+	
+	public List<AbstractBuilding> getAllMisc() {
+		return misc;
 	}	
 }

@@ -5,7 +5,7 @@ import org.dudss.nodeshot.buildings.AmmoStorage;
 import org.dudss.nodeshot.buildings.AbstractStorage;
 import org.dudss.nodeshot.buildings.CoalMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
-import org.dudss.nodeshot.buildings.Furnace;
+import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.Turret;
@@ -203,7 +203,7 @@ public class BuildMenu extends Window {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new Furnace(0, 0);
+					GameScreen.builtBuilding = new Factory(0, 0);
 				}		
 		    }
 	    });		

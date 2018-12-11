@@ -11,9 +11,6 @@ import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.nodes.Node;
-import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.terrain.Chunk;
-import org.dudss.nodeshot.terrain.Section;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -94,6 +91,7 @@ public class Base {
 	public static boolean drawGeneralStats = false;
 	public static boolean drawBorderChunks = false;
 	public static boolean drawActiveSections = false;
+	public static boolean drawBuildingTiles = false;
 	
 	//Graphical settings
 	public static boolean vSyncEnabled = false;
@@ -265,57 +263,5 @@ public class Base {
 	public static float range(float OldValue, float OldMin, float OldMax, float NewMin, float NewMax) {
 		return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin;
 	}
-	
-	/**Returns the {@link Section} that holds this points {@link Chunk}.
-	 * @param x X world space coordinate.
-	 * @param y Y world space coordinate.
-	 */
-	public static Section locateSectionByWorldSpace(float x, float y) {
-		int ax = (int) (x / Base.CHUNK_SIZE);
-		int ay = (int) (y / Base.CHUNK_SIZE);
-		
-		return GameScreen.chunks.sections[ax / Base.SECTION_SIZE][ay / Base.SECTION_SIZE];
-	}
-	
-	/**Returns the {@link Section} that holds this points {@link Chunk}.
-	 * @param x X tile space coordinate.
-	 * @param y Y tile space coordinate.
-	 */
-	public static Section locateSectionByTileSpace(int ax, int ay) {
-		return GameScreen.chunks.sections[ax / Base.SECTION_SIZE][ay / Base.SECTION_SIZE];
-	}
-	
-	/**Returns all 9 sections around this particular point in world space (Including the middle section).
-	 * @param x X world space coordinate
-	 * @param y Y world space coordinate
-	 * */
- 	public static List<Section> getSectionsAroundThePoint(float x, float y) {
- 		List<Section> sections = new ArrayList<Section>();
- 		
- 		Section s = locateSectionByWorldSpace(x, y);
- 		sections = getNeighbourSections(s);
- 		sections.add(s);
- 		
- 		return sections;
- 	}
- 	
- 	/**Returns a list of all neighbouring sections, if there is no neighbouring section, it is skipped and not included in the list
- 	 * @param s The {@link Section} which neighbours will be returned.*/
- 	public static List<Section> getNeighbourSections(Section s) {
- 		List<Section> sections = new ArrayList<Section>();
- 		Chunk sectionOrigin = s.getChunk(0, 0);
- 		int sectionAx = (int) ((int) (sectionOrigin.getX() / Base.CHUNK_SIZE) / Base.SECTION_SIZE);
- 		int sectionAy = (int) ((int) (sectionOrigin.getY() / Base.CHUNK_SIZE) / Base.SECTION_SIZE);
- 		
- 		if (sectionAy < Base.SECTION_AMOUNT-1) 									sections.add(GameScreen.chunks.sections[sectionAx][sectionAy + 1]);
- 		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAx < Base.SECTION_AMOUNT-1) sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy + 1]);
- 		if (sectionAx < Base.SECTION_AMOUNT-1) 									sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy]);
- 		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAy > 0) 					sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy - 1]);
- 		if (sectionAy > 0) 														sections.add(GameScreen.chunks.sections[sectionAx][sectionAy - 1]);
- 		if (sectionAy > 0 && sectionAx > 0) 									sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy - 1]);
- 		if (sectionAx > 0) 														sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy]);
- 		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAx > 0) 					sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy + 1]);
- 		return sections;
- 	}
 }
 

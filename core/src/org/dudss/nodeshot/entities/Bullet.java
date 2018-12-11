@@ -73,7 +73,7 @@ public class Bullet extends Sprite implements Entity {
 	protected void explode() {
 		for (int y = (-radius); y < radius; y++) {
 			for (int x = (-radius); x < radius; x++) {
-				Chunk current = GameScreen.chunks.getChunk((int)(targetCoords.x/Base.CHUNK_SIZE) + x, (int)(targetCoords.y/Base.CHUNK_SIZE) + y); 
+				Chunk current = GameScreen.chunks.getChunkAtTileSpace((int)(targetCoords.x/Base.CHUNK_SIZE) + x, (int)(targetCoords.y/Base.CHUNK_SIZE) + y); 
 				if (current != null) {
 					//System.out.println(Math.hypot((current.getX() + Base.CHUNK_SIZE/2) - targetCoords.x, (current.getY() + Base.CHUNK_SIZE/2) - targetCoords.y));
 					if (Math.hypot((current.getX() + Base.CHUNK_SIZE/2) - targetCoords.x, (current.getY() + Base.CHUNK_SIZE/2) - targetCoords.y) <= (radius*Base.CHUNK_SIZE)) {

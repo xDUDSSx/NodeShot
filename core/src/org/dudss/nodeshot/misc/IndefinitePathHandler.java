@@ -14,13 +14,11 @@ import org.dudss.nodeshot.entities.nodes.Node;
 public class IndefinitePathHandler implements PathHandler {
 
 	Package currentPackage;
-	Connector currentConnector;
-	//Determines the direction
-	Node medianNode;
+	Conveyor currentConnector;
 		
 	boolean done = false;
 	
-	IndefinitePathHandler(Package p, Connector c) {
+	IndefinitePathHandler(Package p, Conveyor c) {
 		currentPackage = p;
 		currentConnector = c;
 	}
@@ -28,15 +26,14 @@ public class IndefinitePathHandler implements PathHandler {
 	@Override
 	public void start() {
 		if (currentPackage.to == null) {
-			currentPackage.reset(currentPackage.from, currentConnector.getFurtherNode(currentPackage.from));
+			currentPackage.resetState(currentPackage.from, currentConnector.getFurtherNode(currentPackage.from));
 		}
-		medianNode = currentPackage.to;
 		currentConnector.add(currentPackage);	
 		currentPackage.go();
 	}
 	
 	@Override
-	public void update() {
+	public boolean nextNode() {
 		if (currentPackage.going == false) {		
 			//Gets all possible connectors to go
 			List<Connector> connectors = new CopyOnWriteArrayList<Connector>(currentPackage.to.getConnectors());
@@ -44,71 +41,39 @@ public class IndefinitePathHandler implements PathHandler {
 			//Removing currentConnector (we wont go again)
 			connectors.remove(currentConnector);
 			
+			//remove all regular connectors and conveyors facing the opposite direction from the connector list, (leave only conveyors THAT face the appropriate direction)
+			List<Connector> toBeRemoved = new ArrayList<Connector>();
+			for (Connector c : connectors) {
+				if (c.getType() == EntityType.CONNECTOR) {
+					toBeRemoved.add(c);
+				}
+				
+				if (c.getType() == EntityType.CONVEYOR) {
+					if (!currentConnector.facesTheSameDirection((Conveyor)c)) {
+						toBeRemoved.add(c);
+					}
+				}
+				
+			}
+			connectors.removeAll(toBeRemoved);
+			
 			//Selecting route
-			if (connectors.size() != 0) {
-				
-				//Check if there is at least one conveyor
-				boolean atLeastOneConveyor = false;
-				for (Connector c : connectors) {
-					if (c instanceof Conveyor) {
-						atLeastOneConveyor = true;
-					}
-				}
-				
-				//if so, remove all regular connectors from the connector list, (leave only conveyors)
-				if (atLeastOneConveyor) {
-					List<Connector> toBeRemoved = new ArrayList<Connector>();
-					for (Connector c : connectors) {
-						if (c.getType() == EntityType.CONNECTOR) {
-							toBeRemoved.add(c);
-						}
-					}
-					connectors.removeAll(toBeRemoved);
-				}
-				
-				//Selecting a random connector
-				Connector nextConnector = connectors.get(Base.getRandomIntNumberInRange(0, connectors.size() - 1));		
-				
-				//Directions
-				if (nextConnector.getFrom() == medianNode) {	
-					boolean isNextConnectorClear = nextConnector.checkEntrance(nextConnector.getFrom(), Base.PACKAGE_BLOCK_RANGE);
-					if (isNextConnectorClear) {
-						currentPackage.reset(nextConnector.getFrom(), nextConnector.getTo());	
-
-						medianNode = nextConnector.getTo();
-						
-						currentConnector.remove(currentPackage);
-						nextConnector.add(currentPackage);
-						currentConnector = nextConnector;	
-						currentPackage.go();			
-					}
-				//next connector is facing the opposite direction
-				} else {
-					//If the next connector is a Conveyor that is faced in the opposite direction, redo this update
-					if (nextConnector instanceof Conveyor) {
-						//this.update();
-						
-					//If its a regular connector, proceed in the opposite direction
-					} else {
-						boolean isNextConnectorClear = nextConnector.checkEntrance(nextConnector.getTo(), Base.PACKAGE_BLOCK_RANGE);
-						if (isNextConnectorClear) {
-							currentPackage.reset(nextConnector.getTo(), nextConnector.getFrom());	
-							medianNode = nextConnector.getFrom();
-							
-							currentConnector.remove(currentPackage);
-							nextConnector.add(currentPackage);
-							currentConnector = nextConnector;	
-							currentPackage.go();			
-						}
-					}
-					
-				}
-			//Dead end, no connectors to go
-			} else {
-				if (currentPackage.going == false) {
-					//System.out.println("Dead end");
+			if (connectors.size() != 0) {				
+				//Selecting a random conveyor
+				Conveyor nextConveyor = (Conveyor) connectors.get(Base.getRandomIntNumberInRange(0, connectors.size() - 1));						
+				boolean isNextConnectorClear = nextConveyor.checkEntrance(nextConveyor.getFrom(), Base.PACKAGE_BLOCK_RANGE);
+				if (isNextConnectorClear) {
+					currentPackage.resetState(nextConveyor.getFrom(), nextConveyor.getTo());							
+					currentConnector.remove(currentPackage);
+					nextConveyor.add(currentPackage);
+					currentConnector = (Conveyor) nextConveyor;	
+					currentPackage.go();	
+					return true;
 				}
 			}
+			return false; //No nodes to go, return unsuccessful
+		} else {
+			throw new RuntimeException(this.getClass().getName() + " .nextNode() called on an active package!");
 		}
 	}
 	

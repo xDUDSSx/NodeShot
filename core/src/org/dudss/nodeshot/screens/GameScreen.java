@@ -2,10 +2,7 @@ package org.dudss.nodeshot.screens;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Logger;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
@@ -29,7 +26,6 @@ import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
 import org.dudss.nodeshot.terrain.Section;
 import org.dudss.nodeshot.ui.BuildMenu;
-import org.dudss.nodeshot.ui.HudMenu;
 import org.dudss.nodeshot.ui.PauseMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
 import org.dudss.nodeshot.ui.SettingsMenu;
@@ -189,7 +185,6 @@ public class GameScreen implements Screen {
     public static Viewport stageViewport;
     public static RightClickMenuManager rightClickMenuManager;
     public static BuildMenu buildMenu;
-    public static HudMenu hudMenu;
     public static PauseMenu pauseMenu;
     public static ToolbarMenu toolbarMenu;
     
@@ -397,9 +392,8 @@ public class GameScreen implements Screen {
         	);
         }
         
-        r.begin(ShapeType.Filled);
-        buildingHandler.drawAll(r, batch);
-        r.end();
+        buildingHandler.drawAllMisc(r, batch);
+        buildingHandler.drawAllBuildings(r, batch);
         
         //Connector rendering
         drawConnectors(r);
@@ -467,7 +461,7 @@ public class GameScreen implements Screen {
 	        r.setColor(Color.WHITE);
 	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-	        		if (chunks.getChunk(x, y).isTerrainEdge() == true) {       			
+	        		if (chunks.getChunkAtTileSpace(x, y).isTerrainEdge() == true) {       			
 	        			Color c = new Color(Color.rgba8888(0/255f, 0/255f, 255/255f, 1.0f));
 	        			r.setColor(c);
 	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
@@ -484,7 +478,7 @@ public class GameScreen implements Screen {
 	        Gdx.gl.glLineWidth(1);
 	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-	        		if (chunks.getChunk(x, y).isCorruptionEdge()) {       			
+	        		if (chunks.getChunkAtTileSpace(x, y).isCorruptionEdge()) {       			
 	        			Color c = new Color(Color.rgba8888(255/255f, 0/255f, 0/255f, 1.0f));
 	        			r.setColor(c);	        			
 	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
@@ -502,7 +496,7 @@ public class GameScreen implements Screen {
 	        //Gdx.gl.glLineWidth(1);
 	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-	        		if (chunks.getChunk(x, y).getCHeight() != chunks.getChunk(x, y).getHeight()) {       			
+	        		if (chunks.getChunkAtTileSpace(x, y).getCHeight() != chunks.getChunkAtTileSpace(x, y).getHeight()) {       			
 	        			Color c = new Color(Color.rgba8888(0/255f, 255/255f, 0/255f, 1.0f));
 	        			r.setColor(c);	        			
 	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
@@ -519,7 +513,7 @@ public class GameScreen implements Screen {
 	        r.setColor(Color.WHITE);
 	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
 	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-	        		if (chunks.getChunk(x, y).isBorderChunk()) {       			
+	        		if (chunks.getChunkAtTileSpace(x, y).isBorderChunk()) {       			
 	        			Color c = new Color(Color.rgba8888(255/255f, 255/255f, 0/255f, 1.0f));
 	        			r.setColor(c);	        			
 	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
@@ -541,6 +535,23 @@ public class GameScreen implements Screen {
 	        			r.rect((float) (x * Base.SECTION_SIZE*Base.CHUNK_SIZE), (float) (y * Base.SECTION_SIZE*Base.CHUNK_SIZE), Base.SECTION_SIZE*Base.CHUNK_SIZE, Base.SECTION_SIZE*Base.CHUNK_SIZE);
 	        			r.line((x * Base.SECTION_SIZE*Base.CHUNK_SIZE), (y * Base.SECTION_SIZE*Base.CHUNK_SIZE), (x * Base.SECTION_SIZE*Base.CHUNK_SIZE) + Base.SECTION_SIZE*Base.CHUNK_SIZE, (y * Base.SECTION_SIZE*Base.CHUNK_SIZE) + Base.SECTION_SIZE*Base.CHUNK_SIZE);
 	        			r.line((x * Base.SECTION_SIZE*Base.CHUNK_SIZE) + Base.SECTION_SIZE*Base.CHUNK_SIZE, (y * Base.SECTION_SIZE*Base.CHUNK_SIZE), (x * Base.SECTION_SIZE*Base.CHUNK_SIZE), (y * Base.SECTION_SIZE*Base.CHUNK_SIZE) + Base.SECTION_SIZE*Base.CHUNK_SIZE);
+	        		}	      
+	        	}
+	        }
+	        r.end();
+        }    
+        
+        if (Base.drawBuildingTiles) {
+	        r.begin(ShapeType.Line);
+	        r.setColor(Color.WHITE);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunkAtTileSpace(x, y).getBuilding() != null) {       			
+	        			Color c = new Color(Color.rgba8888(197/255f, 37/255f, 237/255f, 1.0f));
+	        			r.setColor(c);	        			
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        			r.line((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), (x * Base.CHUNK_SIZE) + Base.CHUNK_SIZE, (float) (y * Base.CHUNK_SIZE) + Base.CHUNK_SIZE);
+	        			r.line((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE) + Base.CHUNK_SIZE, (x * Base.CHUNK_SIZE) + Base.CHUNK_SIZE, (float) (y * Base.CHUNK_SIZE));
 	        		}	      
 	        	}
 	        }
@@ -610,9 +621,9 @@ public class GameScreen implements Screen {
         r.setColor(Color.WHITE);
         for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
         	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-        		if (chunks.getChunk(x, y).getCreeperLevel() > 0) {
+        		if (chunks.getChunkAtTileSpace(x, y).getCreeperLevel() > 0) {
         			//float n = Base.range(chunks.getChunk(x, y).getCreeperLevel(), 0, 5, 0, 1) * 100;
-        			float n = chunks.getChunk(x, y).getCreeperLevel() * 100;
+        			float n = chunks.getChunkAtTileSpace(x, y).getCreeperLevel() * 100;
         			
         			//System.out.println(n);
         			if (n == 100) {
@@ -925,7 +936,6 @@ public class GameScreen implements Screen {
                         if (p instanceof Iron) font.draw(batch, "IRON", (int)x + 35, (int)y + 5);
                         font.draw(batch, "Percentage: " + p.percentage + " %", (int)x + 35, (int)y - (textheight+2)*1 + 5);
                         font.draw(batch, "Going: " + p.going, (int)x + 35, (int)y - (textheight+2)*2 + 5);
-                        font.draw(batch, "Finished: " + p.finished, (int)x + 35, (int)y - (textheight+2)*3 + 5);
                         font.draw(batch, "From: " + p.from.getID(), (int)x + 35, (int)y - (textheight+2)*4 + 5);
                         font.draw(batch, "To: " + p.to.getID(), (int)x + 35, (int)y - (textheight+2)*5 + 5);
                     }

@@ -2,12 +2,11 @@ package org.dudss.nodeshot.buildings;
 
 import java.util.Arrays;
 
-import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.items.Item.ItemType;
+import org.dudss.nodeshot.items.StorableItem;
+import org.dudss.nodeshot.entities.Package;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class AmmoStorage extends AbstractStorage  {
 	
@@ -24,11 +23,9 @@ public class AmmoStorage extends AbstractStorage  {
 	}
 
 	@Override
-	public boolean canStore(ItemType type) {
-		if (accepted.contains(type)) {
-			if (type == ItemType.AMMO) {
-				return true;
-			}
+	public boolean canStore(StorableItem p) {
+		if (accepted.contains(p.getType())) {		
+			return true;
 		}
 		return false;
 	}

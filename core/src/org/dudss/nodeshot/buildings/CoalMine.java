@@ -4,8 +4,8 @@ import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -16,7 +16,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class CoalMine extends AbstractMine {
 	
@@ -35,9 +34,9 @@ public class CoalMine extends AbstractMine {
 	public void generate() {
 		if (canGenerate) {
 			if (this.output.getAllConnectedNodes().size() > 0 ) {
-				if (this.firstConnector.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
+				if (this.firstConveyor.checkEntrance(output, Base.PACKAGE_BLOCK_RANGE)) {
 					Coal coal = new Coal(this.output);
-					output.sendPackage(coal);
+					output.sendPackage(coal, firstConveyor);
 				}
 			}
 		}
@@ -72,7 +71,7 @@ public class CoalMine extends AbstractMine {
 		export = new ConveyorNode(x + (width/2), (float) (y + Base.CHUNK_SIZE/2), Base.RADIUS);
 		output.connectTo(export);
 		
-		firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
+		firstConveyor = (Conveyor) GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
 		
 		GameScreen.nodelist.add(output);
 		GameScreen.nodelist.add(export);
@@ -84,8 +83,8 @@ public class CoalMine extends AbstractMine {
 		float totalOreLevel = 0;
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
-				if (GameScreen.chunks.getChunk(tileX + x, tileY + y) != null) {
-					totalOreLevel += GameScreen.chunks.getChunk(tileX + x, tileY + y).getCoalLevel();				
+				if (GameScreen.chunks.getChunkAtTileSpace(tileX + x, tileY + y) != null) {
+					totalOreLevel += GameScreen.chunks.getChunkAtTileSpace(tileX + x, tileY + y).getCoalLevel();				
 				}
 			}
 		}

@@ -1,11 +1,8 @@
 package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
-import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.nodes.BuildingNode;
 import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.terrain.Chunks;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -57,11 +54,6 @@ public class Headquarters extends AbstractBuilding {
 	}
 
 	@Override
-	public void alert(Package p) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void build() {
 		hqNode = new BuildingNode(x + (width/2), y + (height/2), Base.RADIUS, this);
 		//hqNode.add();
@@ -74,7 +66,8 @@ public class Headquarters extends AbstractBuilding {
 	public void demolish() {
 		GameScreen.buildingHandler.removeBuilding(this);
 		hqNode.remove();
-		
+	
+		clearBuildingChunks();
 		updateFogOfWar(false);	
 	}
 }

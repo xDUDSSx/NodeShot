@@ -61,8 +61,9 @@ public class SettingsMenu extends Window {
 		VisCheckBox drawCorruptionEdgesCheckbox = new VisCheckBox("Highlight corruption edges", Base.drawCorruptionEdges);
 		VisCheckBox drawCHeightInequalityCheckbox = new VisCheckBox("Highlight c_height inequal areas", Base.drawCHeightInequality);	
 		VisCheckBox drawBorderChunksCheckbox = new VisCheckBox("Highlight border chunks", Base.drawBorderChunks);
-		
 		VisCheckBox drawActiveSectionsCheckbox = new VisCheckBox("Highlight active update sections", Base.drawActiveSections);
+		VisCheckBox drawBuildingTilesCheckbox = new VisCheckBox("Highlight building tiles", Base.drawBuildingTiles);
+		
 		VisCheckBox drawOresCheckbox = new VisCheckBox("Draw ores", Base.drawOres);
 		VisCheckBox errorCheckbox = new VisCheckBox("Test error", false);
 		
@@ -77,6 +78,7 @@ public class SettingsMenu extends Window {
 		engineSettingsTable.add(drawCHeightInequalityCheckbox).left().row();
 		engineSettingsTable.add(drawBorderChunksCheckbox).left().row();
 		engineSettingsTable.add(drawActiveSectionsCheckbox).left().row();
+		engineSettingsTable.add(drawBuildingTilesCheckbox).left().row();	
 		
 		table.add(engineSettingsButton).fillX().row();
 		table.add(engineSettingsCollapsibleWidget).expandX().fillX().row();
@@ -161,6 +163,14 @@ public class SettingsMenu extends Window {
 				Base.drawActiveSections = drawActiveSectionsCheckbox.isChecked();
 		    }
 	    });	
+		
+		drawBuildingTilesCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Base.drawBuildingTiles = drawBuildingTilesCheckbox.isChecked();
+		    }
+	    });	
+		
 		drawOresCheckbox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		

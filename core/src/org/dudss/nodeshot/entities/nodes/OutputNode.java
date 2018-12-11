@@ -1,8 +1,6 @@
 package org.dudss.nodeshot.entities.nodes;
 
 import org.dudss.nodeshot.buildings.AbstractBuilding;
-import org.dudss.nodeshot.entities.Entity;
-import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 public class OutputNode extends Node {
@@ -14,8 +12,7 @@ public class OutputNode extends Node {
 		
 		assignedBuilding = building;
 		this.maxConnections = 1;
-		this.setConnectable(false);
-		
+		this.setConnectable(false);		
 		this.set(SpriteLoader.nodeOutputSprite);
 		this.setPosition(x, y);
 		

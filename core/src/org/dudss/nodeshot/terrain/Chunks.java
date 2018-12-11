@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.terrain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -361,7 +362,7 @@ public class Chunks {
 	 * @param visibility Type of visibility.
 	 */
 	public void setVisibility(float x, float y, int radius, Visibility visibility) {
-		List<Section> sectionsToUpdate = Base.getSectionsAroundThePoint(x, y);
+		List<Section> sectionsToUpdate = getSectionsAroundWorldSpacePoint(x, y);
 		for (Section sec : sectionsToUpdate) {
 			for (int sx = 0; sx < Base.SECTION_SIZE; sx++) {
 				for (int sy = 0; sy < Base.SECTION_SIZE; sy++) {
@@ -383,7 +384,7 @@ public class Chunks {
 		};
 	
 		for (Section s : sectionsToUpdate) {
-			s.updateAll();
+			//s.updateAll();
 			GameScreen.chunks.updateFogOfWarMesh(s);
 		}
 	}
@@ -677,7 +678,8 @@ public class Chunks {
 		chunks[x][y].setIronLevel(level);
 	}
 	
-	public Chunk getChunk(int x, int y) {
+	/**Gets the chunk located at x/y coordinates in tile space*/
+	public Chunk getChunkAtTileSpace(int x, int y) {
 		if (x < 0 || y < 0 || x > Base.CHUNK_AMOUNT-1 || y > Base.CHUNK_AMOUNT-1) {
 			return null;
 		}
@@ -830,5 +832,87 @@ public class Chunks {
 			}
 		}
 		return patchPixmap;
+	}
+
+	/**Returns all 9 sections around this particular point in world space (Including the middle section).
+	 * @param x X world space coordinate
+	 * @param y Y world space coordinate
+	 * */
+	public List<Section> getSectionsAroundWorldSpacePoint(float x, float y) {
+		List<Section> sections = new ArrayList<Section>();
+		
+		Section s = getSectionByWorldSpace(x, y);
+		sections = getNeighbourSections(s);
+		sections.add(s);
+		
+		return sections;
+	}
+	
+	/**Returns a list of all neighbouring sections, if there is no neighbouring section, it is skipped and not included in the list
+	 * @param s The {@link Section} which neighbours will be returned.*/
+	public List<Section> getNeighbourSections(Section s) {
+		List<Section> sections = new ArrayList<Section>();
+		Chunk sectionOrigin = s.getChunk(0, 0);
+		int sectionAx = (int) ((int) (sectionOrigin.getX() / Base.CHUNK_SIZE) / Base.SECTION_SIZE);
+		int sectionAy = (int) ((int) (sectionOrigin.getY() / Base.CHUNK_SIZE) / Base.SECTION_SIZE);
+		
+		if (sectionAy < Base.SECTION_AMOUNT-1) 									sections.add(GameScreen.chunks.sections[sectionAx][sectionAy + 1]);
+		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAx < Base.SECTION_AMOUNT-1) sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy + 1]);
+		if (sectionAx < Base.SECTION_AMOUNT-1) 									sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy]);
+		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAy > 0) 					sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy - 1]);
+		if (sectionAy > 0) 														sections.add(GameScreen.chunks.sections[sectionAx][sectionAy - 1]);
+		if (sectionAy > 0 && sectionAx > 0) 									sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy - 1]);
+		if (sectionAx > 0) 														sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy]);
+		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAx > 0) 					sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy + 1]);
+		return sections;
+	}
+	
+	/**Returns the {@link Section} that holds this points {@link Chunk}.
+	 * @param x X tile space coordinate.
+	 * @param y Y tile space coordinate.
+	 */
+	public Section getSectionByTileSpace(int ax, int ay) {
+		return GameScreen.chunks.sections[ax / Base.SECTION_SIZE][ay / Base.SECTION_SIZE];
+	}
+
+	/**Returns the {@link Section} that holds this points {@link Chunk}.
+	 * @param x X world space coordinate.
+	 * @param y Y world space coordinate.
+	 */
+	public Section getSectionByWorldSpace(float x, float y) {
+		int ax = (int) (x / Base.CHUNK_SIZE);
+		int ay = (int) (y / Base.CHUNK_SIZE);
+		
+		return GameScreen.chunks.sections[ax / Base.SECTION_SIZE][ay / Base.SECTION_SIZE];
+	}
+	
+	/**Gets the {@link Chunk} located at world space x, y*/
+	public Chunk getChunkAtWorldSpace(float x, float y) {
+		int tileX = (int) (x / Base.CHUNK_SIZE);
+		int tileY = (int) (y / Base.CHUNK_SIZE);
+		
+		return GameScreen.chunks.getChunkAtTileSpace(tileX, tileY);
+	}
+	
+	/**Gets the chunks around the world space point in a certain diameter (diameter is in tile space)*/
+	public List<Chunk> getChunksAroundWorldSpacePoint(float x, float y, int diameter) {
+		List<Chunk> chunksInRadius = new ArrayList<Chunk>();
+		
+		Chunk centerChunk = getChunkAtWorldSpace(x, y);
+		Chunk originChunk = getChunkAtWorldSpace(x - ((diameter/2) * Base.CHUNK_SIZE), y - ((diameter/2) * Base.CHUNK_SIZE));
+	
+		for (int sx = originChunk.ax; sx < originChunk.ax + diameter/2; sx++) {
+			for (int sy = originChunk.ay; sy < originChunk.ay + diameter/2; sy++) {
+				Chunk c = GameScreen.chunks.getChunkAtTileSpace(sx, sy);
+				if (c != null) {
+					if (Math.hypot(centerChunk.getX() - c.getX(), centerChunk.getY() - c.getY()) <= diameter*Base.CHUNK_SIZE) {						
+						chunksInRadius.add(c);
+						c.setCreeperLevel(10);
+					}
+				}
+			}
+		}
+		
+		return chunksInRadius;
 	}
 }

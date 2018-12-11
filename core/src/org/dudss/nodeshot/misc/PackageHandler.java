@@ -8,6 +8,7 @@ import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.Node;
 
 import com.badlogic.gdx.graphics.Color;
@@ -52,7 +53,7 @@ public class PackageHandler {
 	}
 	
 	/**Create an indefinite path handler and add it to the package handler*/
-	public void addIndefinitePath(Package p, Connector c) {
+	public void addIndefinitePath(Package p, Conveyor c) {
 		IndefinitePathHandler newIPH = new IndefinitePathHandler(p, c);
 		p.setPathHandler(newIPH);
 		pathHandlers.add(newIPH);
@@ -65,7 +66,8 @@ public class PackageHandler {
 		GameScreen.connectorHandler.removeAllPackagesInConnectors();
 	}
 	
-	public void update() {
+	
+	/*public void update() {
 		List<PathHandler> toRemove = new ArrayList<PathHandler>();
 		
 		//Cycle through pHs, update them, and select ones that are done for removal (after iterating!)
@@ -78,7 +80,7 @@ public class PackageHandler {
 		}
 		pathHandlers.removeAll(toRemove);
 	
-	}
+	}*/
 	
 	public List<PathHandler> getAllPathHandlers() {
 		return pathHandlers;

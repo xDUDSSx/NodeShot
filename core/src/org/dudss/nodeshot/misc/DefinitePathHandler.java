@@ -158,7 +158,7 @@ public class DefinitePathHandler implements PathHandler {
 		} else {
 			Connector previousConnector = GameScreen.connectorHandler.getConnectorInbetween(currentPackage.from, currentPackage.to, from.getConnectors());
 			previousConnector.remove(currentPackage);
-			currentPackage.reset(from, to);
+			currentPackage.resetState(from, to);
 		}
 		
 	}
@@ -190,5 +190,11 @@ public class DefinitePathHandler implements PathHandler {
 	@Override
 	public PathHandlerType getType() {
 		return PathHandlerType.DefinitePathHandler;
+	}
+
+	@Override
+	public boolean nextNode() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

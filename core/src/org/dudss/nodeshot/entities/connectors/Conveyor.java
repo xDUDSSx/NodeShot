@@ -1,8 +1,6 @@
 package org.dudss.nodeshot.entities.connectors;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.Entity;
-import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.nodes.Node;
 
 import com.badlogic.gdx.graphics.Color;
@@ -12,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Conveyor extends Connector {
 
+	public boolean reversed = false;
+	
 	public Conveyor(Node from, Node to) {
 		super(from, to);
 	}
@@ -24,13 +24,22 @@ public class Conveyor extends Connector {
 		int numberOfArrows = Math.round((float)(this.lenght / distanceVector));
 		
 		float[] verts = new float[10 * numberOfArrows];
-		
-		float lPX = from.getCX();
-		float lPY = from.getCY();
-		
+				
 		int index = 0;
 		
-		Vector2 connectorVector = new Vector2((to.getCX() - from.getCX()), (to.getCY() - from.getCY()));
+		float lPX;
+		float lPY;
+		Vector2 connectorVector;
+		if (!reversed) {
+			lPX = from.getCX();
+			lPY = from.getCY();
+			connectorVector = new Vector2((to.getCX() - from.getCX()), (to.getCY() - from.getCY()));
+		} else {
+			lPX = to.getCX();
+			lPY = to.getCY();
+			connectorVector = new Vector2((from.getCX() - to.getCX()), (from.getCY() - to.getCY()));
+		}
+		
 		Vector2 connectorNormalVector = new Vector2(connectorVector.y, -(connectorVector.x));
 		double perc = this.lenght / 100;
 		float linePerc = (float) (((float) Base.lineWidth/2) / perc);		
@@ -68,7 +77,9 @@ public class Conveyor extends Connector {
 	}
 	
 	public void reverse() {
-		Node newFrom;
+		reversed = !reversed;
+		
+		/*Node newFrom;
 		Node newTo;
 		
 		newFrom = this.to;
@@ -76,6 +87,48 @@ public class Conveyor extends Connector {
 		
 		this.from = newFrom;
 		this.to = newTo;
+		*/
+	}
+	
+	public boolean isReversed() {
+		return reversed;
+	}
+	
+	public boolean facesTheSameDirection(Conveyor c) {
+		if (!this.isReversed() && !c.isReversed()) {
+			if (this.getFrom() != c.getFrom() && this.getTo() != c.getTo()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else
+		if (this.isReversed() && !c.isReversed()) {
+			if (this.getTo() != c.getFrom() && this.getFrom() != c.getTo()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		
+		
+		/*if (this.getFrom() == c.getTo()) {
+			if (this.isReversed() == c.isReversed()) {
+				return true;
+			}
+			if (this.isReversed() != c.isReversed()) {
+				return false;
+			}
+		} else {
+			if (this.isReversed() == c.isReversed()) {
+				return false;
+			}
+			if (this.isReversed() != c.isReversed()) {
+				return true;
+			}
+		}*/
+		new RuntimeException(this.getClass().getName() + " facesTheSameDirection() exception!");
+		return false;
 	}
 	
 	@Override

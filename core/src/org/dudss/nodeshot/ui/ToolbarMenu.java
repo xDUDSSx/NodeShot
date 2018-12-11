@@ -3,7 +3,9 @@ package org.dudss.nodeshot.ui;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.CoalMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
+import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
+import org.dudss.nodeshot.buildings.Importer;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -43,13 +45,25 @@ public class ToolbarMenu extends VisWindow {
 				}		
 		    }
 		});
+		
 		structures.addBuildingTile(SpriteLoader.genDrawable, "Generator", new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtBuilding = new CoalMine(0, 0);
+					GameScreen.chunks.getChunksAroundWorldSpacePoint(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, 32);
 				}
+		    }
+		});
+		
+		structures.addBuildingTile(SpriteLoader.factoryDrawable, "Factory", new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new Factory(0, 0);
+				}		
 		    }
 		});
 		
@@ -62,7 +76,18 @@ public class ToolbarMenu extends VisWindow {
 					GameScreen.builtBuilding = new CreeperGenerator(0, 0);
 				}		
 		    }
-		});
+		});		
+		
+		BuildTable transfer = new BuildTable();
+		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Importer", new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new Importer(0, 0);
+				}		
+		    }
+		});		
 		
 		final VisTable container = new VisTable();
 		VisList<String> list = new VisList<String>();
@@ -73,7 +98,7 @@ public class ToolbarMenu extends VisWindow {
             	container.clearChildren();
                 switch(list.getSelected()) {
                 	case "STRUCTURES": container.add(structures).expand().fill(); break;
-                	case "TRANSFER": break;
+                	case "TRANSFER": container.add(transfer).expand().fill(); break;
                 	case "WEAPONS": break;
                 	case "UTILS":  container.add(utils).expand().fill(); break;
                 }

@@ -29,7 +29,6 @@ public class Turret extends AbstractStorage {
 	Vector2 target;
 	
 	int radius = 32;
-	float minStorage = 0.1f;
 	
 	TurretHead head;
 	Sprite turretSprite;
@@ -39,13 +38,11 @@ public class Turret extends AbstractStorage {
 	public Turret(float cx, float cy) {
 		super(cx, cy, width, height);
 		accepted = Arrays.asList(ItemType.AMMO);
+		
 		color = new Color(255/255f, 144/255f, 0, 1.0f);
 		prefabColor = new Color(255/255f, 144/255f, 0, 0.5f);
 		head = new TurretHead(this);
 		turretSprite = new Sprite(SpriteLoader.turret);
-		
-		height = 48;
-		width = 48;
 		
 		maxStorage = 5;
 	}
@@ -61,10 +58,10 @@ public class Turret extends AbstractStorage {
 	public void update() {
 		super.update();
 
-		if (SimulationThread.simTick >= nextShot && storage >= minStorage) {			
+		if (SimulationThread.simTick >= nextShot && storage.size() >= 1) {			
 			boolean shotSuccessful = shoot();
 			if (shotSuccessful) {
-				storage -= minStorage; 
+				storage.remove(storage.size()-1);
 				nextShot = SimulationThread.simTick + rechargeRate;
 			}			
 		}
@@ -72,12 +69,12 @@ public class Turret extends AbstractStorage {
 	
 	@Override
 	public void draw(ShapeRenderer r, SpriteBatch batch) {	
-		if (storage < maxStorage) {
+		if (storage.size() < maxStorage) {
 			r.setColor(Color.GREEN);
 		} else {
 			r.setColor(Color.RED);
 		}	
-		r.rectLine(this.x, this.y - 2, this.x + (width*((float) (storage/maxStorage))), this.y - 2, 3);
+		r.rectLine(this.x, this.y - 2, this.x + (width*((float) (storage.size()/maxStorage))), this.y - 2, 3);
 		
 		r.end();
 		batch.begin();
@@ -141,9 +138,9 @@ public class Turret extends AbstractStorage {
             
             //Check if the chunk has any corruption in it (Since we are spiraling outwards from the turrets cx, cy, the first corrupted chunk
             //we encounter is going to be the closest as well (No guarantee that this is the only closest one)
-            chunk = GameScreen.chunks.getChunk(x, y);
+            chunk = GameScreen.chunks.getChunkAtTileSpace(x, y);
             if (chunk != null) {
-	            if (GameScreen.chunks.getChunk(x, y).getCreeperLevel() > 0) {
+	            if (GameScreen.chunks.getChunkAtTileSpace(x, y).getCreeperLevel() > 0) {
 	            	return chunk;
 	            }
             }
@@ -166,15 +163,4 @@ public class Turret extends AbstractStorage {
         
         return null;
 	}
-	
-	@Override
-	public boolean canStore(ItemType type) {
-		if (accepted.contains(type)) {
-			if (type == ItemType.AMMO) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 }

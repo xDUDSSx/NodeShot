@@ -426,7 +426,6 @@ public class RightClickWindow extends Window {
 			  	percentageLabel = new Label("Percentage: " + Base.round((float)p.percentage, 2)+ " %", skin, "font15");
 			  	percentageLabel.setWrap(true);
 			    goingLabel = new Label("Going: " + p.going, skin, "font15");
-			    finishedLabel = new Label("Finished: " + p.finished, skin, "font15");
 			    fromLabel = new Label("From: " + p.from.getID(), skin, "font15");
 			    toLabel = new Label("From: " + p.to.getID(), skin, "font15");
 			   
@@ -640,7 +639,7 @@ public class RightClickWindow extends Window {
 				      table.add(emptyButton).pad(1).fill(true).padLeft(10);
 				      
 				      AbstractStorage s = (AbstractStorage) in.getAssignedStorage();			     
-					  level = new Label("Amount: " + s.storage, skin, "font15");
+					  level = new Label("Amount: " + s.getStoredItems().size(), skin, "font15");
 		        }
 		        
 		        table.row();
@@ -744,7 +743,6 @@ public class RightClickWindow extends Window {
 				
 				percentageLabel.setText("Percentage: " + Base.round((float)p.percentage, 2) + " %");
 			    goingLabel.setText("Going: " + p.going);
-			    finishedLabel.setText("Finished: " + p.finished);
 			    fromLabel.setText("From: " + p.from.getID());
 			    toLabel.setText("From: " + p.to.getID());			    
 				break;
@@ -752,7 +750,7 @@ public class RightClickWindow extends Window {
 				InputNode in = (InputNode) entity;
 				if (in.getAssignedStorage() instanceof AbstractStorage) {		
 					AbstractStorage s = (AbstractStorage) in.getAssignedStorage();
-					level.setText("Amount: " + s.storage);
+					level.setText("Amount: " + s.getStoredItems().size());
 			    }				
 				break;
 			default: break;

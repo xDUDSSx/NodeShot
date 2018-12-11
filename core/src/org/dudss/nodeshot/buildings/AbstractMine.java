@@ -4,8 +4,7 @@ import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.entities.Package;
-import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
@@ -23,8 +22,8 @@ public abstract class AbstractMine extends AbstractBuilding {
 		OutputNode output;
 		//The iron mine boundary node
 		Node export;
-		//First and the only connector of the output node
-		Connector firstConnector;
+		//First and the only conveyor of the output node
+		Conveyor firstConveyor;
 		//Target node - where is Item sent
 		Node target;
 
@@ -71,7 +70,7 @@ public abstract class AbstractMine extends AbstractBuilding {
 			export = new ConveyorNode(x + (width/2), (float) (y + height*0.15), Base.RADIUS);
 			output.connectTo(export);
 			
-			firstConnector = GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
+			firstConveyor = (Conveyor) GameScreen.connectorHandler.getConnectorInbetween(output, export, export.getConnectors());
 			
 			GameScreen.nodelist.add(output);
 			GameScreen.nodelist.add(export);
@@ -81,10 +80,10 @@ public abstract class AbstractMine extends AbstractBuilding {
 			int tileY = (int) (this.y / Base.CHUNK_SIZE);
 			
 			float totalOreLevel = 
-					GameScreen.chunks.getChunk(tileX, tileY).getCoalLevel() + 
-					GameScreen.chunks.getChunk(tileX + 1, tileY).getCoalLevel() +
-					GameScreen.chunks.getChunk(tileX, tileY + 1).getCoalLevel() + 
-					GameScreen.chunks.getChunk(tileX + 1, tileY + 1).getCoalLevel();
+					GameScreen.chunks.getChunkAtTileSpace(tileX, tileY).getCoalLevel() + 
+					GameScreen.chunks.getChunkAtTileSpace(tileX + 1, tileY).getCoalLevel() +
+					GameScreen.chunks.getChunkAtTileSpace(tileX, tileY + 1).getCoalLevel() + 
+					GameScreen.chunks.getChunkAtTileSpace(tileX + 1, tileY + 1).getCoalLevel();
 			
 			if (totalOreLevel > 0) {
 				canGenerate = true;
@@ -102,12 +101,7 @@ public abstract class AbstractMine extends AbstractBuilding {
 			this.output.remove();
 			this.export.remove();
 			
+			clearBuildingChunks();
 			updateFogOfWar(false);
 		}
-
-		@Override
-		public void alert(Package p) {
-			// TODO Auto-generated method stub		
-		}
-
 }

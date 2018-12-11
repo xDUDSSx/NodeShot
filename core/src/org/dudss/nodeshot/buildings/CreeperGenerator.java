@@ -3,25 +3,18 @@ package org.dudss.nodeshot.buildings;
 import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.SimulationThread;
-import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**A creeper generator building that generates creeper*/
 public class CreeperGenerator extends AbstractGenerator {
 
 	OutputNode output;
-	protected Color prefabColor = new Color(49f/255f, 209f/255f, 12f/255f, 0.5f);
-	protected Color color = new Color(35/255f, 175/255f, 3/255f, 1f);
 	
 	/**Height of the spawned creeper*/
 	public float spawnRate = Base.MAX_CREEP;
@@ -33,7 +26,7 @@ public class CreeperGenerator extends AbstractGenerator {
 	
 	@Override
 	public void update() {
-		if (GameScreen.chunks.getChunk((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE)).visibility != Chunk.deactivated) {
+		if (GameScreen.chunks.getChunkAtTileSpace((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE)).visibility != Chunk.deactivated) {
 			this.active = true;
 			generate();
 		}
@@ -41,11 +34,12 @@ public class CreeperGenerator extends AbstractGenerator {
 	
 	@Override
 	protected void generate() {
-		if (active) {
-			int tileX = (int) ((this.x + Base.CHUNK_SIZE) / Base.CHUNK_SIZE);
-			int tileY = (int) ((this.y + Base.CHUNK_SIZE) / Base.CHUNK_SIZE);
-			GameScreen.chunks.getChunk(tileX, tileY).setCreeperLevel(spawnRate);	
+		if (GameScreen.chunks.getChunkAtTileSpace((int)(this.cx/Base.CHUNK_SIZE), (int)(this.cy/Base.CHUNK_SIZE)).getSection().isActive() == false) {
+			GameScreen.chunks.getChunkAtTileSpace((int)(this.cx/Base.CHUNK_SIZE), (int)(this.cy/Base.CHUNK_SIZE)).getSection().setActive(true);
 		}
+		int tileX = (int) ((this.cx) / Base.CHUNK_SIZE);
+		int tileY = (int) ((this.cy) / Base.CHUNK_SIZE);
+		GameScreen.chunks.getChunkAtTileSpace(tileX, tileY).setCreeperLevel(spawnRate);	
 	}
 
 	@Override
@@ -78,19 +72,15 @@ public class CreeperGenerator extends AbstractGenerator {
 		buildingHandler.addGenerator(this);
 		GameScreen.nodelist.add(output);
 		
-		Base.locateSectionByWorldSpace(x, y).setActive(true);
-		GameScreen.chunks.updateFogOfWarMesh(Base.locateSectionByWorldSpace(x, y));
+		GameScreen.chunks.getSectionByWorldSpace(x, y).setActive(true);
+		//GameScreen.chunks.updateFogOfWarMesh(Base.locateSectionByWorldSpace(x, y));
 	}
 
 	@Override
 	public void demolish() {
 		GameScreen.buildingHandler.removeBuilding(this);	
 		this.output.remove();
+		
+		clearBuildingChunks();
 	}
-
-	@Override
-	public void alert(Package p) {
-		// TODO Auto-generated method stub	
-	}
-
 }

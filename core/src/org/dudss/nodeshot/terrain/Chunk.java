@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
+import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunks.OreType;
 import org.dudss.nodeshot.terrain.Chunks.Visibility;
@@ -37,8 +38,13 @@ public class Chunk {
 	public static float deactivated = 0.5f;
 	
 	boolean borderChunk = false;
-	Section section;
 	
+	/**Building atop of this chunk*/
+	AbstractBuilding building = null;
+	
+	/**Section that contains this chunk*/
+	Section section;
+
 	/**Coal ore level*/
 	float coalOre = 0f;
 	/**Iron ore level*/
@@ -853,15 +859,15 @@ public class Chunk {
 		ax = Math.round(x/Base.CHUNK_SIZE);
 		ay = Math.round(y/Base.CHUNK_SIZE);
 		
-		minusx = GameScreen.chunks.getChunk(ax - 1, ay);
-		plusx = GameScreen.chunks.getChunk(ax + 1, ay);
-		minusy = GameScreen.chunks.getChunk(ax, ay - 1);
-		plusy = GameScreen.chunks.getChunk(ax, ay + 1);
+		minusx = GameScreen.chunks.getChunkAtTileSpace(ax - 1, ay);
+		plusx = GameScreen.chunks.getChunkAtTileSpace(ax + 1, ay);
+		minusy = GameScreen.chunks.getChunkAtTileSpace(ax, ay - 1);
+		plusy = GameScreen.chunks.getChunkAtTileSpace(ax, ay + 1);
 		
-		cornerTopLeft = GameScreen.chunks.getChunk(ax - 1, ay + 1);
-		cornerTopRight = GameScreen.chunks.getChunk(ax + 1, ay + 1);
-		cornerBottomLeft = GameScreen.chunks.getChunk(ax - 1, ay - 1);
-		cornerBottomRight = GameScreen.chunks.getChunk(ax + 1, ay - 1);
+		cornerTopLeft = GameScreen.chunks.getChunkAtTileSpace(ax - 1, ay + 1);
+		cornerTopRight = GameScreen.chunks.getChunkAtTileSpace(ax + 1, ay + 1);
+		cornerBottomLeft = GameScreen.chunks.getChunkAtTileSpace(ax - 1, ay - 1);
+		cornerBottomRight = GameScreen.chunks.getChunkAtTileSpace(ax + 1, ay - 1);
 				
 		//Putting these chunks into array for accessibility
 		neighbours = new Chunk[8];	
@@ -1084,6 +1090,16 @@ public class Chunk {
 		return section;
 	}
 	
+	/**Sets the building that stands on top of this chunk, (set null if there is none)*/
+	public void setBuilding(AbstractBuilding b) {
+		building = b;
+	}
+	
+	/**Gets the building that is on top of this chunk, (null if there is none).*/
+	public AbstractBuilding getBuilding() {
+		return building;
+	}
+	
 	/**@return Current terrain {@link #height}.*/
 	public float getHeight() {
 		return height;
@@ -1099,9 +1115,19 @@ public class Chunk {
 		return x;	
 	}
 	
-	/**@return World space x coordinate of this {@linkplain Chunk}.*/
+	/**@return World space y coordinate of this {@linkplain Chunk}.*/
 	public float getY() {
 		return y;
+	}
+	
+	/**@return Tile space x coordinate of this {@linkplain Chunk}.*/
+	public int getAX() {
+		return ax;	
+	}
+	
+	/**@return Tile space y coordinate of this {@linkplain Chunk}.*/
+	public int getAY() {
+		return ay;
 	}
 	
 	/**@return World space width/height of this {@linkplain Chunk}.*/

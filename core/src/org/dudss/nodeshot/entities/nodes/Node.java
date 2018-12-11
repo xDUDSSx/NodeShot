@@ -349,9 +349,8 @@ public class Node extends Sprite implements Entity {
 		GameScreen.packageHandler.addPath(this, target, p);
 	}
 	
-	public void sendPackage(Package p) {
-		Connector c = connectors.get(Base.getRandomIntNumberInRange(0, connectors.size() - 1));
-		GameScreen.packageHandler.addIndefinitePath(p, c); //TODO: indefinite package + conveyor connector
+	public void sendPackage(Package p, Conveyor c) {
+		GameScreen.packageHandler.addIndefinitePath(p, c);
 	}
 	
 	

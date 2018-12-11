@@ -265,9 +265,9 @@ public class DesktopInputProcessor implements InputProcessor {
 				if (draggingConnection == false) {
 					for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
 						for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-							Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
+							Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
 							if (c != null) {
-								c.setCreeperLevel(GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 1);
+								c.setCreeperLevel(GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 1);
 							}
 						}
 					}						
@@ -278,9 +278,9 @@ public class DesktopInputProcessor implements InputProcessor {
 				if (draggingConnection == false) {
 					for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
 						for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-							Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
+							Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
 							if (c != null) {
-								c.setCreeperLevel(GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() - Base.MAX_CREEP * 0.02f);
+								c.setCreeperLevel(GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() - Base.MAX_CREEP * 0.02f);
 							}
 						}
 					}							
@@ -290,7 +290,7 @@ public class DesktopInputProcessor implements InputProcessor {
 				if (draggingConnection == false) {			
 					for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
 						for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-							Chunk c = GameScreen.chunks.getChunk((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
+							Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
 							if (c != null) {
 								c.setHeight(GameScreen.terrainLayerSelected);
 							}
@@ -341,7 +341,7 @@ public class DesktopInputProcessor implements InputProcessor {
 		float nx = Math.round((worldPos.x - (worldPos.x % Base.CHUNK_SIZE)) / Base.CHUNK_SIZE);
 		float ny = Math.round((worldPos.y - (worldPos.y % Base.CHUNK_SIZE)) / Base.CHUNK_SIZE);		
 			
-		GameScreen.hoverChunk = GameScreen.chunks.getChunk((int)nx, (int)ny);
+		GameScreen.hoverChunk = GameScreen.chunks.getChunkAtTileSpace((int)nx, (int)ny);
 	}
 	
 	@Override

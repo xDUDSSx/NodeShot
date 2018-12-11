@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.items.Item.ItemType;
+import org.dudss.nodeshot.items.StorableItem;
 import org.dudss.nodeshot.misc.PathHandler;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -30,8 +31,9 @@ public class Package extends Sprite implements Entity{
 	
 	public Color color;
 	
+	/**Whether the package is still moving through a connector, when true,
+	 * the package has finished the connector segment path and awaits further instructions of its {@link PathHandler}*/
 	public Boolean going = false;
-	public Boolean finished = false;
 
 	public Vector2 currentMovePos;
 	
@@ -98,9 +100,8 @@ public class Package extends Sprite implements Entity{
 		highlightSprite.draw(batch);
 	}
 	
-	public void reset(Node from, Node to) {
+	public void resetState(Node from, Node to) {
 		going = false;
-		finished = false;
 		this.percentage = 0;
 		this.from = from;
 		this.to = to;
@@ -109,7 +110,6 @@ public class Package extends Sprite implements Entity{
 	public void destroy() {
 		GameScreen.packagelist.remove(this); //wont be rendered anymore
 		going = false;
-		finished = true;
 		this.pathHandler.finish();
 	}
 	
@@ -127,8 +127,8 @@ public class Package extends Sprite implements Entity{
 		going = true;
 	}
 	
-	public Boolean isFinished() {
-		return finished;
+	public Boolean isGoing() {
+		return going;
 	}
 	
 	public void setColor(Color color) {
@@ -141,6 +141,7 @@ public class Package extends Sprite implements Entity{
 	public void setPathHandler(PathHandler pathHandler) {
 		this.pathHandler = pathHandler;
 	}
+	
 	public PathHandler getPathHandler() {
 		return pathHandler;
 	}
@@ -162,4 +163,8 @@ public class Package extends Sprite implements Entity{
 		return ItemType.PACKAGE;
 	}
 	
+	/**Gets a {@link StorableItem} that is the same type as this package.*/
+	public StorableItem getStorable() {
+		return new StorableItem(getItemType());
+	}
 }
