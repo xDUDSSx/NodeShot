@@ -6,7 +6,8 @@ import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.items.StorableItem;
 
-public interface Storage {
+/**A basic interface for a {@link AbstractBuilding} that can be alerted by a {@link Package}.*/
+public interface Alertable {
 	
 	public abstract boolean alert(StorableItem p);
 	

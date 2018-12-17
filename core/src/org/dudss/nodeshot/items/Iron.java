@@ -14,17 +14,20 @@ public class Iron extends Package implements Item{
 	
 	//Package representing an item
 	public Iron(Node from, Node to) {
-		super(from, to);
-		
+		super(from, to);	
 		highlightSprite = SpriteLoader.ironHighlightSprite;
 	}
 	
 	public Iron(Node from) {
-		super(from);
-		
+		super(from);	
 		highlightSprite = SpriteLoader.ironHighlightSprite;
 	}
-
+	
+	public Iron() {
+		super();	
+		highlightSprite = SpriteLoader.ironHighlightSprite;
+	}
+	
 	@Override
 	public void draw(SpriteBatch batch) {
 		packageSprite = ironSprite;

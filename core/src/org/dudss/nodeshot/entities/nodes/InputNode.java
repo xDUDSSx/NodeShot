@@ -1,7 +1,8 @@
 package org.dudss.nodeshot.entities.nodes;
 
 import org.dudss.nodeshot.buildings.AbstractStorage;
-import org.dudss.nodeshot.buildings.Storage;
+import org.dudss.nodeshot.buildings.Alertable;
+import org.dudss.nodeshot.buildings.AlertableBuilding;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.misc.DefinitePathHandler;
@@ -10,9 +11,9 @@ import org.dudss.nodeshot.utils.SpriteLoader;
 /**A node that can transfer nodes to an assigned {@link AbstractStorage}*/
 public class InputNode extends Node {
 
-	AbstractStorage assignedBuilding;
+	AlertableBuilding assignedBuilding;
 
-	public InputNode(float cx, float cy, int radius, AbstractStorage building) {
+	public InputNode(float cx, float cy, int radius, AlertableBuilding building) {
 		super(cx, cy, radius);		
 		assignedBuilding = building;
 		this.set(SpriteLoader.nodeInputSprite);
@@ -48,7 +49,7 @@ public class InputNode extends Node {
 		}
 	}
 	
-	public Storage getAssignedStorage() {
+	public Alertable getAssignedStorage() {
 		return assignedBuilding;
 	}
 	

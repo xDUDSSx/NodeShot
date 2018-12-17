@@ -38,7 +38,7 @@ public class Base {
 	public static int HUD_FONT_LARGE_SIZE = 36;
 	
 	//TERRAIN
-	public static int WORLD_SIZE = 2048*4;
+	public static int WORLD_SIZE = 2048*2;
 	
 	public static float COAL_THRESHOLD = 0.74f;
 	public static float IRON_THRESHOLD = 0.74f;

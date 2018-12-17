@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.items;
 
+import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.items.Item.ItemType;
 
 /**Represents an item stored in a storage pool.*/
@@ -13,5 +14,17 @@ public class StorableItem {
 	
 	public ItemType getType() {
 		return type;
+	}
+	
+	public Package getPackage() {
+		switch(type) {
+			case COAL: return new Coal();
+			case IRON: return new Iron();
+			case AMMO: return new Ammo();
+			case PACKAGE: return new Package();
+			default: break;
+			
+		}
+		return null;
 	}
 }

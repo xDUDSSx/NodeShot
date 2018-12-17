@@ -14,14 +14,17 @@ public class Coal extends Package implements Item{
 	
 	//Package representing an item
 	public Coal(Node from, Node to) {
-		super(from, to);
-		
+		super(from, to);	
 		highlightSprite = SpriteLoader.coalHighlightSprite;
 	}
 	
 	public Coal(Node from) {
-		super(from);
-		
+		super(from);		
+		highlightSprite = SpriteLoader.coalHighlightSprite;
+	}
+	
+	public Coal() {
+		super();	
 		highlightSprite = SpriteLoader.coalHighlightSprite;
 	}
 	

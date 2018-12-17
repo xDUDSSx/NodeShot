@@ -1,5 +1,8 @@
 package org.dudss.nodeshot.items;
 
+import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.nodes.Node;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**A {@link Package} representing an item of a certain {@link ItemType}. This item then exists in the game world and can move along transfer networks.

@@ -24,7 +24,9 @@ void main()
         }  
  
         if (tex.a > 0 && tex.a < 1) {
-	    gl_FragColor = vec4((tex.rgb * tex1.rgb), 1.0) * v_color;
+	    //gl_FragColor = vec4((tex.rgb * tex1.rgb), 1.0) * v_color;
+            //gl_FragColor = vec4((tex.rgb + tex1.rgb), 1.0) * v_color;
+            gl_FragColor = vec4(mix(tex.rgb, tex1.rgb, 0.8), 1.0);
         }
 
         if (tex.a == 0) {

@@ -3,6 +3,7 @@ package org.dudss.nodeshot.ui;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.CoalMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
+import org.dudss.nodeshot.buildings.Exporter;
 import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.buildings.Importer;
@@ -12,6 +13,7 @@ import org.dudss.nodeshot.utils.SpriteLoader;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -46,13 +48,22 @@ public class ToolbarMenu extends VisWindow {
 		    }
 		});
 		
+		structures.addBuildingTile(SpriteLoader.mineDrawable, "Mine", new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new CoalMine(0, 0);
+				}
+		    }
+		});
+		
 		structures.addBuildingTile(SpriteLoader.genDrawable, "Generator", new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtBuilding = new CoalMine(0, 0);
-					GameScreen.chunks.getChunksAroundWorldSpacePoint(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, 32);
 				}
 		    }
 		});
@@ -89,6 +100,16 @@ public class ToolbarMenu extends VisWindow {
 		    }
 		});		
 		
+		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Exporter", new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.builtBuilding = new Exporter(0, 0);
+				}		
+		    }
+		});		
+		
 		final VisTable container = new VisTable();
 		VisList<String> list = new VisList<String>();
 		list.setItems("STRUCTURES", "TRANSFER", "WEAPONS", "UTILS"); 		
@@ -116,8 +137,7 @@ public class ToolbarMenu extends VisWindow {
 		mainTable.top();
 		mainTable.defaults().top();
 		TableUtils.setSpacingDefaults(mainTable);
-		
-		
+			
 		mainTable.add(list);
 		mainTable.addSeparator(true);
 		mainTable.add(container).expand().fill().prefHeight(Base.buildMenuImgSize + 50);

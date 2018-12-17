@@ -20,7 +20,7 @@ public class Factory extends AbstractIOStorage {
 	Animation<TextureRegion> factoryAnimation;
 	Animation<TextureRegion> factoryOutlinedAnimation;
 
-	float processingSpeed = 10;
+	float processingSpeed = 100;
 	long lastProcess = SimulationThread.simTick;
 	
 	public Factory(float cx, float cy) {

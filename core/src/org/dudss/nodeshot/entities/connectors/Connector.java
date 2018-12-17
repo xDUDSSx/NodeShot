@@ -18,6 +18,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static org.dudss.nodeshot.Base.PACKAGE_BLOCK_RANGE;
 import static org.dudss.nodeshot.Base.PACKAGE_SPEED;
 
+/**An entity representing a connection between two {@link Node}s. 
+ * {@link Package}s travel along them and their movement is handled by them and their assigned {@link ConnectorHandler}.
+ * */
 public class Connector implements Entity{
 	Node from;
 	Node to;

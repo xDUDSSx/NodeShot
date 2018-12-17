@@ -15,8 +15,10 @@ public class DesktopLauncher {
 	/**NodeEngine development version
 	 * v5.0 - corruption optimisation update
 	 * v5.1 - fog of war update
-	 * v6.0 - building update*/
-	public static final String ver = "v6.0";
+	 * v6.0 - building update
+	 * v6.1 - package system updates
+	 * */
+	public static final String ver = "v6.1";
 	
 	/**The main method*/
 	public static void main (String[] arg) {

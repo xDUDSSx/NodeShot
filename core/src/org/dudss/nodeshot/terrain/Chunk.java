@@ -59,8 +59,8 @@ public class Chunk {
 	/**Absolute creeper ({@link #c_height} + {@link #creeper} when {@linkplain #creeper} > 0)*/
 	float absCreeper = 0;
 	
-	float flowRate = 0.25f;
-	float spreadThreshold = 0.5f;
+	float flowRate = 0.1f; //0.25
+	float spreadThreshold = 0.2f; //0.5
 	
 	/**A buffer that holds the creeper change between simulation ticks*/
 	public float creeperChange = 0;
@@ -427,7 +427,15 @@ public class Chunk {
 			} else {
 				return SpriteLoader.tileAtlas.findRegion("renderedCoalLevel0");
 			}
-			
+		}	
+	
+		if (ironOre != 0) {
+			if (ironOre > 0.25f) {
+				return SpriteLoader.tileAtlas.findRegion("renderedIronLevel1");
+			} else {
+				return SpriteLoader.tileAtlas.findRegion("renderedIronLevel0");
+			}		
+		}
 			/*AtlasRegion desiredRegion = null;
 			if (coalOre <= 0.25) {
 				desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledCoallow");
@@ -506,14 +514,7 @@ public class Chunk {
 			}
 				
 			return desiredRegion;*/
-		} else
-		if (ironOre != 0) {
-			if (ironOre > 0.25f) {
-				return SpriteLoader.tileAtlas.findRegion("renderedIronLevel1");
-			} else {
-				return SpriteLoader.tileAtlas.findRegion("renderedIronLevel0");
-			}
-		}
+		
 			/*boolean triangleDrawn = false;
 			AtlasRegion desiredRegion = SpriteLoader.tileAtlas.findRegion("tiledIron");
 			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) {
@@ -613,17 +614,6 @@ public class Chunk {
 		if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) {
 			//Diagonal edges
 			float level = this.getAbsoluteCreeperLayer();
-			
-			/*if (minusy.getHeight() > level && minusy.getCreeperLevel() == 0 &&
-				minusx.getHeight() > level && minusx.getCreeperLevel() == 0 &&
-			    plusx.getAbsoluteCreeperLayer() >= level &&
-			    plusy.getAbsoluteCreeperLayer() >= level)
-			{
-				setCorruptionEdge(true, EdgeType.TOP_RIGHT);	
-				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrCBL"));	
-			} else
-			*/
-			
 			if ((plusy.getAbsoluteCreeperLayer() < level )&& 
 				(plusx.getAbsoluteCreeperLayer() < level )&&
 				minusx.getAbsoluteCreeperLayer() >= level &&

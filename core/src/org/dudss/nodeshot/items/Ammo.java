@@ -13,17 +13,21 @@ public class Ammo extends Package implements Item {
 	
 	//Package representing an item
 	public Ammo(Node from, Node to) {
-		super(from, to);
-		
+		super(from, to);	
 		highlightSprite = SpriteLoader.packageHighlightSprite;
 	}
 	
 	public Ammo(Node from) {
-		super(from);
-		
+		super(from);	
+		highlightSprite = SpriteLoader.packageHighlightSprite;
+	}
+	
+	public Ammo() {
+		super();	
 		highlightSprite = SpriteLoader.packageHighlightSprite;
 	}
 
+	
 	@Override
 	public void draw(SpriteBatch batch) {
 		packageSprite = ammoSprite;
@@ -44,6 +48,5 @@ public class Ammo extends Package implements Item {
 	public ItemType getItemType() {
 		return ItemType.AMMO;
 	}
-	
 }
 

@@ -3,6 +3,7 @@ package org.dudss.nodeshot.inputs;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
+import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.screens.MenuScreen;
@@ -206,7 +207,7 @@ public class DesktopInputProcessor implements InputProcessor {
 						}				
 						if (!nodeIntersected) {
 							Node newNode = null;
-							if (nodelist.get(selectedIndex) instanceof ConveyorNode) {
+							if (nodelist.get(selectedIndex) instanceof ConveyorNode || nodelist.get(selectedIndex) instanceof IONode) {
 								newNode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
 							} else {
 								newNode = new Node(worldPos.x, worldPos.y, Base.RADIUS);

@@ -26,9 +26,9 @@ public class CoalMine extends AbstractMine {
 	
 	public CoalMine(float cx, float cy) {
 		super(cx, cy);
-		genAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.genanimFrames);	
-		genOutlinedAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.genanimoutlineFrames);
-		prefabColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
+		//genAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.genanimFrames);	
+		//genOutlinedAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.genanimoutlineFrames);
+		//prefabColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
 	}
 
 	public void generate() {
@@ -47,21 +47,24 @@ public class CoalMine extends AbstractMine {
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 1f);		
 		if (outlined) {
-			TextureRegion currentFrame = genOutlinedAnimation.getKeyFrame(GameScreen.stateTime, true);
-			batch.draw(currentFrame, x, y, width, height);
+			//TextureRegion currentFrame = genOutlinedAnimation.getKeyFrame(GameScreen.stateTime, true);
+			//batch.draw(currentFrame, x, y, width, height);
+			batch.draw(SpriteLoader.mineOn, x, y, width, height);
 		} else {
-			TextureRegion currentFrame = genAnimation.getKeyFrame(GameScreen.stateTime, true);
-			batch.draw(currentFrame, x, y, width, height);
+			//TextureRegion currentFrame = genAnimation.getKeyFrame(GameScreen.stateTime, true);
+			//batch.draw(currentFrame, x, y, width, height);
+			batch.draw(SpriteLoader.mineOn, x, y, width, height);
 		}		
 		batch.end();
 	}
 	
 	@Override
 	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {
-		TextureRegion currentFrame = genAnimation.getKeyFrame(GameScreen.stateTime, true);		
+		//TextureRegion currentFrame = genAnimation.getKeyFrame(GameScreen.stateTime, true);		
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 0.5f);
-		batch.draw(currentFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
+		//batch.draw(currentFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);		
+		batch.draw(SpriteLoader.mineOn, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
 		batch.end();		
 	}
 	

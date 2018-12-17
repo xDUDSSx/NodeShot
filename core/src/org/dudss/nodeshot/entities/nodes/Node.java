@@ -16,18 +16,14 @@ import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
+import org.dudss.nodeshot.items.Item;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * Node object that holds position, transform, state and connection data, extends a
- * Gdx sprite
- * 
- * @author Dan
- *
+ * Node object that holds position, transform, state and connection data. Individual nodes are connected via {@link Connector}s.
  */
-
 public class Node extends Sprite implements Entity {
 
 	public float x;
@@ -55,12 +51,13 @@ public class Node extends Sprite implements Entity {
 
 	public Point movementVector;
 
+	//TODO: Node code is old and not necessarily best for the current use, rewrite at one point!!
 	/**
 	 * Creates a new Node that functions as a Sprite
 	 * 
 	 * @param cx - the X center coordinate 
 	 * @param cy - the Y center coordinate
-	 * @param radius - the sprite radius (16 hardcoded TODO: fix)
+	 * @param radius - the sprite radius
 	 */
 	public Node(float cx, float cy, int radius) {
 		this.cx = cx;
@@ -187,7 +184,7 @@ public class Node extends Sprite implements Entity {
 				}
 
 				Connector nC = null;
-				if (this instanceof ConveyorNode || targetnode instanceof ConveyorNode) {
+				if (this instanceof ConveyorNode || targetnode instanceof ConveyorNode || this instanceof IONode || targetnode instanceof IONode) {
 					nC = new Conveyor(this, targetnode);
 				} else {
 					nC = new Connector(this, targetnode);
@@ -352,7 +349,6 @@ public class Node extends Sprite implements Entity {
 	public void sendPackage(Package p, Conveyor c) {
 		GameScreen.packageHandler.addIndefinitePath(p, c);
 	}
-	
 	
 	public int getID() {
 		return this.id;

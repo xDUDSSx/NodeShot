@@ -14,6 +14,8 @@ public abstract class AbstractIOStorage extends AbstractStorage {
 	
 	public AbstractIOStorage(float cx, float cy, float width, float height) {
 		super(cx, cy, width, height);
+		
+		maxStorage = 5;
 	}
 
 	@Override
@@ -26,11 +28,15 @@ public abstract class AbstractIOStorage extends AbstractStorage {
 	@Override
 	public boolean canStore(StorableItem p) {
 		if (this.accepted.size() > 0) {
-			if (this.accepted.contains(p.getType()) && storage.size() < maxStorage && processedStorage.size() < maxProcessedStorage) {
+			if (this.accepted.contains(p.getType()) && (storage.size() < maxStorage || processedStorage.size() < maxProcessedStorage)) {
 				return true;
 			}
 			return false;
 		}
 		return true;
+	}
+	
+	public List<StorableItem> getProcessedStorage() {
+		return processedStorage;
 	}
 }

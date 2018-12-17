@@ -32,7 +32,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 /**Manages terrain and corruption generation, updating, optimising and rendering.
  * Both terrain and corruption are rendered as direct OpenGL draw calls with their own
- * vertex and index buffers that get uploaded to the GPU. They are also rendered using custom GLSL shaders.
+ * vertex and index buffers that get uploaded to the GPU. They are also rendered using custom GLSL shaders
  * @see {@link Shaders#corruptionShader} and {@link Shaders#terrainShader}.
  * */
 public class Chunks {
@@ -859,7 +859,7 @@ public class Chunks {
 		if (sectionAy < Base.SECTION_AMOUNT-1) 									sections.add(GameScreen.chunks.sections[sectionAx][sectionAy + 1]);
 		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAx < Base.SECTION_AMOUNT-1) sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy + 1]);
 		if (sectionAx < Base.SECTION_AMOUNT-1) 									sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy]);
-		if (sectionAy < Base.SECTION_AMOUNT-1 && sectionAy > 0) 					sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy - 1]);
+		if (sectionAx < Base.SECTION_AMOUNT-1 && sectionAy > 0) 					sections.add(GameScreen.chunks.sections[sectionAx + 1][sectionAy - 1]);
 		if (sectionAy > 0) 														sections.add(GameScreen.chunks.sections[sectionAx][sectionAy - 1]);
 		if (sectionAy > 0 && sectionAx > 0) 									sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy - 1]);
 		if (sectionAx > 0) 														sections.add(GameScreen.chunks.sections[sectionAx - 1][sectionAy]);
@@ -907,7 +907,6 @@ public class Chunks {
 				if (c != null) {
 					if (Math.hypot(centerChunk.getX() - c.getX(), centerChunk.getY() - c.getY()) <= diameter*Base.CHUNK_SIZE) {						
 						chunksInRadius.add(c);
-						c.setCreeperLevel(10);
 					}
 				}
 			}

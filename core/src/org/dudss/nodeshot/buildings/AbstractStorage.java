@@ -17,13 +17,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**Building that can accept and hold items in a single shared storage pool.*/
-public abstract class AbstractStorage extends AbstractBuilding implements Storage {	
+public abstract class AbstractStorage extends AlertableBuilding {	
 	InputNode input;
 	
 	List<StorableItem> storage = new ArrayList<StorableItem>();
 	float maxStorage = 50;
-	
-	List<ItemType> accepted;
 	
 	protected Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
 	protected Color color = Color.GOLDENROD;
@@ -38,6 +36,27 @@ public abstract class AbstractStorage extends AbstractBuilding implements Storag
 		if (storage.size() < maxStorage) {
 			input.update();
 		}
+	}
+	
+	@Override
+	public boolean alert(StorableItem p) {
+		if (canStore(p)) {
+			storage.add(p);	
+			System.out.println("caled at " + storage.size());
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canStore(StorableItem p) {
+		if (this.accepted.size() > 0) {
+			if (this.accepted.contains(p.getType()) && storage.size() < maxStorage) {
+				return true;
+			}
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
@@ -88,40 +107,7 @@ public abstract class AbstractStorage extends AbstractBuilding implements Storag
 	public Node getInputNode() {
 		return input;
 	}
-	
-	/**Method used by {@link InputNode}s used to alert the building that a following package is trying to be transfered.
-	 * @param p The {@link Package} that is being transfered.
-	 * @return Returns if the {@linkplain Package} transfer was successful.
-	 * */
-	public boolean alert(StorableItem p) {
-		if (canStore(p)) {
-			storage.add(p);	
-			return true;
-		}
-		return false;
-	}
 
-	@Override
-	public boolean canStore(StorableItem p) {
-		if (this.accepted.size() > 0) {
-			if (this.accepted.contains(p.getType()) && storage.size() < maxStorage) {
-				return true;
-			}
-			return false;
-		}
-		return true;
-	}
-	
-	@Override
-	public void setAccepted(List<ItemType> accepted) {
-		this.accepted = accepted;
-	}
-	
-	@Override	
-	public List<ItemType> getAccepted() {
-		return this.accepted;
-	}
-	
 	public List<StorableItem> getStoredItems() {
 		return this.storage;
 	}

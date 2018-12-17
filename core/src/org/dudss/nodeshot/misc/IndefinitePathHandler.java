@@ -11,6 +11,7 @@ import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.Node;
 
+/**A {@link PathHandler} that has no path-finding algorithm backing it up. This handler moves packages forward along one-way {@link Conveyors}.*/
 public class IndefinitePathHandler implements PathHandler {
 
 	Package currentPackage;

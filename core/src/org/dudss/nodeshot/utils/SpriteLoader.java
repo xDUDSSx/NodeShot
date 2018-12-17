@@ -71,11 +71,16 @@ public class SpriteLoader {
 	
 	public static TextureRegion importerTop;
 	
+	public static TextureRegion mineOff;
+	public static TextureRegion mineOn;
+	
+	
 	public static Drawable creepergenDrawable;
 	public static Drawable hqDrawable;
 	public static Drawable genDrawable;
 	public static Drawable factoryDrawable;
 	public static Drawable importerTopDrawable;
+	public static Drawable mineDrawable;
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
@@ -175,6 +180,9 @@ public class SpriteLoader {
 		
 		importerTop = hqanimAtlas.findRegion("importerTOP");
 		
+		mineOff = hqanimAtlas.findRegion("mineOFF");
+		mineOn = hqanimAtlas.findRegion("mineON");
+		
 		creepergenDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("creepergenPreview512")));
 		creepergenDrawable.setMinHeight(Base.buildMenuImgSize);
 		creepergenDrawable.setMinWidth(Base.buildMenuImgSize);
@@ -194,6 +202,10 @@ public class SpriteLoader {
 		importerTopDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("importerTOPpreview256")));
 		importerTopDrawable.setMinHeight(Base.buildMenuImgSize);
 		importerTopDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		mineDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("minePreview512")));
+		mineDrawable.setMinHeight(Base.buildMenuImgSize);
+		mineDrawable.setMinWidth(Base.buildMenuImgSize);
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);

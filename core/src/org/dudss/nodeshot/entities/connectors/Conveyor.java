@@ -78,22 +78,13 @@ public class Conveyor extends Connector {
 	
 	public void reverse() {
 		reversed = !reversed;
-		
-		/*Node newFrom;
-		Node newTo;
-		
-		newFrom = this.to;
-		newTo = this.from;
-		
-		this.from = newFrom;
-		this.to = newTo;
-		*/
 	}
 	
 	public boolean isReversed() {
 		return reversed;
 	}
 	
+	/**Whether this conveyor faces the same direction as conveyor c, eg. Whether this connector can accept packages from connector c.*/
 	public boolean facesTheSameDirection(Conveyor c) {
 		if (!this.isReversed() && !c.isReversed()) {
 			if (this.getFrom() != c.getFrom() && this.getTo() != c.getTo()) {
@@ -109,25 +100,21 @@ public class Conveyor extends Connector {
 				return false;
 			}
 		}
-		
-		
-		
-		/*if (this.getFrom() == c.getTo()) {
-			if (this.isReversed() == c.isReversed()) {
+		new RuntimeException(this.getClass().getName() + " facesTheSameDirection() exception!");
+		return false;
+	}
+	
+	/**Whether a package sent from the {@link Node} n can access this conveyor.*/
+	public boolean facesTheSameDirection(Node n) {
+		if (!this.isReversed()) {
+			if (this.getFrom() == n) {
 				return true;
-			}
-			if (this.isReversed() != c.isReversed()) {
-				return false;
 			}
 		} else {
-			if (this.isReversed() == c.isReversed()) {
-				return false;
-			}
-			if (this.isReversed() != c.isReversed()) {
+			if (this.getTo() == n) {
 				return true;
 			}
-		}*/
-		new RuntimeException(this.getClass().getName() + " facesTheSameDirection() exception!");
+		}
 		return false;
 	}
 	

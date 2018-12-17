@@ -13,6 +13,9 @@ import org.dudss.nodeshot.misc.PathHandler;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
+/**An entity that can move along {@link Connector}s between {@link Node}s and can be processed by them.
+ * A carrier of {@link StorableItem}s.
+ * */
 public class Package extends Sprite implements Entity{
 
 	public Node from;
@@ -42,8 +45,29 @@ public class Package extends Sprite implements Entity{
 	public Sprite packageSprite;
 	public Sprite highlightSprite;
 	
-	//Simple two node connection
+	/**Whether the package has all data needed for proper function*/
+	public boolean notSet = true;
+	
+	/**A proper two node connection*/
 	public Package(Node from, Node to) {
+		setParams(from, to);
+		notSet = false;
+	}
+	
+	/**Package with no target node yet, used for initialisation of position parameters*/
+	public Package(Node from) {
+		setParams(from, null);
+		notSet = true;
+	}
+	
+	/**An empty constructor that needs {@link #setParams(Node, Node)} to be called before use*/
+	public Package() {
+		notSet = true;
+	}
+		
+	/**A method usually called from the constructor that initialises the package positions, variables and adds it to the simulation.
+	 * Needs to be called manually when an empty constructor is used.*/
+	public void setParams(Node from, Node to) {
 		this.from = from;
 		this.to = to;
 		this.radius = Base.PACKAGE_RADIUS;
@@ -59,26 +83,7 @@ public class Package extends Sprite implements Entity{
 		
 		GameScreen.packagelist.add(this);
 	}
-	//TODO: implement speed
-	
-	//No params
-	public Package(Node from) {
-		this.from = from;
-		this.to = null;
-		this.radius = Base.PACKAGE_RADIUS;
-		this.id = System.identityHashCode(this);
 		
-		this.x = from.getCX() - radius/2;
-		this.y = from.getCY() - radius/2;
-		
-		currentMovePos = new Vector2(from.getCX(), from.getCY());
-		
-		this.set(new Sprite(SpriteLoader.packageSprite));
-		this.setPosition(x, y);
-		
-		GameScreen.packagelist.add(this);
-	}
-
 	public void draw(SpriteBatch batch) {
 		packageSprite = SpriteLoader.packageSprite;
 
