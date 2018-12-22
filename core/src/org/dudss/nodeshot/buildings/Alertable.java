@@ -9,7 +9,7 @@ import org.dudss.nodeshot.items.StorableItem;
 /**A basic interface for a {@link AbstractBuilding} that can be alerted by a {@link Package}.*/
 public interface Alertable {
 	
-	public abstract boolean alert(StorableItem p);
+	public boolean alert(StorableItem p);
 	
 	//Method that checks if the designated storage is able to contain one more package of said ItemType
 	public boolean canStore(StorableItem p);

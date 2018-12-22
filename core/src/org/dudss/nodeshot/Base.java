@@ -23,6 +23,9 @@ public class Base {
 	public static int SCREEN_HEIGHT;
 
 	public static float MIN_ZOOM = 0.2f;
+
+	public static int START_BITS = 100;
+	public static int START_POWER = 1000;
 	
 	public static int RADIUS = 16;
 	public static int PACKAGE_RADIUS = 16;
@@ -96,7 +99,7 @@ public class Base {
 	//Graphical settings
 	public static boolean vSyncEnabled = false;
 	public static boolean fullscreen = false;
-	public static int foregroundFps = 144;
+	public static int foregroundFps = 0;
 	public static Dimension defaultWindowSize = new Dimension(1300, 795);
 	public static int MSAAsamples = 10;
 	

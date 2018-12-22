@@ -56,15 +56,36 @@ public class IONode extends Node {
 		}
 	}
 	
-	/**Sends a package to a random accessible {@link Conveyor} using the {@link PackageHandler#addIndefinitePath} method.
-	 * @return Whether the operation was successful.*/
-	public boolean sendPackage(Package export) {
+	/**Whether this node can send a Package*/
+	public boolean canSendPackage() {
 		//Picks a random accessible conveyor
 		List<Conveyor> possiblePaths = new ArrayList<Conveyor>();
 		for (Connector c : this.getConnectors()) {
 			if (c instanceof Conveyor) {
 				if (((Conveyor) c).facesTheSameDirection(this)) {
-					possiblePaths.add((Conveyor)c);
+					if(c.checkEntrance(this, Base.PACKAGE_BLOCK_RANGE)) {
+						possiblePaths.add((Conveyor)c);
+					}
+				}
+			}
+		}
+		if (possiblePaths.size() > 0) {
+			return true;
+		} 
+		return false;
+	}
+	
+	/**Sends a package to a random accessible {@link Conveyor} using the {@link PackageHandler#addIndefinitePath} method.
+	 * @return Whether the operation was successful.*/
+	public boolean sendIOPackage(Package export) {
+		//Picks a random accessible conveyor
+		List<Conveyor> possiblePaths = new ArrayList<Conveyor>();
+		for (Connector c : this.getConnectors()) {
+			if (c instanceof Conveyor) {
+				if (((Conveyor) c).facesTheSameDirection(this)) {
+					if(c.checkEntrance(this, Base.PACKAGE_BLOCK_RANGE)) {
+						possiblePaths.add((Conveyor)c);
+					}
 				}
 			}
 		}
@@ -74,9 +95,8 @@ public class IONode extends Node {
 			targetConveyor = possiblePaths.get(Base.getRandomIntNumberInRange(0, possiblePaths.size()-1));
 			GameScreen.packageHandler.addIndefinitePath(export, targetConveyor);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 	
 	public void setInputSprite() {

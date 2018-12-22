@@ -1,24 +1,26 @@
 attribute vec4 a_position;
 attribute vec4 a_color;
-attribute vec2 a_texCoord0; 
-attribute vec2 a_texCoord1;
+
 uniform mat4 u_projTrans; 
 varying vec4 v_color;
-varying vec2 v_texCoords;
+
+attribute vec2 a_texCoord0; 
+attribute vec2 a_texCoord1;
+attribute vec2 a_texCoord2; 
+attribute vec2 a_texCoord3;
+
+varying vec2 v_texCoords0;
 varying vec2 v_texCoords1;
-varying float useTex1;
+varying vec2 v_texCoords2;
+varying vec2 v_texCoords3;
 
 void main()                   
 {                             
    v_color = a_color; 
-   v_texCoords = a_texCoord0; 
-
-   if (a_texCoord1.x == 0 && a_texCoord1.y == 0) {
-   	useTex1 = 0.0;
-   } else {
-        useTex1 = 1.0;
-	v_texCoords1 = a_texCoord1; 
-   }
+   v_texCoords0 = a_texCoord0; 
+   v_texCoords1 = a_texCoord1;
+   v_texCoords2 = a_texCoord2; 
+   v_texCoords3 = a_texCoord3;
   
    gl_Position =  u_projTrans * a_position; 
 }                         

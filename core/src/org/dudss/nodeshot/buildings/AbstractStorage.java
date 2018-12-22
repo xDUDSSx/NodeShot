@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.entities.nodes.InputNode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.items.Item.ItemType;
@@ -18,7 +19,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**Building that can accept and hold items in a single shared storage pool.*/
 public abstract class AbstractStorage extends AlertableBuilding {	
-	InputNode input;
+	IONode ioNode;
+	boolean ioActive = false;
 	
 	List<StorableItem> storage = new ArrayList<StorableItem>();
 	float maxStorage = 50;
@@ -33,8 +35,10 @@ public abstract class AbstractStorage extends AlertableBuilding {
 		
 	@Override
 	public void update() {
-		if (storage.size() < maxStorage) {
-			input.update();
+		if (ioActive) {
+			if (storage.size() < maxStorage) {
+				ioNode.update();
+			}
 		}
 	}
 	
@@ -71,6 +75,9 @@ public abstract class AbstractStorage extends AlertableBuilding {
 			r.setColor(Color.RED);
 		}	
 		r.rectLine(this.x, this.y - 2, this.x + (width*((float) (storage.size()/maxStorage))), this.y - 2, 3);
+		if (ioActive) {
+			this.ioNode.draw(batch);
+		}
 	}
 	
 	@Override
@@ -82,11 +89,12 @@ public abstract class AbstractStorage extends AlertableBuilding {
 	
 	@Override
 	public void build() {
-		input = new InputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
-		
-		//GameScreen.nodelist.add(input);
+		if (ioActive) {
+			ioNode = new IONode(x + (width/2), y + (height/2), Base.RADIUS, this);
+			ioNode.setInputSprite();
+			GameScreen.nodelist.add(ioNode);
+		}
 		GameScreen.buildingHandler.addBuilding(this);
-		GameScreen.nodelist.add(input);
 		
 		updateFogOfWar(true);
 	}
@@ -94,10 +102,14 @@ public abstract class AbstractStorage extends AlertableBuilding {
 	@Override
 	public void demolish() {
 		GameScreen.buildingHandler.removeBuilding(this);
-		this.input.remove();
+		if (ioActive) this.ioNode.remove();
 		
 		clearBuildingChunks();
 		updateFogOfWar(false);
+	}
+	
+	public void activateIONode(boolean b) {
+		this.ioActive = b;
 	}
 	
 	public void empty() {
@@ -105,7 +117,7 @@ public abstract class AbstractStorage extends AlertableBuilding {
 	}
 	
 	public Node getInputNode() {
-		return input;
+		return ioNode;
 	}
 
 	public List<StorableItem> getStoredItems() {

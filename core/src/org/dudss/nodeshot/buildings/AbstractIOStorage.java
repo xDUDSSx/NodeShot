@@ -20,15 +20,17 @@ public abstract class AbstractIOStorage extends AbstractStorage {
 
 	@Override
 	public void update() {
-		if (storage.size() < maxStorage && processedStorage.size() < maxProcessedStorage) {
-			input.update();
+		if (ioActive) {
+			if (storage.size() < maxStorage && processedStorage.size() < maxProcessedStorage) {
+				ioNode.update();
+			}
 		}
 	}
 	
 	@Override
 	public boolean canStore(StorableItem p) {
 		if (this.accepted.size() > 0) {
-			if (this.accepted.contains(p.getType()) && (storage.size() < maxStorage || processedStorage.size() < maxProcessedStorage)) {
+			if (this.accepted.contains(p.getType()) && storage.size() < maxStorage) {
 				return true;
 			}
 			return false;

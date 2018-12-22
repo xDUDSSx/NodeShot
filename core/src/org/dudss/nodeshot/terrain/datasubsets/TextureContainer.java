@@ -18,6 +18,19 @@ public class TextureContainer {
 		}
 	}
 	
+	/**Adds a texture to the last unoccupied slot of this container.
+	 * @param texture The {@link Texture} that will be added.
+	 * */
+	public void addTexture(Texture texture) {
+		size++;
+		Texture[] tempTextures = new Texture[size];		
+		for (int i = 0; i < textures.length; i++) {
+			tempTextures[i] = textures[i];
+		}
+		tempTextures[tempTextures.length-1] = texture;
+		this.textures = tempTextures;
+	}
+	
 	/**Returns an {@linkplain Texture} corresponding to the index
 	 * @param index Index of the {@linkplain Texture}
 	 * @return {@link Texture}, null if the index is out of bounds

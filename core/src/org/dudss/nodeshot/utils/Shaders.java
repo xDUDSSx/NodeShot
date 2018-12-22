@@ -34,6 +34,7 @@ public class Shaders {
 		String fragShader = Gdx.files.internal("shaders/corruptionFrag.glsl").readString();
 		String vertShader = Gdx.files.internal("shaders/corruptionVertex.glsl").readString();		
 		corruptionShader = new ShaderProgram(vertShader, fragShader);		
+		corruptionShader.pedantic = true;
 		
 		String fogVertShader = Gdx.files.internal("shaders/fogVertex.glsl").readString();
 		String fogFragShader = Gdx.files.internal("shaders/fogFragment.glsl").readString();

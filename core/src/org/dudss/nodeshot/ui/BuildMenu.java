@@ -3,11 +3,10 @@ package org.dudss.nodeshot.ui;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.AmmoStorage;
 import org.dudss.nodeshot.buildings.AbstractStorage;
-import org.dudss.nodeshot.buildings.CoalMine;
+import org.dudss.nodeshot.buildings.BasicMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
-import org.dudss.nodeshot.buildings.IronMine;
 import org.dudss.nodeshot.buildings.Turret;
 import org.dudss.nodeshot.buildings.TurretCheat;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
@@ -153,7 +152,7 @@ public class BuildMenu extends Window {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new CoalMine(0, 0);
+					GameScreen.builtBuilding = new BasicMine(0, 0);
 				}
 		    }
 	    });
@@ -163,7 +162,7 @@ public class BuildMenu extends Window {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new IronMine(0, 0);
+					//GameScreen.builtBuilding = new IronMine(0, 0);
 				}		
 		    }
 	    });

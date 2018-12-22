@@ -24,6 +24,7 @@ public class Exporter extends AbstractIOPort {
 	public Exporter(float cx, float cy) {
 		super(cx, cy, width, height);
 		sprite = new Sprite(SpriteLoader.importerTop);
+		
 	}
 	
 	@Override
@@ -71,7 +72,7 @@ public class Exporter extends AbstractIOPort {
 					if (export.notSet == true) {
 						export.setParams(input, null);
 					}
-					this.input.sendPackage(export);
+					this.input.sendIOPackage(export);
 					this.nextOperation = SimulationThread.simTick + ioSpeed;
 				}
 			}
@@ -92,7 +93,12 @@ public class Exporter extends AbstractIOPort {
 	public void draw(ShapeRenderer r, SpriteBatch batch) {
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 1f);		
-		batch.draw(sprite, x, y - Base.CHUNK_SIZE, width, height + Base.CHUNK_SIZE);
+		sprite.setOrigin(Base.CHUNK_SIZE/2, Base.CHUNK_SIZE + Base.CHUNK_SIZE/2);
+		sprite.setRotation(this.spriteRotation);
+		sprite.setSize(width, height + Base.CHUNK_SIZE);
+		sprite.setPosition(x, y - Base.CHUNK_SIZE);
+		sprite.draw(batch);		
+		//batch.draw(sprite, x, y - Base.CHUNK_SIZE, width, height + Base.CHUNK_SIZE);
 		//input.draw(batch);
 		batch.end();
 		
@@ -101,8 +107,13 @@ public class Exporter extends AbstractIOPort {
 	@Override
 	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {
 		batch.begin();
-		batch.setColor(1f, 1f, 1f, 0.5f);
-		batch.draw(sprite, getPrefabX(cx, snap), getPrefabY(cy, snap)  - Base.CHUNK_SIZE, width, height + Base.CHUNK_SIZE);
+		batch.setColor(1f, 1f, 1f, 0.5f);	
+		sprite.setOrigin(Base.CHUNK_SIZE/2, Base.CHUNK_SIZE + Base.CHUNK_SIZE/2);
+		sprite.setRotation(this.spriteRotation);
+		sprite.setSize(width, height + Base.CHUNK_SIZE);
+		sprite.setPosition(getPrefabX(cx, snap), getPrefabY(cy, snap) - Base.CHUNK_SIZE);
+		sprite.draw(batch);		
+		//batch.draw(sprite, getPrefabX(cx, snap), getPrefabY(cy, snap)  - Base.CHUNK_SIZE, width, height + Base.CHUNK_SIZE);
 		batch.end();		
 		
 	}
@@ -114,7 +125,13 @@ public class Exporter extends AbstractIOPort {
 		GameScreen.nodelist.add(input);
 		
 		importerChunk = GameScreen.chunks.getChunkAtWorldSpace(x, y);
-		buildingChunk = GameScreen.chunks.getChunkAtTileSpace(importerChunk.getAX(), importerChunk.getAY() - 1);		
+		
+		switch(Math.abs(this.spriteRotation)) {
+			case 0: buildingChunk = GameScreen.chunks.getChunkAtTileSpace(importerChunk.getAX(), importerChunk.getAY() - 1); break;
+			case 90: buildingChunk = GameScreen.chunks.getChunkAtTileSpace(importerChunk.getAX() + 1, importerChunk.getAY()); break;
+			case 180: buildingChunk = GameScreen.chunks.getChunkAtTileSpace(importerChunk.getAX(), importerChunk.getAY() + 1); break;
+			case 270: buildingChunk = GameScreen.chunks.getChunkAtTileSpace(importerChunk.getAX() - 1, importerChunk.getAY()); break;
+		}		
 		
 		if (buildingChunk.getBuilding() != null) {
 			if (buildingChunk.getBuilding() instanceof AbstractStorage) {

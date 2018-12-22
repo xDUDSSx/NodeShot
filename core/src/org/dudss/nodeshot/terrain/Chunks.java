@@ -282,22 +282,22 @@ public class Chunks {
 	}
 	
 	public void drawTerrain() {
-			Gdx.gl.glEnable(GL20.GL_BLEND);
-			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
-			SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
-		    Shaders.terrainShader.begin();
-		    Shaders.terrainShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
-		    Shaders.terrainShader.setUniformi("u_texture", 0);
-		    for (Section s : sectionsInView) {
-		    	if (s.needsTerrainUpdate() == true) {		
-		    		s.getTerrainMesh().setVertices(s.getTerrainVerts());
-			    	s.getTerrainMesh().setIndices(s.getTerrainIndices());	 
-	 				s.updatedTerrain();
-	 			}
-		    	s.getTerrainMesh().render(Shaders.terrainShader, GL20.GL_TRIANGLES);
-		    }
-		    Shaders.terrainShader.end();	
-		    Gdx.gl.glDisable(GL20.GL_BLEND);
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
+		SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
+	    Shaders.terrainShader.begin();
+	    Shaders.terrainShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
+	    Shaders.terrainShader.setUniformi("u_texture", 0);
+	    for (Section s : sectionsInView) {
+	    	if (s.needsTerrainUpdate() == true) {		
+	    		s.getTerrainMesh().setVertices(s.getTerrainVerts());
+		    	s.getTerrainMesh().setIndices(s.getTerrainIndices());	 
+ 				s.updatedTerrain();
+ 			}
+	    	s.getTerrainMesh().render(Shaders.terrainShader, GL20.GL_TRIANGLES);
+	    }
+	    Shaders.terrainShader.end();	
+	    Gdx.gl.glDisable(GL20.GL_BLEND);
 	}	
 	
 	/**Draws the {@link Section#corrMesh} of every {@link Section} in the {@link #sectionsInView} list. Corruption is drawn as a textured grid rendered using
@@ -307,32 +307,32 @@ public class Chunks {
 	 * Thus I didn't need to keep corruption layers as separate meshes but as a single mesh (per {@link Section}) which increases performance.
 	 * @see {@link Chunk#getCorruptionTexture()}*/
 	public void drawCorruption() {
-		 	Gdx.gl.glEnable(GL20.GL_BLEND);
-	        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	    
+	 	Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	    
 
-	        //For blur
-		    //GameScreen.corrBuffers.get(layer).begin();
-	        //Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	 		SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
-	 		 		
-			Shaders.corruptionShader.begin();
-			Shaders.corruptionShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
-			Shaders.corruptionShader.setUniformi("u_texture", 0);			
-			    
-	 		for (Section s : sectionsInView) {	   	 
-	 			if (s.needsCorruptionMeshUpdate() == true) {		
-	 				s.getCorruptionMesh().setVertices(s.getCorruptionVerts());
-			    	s.getCorruptionMesh().setIndices(s.getCorruptionIndices());
-	 				s.updatedCorruptionMesh();
-	 			}
-	 			s.getCorruptionMesh().render(Shaders.corruptionShader, GL20.GL_TRIANGLES);
-	 		}	 	 		
-	 		Shaders.corruptionShader.end();
-	 		
-	 		Gdx.gl.glDisable(GL20.GL_BLEND);
-	 		//GameScreen.corrBuffers.get(layer).end();	
-	 		//GameScreen.blurBuffer(GameScreen.corrBuffers.get(layer), GameScreen.blurBuffer, GameScreen.corrBuffers.get(layer).getColorBufferTexture(), 0, 0);
+        //For blur
+	    //GameScreen.corrBuffers.get(layer).begin();
+        //Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+ 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+ 		SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
+ 		 		
+		Shaders.corruptionShader.begin();
+		Shaders.corruptionShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
+		Shaders.corruptionShader.setUniformi("u_texture", 0);			
+		    
+ 		for (Section s : sectionsInView) {	   	 
+ 			if (s.needsCorruptionMeshUpdate() == true) {		
+ 				s.getCorruptionMesh().setVertices(s.getCorruptionVerts());
+		    	s.getCorruptionMesh().setIndices(s.getCorruptionIndices());
+ 				s.updatedCorruptionMesh();
+ 			}
+ 			s.getCorruptionMesh().render(Shaders.corruptionShader, GL20.GL_TRIANGLES);
+ 		}	 	 		
+ 		Shaders.corruptionShader.end();
+ 		
+ 		Gdx.gl.glDisable(GL20.GL_BLEND);
+ 		//GameScreen.corrBuffers.get(layer).end();	
+ 		//GameScreen.blurBuffer(GameScreen.corrBuffers.get(layer), GameScreen.blurBuffer, GameScreen.corrBuffers.get(layer).getColorBufferTexture(), 0, 0);
 	}
 	
 	public void drawFogOfWar() {
@@ -487,6 +487,8 @@ public class Chunks {
 				new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
 				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"),
 				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "1"),
+				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "2"),
+				new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "3"),
 				new VertexAttribute(Usage.Generic, 2, "a_shade")); //Two shade components, for each texture (max of 2 corruption textures per tile)
 	    
 	    
@@ -512,7 +514,7 @@ public class Chunks {
 	    return generateVertexArrays(s, corr, numberOfRectangles, numberOfVertices);
 	}
 
-	/**Generates the vertices and indices arrays for a Mesh with 9 vertex attributes
+	/**Generates the vertices and indices arrays for a Mesh with 13 vertex attributes
 	 * @param s The assigned section.
 	 * @param corr Whether a terrain or a corruption mesh should b e generated
 	 * @param numberOfRectangles Number of rectangles in the vertex array
@@ -522,7 +524,7 @@ public class Chunks {
 	private MeshVertexData generateVertexArrays(Section s, boolean corr, int numberOfRectangles, int numberOfVertices) {			      			
 			int vertexPositionValue = 2; //x,y position values
 			int vertexColorValue = 1; //A single packed color value
-		    int vertexTexCordsValue = 4; //u,v texture1 and 2 coordinates
+		    int vertexTexCordsValue = 8; //u,v texture coordinates (4 textures)
 		    int vertexShadeValue = 2; //Custom value representing shade of corruption
 		    
 		    int valuesPerVertex = vertexPositionValue + vertexColorValue + vertexTexCordsValue + vertexShadeValue; //6
@@ -541,21 +543,35 @@ public class Chunks {
 					
 		  	        int rectangleOffsetInArray = i * valuesPerVertex * 4;  	        
 		  	        
-		  	        //Two texture regions and texture coordinates are used for mixing multiple texture variants using a shader
+		  	        //Four texture regions and texture coordinates are used for mixing multiple texture variants using a shader
 		  	        //Currently used when rendering terrain (eg. terrainShader, corruptionShader)
 		  	      	
+		  	        //All the texture coordinates are set to a blank (alpha = 0) texture to properly work with the terrain shaders
+		  	        //(Since the texture layering checks are based on alpha values)
 		  	      	//Texture 1 texture coordinates
-		  	      	float u = 0;
-		  	        float v = 0;
-		  	        float u2 = 1;
-		  	        float v2 = 1;
+		  	      	float au = SpriteLoader.tileAtlas.findRegion("0void").getU();
+		  	        float av = SpriteLoader.tileAtlas.findRegion("0void").getV();
+		  	        float au2 = SpriteLoader.tileAtlas.findRegion("0void").getU2();
+		  	        float av2 = SpriteLoader.tileAtlas.findRegion("0void").getV2();
 		  	        
 		  	        //Texture 2 texture coordinates
-		  	        float tu;
-		  	        float tv;
-		  	        float tu2;
-		  	        float tv2;
-
+		  	        float bu = au;
+		  	        float bv = av;
+		  	        float bu2 = au2;
+		  	        float bv2 = av2;
+		  	        
+		  	        //Texture 3 texture coordinates
+		  	        float cu = au;   
+		  	        float cv = av;   
+		  	        float cu2 = au2; 
+		  	        float cv2 = av2; 
+		  	        
+		  	        //Texture 4 texture coordinates
+		  	        float du = au;   
+		  	        float dv = av;   
+		  	        float du2 = au2; 
+		  	        float dv2 = av2; 
+		  	        
 		  	        AtlasRegionContainer tC;
 		  	        if (corr) {
 		  	        	tC = c.getCorruptionTexture();
@@ -572,25 +588,36 @@ public class Chunks {
 		  	        	float shade1 = 0; //Secondary texture shade (Only used when a tile has mutiple shades)
 		  	        					  	        	
 			  	        //First set of texture coordinates for the texture1
-			  	        u = tC.getTexture(0).getU();
-			  	      	v = tC.getTexture(0).getV();
-			  	        u2 = tC.getTexture(0).getU2();
-			  	        v2 = tC.getTexture(0).getV2();	
+			  	        au = tC.getTexture(0).getU();
+			  	      	av = tC.getTexture(0).getV();
+			  	        au2 = tC.getTexture(0).getU2();
+			  	        av2 = tC.getTexture(0).getV2();	
 			  	        
 			  	        //Second set of texture coordinates IF supplied by the AtlasRegionContainer
 			  	        if (tC.getTexture(1) != null) {
-			  	        	tu = tC.getTexture(1).getU();  
-			  	        	tv = tC.getTexture(1).getV();  
-			  	        	tu2 = tC.getTexture(1).getU2();
-			  	        	tv2 = tC.getTexture(1).getV2();
+			  	        	bu = tC.getTexture(1).getU();  
+			  	        	bv = tC.getTexture(1).getV();  
+			  	        	bu2 = tC.getTexture(1).getU2();
+			  	        	bv2 = tC.getTexture(1).getV2();
 			  	        	
-			  	        	//Get the shade of the secondary texture
+			  	        	//Get the shade of the secondary texture (This is used to shade the corruption mesh)
 			  	        	if (corr) shade1 = tC.getSecondaryShade();			  	        		 
-			  	        } else {
-			  	        	tu = 0;
-			  	        	tv = 0;
-			  	        	tu2 = 0;
-			  	        	tv2 = 0;
+			  	        }
+			  	        
+			  	        //Third set of texture coordinates IF supplied by the AtlasRegionContainer
+			  	        if (tC.getTexture(2) != null) {
+			  	        	cu = tC.getTexture(2).getU();  
+			  	        	cv = tC.getTexture(2).getV();  
+			  	        	cu2 = tC.getTexture(2).getU2();
+			  	        	cv2 = tC.getTexture(2).getV2();	  	        		 
+			  	        }
+			  	        
+			  	        //Fourth set of texture coordinates IF supplied by the AtlasRegionContainer
+			  	        if (tC.getTexture(3) != null) {
+			  	        	du = tC.getTexture(3).getU();  
+			  	        	dv = tC.getTexture(3).getV();  
+			  	        	du2 = tC.getTexture(3).getU2();
+			  	        	dv2 = tC.getTexture(3).getV2();	  	        		 
 			  	        }
 
 			  	        //Assign a color attribute for further color / alpha modifications.
@@ -612,10 +639,10 @@ public class Chunks {
 
 			  	        
 			  	        //Set the individual vertex attributes to each of the 4 vertexes of this square
-			  	     	setValuesInArrayForVertex(verticesWithColor, u, v2, tu, tv2, tileX, tileY, f, shade, shade1, rectangleOffsetInArray, 0);
-			  	        setValuesInArrayForVertex(verticesWithColor, u2, v2, tu2, tv2, tileX + Base.CHUNK_SIZE, tileY, f, shade, shade1, rectangleOffsetInArray, 1);
-			  	        setValuesInArrayForVertex(verticesWithColor, u2, v, tu2, tv, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, shade, shade1, rectangleOffsetInArray, 2);
-			  	        setValuesInArrayForVertex(verticesWithColor, u, v, tu, tv, tileX, tileY + Base.CHUNK_SIZE, f, shade, shade1, rectangleOffsetInArray, 3);			  	       
+			  	     	setValuesInArrayForVertex(verticesWithColor, au, av2, bu, bv2, cu, cv2, du, dv2, tileX, tileY, f, shade, shade1, rectangleOffsetInArray, 0);
+			  	        setValuesInArrayForVertex(verticesWithColor, au2, av2, bu2, bv2, cu2, cv2, du2, dv2, tileX + Base.CHUNK_SIZE, tileY, f, shade, shade1, rectangleOffsetInArray, 1);
+			  	        setValuesInArrayForVertex(verticesWithColor, au2, av, bu2, bv, cu2, cv, du2, dv, tileX + Base.CHUNK_SIZE, tileY + Base.CHUNK_SIZE, f, shade, shade1, rectangleOffsetInArray, 2);
+			  	        setValuesInArrayForVertex(verticesWithColor, au, av, bu, bv, cu, cv, du, dv, tileX, tileY + Base.CHUNK_SIZE, f, shade, shade1, rectangleOffsetInArray, 3);			  	       
 			  	        
 			  	        //Set the index buffer object (IBO) indices that specify the triangle structure
 			  	        vertexIndices[i * 6 + 0] = (short) (i * 4 + 0);
@@ -635,10 +662,14 @@ public class Chunks {
 	
 	/**Method that populates the mesh vertex array (OpenGL VBO)
 	 * @param vertices The array that is being modified
-	 * @param u U texture1 coordinate
-	 * @param v V texture1 coordinate
-	 * @param tu U texture2 coordinate
-	 * @param tv V texture2 coordinate
+	 * @param au U texture1 coordinate
+	 * @param av V texture1 coordinate
+	 * @param bu U texture2 coordinate
+	 * @param bv V texture2 coordinate
+	 * @param cu U texture3 coordinate
+	 * @param cv V texture3 coordinate
+	 * @param du U texture4 coordinate
+	 * @param dv V texture4 coordinate
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 * @param c The packed color that can be used with shaders
@@ -646,8 +677,8 @@ public class Chunks {
 	 * @param rectangeOffsetInArray Index of the current position in the array
 	 * @param vertexNumberInRect Rectangle (tile) vertex which attributes are being set
 	 * */
-	private void setValuesInArrayForVertex(float[] vertices, float u, float v, float tu, float tv, float x, float y, float c, float shade, float shade1, int rectangleOffsetInArray, int vertexNumberInRect) {
-	    int valuesPerVertex = 9; //Constant representing the number of individual attributes (x,y,c,u,v,tu,tv,shade)
+	private void setValuesInArrayForVertex(float[] vertices, float au, float av, float bu, float bv, float cu, float cv, float du, float dv, float x, float y, float c, float shade, float shade1, int rectangleOffsetInArray, int vertexNumberInRect) {
+	    int valuesPerVertex = 13; //Constant representing the number of individual attributes (x,y,c,4x u, v,shade)
 		int vertexOffsetInArray = rectangleOffsetInArray + vertexNumberInRect * valuesPerVertex; 
 
 	    // x position
@@ -657,17 +688,25 @@ public class Chunks {
 	    // color 
 	    vertices[vertexOffsetInArray + 2] = c;  	 	
 	    // u texture1 coord
-	    vertices[vertexOffsetInArray + 3] = u;
+	    vertices[vertexOffsetInArray + 3] = au;
 	    // v texture1 coord
-	    vertices[vertexOffsetInArray + 4] = v;
+	    vertices[vertexOffsetInArray + 4] = av;
 	    // tu texture2 coord
-	    vertices[vertexOffsetInArray + 5] = tu;
+	    vertices[vertexOffsetInArray + 5] = bu;
 	    // tv texture2 coord
-	    vertices[vertexOffsetInArray + 6] = tv;
+	    vertices[vertexOffsetInArray + 6] = bv;
+	    // u texture1 coord
+	    vertices[vertexOffsetInArray + 7] = cu;
+	    // v texture1 coord
+	    vertices[vertexOffsetInArray + 8] = cv;
+	    // tu texture2 coord
+	    vertices[vertexOffsetInArray + 9] = du;
+	    // tv texture2 coord
+	    vertices[vertexOffsetInArray + 10] = dv;
 	    // texture shade
-	    vertices[vertexOffsetInArray + 7] = shade;
+	    vertices[vertexOffsetInArray + 11] = shade;
 	    // texture1 shade (if used)
-	    vertices[vertexOffsetInArray + 8] = shade1;
+	    vertices[vertexOffsetInArray + 12] = shade1;
 	}
 	
 	public void setCoalLevel(float level, int x, int y) {
@@ -894,18 +933,18 @@ public class Chunks {
 		return GameScreen.chunks.getChunkAtTileSpace(tileX, tileY);
 	}
 	
-	/**Gets the chunks around the world space point in a certain diameter (diameter is in tile space)*/
+	/**Gets the chunks around the world space point in a certain diameter (diameter is in tile space).*/
 	public List<Chunk> getChunksAroundWorldSpacePoint(float x, float y, int diameter) {
 		List<Chunk> chunksInRadius = new ArrayList<Chunk>();
 		
 		Chunk centerChunk = getChunkAtWorldSpace(x, y);
 		Chunk originChunk = getChunkAtWorldSpace(x - ((diameter/2) * Base.CHUNK_SIZE), y - ((diameter/2) * Base.CHUNK_SIZE));
 	
-		for (int sx = originChunk.ax; sx < originChunk.ax + diameter/2; sx++) {
-			for (int sy = originChunk.ay; sy < originChunk.ay + diameter/2; sy++) {
+		for (int sx = originChunk.ax; sx < originChunk.ax + diameter; sx++) {
+			for (int sy = originChunk.ay; sy < originChunk.ay + diameter; sy++) {
 				Chunk c = GameScreen.chunks.getChunkAtTileSpace(sx, sy);
 				if (c != null) {
-					if (Math.hypot(centerChunk.getX() - c.getX(), centerChunk.getY() - c.getY()) <= diameter*Base.CHUNK_SIZE) {						
+					if (Math.hypot(centerChunk.getX() - c.getX(), centerChunk.getY() - c.getY()) <= ((float)(diameter/2f))*Base.CHUNK_SIZE) {		
 						chunksInRadius.add(c);
 					}
 				}

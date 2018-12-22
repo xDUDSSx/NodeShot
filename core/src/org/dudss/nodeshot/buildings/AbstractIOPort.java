@@ -13,8 +13,10 @@ public abstract class AbstractIOPort extends AlertableBuilding {
 	
 	IONode input;
 	
-	int ioSpeed = 100;
+	int ioSpeed = 50;
 	int nextOperation = SimulationThread.simTick + ioSpeed;
+	
+	int spriteRotation = GameScreen.activeRotation;
 	
 	public AbstractIOPort(float cx, float cy, float width, float height) {
 		super(cx, cy, width, height);
@@ -26,12 +28,27 @@ public abstract class AbstractIOPort extends AlertableBuilding {
 	}
 	
 	@Override
-	public void demolish() {
+	public void demolish() {	
 		GameScreen.buildingHandler.removeMisc(this);
 		input.remove();
 		
 		clearBuildingChunks();
 		updateFogOfWar(false);
+	}
+	
+	public void rotateRight() {
+		spriteRotation += 90;
+		spriteRotation %= 360;
+		GameScreen.activeRotation = spriteRotation;
+	}
+
+	public void rotateLeft() {
+		if (spriteRotation == 0) {
+			spriteRotation = 270;
+		} else {
+			this.spriteRotation -= 90;
+		}
+		GameScreen.activeRotation = spriteRotation;
 	}
 	
 	public AbstractBuilding getBuilding() {

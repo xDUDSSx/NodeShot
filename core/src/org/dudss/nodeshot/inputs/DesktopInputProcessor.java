@@ -6,14 +6,12 @@ import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.screens.MenuScreen;
 import org.dudss.nodeshot.terrain.Chunk;
-import org.dudss.nodeshot.ui.PauseMenu;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
-import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
+import org.dudss.nodeshot.buildings.AbstractIOPort;
 
 import static org.dudss.nodeshot.screens.GameScreen.*;
 
@@ -57,7 +55,13 @@ public class DesktopInputProcessor implements InputProcessor {
 		
 		if (keycode == Keys.ESCAPE) {
 			GameScreen.callPauseMenu();		
-		}		
+		} else
+		if (keycode == Keys.R && GameScreen.buildMode == true && GameScreen.builtBuilding instanceof AbstractIOPort) {
+			((AbstractIOPort)GameScreen.builtBuilding).rotateRight();
+		} else 
+		if (keycode == Keys.E && GameScreen.buildMode == true && GameScreen.builtBuilding instanceof AbstractIOPort) {
+			((AbstractIOPort)GameScreen.builtBuilding).rotateLeft();
+		}
 		return false;
 	}
 
@@ -80,25 +84,39 @@ public class DesktopInputProcessor implements InputProcessor {
 				lastMousePressType = MouseType.MOUSE_1;
 				
 				//Building
-				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {
-					GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true);
-					GameScreen.builtBuilding.build();
-					
-					if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
-						try {					
-							Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
-							Constructor buildingConstructor;
-							buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
-							Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
-							GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
-						} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
-							BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
+				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {				
+					if (GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true)) {
+						boolean canBeBuilt = true;
+						int buildingHeight = (int) GameScreen.builtBuilding.getBuildingChunks()[0].getHeight();
+						for (int i = 0; i < GameScreen.builtBuilding.getBuildingChunks().length; i++) {
+							if (GameScreen.builtBuilding.getBuildingChunks()[i].isCorruptionEdge() ||
+								GameScreen.builtBuilding.getBuildingChunks()[i].getHeight() != buildingHeight) {
+								canBeBuilt = false;
+							}
 						}
-											
-					} else {
-						GameScreen.builtBuilding = null;
-						GameScreen.builtConnector = null;
-						GameScreen.buildMode = false;
+						
+						if (canBeBuilt) {
+							GameScreen.builtBuilding.build();
+						
+							if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
+								try {					
+									Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
+									Constructor buildingConstructor;
+									buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
+									Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
+									GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
+								} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
+									BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
+								}
+													
+							} else {
+								GameScreen.builtBuilding = null;
+								GameScreen.builtConnector = null;
+								GameScreen.buildMode = false;
+							}
+						} else {
+							GameScreen.builtBuilding.clearBuildingChunks();
+						}
 					}
 				} else if (GameScreen.builtConnector != null) {
 					Node newNode = null;

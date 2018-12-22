@@ -60,8 +60,6 @@ public class Factory extends AbstractIOStorage {
 			TextureRegion currentFrame = factoryAnimation.getKeyFrame(GameScreen.stateTime, true);
 			batch.draw(currentFrame, x, y, width, height);
 		}		
-		
-		input.draw(batch);
 		batch.end();
 	}
 

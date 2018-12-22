@@ -1,12 +1,13 @@
 package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.buildings.CoalMine;
+import org.dudss.nodeshot.buildings.BasicMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Exporter;
 import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.buildings.Importer;
+import org.dudss.nodeshot.buildings.PowerGenerator;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -53,17 +54,17 @@ public class ToolbarMenu extends VisWindow {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new CoalMine(0, 0);
+					GameScreen.builtBuilding = new BasicMine(0, 0);
 				}
 		    }
 		});
 		
-		structures.addBuildingTile(SpriteLoader.genDrawable, "Generator", new ClickListener() {
+		structures.addBuildingTile(SpriteLoader.genDrawable, "Power generator", new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new CoalMine(0, 0);
+					GameScreen.builtBuilding = new PowerGenerator(0, 0);
 				}
 		    }
 		});
@@ -140,7 +141,7 @@ public class ToolbarMenu extends VisWindow {
 			
 		mainTable.add(list);
 		mainTable.addSeparator(true);
-		mainTable.add(container).expand().fill().prefHeight(Base.buildMenuImgSize + 50);
+		mainTable.add(container).expand().fill();
 		add(mainTable).expand().fill();
 		
 		//debugAll();

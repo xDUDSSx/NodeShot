@@ -26,7 +26,7 @@ and texturing techniques.
 
 	* A lightweight UI and crash reporting.
 	
-	*Everything updated by a main simulation loop that runs on a seperate simulation thread. This allows features like pause menu and simulation speed control.
+	* Everything updated by a main simulation loop that runs on a seperate simulation thread. This allows features like pause menu and simulation speed control.
 
 * * *
 

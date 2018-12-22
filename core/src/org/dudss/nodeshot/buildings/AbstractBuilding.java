@@ -18,6 +18,7 @@ public abstract class AbstractBuilding implements Entity {
 	float height;
 	
 	boolean outlined = false;
+	boolean isBuilt = false;
 	
 	int fogOfWarRadius = Base.SECTION_SIZE;
 	
@@ -39,7 +40,10 @@ public abstract class AbstractBuilding implements Entity {
 		y = cy - (height/2);
 	}
 	
-	public void setLocation(float cx, float cy, boolean snap) {
+	/**Sets all the necessary position attributes and sets up building chunks array
+	 * @return Returns whether this building intersects another building
+	 * */
+	public boolean setLocation(float cx, float cy, boolean snap) {
 		if (snap) {
 			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
 			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
@@ -57,17 +61,30 @@ public abstract class AbstractBuilding implements Entity {
 			y = cy - (height/2);
 		}
 		
-		int i = 0;
+		int index = 0;
 		int buildintWidthInTileSpace = Math.round(width/Base.CHUNK_SIZE);
 		int buildingHeightInTileSpace = Math.round(height/Base.CHUNK_SIZE);
+		
+		boolean intersectsAnotherBuilding = false;
 		
 		buildingChunks = new Chunk[buildintWidthInTileSpace*buildingHeightInTileSpace];
 		for (int gx = 0; gx < buildintWidthInTileSpace; gx++) {
 			for (int gy = 0; gy < buildingHeightInTileSpace; gy++) {
 				Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(this.x/Base.CHUNK_SIZE) + gx, (int)(this.y/Base.CHUNK_SIZE) + gy);
-				buildingChunks[i++] = c;
-				c.setBuilding(this);;
+				buildingChunks[index++] = c;		
+				if (c.getBuilding() != null) {
+					intersectsAnotherBuilding = true;
+				}
 			}
+		}
+		
+		if (intersectsAnotherBuilding) {
+			return false;
+		} else {
+			for (int i = 0; i < buildingChunks.length; i++) {
+				buildingChunks[i].setBuilding(this);
+			}
+			return true;
 		}
 	}
 	
@@ -93,10 +110,13 @@ public abstract class AbstractBuilding implements Entity {
 		return prefY;
 	}
 	
+	/**Building update method, updated by the {@link SimulationThread}.*/
 	public abstract void update();	
 	
-	//Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)
-	public abstract void draw(ShapeRenderer r, SpriteBatch batch);	
+	/**Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)*/
+	public abstract void draw(ShapeRenderer r, SpriteBatch batch);
+	
+	/**Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)*/
 	public abstract void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap);	
 	
 	/**Called when the building is built*/
@@ -121,8 +141,13 @@ public abstract class AbstractBuilding implements Entity {
 		
 	}
 	
+	/**All the {@link Chunk}s this building is occupying*/
+	public Chunk[] getBuildingChunks() {
+		return buildingChunks;
+	}
+	
 	/**Clears the building reference of all the {@link #buildingChunks}*/
-	protected void clearBuildingChunks() {
+	public void clearBuildingChunks() {
 		for(int i = 0; i < buildingChunks.length; i++) {
 			buildingChunks[i].setBuilding(null);
 		}		

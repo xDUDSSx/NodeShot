@@ -48,10 +48,11 @@ public class Turret extends AbstractStorage {
 	}
 
 	@Override 
-	public void setLocation(float cx, float cy, boolean snap) {
+	public boolean setLocation(float cx, float cy, boolean snap) {
 		super.setLocation(cx, cy, snap);
 		turretSprite.setPosition(x, y);
 		head.setPosition(this.cx - 56, this.cy - 12);
+		return false;
 	}
 	
 	@Override
@@ -79,7 +80,7 @@ public class Turret extends AbstractStorage {
 		r.end();
 		batch.begin();
 		turretSprite.draw(batch);
-		input.draw(batch);
+		ioNode.draw(batch);
 		head.setRotation((float) head.rotation); 
 		head.draw(batch);
 		batch.end();

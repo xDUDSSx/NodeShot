@@ -22,6 +22,7 @@ import org.dudss.nodeshot.misc.BuildingHandler;
 import org.dudss.nodeshot.misc.BulletHandler;
 import org.dudss.nodeshot.misc.ConnectorHandler;
 import org.dudss.nodeshot.misc.PackageHandler;
+import org.dudss.nodeshot.misc.ResourceManager;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
 import org.dudss.nodeshot.terrain.Section;
@@ -104,6 +105,7 @@ public class GameScreen implements Screen {
 
 	//Handlers
 	public static PackageHandler packageHandler;
+	public static ResourceManager resourceManager;
 	
 	//Handlers with internal collections
 	public static ConnectorHandler connectorHandler;
@@ -155,6 +157,7 @@ public class GameScreen implements Screen {
 	public static boolean buildMode = false;
 	public static AbstractBuilding builtBuilding = null;
 	public static Node builtConnector = null;
+	public static int activeRotation = 0;
 	
     //libGDX
     static SpriteBatch batch;
@@ -208,6 +211,7 @@ public class GameScreen implements Screen {
         VisUI.load();
         
         packageHandler = new PackageHandler();
+        resourceManager = new ResourceManager(Base.START_POWER, Base.START_BITS);
         connectorHandler = new ConnectorHandler();
         buildingHandler = new BuildingHandler();       
         bulletHandler = new BulletHandler();  
@@ -321,7 +325,6 @@ public class GameScreen implements Screen {
         DesktopInputProcessor dip = new DesktopInputProcessor();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(dip);
-        
     	
         //Android not supported anymore
         /*if (Gdx.app.getType() == ApplicationType.Android) {
@@ -332,6 +335,7 @@ public class GameScreen implements Screen {
         	multiplexer.addProcessor(dip);
         }  
         */     	
+        
         Gdx.input.setInputProcessor(multiplexer); 
     }
 
@@ -394,7 +398,7 @@ public class GameScreen implements Screen {
         
         buildingHandler.drawAllMisc(r, batch);
         buildingHandler.drawAllBuildings(r, batch);
-        
+
         //Connector rendering
         drawConnectors(r);
     
@@ -636,7 +640,12 @@ public class GameScreen implements Screen {
         			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));
         			r.setColor(c);
         			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-        		}	      
+        		}
+        		
+        		if (chunks.getChunkAtTileSpace(x, y).isOreOutlined()) {
+        			r.setColor(Color.WHITE);
+        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+        		}
         	}
         }
         r.end();
@@ -1028,19 +1037,19 @@ public class GameScreen implements Screen {
         	simulationThread.recalculateSpeed(30);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            cam.translate(-3, 0, 0);
+            cam.translate(-1, 0, 0);
           	GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            cam.translate(3, 0, 0);            
+            cam.translate(1, 0, 0);            
           	GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            cam.translate(0, -3, 0);     
+            cam.translate(0, -1, 0);     
             GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            cam.translate(0, 3, 0);  
+            cam.translate(0, 1, 0);  
           	GameScreen.chunks.updateView(cam);
         }
         
@@ -1058,7 +1067,6 @@ public class GameScreen implements Screen {
         cam.position.x = MathUtils.clamp(cam.position.x, effectiveViewportWidth / 2f - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f - effectiveViewportWidth / 2f);
         cam.position.y = MathUtils.clamp(cam.position.y, effectiveViewportHeight / 2f -  Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE*1.2f - effectiveViewportHeight / 2f);
    		*/
-        
         
         //Making sure the camera doesn't go beyond the world limit
         cam.position.x = MathUtils.clamp(cam.position.x, 0 - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE * 1.2f);
