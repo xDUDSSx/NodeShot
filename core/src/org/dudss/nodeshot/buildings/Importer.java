@@ -98,6 +98,6 @@ public class Importer extends AbstractIOPort {
 			BaseClass.logger.warning("IOPort assigned building is null!");
 		}
 		
-		GameScreen.buildingHandler.addMisc(this);
+		GameScreen.buildingManager.addMisc(this);
 	}
 }

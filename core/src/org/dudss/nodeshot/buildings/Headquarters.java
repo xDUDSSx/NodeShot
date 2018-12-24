@@ -57,14 +57,14 @@ public class Headquarters extends AbstractBuilding {
 	public void build() {
 		hqNode = new BuildingNode(x + (width/2), y + (height/2), Base.RADIUS, this);
 		//hqNode.add();
-		GameScreen.buildingHandler.addBuilding(this);
+		GameScreen.buildingManager.addBuilding(this);
 		
 		updateFogOfWar(true);
 	}
 	
 	@Override
 	public void demolish() {
-		GameScreen.buildingHandler.removeBuilding(this);
+		GameScreen.buildingManager.removeBuilding(this);
 		hqNode.remove();
 	
 		clearBuildingChunks();

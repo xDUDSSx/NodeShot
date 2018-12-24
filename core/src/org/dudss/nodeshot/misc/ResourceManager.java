@@ -3,6 +3,7 @@ package org.dudss.nodeshot.misc;
 /**A manager class that holds resource amount information*/
 public class ResourceManager {
 	public int power;
+	public int maxPower = 1000;
 	public int bits;
 	
 	/**A manager class that holds resource amount information.
@@ -11,8 +12,14 @@ public class ResourceManager {
 	 */
 	public ResourceManager(int startPower, int startBits) {
 		power = startPower;
-		bits = startBits;
+		bits = startBits; 
 	}
+	
+	/*public void updateMaxPower() {
+		for (AbstractBuilding b : GameScreen.buildingHandler.getAllBuildings()) {
+			
+		}
+	}*/
 	
 	public int getPower() {
 		return power;
@@ -23,11 +30,23 @@ public class ResourceManager {
 	}
 	
 	public void addPower(int add) {
-		this.power += add;
+		if (power + add <= maxPower) {
+			this.power += add;
+		}
 	}
 	
+	public int getMaxPower() {
+		return maxPower;
+	}
+
+	public void setMaxPower(int maxPower) {
+		this.maxPower = maxPower;
+	}
+
 	public void removePower(int remove) {
-		this.power -= remove;
+		if (power - remove >= 0) {
+			this.power -= remove;
+		}
 	}
 	
 	public void addBits(int add) {

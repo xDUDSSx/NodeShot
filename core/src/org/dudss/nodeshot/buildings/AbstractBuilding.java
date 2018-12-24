@@ -168,7 +168,7 @@ public abstract class AbstractBuilding implements Entity {
 
 	@Override
 	public int getIndex() {
-		return GameScreen.buildingHandler.getAllBuildings().indexOf(this);
+		return GameScreen.buildingManager.getAllBuildings().indexOf(this);
 	}
 
 	@Override

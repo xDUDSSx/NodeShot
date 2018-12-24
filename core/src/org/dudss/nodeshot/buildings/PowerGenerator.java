@@ -1,6 +1,6 @@
 package org.dudss.nodeshot.buildings;
 
-import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
+import static org.dudss.nodeshot.screens.GameScreen.buildingManager;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
@@ -62,14 +62,14 @@ public class PowerGenerator extends AbstractBuilding {
 	
 	@Override
 	public void build() {
-		buildingHandler.addBuilding(this);
+		buildingManager.addBuilding(this);
 		
 		updateFogOfWar(true);
 	}
 
 	@Override
 	public void demolish() {
-		GameScreen.buildingHandler.removeBuilding(this);
+		GameScreen.buildingManager.removeBuilding(this);
 
 		clearBuildingChunks();
 		updateFogOfWar(false);	

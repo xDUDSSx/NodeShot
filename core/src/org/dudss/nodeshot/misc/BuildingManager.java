@@ -1,22 +1,25 @@
 package org.dudss.nodeshot.misc;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
-import org.dudss.nodeshot.buildings.CreeperGenerator;
+import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**Manages all buildings in the game world. Calls logic updates and render calls*/
-public class BuildingHandler {
+public class BuildingManager {
 
 	List<AbstractBuilding> buildings;
 	List<AbstractBuilding> generators;
 	List<AbstractBuilding> misc;
 	
-	public BuildingHandler() {
+	public BuildingManager() {
 		buildings = new CopyOnWriteArrayList<AbstractBuilding>();
 		generators = new CopyOnWriteArrayList<AbstractBuilding>();
 		misc = new CopyOnWriteArrayList<AbstractBuilding>();
@@ -93,4 +96,24 @@ public class BuildingHandler {
 	public List<AbstractBuilding> getAllMisc() {
 		return misc;
 	}	
+	
+	/**Initialises a new {@link AbstractBuilding} and assigns it to build mode.
+	 * @param b The built building type.
+	 * */
+	public void startBuildMode(AbstractBuilding b) {
+		try {
+			Class<? extends AbstractBuilding> buildingClass = b.getClass();
+			Constructor<? extends AbstractBuilding> buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});	
+			Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
+		
+			if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+				GameScreen.buildMode = true;
+				GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);
+				GameScreen.chunks.updateAllSectionMeshes(false);
+			}
+			
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			BaseClass.errorManager.report(e, "Build mode building initialisation failed.");
+		}
+	}
 }

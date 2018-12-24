@@ -133,7 +133,7 @@ public class SimulationThread extends Thread {
 		GameScreen.bulletHandler.updateAll();
 		
 		//Updating creeper generators
-		GameScreen.buildingHandler.updateAllGenerators();
+		GameScreen.buildingManager.updateAllGenerators();
 		
 		//Updating chunks and geometry of each section corruption mesh every chunkUpdateRate ticks
 		//Terrain geometry is updated every terrainMeshUpdateRate ticks
@@ -183,10 +183,10 @@ public class SimulationThread extends Thread {
 		GameScreen.connectorHandler.update();		
 		
 		//Updating misc buildings (importers/exporters)
-		GameScreen.buildingHandler.updateAllMisc();
+		GameScreen.buildingManager.updateAllMisc();
 		
 		//Updating buildings
-		GameScreen.buildingHandler.updateAllBuildings();
+		GameScreen.buildingManager.updateAllBuildings();
 		
 		//Updating rightClickMenu text
 		GameScreen.rightClickMenuManager.update();

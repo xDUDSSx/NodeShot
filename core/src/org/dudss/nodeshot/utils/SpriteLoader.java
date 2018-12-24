@@ -81,6 +81,7 @@ public class SpriteLoader {
 	public static Drawable factoryDrawable;
 	public static Drawable importerTopDrawable;
 	public static Drawable mineDrawable;
+	public static Drawable nodeDrawable;
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
@@ -202,6 +203,11 @@ public class SpriteLoader {
 		importerTopDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("importerTOPpreview256")));
 		importerTopDrawable.setMinHeight(Base.buildMenuImgSize);
 		importerTopDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		nodeDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("nodePreview512")));
+		nodeDrawable.setMinHeight(Base.buildMenuImgSize);
+		nodeDrawable.setMinWidth(Base.buildMenuImgSize);
+		
 		
 		mineDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("minePreview512")));
 		mineDrawable.setMinHeight(Base.buildMenuImgSize);

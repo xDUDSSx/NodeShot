@@ -29,7 +29,7 @@ public abstract class AbstractIOPort extends AlertableBuilding {
 	
 	@Override
 	public void demolish() {	
-		GameScreen.buildingHandler.removeMisc(this);
+		GameScreen.buildingManager.removeMisc(this);
 		input.remove();
 		
 		clearBuildingChunks();

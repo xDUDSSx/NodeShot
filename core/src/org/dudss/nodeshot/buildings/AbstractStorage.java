@@ -94,14 +94,14 @@ public abstract class AbstractStorage extends AlertableBuilding {
 			ioNode.setInputSprite();
 			GameScreen.nodelist.add(ioNode);
 		}
-		GameScreen.buildingHandler.addBuilding(this);
+		GameScreen.buildingManager.addBuilding(this);
 		
 		updateFogOfWar(true);
 	}
 
 	@Override
 	public void demolish() {
-		GameScreen.buildingHandler.removeBuilding(this);
+		GameScreen.buildingManager.removeBuilding(this);
 		if (ioActive) this.ioNode.remove();
 		
 		clearBuildingChunks();

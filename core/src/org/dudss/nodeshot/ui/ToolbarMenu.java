@@ -1,12 +1,14 @@
 package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.buildings.BasicMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Exporter;
 import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.buildings.Importer;
+import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.buildings.PowerGenerator;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -14,6 +16,7 @@ import org.dudss.nodeshot.utils.SpriteLoader;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -32,104 +35,47 @@ public class ToolbarMenu extends VisWindow {
 	
 	VisTable mainTable;
 	
+	VisLabel bitLabel;
+	VisLabel powerLabel;
+	
 	public ToolbarMenu(String title) {
-		super("Toolbar", false);
+		super("Toolbar", false);	
 		TableUtils.setSpacingDefaults(this);
 		setResizable(false);
 		setMovable(false);
-			
+		getTitleTable().clear();	
+		
 		BuildTable structures = new BuildTable();
-		structures.addBuildingTile(SpriteLoader.hqDrawable, "Headquarters", new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new Headquarters(0, 0);
-				}		
-		    }
-		});
-		
-		structures.addBuildingTile(SpriteLoader.mineDrawable, "Mine", new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new BasicMine(0, 0);
-				}
-		    }
-		});
-		
-		structures.addBuildingTile(SpriteLoader.genDrawable, "Power generator", new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new PowerGenerator(0, 0);
-				}
-		    }
-		});
-		
-		structures.addBuildingTile(SpriteLoader.factoryDrawable, "Factory", new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new Factory(0, 0);
-				}		
-		    }
-		});
-		
+		structures.addBuildingTile(SpriteLoader.hqDrawable, "Headquarters", new BuildListener(new Headquarters(0, 0)));	
+		structures.addBuildingTile(SpriteLoader.mineDrawable, "Mine", new BuildListener(new BasicMine(0, 0)));	
+		structures.addBuildingTile(SpriteLoader.genDrawable, "Power generator", new BuildListener(new PowerGenerator(0, 0)));
+		structures.addBuildingTile(SpriteLoader.factoryDrawable, "Factory", new BuildListener(new Factory(0, 0)));	
 		BuildTable utils = new BuildTable();
-		utils.addBuildingTile(SpriteLoader.creepergenDrawable, "Creeper generator", new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new CreeperGenerator(0, 0);
-				}		
-		    }
-		});		
-		
+		utils.addBuildingTile(SpriteLoader.creepergenDrawable, "Creeper generator", new BuildListener(new CreeperGenerator(0, 0)));	
 		BuildTable transfer = new BuildTable();
-		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Importer", new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new Importer(0, 0);
-				}		
-		    }
-		});		
+		transfer.addBuildingTile(SpriteLoader.nodeDrawable, "Conveyor", new BuildListener(new NodeBuilding(0, 0)));		
+		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Importer", new BuildListener(new Importer(0, 0)));		
+		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Exporter", new BuildListener(new Exporter(0, 0)));
 		
-		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Exporter", new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new Exporter(0, 0);
-				}		
-		    }
-		});		
-		
-		final VisTable container = new VisTable();
-		VisList<String> list = new VisList<String>();
-		list.setItems("STRUCTURES", "TRANSFER", "WEAPONS", "UTILS"); 		
-		list.addCaptureListener(new ChangeListener(){
+		final VisTable buildPanel = new VisTable();
+		VisList<String> buildList = new VisList<String>();
+		buildList.setItems("STRUCTURES", "TRANSFER", "WEAPONS", "UTILS"); 		
+		buildList.addCaptureListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	container.clearChildren();
-                switch(list.getSelected()) {
-                	case "STRUCTURES": container.add(structures).expand().fill(); break;
-                	case "TRANSFER": container.add(transfer).expand().fill(); break;
+            	buildPanel.clearChildren();
+                switch(buildList.getSelected()) {
+                	case "STRUCTURES": buildPanel.add(structures).expand().fill(); break;
+                	case "TRANSFER": buildPanel.add(transfer).expand().fill(); break;
                 	case "WEAPONS": break;
-                	case "UTILS":  container.add(utils).expand().fill(); break;
+                	case "UTILS":  buildPanel.add(utils).expand().fill(); break;
                 }
             }
         });
 		
 		//initial selection
-		list.setSelected("STRUCTURES");		
-		container.add(structures).expand().fill();
+		buildList.setSelected("STRUCTURES");		
+		buildPanel.add(structures).expand().fill();
 		
 		top();
 		defaults().top();
@@ -138,10 +84,31 @@ public class ToolbarMenu extends VisWindow {
 		mainTable.top();
 		mainTable.defaults().top();
 		TableUtils.setSpacingDefaults(mainTable);
-			
-		mainTable.add(list);
-		mainTable.addSeparator(true);
-		mainTable.add(container).expand().fill();
+		
+		VisTable infoTable = new VisTable();
+		infoTable.top();
+		TableUtils.setSpacingDefaults(infoTable);
+		//this.getTitleLabel().setText("Bits: " + Base.START_BITS);
+		
+		this.getTitleTable().left();
+		bitLabel = new VisLabel("Bits: " + Base.START_BITS);
+		powerLabel = new VisLabel("Power: " + GameScreen.resourceManager.getPower() + " / " + GameScreen.resourceManager.getMaxPower());
+		this.getTitleTable().add(bitLabel).width(bitLabel.getWidth() + 50);
+		this.getTitleTable().add(powerLabel);
+		
+		//infoTable.add(bitLabel).fillX().left().top();
+		//infoTable.row();
+		//infoTable.add(powerLabel).fillX().left().top();
+		mainTable.add(infoTable).fill();
+		
+		VisTable buildTable = new VisTable();
+		buildTable.top();
+		TableUtils.setSpacingDefaults(buildTable);
+		buildTable.add(buildList);
+		buildTable.addSeparator(true);
+		buildTable.add(buildPanel).expand().fill();
+		mainTable.add(buildTable).expand().fill();
+		
 		add(mainTable).expand().fill();
 		
 		//debugAll();
@@ -149,6 +116,12 @@ public class ToolbarMenu extends VisWindow {
 		updateBounds();
 		
 		pack();		
+	}
+	
+	public void updateInfoPanel() {
+		//bitLabel.setText("Bits: " + GameScreen.resourceManager.getBits());
+		bitLabel.setText("Bits: " + GameScreen.resourceManager.getBits());
+		powerLabel.setText("Power: " + GameScreen.resourceManager.getPower() + " / " + GameScreen.resourceManager.getMaxPower());
 	}
 	
 	public void updateBounds() {
@@ -222,5 +195,21 @@ public class ToolbarMenu extends VisWindow {
 		public void addClickListener(ClickListener listener) {
 			btn.addListener(listener);
 		}
+	}
+	
+	/**A special {@link ClickListener} that makes a direct call to the {@link BuildingManager} and initialises build mode with the assigned {@link AbstractBuilding}.*/
+	class BuildListener extends ClickListener {
+		AbstractBuilding b;
+		
+		/**A special {@link ClickListener} that makes a direct call to the {@link BuildingManager} and initialises build mode with the assigned {@link AbstractBuilding}.*/
+		BuildListener(AbstractBuilding b) {
+			super();
+			this.b = b;
+		}
+		
+		@Override
+		public void clicked(InputEvent event, float x, float y) {	 		
+			GameScreen.buildingManager.startBuildMode(b);
+	    }
 	}
 }

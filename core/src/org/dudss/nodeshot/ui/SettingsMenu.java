@@ -30,7 +30,7 @@ public class SettingsMenu extends Window {
 	
 	public SettingsMenu(String title, Skin skin) {
 		super(title, skin);
-		setVisible(true);
+		setVisible(false);
 		setMovable(true);
 		setResizable(true);
 		setPosition(10, Gdx.graphics.getHeight()/2 - this.getHeight());

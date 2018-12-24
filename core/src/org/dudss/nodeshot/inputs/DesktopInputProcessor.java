@@ -7,6 +7,7 @@ import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
+import org.dudss.nodeshot.terrain.Section;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
@@ -96,8 +97,8 @@ public class DesktopInputProcessor implements InputProcessor {
 						}
 						
 						if (canBeBuilt) {
-							GameScreen.builtBuilding.build();
-						
+							GameScreen.builtBuilding.build();							
+							
 							if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
 								try {					
 									Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
@@ -113,7 +114,8 @@ public class DesktopInputProcessor implements InputProcessor {
 								GameScreen.builtBuilding = null;
 								GameScreen.builtConnector = null;
 								GameScreen.buildMode = false;
-							}
+							}							
+							GameScreen.chunks.updateAllSectionMeshes(false);
 						} else {
 							GameScreen.builtBuilding.clearBuildingChunks();
 						}
@@ -158,8 +160,11 @@ public class DesktopInputProcessor implements InputProcessor {
 
 				Entity clickedEntity = GameScreen.checkHighlights(true);				
 
-				GameScreen.buildMode = false;
-				GameScreen.builtBuilding = null;
+				if (buildMode) {
+					GameScreen.buildMode = false;
+					GameScreen.builtBuilding = null;
+					GameScreen.chunks.updateAllSectionMeshes(false);
+				}
 				
 				if (clickedEntity == null && GameScreen.selectedID != -1) {
 					Selector.deselect();

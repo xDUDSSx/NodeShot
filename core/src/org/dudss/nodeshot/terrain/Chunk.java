@@ -205,7 +205,7 @@ public class Chunk {
 	/**Returns an {@link AtlasRegion} representing this {@linkplain Chunk}s terrain.*/
 	public AtlasRegionContainer getTerrainTexture() {			
 		AtlasRegionContainer arc = new AtlasRegionContainer();
-		
+				
 		//Draw mine outlines
 		if (this.isOreOutlined) {
 			AtlasRegion outline = resolveOutlineEdges();
@@ -223,6 +223,16 @@ public class Chunk {
 				}
 			}
 		}
+		
+		//Draw build outlines
+		if (GameScreen.buildMode) {
+			if (this.isDiagonalTerrainEdge() || this.getBuilding() != null) {
+				arc.addTexture(SpriteLoader.tileAtlas.findRegion("buildOverlayRed"));
+			} else {
+				arc.addTexture(SpriteLoader.tileAtlas.findRegion("buildOverlayGreen"));
+			}
+		}
+		
 		
 		switch(height) {
 			case 0: this.setTerrainEdge(false, 0, EdgeType.NONE); return null; //TODO: ore at level 0?

@@ -18,7 +18,7 @@ import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.inputs.DesktopInputProcessor;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;
-import org.dudss.nodeshot.misc.BuildingHandler;
+import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.misc.BulletHandler;
 import org.dudss.nodeshot.misc.ConnectorHandler;
 import org.dudss.nodeshot.misc.PackageHandler;
@@ -109,7 +109,7 @@ public class GameScreen implements Screen {
 	
 	//Handlers with internal collections
 	public static ConnectorHandler connectorHandler;
-	public static BuildingHandler buildingHandler;
+	public static BuildingManager buildingManager;
 	public static BulletHandler bulletHandler;
 
 	static Boolean NodeInfoHidden = false;
@@ -213,7 +213,7 @@ public class GameScreen implements Screen {
         packageHandler = new PackageHandler();
         resourceManager = new ResourceManager(Base.START_POWER, Base.START_BITS);
         connectorHandler = new ConnectorHandler();
-        buildingHandler = new BuildingHandler();       
+        buildingManager = new BuildingManager();       
         bulletHandler = new BulletHandler();  
         chunks = new Chunks();        
         rightClickMenuManager = new RightClickMenuManager();             
@@ -360,6 +360,7 @@ public class GameScreen implements Screen {
     	 	
         handleInput();
         cam.update();	        	
+        toolbarMenu.updateInfoPanel();
         
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -376,14 +377,14 @@ public class GameScreen implements Screen {
         //Rendering the terrain
         chunks.drawTerrain();
         
-		if (buildMode == true) {
+		/*if (buildMode == true) {
 			batch.begin();    	        
 	        for (Section s : chunks.sectionsInView) {	   
 	        	Chunk c = s.getChunk(0, 0);	        	
 	        	batch.draw(SpriteLoader.gridOverlay, c.getX() , c.getY(), 512, 512);	
 	        }
 	        batch.end();
-		}
+		}*/  
         
 		//OpenGL performance logging
         if (Base.enableGlProgilerLogging) {
@@ -396,8 +397,8 @@ public class GameScreen implements Screen {
         	);
         }
         
-        buildingHandler.drawAllMisc(r, batch);
-        buildingHandler.drawAllBuildings(r, batch);
+        buildingManager.drawAllMisc(r, batch);
+        buildingManager.drawAllBuildings(r, batch);
 
         //Connector rendering
         drawConnectors(r);
@@ -412,6 +413,16 @@ public class GameScreen implements Screen {
         }
         
         batch.begin();      
+        //Drawing packages
+        for(int i = 0; i < packagelist.size(); i++) {
+            Package p = packagelist.get(i);
+            
+            if (selectedID == p.getID()) {
+            	packagelist.get(selectedIndex).drawHighlight(batch);
+            }          
+            
+            p.draw(batch);
+        }           
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
             Node n = nodelist.get(i);  
@@ -436,23 +447,12 @@ public class GameScreen implements Screen {
             }
            
         }
-        
-        //Drawing packages
-        for(int i = 0; i < packagelist.size(); i++) {
-            Package p = packagelist.get(i);
-            
-            if (selectedID == p.getID()) {
-            	packagelist.get(selectedIndex).drawHighlight(batch);
-            }          
-            
-            p.draw(batch);
-        }           
         batch.end();     
         
         //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
         chunks.drawCorruption();
         
-        buildingHandler.drawAllGenerators(r, batch);
+        buildingManager.drawAllGenerators(r, batch);
         
         //Drawing the fog of war.
         chunks.drawFogOfWar();
@@ -761,7 +761,7 @@ public class GameScreen implements Screen {
         String stat = "Nodes: " + nodelist.size();
         String stat2 = "Packages: " + packagelist.size();
         String stat3 = "Connectors: " + connectorHandler.getAllConnectors().size();
-        String stat41 = "Buildings: " + buildingHandler.getAllBuildings().size(); 
+        String stat41 = "Buildings: " + buildingManager.getAllBuildings().size(); 
         String stat4 = "PackagePaths: " + packageHandler.getNumberOfPaths();
         String stat5 = "ConnectMode: " + toggleConnectMode;
         String stat6 = "activeNewConnection: " + activeNewConnection;
@@ -1099,9 +1099,9 @@ public class GameScreen implements Screen {
     private static AbstractBuilding checkBuildings(Rectangle rect, Vector3 worldPos, boolean select) {
     	Boolean buildingIntersected = false;
     	AbstractBuilding intersectedBuilding = null;
-        if ((buildingHandler.getAllBuildings().size() > 0)) {
-            for(int i = 0; i < buildingHandler.getAllBuildings().size(); i++) {
-                AbstractBuilding b = buildingHandler.getAllBuildings().get(i);
+        if ((buildingManager.getAllBuildings().size() > 0)) {
+            for(int i = 0; i < buildingManager.getAllBuildings().size(); i++) {
+                AbstractBuilding b = buildingManager.getAllBuildings().get(i);
                 Rectangle r = new Rectangle(b.getX(), b.getY(), b.getWidth(), b.getHeight());
                 if(r.overlaps(rect)) {
                 	if (select) Selector.selectBuilding(b);

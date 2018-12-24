@@ -25,7 +25,7 @@ public class Base {
 	public static float MIN_ZOOM = 0.2f;
 
 	public static int START_BITS = 100;
-	public static int START_POWER = 1000;
+	public static int START_POWER = 100;
 	
 	public static int RADIUS = 16;
 	public static int PACKAGE_RADIUS = 16;
@@ -97,11 +97,11 @@ public class Base {
 	public static boolean drawBuildingTiles = false;
 	
 	//Graphical settings
-	public static boolean vSyncEnabled = false;
+	public static boolean vSyncEnabled = true;
 	public static boolean fullscreen = false;
-	public static int foregroundFps = 0;
+	public static int foregroundFps = 144;
 	public static Dimension defaultWindowSize = new Dimension(1300, 795);
-	public static int MSAAsamples = 10;
+	public static int MSAAsamples = 8;
 	
 	public static float getRandomFloatNumberInRange(int min, int max) {
 		if (min == 0 && max == 0) {

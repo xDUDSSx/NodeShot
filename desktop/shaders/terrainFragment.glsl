@@ -18,6 +18,40 @@ void main()
     vec4 tex3 = texture2D(u_texture, v_texCoords2);
     vec4 tex4 = texture2D(u_texture, v_texCoords3);
 
+    vec4 finalColor = vec4(0,0,0,0);
+
+    if (tex4.a > 0.25) {
+        if (tex4.a == 1.0) {
+            finalColor = tex4;
+        } else {
+            finalColor = vec4(mix(tex4.rgb, finalColor, 0.8), 1.0);
+        }
+    }
+    if (tex3.a > 0.25) {
+        if (tex3.a == 1.0) {
+            finalColor = tex3;
+        } else {
+            finalColor = vec4(mix(tex3.rgb, finalColor, 0.8), 1.0);
+        }
+    }
+    if (tex2.a > 0.25) {
+        if (tex2.a == 1.0) {
+            finalColor = tex2;
+        } else {
+            finalColor = vec4(mix(tex2.rgb, finalColor, 0.8), 1.0);
+        }
+    }
+    if (tex1.a > 0.25) {
+        if (tex1.a == 1.0) {
+            finalColor = tex1;
+        } else {
+            finalColor = vec4(mix(tex1.rgb, finalColor, 0.8), 1.0);
+        }
+    }
+
+    gl_FragColor = finalColor;
+
+    /*
     gl_FragColor = vec4(1,1,1,0);
 
     //tex1
@@ -45,4 +79,5 @@ void main()
             gl_FragColor = vec4(mix(tex3.rgb, tex4.rgb, 0.8), 1.0);
         }
     }
+    */
 }

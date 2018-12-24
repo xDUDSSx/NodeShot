@@ -1,6 +1,6 @@
 package org.dudss.nodeshot.buildings;
 
-import static org.dudss.nodeshot.screens.GameScreen.buildingHandler;
+import static org.dudss.nodeshot.screens.GameScreen.buildingManager;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
@@ -69,7 +69,7 @@ public class CreeperGenerator extends AbstractGenerator {
 	@Override
 	public void build() { 
 		output = new OutputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
-		buildingHandler.addGenerator(this);
+		buildingManager.addGenerator(this);
 		GameScreen.nodelist.add(output);
 		
 		GameScreen.chunks.getSectionByWorldSpace(x, y).setActive(true);
@@ -78,7 +78,7 @@ public class CreeperGenerator extends AbstractGenerator {
 
 	@Override
 	public void demolish() {
-		GameScreen.buildingHandler.removeBuilding(this);	
+		GameScreen.buildingManager.removeBuilding(this);	
 		this.output.remove();
 		
 		clearBuildingChunks();

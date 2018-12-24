@@ -2,7 +2,6 @@ package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.AmmoStorage;
-import org.dudss.nodeshot.buildings.AbstractStorage;
 import org.dudss.nodeshot.buildings.BasicMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Factory;
