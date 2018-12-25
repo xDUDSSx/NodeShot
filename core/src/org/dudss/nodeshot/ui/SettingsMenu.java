@@ -30,7 +30,7 @@ public class SettingsMenu extends Window {
 	
 	public SettingsMenu(String title, Skin skin) {
 		super(title, skin);
-		setVisible(false);
+		setVisible(true);
 		setMovable(true);
 		setResizable(true);
 		setPosition(10, Gdx.graphics.getHeight()/2 - this.getHeight());
@@ -54,9 +54,10 @@ public class SettingsMenu extends Window {
 		});
 		
 		VisCheckBox loggingCheckbox = new VisCheckBox("Enable GlProfiler logging", Base.enableGlProgilerLogging);
-		VisCheckBox debugCheckbox = new VisCheckBox("Debug", GameScreen.debug);
 		VisCheckBox drawGeneralStatsCheckbox = new VisCheckBox("Draw general stats", Base.drawGeneralStats);
 		VisCheckBox hoverChunkHighlightCheckbox = new VisCheckBox("Highlight chunks with cursor", Base.hoverChunkHighlight);
+		VisCheckBox drawSectionBordersCheckbox = new VisCheckBox("Draw section borders", Base.drawSectionBorders);
+		VisCheckBox drawCreeperLevelCheckbox = new VisCheckBox("Show creeper levels", Base.drawCreeperLevel);
 		VisCheckBox drawTerrainEdgesCheckbox = new VisCheckBox("Highlight terrain edges", Base.drawTerrainEdges);
 		VisCheckBox drawCorruptionEdgesCheckbox = new VisCheckBox("Highlight corruption edges", Base.drawCorruptionEdges);
 		VisCheckBox drawCHeightInequalityCheckbox = new VisCheckBox("Highlight c_height inequal areas", Base.drawCHeightInequality);	
@@ -68,11 +69,12 @@ public class SettingsMenu extends Window {
 		VisCheckBox errorCheckbox = new VisCheckBox("Test error", false);
 		
 		engineSettingsTable.add(loggingCheckbox).left().row();
-		engineSettingsTable.add(debugCheckbox).left().row();
+		engineSettingsTable.add(errorCheckbox).left().row();	
 		engineSettingsTable.add(drawGeneralStatsCheckbox).left().row();
 		engineSettingsTable.add(hoverChunkHighlightCheckbox).left().row();
 		engineSettingsTable.add(drawOresCheckbox).left().row();		
-		engineSettingsTable.add(errorCheckbox).left().row();	
+		engineSettingsTable.add(drawSectionBordersCheckbox).left().row();
+		engineSettingsTable.add(drawCreeperLevelCheckbox).left().row();
 		engineSettingsTable.add(drawTerrainEdgesCheckbox).left().row();
 		engineSettingsTable.add(drawCorruptionEdgesCheckbox).left().row();
 		engineSettingsTable.add(drawCHeightInequalityCheckbox).left().row();
@@ -116,23 +118,27 @@ public class SettingsMenu extends Window {
 			public void clicked(InputEvent event, float x, float y) {	 		
 				Base.enableGlProgilerLogging = loggingCheckbox.isChecked();
 				if (Base.enableGlProgilerLogging) GameScreen.glProfiler.enable();
-				if (!Base.enableGlProgilerLogging) GameScreen.glProfiler.disable();
-				
+				if (!Base.enableGlProgilerLogging) GameScreen.glProfiler.disable();	
 		    }
-	    });		
-		debugCheckbox.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				GameScreen.debug = debugCheckbox.isChecked();
-				//GameScreen.debug = "";
-		    }
-	    });		
+	    });			
 		hoverChunkHighlightCheckbox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
 				Base.hoverChunkHighlight = hoverChunkHighlightCheckbox.isChecked();
 		    }
 	    });		
+		drawSectionBordersCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Base.drawSectionBorders = drawSectionBordersCheckbox.isChecked();
+		    }
+	    });
+		drawCreeperLevelCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Base.drawCreeperLevel = drawCreeperLevelCheckbox.isChecked();
+		    }
+	    });
 		drawTerrainEdgesCheckbox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		

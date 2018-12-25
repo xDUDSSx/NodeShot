@@ -84,7 +84,7 @@ public class Base {
 	//UI ELEMENT STATES
 	public static int buildMenuImgSize = 80;
 	
-	public static boolean settingsOpened = true;
+	public static boolean settingsOpened = false;
 	public static boolean enableGlProgilerLogging = false;
 	public static boolean hoverChunkHighlight = false;
 	public static boolean drawTerrainEdges = false;
@@ -95,13 +95,15 @@ public class Base {
 	public static boolean drawBorderChunks = false;
 	public static boolean drawActiveSections = false;
 	public static boolean drawBuildingTiles = false;
+	public static boolean drawSectionBorders = false;
+	public static boolean drawCreeperLevel = false;
 	
 	//Graphical settings
 	public static boolean vSyncEnabled = true;
 	public static boolean fullscreen = false;
 	public static int foregroundFps = 144;
 	public static Dimension defaultWindowSize = new Dimension(1300, 795);
-	public static int MSAAsamples = 8;
+	public static int MSAAsamples = 10;
 	
 	public static float getRandomFloatNumberInRange(int min, int max) {
 		if (min == 0 && max == 0) {

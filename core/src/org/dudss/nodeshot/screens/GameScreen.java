@@ -96,8 +96,6 @@ public class GameScreen implements Screen {
 	
 	/**Animation state time, used for animation frame looping*/
 	public static float stateTime = 0f;
-	
-	public static Vector2 mousePos = new Vector2();
 
 	//Collections
 	public static CopyOnWriteArrayList<Node> nodelist = new CopyOnWriteArrayList<Node>();
@@ -106,45 +104,31 @@ public class GameScreen implements Screen {
 	//Handlers
 	public static PackageHandler packageHandler;
 	public static ResourceManager resourceManager;
-	
-	//Handlers with internal collections
 	public static ConnectorHandler connectorHandler;
 	public static BuildingManager buildingManager;
 	public static BulletHandler bulletHandler;
 
-	static Boolean NodeInfoHidden = false;
-	public static Boolean NodeSelectiveInfo = true;
-	static Boolean NodeConnectRadiusHidden = true;
-
 	public static Boolean toggleConnectMode = false;
-	
-	//Android old UI
-	public static Boolean oldNodeBuildMode = false;
-	
 	public static Boolean activeNewConnection = false;
 	public static int newConnectionFromIndex;
 	public static Boolean draggingConnection = false;
 
+	
+	public static Vector2 mousePos = new Vector2();
 	public static int mouseX;
 	public static int mouseY;
-
-	//edited
 	public static Vector3 lastMousePress = new Vector3(0,0,0);
-
 	public static enum MouseType {
 		MOUSE_1, MOUSE_2, MOUSE_3
 	}
 	public static MouseType lastMousePressType;
 
+	//Selecting
 	public static Entity selectedEntity = null;
 	public static int selectedID = -1;
 	public static int selectedIndex = -1;
 	public static EntityType selectedType = EntityType.NONE;
-
-	public static Boolean debug = false;
-	static Boolean drawString = false;
-	static String stringToWrite = "";
-
+	
 	//Terrain
 	public static Chunks chunks;
 	public static Chunk hoverChunk = null;
@@ -172,6 +156,7 @@ public class GameScreen implements Screen {
     public static Vector3 lastCamPos;
     public static float lastZoom;
     public static Boolean zooming = false;
+    
     //Background shader helper vars
     public static float off = 0.5f;
     public static Vector3 prevCameraOffset;
@@ -302,9 +287,6 @@ public class GameScreen implements Screen {
         imgButton.setSize(64, 64);
         imgButton.setPosition(10, 10);        
         stage.addActor(imgButton);
-        
-        SettingsMenu settings = new SettingsMenu("Settings", GameScreen.skin);	
-		GameScreen.stage.addActor(settings);
     }
 
     public static int getWidth() {return WIDTH;}
@@ -371,20 +353,12 @@ public class GameScreen implements Screen {
         //Background cloud rendering
         drawBackgroundClouds(batch);
  		
+        //Setting the world space projection matrix
         batch.setProjectionMatrix(cam.combined);
         r.setProjectionMatrix(cam.combined);
         
         //Rendering the terrain
         chunks.drawTerrain();
-        
-		/*if (buildMode == true) {
-			batch.begin();    	        
-	        for (Section s : chunks.sectionsInView) {	   
-	        	Chunk c = s.getChunk(0, 0);	        	
-	        	batch.draw(SpriteLoader.gridOverlay, c.getX() , c.getY(), 512, 512);	
-	        }
-	        batch.end();
-		}*/  
         
 		//OpenGL performance logging
         if (Base.enableGlProgilerLogging) {
@@ -452,6 +426,7 @@ public class GameScreen implements Screen {
         //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
         chunks.drawCorruption();
         
+        //Drawing creeper generators on top of creeper itself
         buildingManager.drawAllGenerators(r, batch);
         
         //Drawing the fog of war.
@@ -459,7 +434,38 @@ public class GameScreen implements Screen {
         
         bulletHandler.drawAll(r, batch);
 
-        //Shows terrain edges in blue
+        //Draw debug infographics
+        drawDebug(r);
+           
+        //HUD, draw last
+        //setting screen matrix    
+        setHudProjectionMatrix(batch);
+        setHudProjectionMatrix(r); 
+        
+        batch.begin(); 
+        if (Base.drawGeneralStats) drawStats(batch);
+        drawFps(batch);
+        //drawInfo(batch);
+        drawCoords(batch);
+        drawTerrainInfo(batch);
+        if (gamePaused) {
+	        batch.setColor(Color.RED);
+	        drawPauseIndicator(batch);
+	        batch.setColor(Color.WHITE);
+        }
+        
+        batch.end();
+        
+        //Stage UI drawing
+        stage.act();
+        stage.draw();
+        
+        if (Base.enableGlProgilerLogging) glProfiler.reset(); 
+    }   
+    
+    /**Draws all debug infographics if enabled*/
+    public static void drawDebug(ShapeRenderer r) {
+    	//Shows terrain edges in blue
         if (Base.drawTerrainEdges) {
 	        r.begin(ShapeType.Line);
 	        r.setColor(Color.WHITE);
@@ -577,78 +583,40 @@ public class GameScreen implements Screen {
         	}
         }
         
-        //Draw debug infographics
-        if (debug) drawDebug(batch, r);
-           
-        //HUD, draw last
-        //setting screen matrix    
-        setHudProjectionMatrix(batch);
-        setHudProjectionMatrix(r); 
-        
-        batch.begin();
-        if (Gdx.app.getType() == ApplicationType.Android) {
-	        batch.end();
-	        drawButtons(batch, r);
-	        batch.begin();
-	    }      
-        if (Base.drawGeneralStats) drawStats(batch);
-        drawFps(batch);
-        //drawInfo(batch);
-        drawCoords(batch);
-        drawTerrainInfo(batch);
-        if (gamePaused) {
-	        batch.setColor(Color.RED);
-	        drawPauseIndicator(batch);
-	        batch.setColor(Color.WHITE);
+        if (Base.drawSectionBorders) {
+	        r.begin(ShapeType.Line);
+	        for (Section s : chunks.sectionsInView) {	   
+	        	Chunk c = s.getChunk(0, 0);	        	
+	        	r.setColor(Color.YELLOW);
+	        	r.rectLine(c.getX(), c.getY(), c.getX() + Base.SECTION_SIZE*Base.CHUNK_SIZE, c.getY(), 5);
+	        	r.rectLine(c.getX() + Base.SECTION_SIZE*Base.CHUNK_SIZE, c.getY(), c.getX() + Base.SECTION_SIZE*Base.CHUNK_SIZE, c.getY() + Base.SECTION_SIZE*Base.CHUNK_SIZE, 5);
+	        	r.rectLine(c.getX() + Base.SECTION_SIZE*Base.CHUNK_SIZE, c.getY() + Base.SECTION_SIZE*Base.CHUNK_SIZE, c.getX(), c.getY() + Base.SECTION_SIZE*Base.CHUNK_SIZE, 5);
+	        	r.rectLine(c.getX(), c.getY() + Base.SECTION_SIZE*Base.CHUNK_SIZE, c.getX(), c.getY(), 5);
+	        }      
+	        r.end();
         }
         
-        batch.end();
-        
-        //Stage UI drawing
-        stage.act();
-        stage.draw();
-        
-        
-        if (Base.enableGlProgilerLogging) glProfiler.reset(); 
-    }   
-    
-    public static void drawDebug(SpriteBatch batch, ShapeRenderer r) {
-    	batch.begin();    	        
-        for (Section s : chunks.sectionsInView) {	   
-        	Chunk c = s.getChunk(0, 0);	        	
-        	batch.draw(SpriteLoader.sectionOutline, c.getX() , c.getY(), 256, 256);	
-        	//font.draw(batch, s.mesh, x, y)
-        }      
-        batch.end();   
-
-        r.begin(ShapeType.Filled);
-        r.setColor(Color.WHITE);
-        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-        		if (chunks.getChunkAtTileSpace(x, y).getCreeperLevel() > 0) {
-        			//float n = Base.range(chunks.getChunk(x, y).getCreeperLevel(), 0, 5, 0, 1) * 100;
-        			float n = chunks.getChunkAtTileSpace(x, y).getCreeperLevel() * 100;
-        			
-        			//System.out.println(n);
-        			if (n == 100) {
-        				n = 99;
-        			}
-        			float rc = (255 * n) / 100;
-        			float g = (255 * (100 - n)) / 100 ;
-        			float b = 0;
-        			//System.out.println(rc + " " + g + " " + b);
-        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));
-        			r.setColor(c);
-        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-        		}
-        		
-        		if (chunks.getChunkAtTileSpace(x, y).isOreOutlined()) {
-        			r.setColor(Color.WHITE);
-        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-        		}
-        	}
+        if (Base.drawCreeperLevel) {
+	        r.begin(ShapeType.Filled);
+	        r.setColor(Color.WHITE);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunkAtTileSpace(x, y).getCreeperLevel() > 0) {
+	        			float n = chunks.getChunkAtTileSpace(x, y).getCreeperLevel() * 100;	        			
+	        			if (n == 100) {
+	        				n = 99;
+	        			}
+	        			float rc = (255 * n) / 100;
+	        			float g = (255 * (100 - n)) / 100 ;
+	        			float b = 0;
+	        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));	        			
+	        			r.setColor(c);
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        		}
+	        	}
+	        }
+	        r.end();
         }
-        r.end();
     }
     
     //Shader related rendering methods
@@ -963,40 +931,6 @@ public class GameScreen implements Screen {
         float textwidth = layout.width;
 
         font.draw(batch, "x: " + v.x + " y: " + v.y, WIDTH - textwidth - 5, textheight + 5);
-    }
-
-    void drawButtons(SpriteBatch batch, ShapeRenderer r) {
-        r.begin(ShapeRenderer.ShapeType.Filled);
-        r.setColor(Color.LIGHT_GRAY);
-        r.rect(backButton.x, backButton.y, backButton.width, backButton.height);
-        r.rect(deleteButton.x, deleteButton.y, deleteButton.width, deleteButton.height);
-        if (oldNodeBuildMode == true) r.setColor(Color.GREEN);
-        r.rect(buildButton.x, buildButton.y, buildButton.width, buildButton.height);
-        r.setColor(Color.WHITE);
-        r.end();
-
-        batch.begin();
-        //Back
-        layout.setText(font, "Back");
-        float textwidth = layout.width;
-        float textheight = font.getCapHeight();
-
-        //Delete
-        layout.setText(font, "Delete");
-        float textwidth1 = layout.width;
-        float textheight1 = font.getCapHeight();
-
-        //Build
-        layout.setText(font, "Build");
-        float textwidth2 = layout.width;
-        float textheight2 = font.getCapHeight();
-
-        font.setColor(Color.RED);
-        font.draw(batch, "Back", backButton.x + backButton.width/2 - textwidth/2, backButton.y + backButton.height/2 + textheight/2);
-        font.draw(batch, "Delete", deleteButton.x + deleteButton.width/2 - textwidth1/2, deleteButton.y + deleteButton.height/2 + textheight/2);
-        font.draw(batch, "Build", buildButton.x + buildButton.width/2 - textwidth2/2, buildButton.y + buildButton.height/2 + textheight/2);
-        font.setColor(Color.WHITE);
-        batch.end();
     }
 
     void setHudProjectionMatrix(SpriteBatch batch) {
