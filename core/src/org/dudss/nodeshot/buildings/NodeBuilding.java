@@ -6,14 +6,14 @@ import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class NodeBuilding extends AbstractBuilding {
 	
 	static float width = Base.CHUNK_SIZE*1, height = Base.CHUNK_SIZE*1;
 	
-	AtlasRegion s = SpriteLoader.tileAtlas.findRegion("node");
+	TextureRegion s = new TextureRegion(SpriteLoader.node);
 	
 	ConveyorNode n;
 	
@@ -29,7 +29,7 @@ public class NodeBuilding extends AbstractBuilding {
 	@Override
 	public void draw(ShapeRenderer r, SpriteBatch batch) {
 		batch.begin();
-		batch.setColor(1f, 1f, 1f, 1f);		
+		batch.setColor(1f, 1f, 1f, 1f);		 
 		batch.draw(s, x, y, width, height);		
 		batch.end();
 		
@@ -46,10 +46,9 @@ public class NodeBuilding extends AbstractBuilding {
 
 	@Override
 	public void build() {
-		n = new ConveyorNode(x + (width/2), y + (height/2), Base.RADIUS);
+		n = new ConveyorNode(x + (width/2), y + (height/2), Base.RADIUS, this);
 		n.add();
 		GameScreen.buildingManager.addBuilding(this);
-		
 		//Nodes are not updating fog of war
 		//updateFogOfWar(true);
 	}
@@ -63,4 +62,7 @@ public class NodeBuilding extends AbstractBuilding {
 		updateFogOfWar(false);	
 	}
 
+	public ConveyorNode getNode() {
+		return n;
+	}
 }

@@ -12,6 +12,7 @@ import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.InputNode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.entities.nodes.OutputNode;
@@ -29,7 +30,6 @@ import org.dudss.nodeshot.terrain.Section;
 import org.dudss.nodeshot.ui.BuildMenu;
 import org.dudss.nodeshot.ui.PauseMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
-import org.dudss.nodeshot.ui.SettingsMenu;
 import org.dudss.nodeshot.ui.ToolbarMenu;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.Shaders;
@@ -107,12 +107,6 @@ public class GameScreen implements Screen {
 	public static ConnectorHandler connectorHandler;
 	public static BuildingManager buildingManager;
 	public static BulletHandler bulletHandler;
-
-	public static Boolean toggleConnectMode = false;
-	public static Boolean activeNewConnection = false;
-	public static int newConnectionFromIndex;
-	public static Boolean draggingConnection = false;
-
 	
 	public static Vector2 mousePos = new Vector2();
 	public static int mouseX;
@@ -138,10 +132,14 @@ public class GameScreen implements Screen {
 	public static float viewportWidth = 312f;
     FreeTypeFontGenerator generator;
 	
+    //Build mode
 	public static boolean buildMode = false;
 	public static AbstractBuilding builtBuilding = null;
-	public static Node builtConnector = null;
 	public static int activeRotation = 0;
+
+	//public static AbstractBuilding expandedNodeBuilding;
+	public static ConveyorNode expandedConveyorNode;
+	public static boolean expandingANode = false;
 	
     //libGDX
     static SpriteBatch batch;
@@ -387,6 +385,7 @@ public class GameScreen implements Screen {
         }
         
         batch.begin();      
+        
         //Drawing packages
         for(int i = 0; i < packagelist.size(); i++) {
             Package p = packagelist.get(i);
@@ -396,7 +395,8 @@ public class GameScreen implements Screen {
             }          
             
             p.draw(batch);
-        }           
+        }        
+        
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
             Node n = nodelist.get(i);  
@@ -570,11 +570,12 @@ public class GameScreen implements Screen {
         
         //Highlight of the chunk the mouse is hovering on
         if (hoverChunk != null) {
-        	if (buildMode == true && builtConnector != null) {
-        		r.begin(ShapeType.Filled);
+        	if (buildMode == true) {
+        		/*r.begin(ShapeType.Filled);
 	        	r.setColor(Color.WHITE);
 	        	r.rect(hoverChunk.getX(), hoverChunk.getY(), hoverChunk.getSize(), hoverChunk.getSize());
-	        	r.end();        	
+	        	r.end();
+	        	*/        	
         	} else if (Base.hoverChunkHighlight) {
         		r.begin(ShapeType.Line);
 	        	r.setColor(Color.WHITE);
@@ -704,13 +705,16 @@ public class GameScreen implements Screen {
     }
     
     void drawConnectors(ShapeRenderer sR) {
-
     	r.begin(ShapeType.Filled);
         r.setColor(Color.WHITE);
         //ConnectMode line
-        if ((toggleConnectMode == true && activeNewConnection == true) || draggingConnection == true) {
+        if (expandingANode && expandedConveyorNode != null) {
             Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
-            r.rectLine(nodelist.get(newConnectionFromIndex).getCX(), nodelist.get(newConnectionFromIndex).getCY(), worldPos.x, worldPos.y, Base.lineWidth);
+            r.rectLine(	expandedConveyorNode.getCX(),
+            			expandedConveyorNode.getCY(),
+            			builtBuilding.getPrefabX(worldPos.x, true) + builtBuilding.getWidth()/2,
+            			builtBuilding.getPrefabY(worldPos.y, true) + builtBuilding.getHeight()/2, 
+            			Base.lineWidth);
         }
         r.end();
         
@@ -731,14 +735,14 @@ public class GameScreen implements Screen {
         String stat3 = "Connectors: " + connectorHandler.getAllConnectors().size();
         String stat41 = "Buildings: " + buildingManager.getAllBuildings().size(); 
         String stat4 = "PackagePaths: " + packageHandler.getNumberOfPaths();
-        String stat5 = "ConnectMode: " + toggleConnectMode;
-        String stat6 = "activeNewConnection: " + activeNewConnection;
+       // String stat5 = "ConnectMode: " + toggleConnectMode;
+        //String stat6 = "activeNewConnection: " + activeNewConnection;
         String stat7 = "selectedID: " + selectedID;
         String stat8 = "selectedType: " + selectedType;
         String stat9 = "selectedIndex: " + selectedIndex;  
         String stat10 = "zoom: " + cam.zoom;
-        String stat11 = "draggingConnection: " + draggingConnection;
-        String stat12 = "newConnectionFromIndex: " + newConnectionFromIndex;   
+       // String stat11 = "draggingConnection: " + draggingConnection;
+       // String stat12 = "newConnectionFromIndex: " + newConnectionFromIndex;   
 
         layout.setText(font, stat);
         float textstatwidth = layout.width;
@@ -750,9 +754,9 @@ public class GameScreen implements Screen {
         float textstat41width = layout.width;
         layout.setText(font, stat4);
         float textstat4width = layout.width;
-        layout.setText(font, stat5);
+        //layout.setText(font, stat5);
         float textstat5width = layout.width;
-        layout.setText(font, stat6);
+        //layout.setText(font, stat6);
         float textstat6width = layout.width;
         layout.setText(font, stat7);
         float textstat7width = layout.width;
@@ -762,9 +766,9 @@ public class GameScreen implements Screen {
         float textstat9width = layout.width;
         layout.setText(font, stat10);
         float textstat10width = layout.width;
-        layout.setText(font, stat11);
+        //layout.setText(font, stat11);
         float textstat11width = layout.width;
-        layout.setText(font, stat12);
+       // layout.setText(font, stat12);
         float textstat12width = layout.width;
 
         font.draw(batch, stat, WIDTH - textstatwidth - 10, HEIGHT - textheight);
@@ -772,14 +776,14 @@ public class GameScreen implements Screen {
         font.draw(batch, stat3, WIDTH - textstat3width - 10, HEIGHT - (textheight+2)*3);
         font.draw(batch, stat41, WIDTH - textstat41width - 10, HEIGHT - (textheight+2)*4);
         font.draw(batch, stat4, WIDTH - textstat4width - 10, HEIGHT - (textheight+2)*5);
-        font.draw(batch, stat5, WIDTH - textstat5width - 10, HEIGHT - (textheight+2)*6);
-        font.draw(batch, stat6, WIDTH - textstat6width - 10, HEIGHT - (textheight+2)*7);
+       //font.draw(batch, stat5, WIDTH - textstat5width - 10, HEIGHT - (textheight+2)*6);
+        //font.draw(batch, stat6, WIDTH - textstat6width - 10, HEIGHT - (textheight+2)*7);
         font.draw(batch, stat7, WIDTH - textstat7width - 10, HEIGHT - (textheight+2)*8);
         font.draw(batch, stat8, WIDTH - textstat8width - 10, HEIGHT - (textheight+2)*9);
         font.draw(batch, stat9, WIDTH - textstat9width - 10, HEIGHT - (textheight+2)*10);
         font.draw(batch, stat10, WIDTH - textstat10width - 10, HEIGHT - (textheight+2)*11);
-        font.draw(batch, stat11, WIDTH - textstat11width - 10, HEIGHT - (textheight+2)*12);
-        font.draw(batch, stat12, WIDTH - textstat12width - 10, HEIGHT - (textheight+2)*13);
+        //font.draw(batch, stat11, WIDTH - textstat11width - 10, HEIGHT - (textheight+2)*12);
+        //font.draw(batch, stat12, WIDTH - textstat12width - 10, HEIGHT - (textheight+2)*13);
 
     }
 
@@ -971,19 +975,19 @@ public class GameScreen implements Screen {
         	simulationThread.recalculateSpeed(30);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            cam.translate(-1, 0, 0);
+            cam.translate(-3, 0, 0);
           	GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            cam.translate(1, 0, 0);            
+            cam.translate(3, 0, 0);            
           	GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            cam.translate(0, -1, 0);     
+            cam.translate(0, -3, 0);     
             GameScreen.chunks.updateView(cam);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            cam.translate(0, 1, 0);  
+            cam.translate(0, 3, 0);  
           	GameScreen.chunks.updateView(cam);
         }
         

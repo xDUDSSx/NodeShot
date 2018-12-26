@@ -13,6 +13,7 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.buildings.AbstractIOPort;
+import org.dudss.nodeshot.buildings.NodeBuilding;
 
 import static org.dudss.nodeshot.screens.GameScreen.*;
 
@@ -62,6 +63,13 @@ public class DesktopInputProcessor implements InputProcessor {
 		} else 
 		if (keycode == Keys.E && GameScreen.buildMode == true && GameScreen.builtBuilding instanceof AbstractIOPort) {
 			((AbstractIOPort)GameScreen.builtBuilding).rotateLeft();
+		} else 
+		if (keycode == Keys.Q) {
+			GameScreen.buildMode = false;
+			GameScreen.builtBuilding = null;
+			GameScreen.expandedConveyorNode = null;
+			GameScreen.expandingANode = false;
+			GameScreen.chunks.updateAllSectionMeshes(false);
 		}
 		return false;
 	}
@@ -98,9 +106,16 @@ public class DesktopInputProcessor implements InputProcessor {
 						
 						if (canBeBuilt) {
 							GameScreen.builtBuilding.build();							
+							if (GameScreen.expandingANode && builtBuilding instanceof NodeBuilding) {
+								GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)builtBuilding).getNode());
+							}
 							
 							if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
 								try {					
+									if (builtBuilding instanceof NodeBuilding) {
+										GameScreen.expandingANode = true;
+										GameScreen.expandedConveyorNode = ((NodeBuilding) builtBuilding).getNode();
+									}
 									Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
 									Constructor buildingConstructor;
 									buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
@@ -111,30 +126,27 @@ public class DesktopInputProcessor implements InputProcessor {
 								}
 													
 							} else {
+								GameScreen.expandedConveyorNode = null;
+								GameScreen.expandingANode = false;
 								GameScreen.builtBuilding = null;
-								GameScreen.builtConnector = null;
 								GameScreen.buildMode = false;
 							}							
 							GameScreen.chunks.updateAllSectionMeshes(false);
 						} else {
 							GameScreen.builtBuilding.clearBuildingChunks();
 						}
-					}
-				} else if (GameScreen.builtConnector != null) {
-					Node newNode = null;
-					if (builtConnector instanceof ConveyorNode) {					
-						newNode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
-					} else {
-						newNode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
-					}					
-					Selector.selectNode(newNode);
-					nodelist.add(newNode);
-					newNode.setLocation(worldPos.x, worldPos.y, true);
-					
-					GameScreen.builtBuilding = null;
-					GameScreen.builtConnector = null;
-					GameScreen.buildMode = false;
-				} else if (draggingConnection != true){
+					} else 
+					if (expandingANode) {
+						if (GameScreen.chunks.getChunkAtWorldSpace(worldPos.x,  worldPos.y).getBuilding() instanceof NodeBuilding) {
+							if(!((NodeBuilding)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode().getAllConnectedNodes().contains(GameScreen.expandedConveyorNode)) {
+								if(((NodeBuilding)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode() != GameScreen.expandedConveyorNode) {
+									GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode());
+									GameScreen.expandedConveyorNode = ((NodeBuilding)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode();
+								}
+							}			
+						}
+					} 		
+				} else {
 					GameScreen.checkHighlights(true);	
 				}
 				
@@ -163,9 +175,25 @@ public class DesktopInputProcessor implements InputProcessor {
 				if (buildMode) {
 					GameScreen.buildMode = false;
 					GameScreen.builtBuilding = null;
+					GameScreen.expandedConveyorNode = null;
+					GameScreen.expandingANode = false;
 					GameScreen.chunks.updateAllSectionMeshes(false);
 				}
 				
+				if (clickedEntity instanceof NodeBuilding || clickedEntity instanceof ConveyorNode || clickedEntity instanceof IONode) {
+					if (clickedEntity instanceof IONode) {
+						GameScreen.expandedConveyorNode = (IONode) clickedEntity;
+					} else if (clickedEntity instanceof ConveyorNode) {
+						GameScreen.expandedConveyorNode =(ConveyorNode) clickedEntity;
+					} else {
+						GameScreen.expandedConveyorNode = ((NodeBuilding) clickedEntity).getNode();
+					}
+					
+					GameScreen.expandingANode = true;
+					GameScreen.buildingManager.startBuildMode(new NodeBuilding(0, 0));
+				}
+				
+				/*
 				if (clickedEntity == null && GameScreen.selectedID != -1) {
 					Selector.deselect();
 					GameScreen.rightClickMenuManager.removeMenu();
@@ -175,12 +203,8 @@ public class DesktopInputProcessor implements InputProcessor {
 					} else {
 						GameScreen.rightClickMenuManager.createMenu(clickedEntity);
 					}
-				}	
-				if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-					if(nodelist.size() != 0) {
-						nodelist.get(nodelist.size() - 1).remove();
-					}
-				}			
+				}
+				*/			
 			break;
 				case Input.Buttons.MIDDLE: mouseX = Gdx.input.getX();
 				mouseY = Gdx.input.getY();		
@@ -209,6 +233,7 @@ public class DesktopInputProcessor implements InputProcessor {
 					
 					lastMousePress = worldPos;
 					
+					/*
 					if (draggingConnection == true) {
 						Rectangle rect = new Rectangle(worldPos.x-0.5f, worldPos.y-0.5f, 1, 1);
 						
@@ -247,6 +272,7 @@ public class DesktopInputProcessor implements InputProcessor {
 						buildMode = false;
 						}
 					}
+					*/
 				break;
 				
 				case Input.Buttons.LEFT: break;
@@ -270,7 +296,7 @@ public class DesktopInputProcessor implements InputProcessor {
 				//Cancel right click menu if one is present
 				GameScreen.rightClickMenuManager.removeMenu();
 				
-				if (selectedIndex != -1 && selectedType == EntityType.NODE && draggingConnection == false) {
+				/*if (selectedIndex != -1 && selectedType == EntityType.NODE) {
 					Node highlightedNode = nodelist.get(selectedIndex);
 		            double distance = Math.hypot( highlightedNode.getCX() - lastMousePress.x,  highlightedNode.getCY() - lastMousePress.y);
 		            
@@ -284,64 +310,54 @@ public class DesktopInputProcessor implements InputProcessor {
 				} else if (selectedIndex != -1 && draggingConnection == true ) {
 					//Dragging a connection action //TODO: Maybe implement some info later
 					//System.out.println("drag action --");
-				} 			
+				} 
+				*/
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.C)) {
-				if (draggingConnection == false) {
-					for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
-						for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-							Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
-							if (c != null) {
-								c.setCreeperLevel(GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 1);
-							}
-						}
-					}						
-					GameScreen.chunks.updateAllSectionMeshes(true);
-					
-				}
-			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
-				if (draggingConnection == false) {
-					for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
-						for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-							Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
-							if (c != null) {
-								c.setCreeperLevel(GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() - Base.MAX_CREEP * 0.02f);
-							}
-						}
-					}							
-					GameScreen.chunks.updateAllSectionMeshes(true);					
-				}
-			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.T)) {
-				if (draggingConnection == false) {			
-					for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
-						for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-							Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
-							if (c != null) {
-								c.setHeight(GameScreen.terrainLayerSelected);
-							}
+				for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
+					for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
+						Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
+						if (c != null) {
+							c.setCreeperLevel(GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 1);
 						}
 					}
-					/*int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-					int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-					if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
-						GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], false, -1);
-					}*/
-					
-					GameScreen.chunks.updateAllSectionMeshes(false);		
-				}	
+				}						
+				GameScreen.chunks.updateAllSectionMeshes(true);
+			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
+				for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
+					for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
+						Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
+						if (c != null) {
+							c.setCreeperLevel(GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() - Base.MAX_CREEP * 0.02f);
+						}
+					}
+				}							
+				GameScreen.chunks.updateAllSectionMeshes(true);					
+			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.T)) {	
+				for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
+					for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
+						Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
+						if (c != null) {
+							c.setHeight(GameScreen.terrainLayerSelected);
+						}
+					}
+				}
+				/*int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
+				if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
+					GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], false, -1);
+				}*/
+				
+				GameScreen.chunks.updateAllSectionMeshes(false);		
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-				if (draggingConnection == false) {
 					float xPos = previousWorldMousePos.x - worldMousePos.x;
 					float yPos = previousWorldMousePos.y - worldMousePos.y;
 					cam.translate(xPos, yPos, 0);	
 					GameScreen.chunks.updateView(cam);
-				}
 			} else if (Gdx.input.isButtonPressed(Buttons.MIDDLE)) {
-				if (draggingConnection == false) {
 					float xPos = previousWorldMousePos.x - worldMousePos.x;
 					float yPos = previousWorldMousePos.y - worldMousePos.y;
 					cam.translate(xPos, yPos, 0);					
 					GameScreen.chunks.updateView(cam);
-				}
 			}
 		//}
 		return false;

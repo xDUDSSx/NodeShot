@@ -176,7 +176,7 @@ public class Base {
 		}
 			return listToString(entityList);
 	}
-	public static String nodeConnectorListToString (List < Connector > list) {
+	public static String nodeConnectorListToString (List <Connector> list) {
 		List<Entity> entityList = new ArrayList<Entity>();
 		for (final Connector n : list) {
 			entityList.add(new Entity() {
@@ -213,7 +213,7 @@ public class Base {
 		return listToString(entityList);
 	}
 
-	public static String packageListToString (List < Package > list) {
+	public static String packageListToString (List <Package> list) {
 		List<Entity> entityList = new ArrayList<Entity>();
 		for (final Package n : list) {
 			entityList.add(new Entity() {

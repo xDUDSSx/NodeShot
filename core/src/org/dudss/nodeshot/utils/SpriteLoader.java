@@ -74,6 +74,7 @@ public class SpriteLoader {
 	public static TextureRegion mineOff;
 	public static TextureRegion mineOn;
 	
+	public static TextureRegion node;
 	
 	public static Drawable creepergenDrawable;
 	public static Drawable hqDrawable;
@@ -184,6 +185,8 @@ public class SpriteLoader {
 		mineOff = hqanimAtlas.findRegion("mineOFF");
 		mineOn = hqanimAtlas.findRegion("mineON");
 		
+		node = hqanimAtlas.findRegion("nodeNew");
+		
 		creepergenDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("creepergenPreview512")));
 		creepergenDrawable.setMinHeight(Base.buildMenuImgSize);
 		creepergenDrawable.setMinWidth(Base.buildMenuImgSize);
@@ -207,7 +210,6 @@ public class SpriteLoader {
 		nodeDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("nodePreview512")));
 		nodeDrawable.setMinHeight(Base.buildMenuImgSize);
 		nodeDrawable.setMinWidth(Base.buildMenuImgSize);
-		
 		
 		mineDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("minePreview512")));
 		mineDrawable.setMinHeight(Base.buildMenuImgSize);

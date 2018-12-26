@@ -169,20 +169,20 @@ public class BuildMenu extends Window {
 		conveyorButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null && GameScreen.builtConnector == null) {
+				/*if (GameScreen.buildMode == false && GameScreen.builtBuilding == null && GameScreen.builtConnector == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtConnector = new ConveyorNode(0 ,0 , Base.RADIUS);
-				}		
+				}*/	
 		    }
 	    });
 		
 		connectorButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null && GameScreen.builtConnector == null) {
+				/*if (GameScreen.buildMode == false && GameScreen.builtBuilding == null && GameScreen.builtConnector == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtConnector = new Node(0, 0, Base.RADIUS);
-				}	
+				}*/
 		    }
 	    });
 		

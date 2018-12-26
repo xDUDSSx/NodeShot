@@ -14,7 +14,7 @@ import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 /**A special {@link Node} that handles {@link Package} transfer between various package systems. Currently supports {@link org.dudss.nodeshot.misc.IndefinitePathHandler}s only!*/
-public class IONode extends Node {
+public class IONode extends ConveyorNode {
 
 	AlertableBuilding building;
 	

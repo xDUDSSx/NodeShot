@@ -116,7 +116,7 @@ public abstract class AbstractStorage extends AlertableBuilding {
 		storage.clear();
 	}
 	
-	public Node getInputNode() {
+	public Node getNode() {
 		return ioNode;
 	}
 

@@ -103,7 +103,7 @@ public abstract class AbstractBuilding implements Entity {
 		float prefY;
 		if (snap) {;
 			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			prefY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
+			prefY = ny - ((int)(height/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
 		} else {
 			prefY = cy - (height/2);
 		}
@@ -186,4 +186,13 @@ public abstract class AbstractBuilding implements Entity {
 		return y;
 	}
 
+	/**Returns the X coordinate of the center of the building*/
+	public float getCX() {
+		return cx;
+	}
+
+	/**Returns the Y coordinate of the center of the building*/
+	public float getCY() {
+		return cy;
+	}
 }

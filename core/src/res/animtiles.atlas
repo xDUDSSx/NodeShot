@@ -11,20 +11,6 @@ factoryFrame0001
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0009
-  rotate: false
-  xy: 1302, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0010
-  rotate: false
-  xy: 2, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 factoryFrame0038
   rotate: false
   xy: 262, 1042
@@ -32,30 +18,23 @@ factoryFrame0038
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0002
+genframe0036
   rotate: false
-  xy: 262, 782
+  xy: 202, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0036
+genframe0037
   rotate: false
-  xy: 70, 1562
+  xy: 462, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0038
   rotate: false
-  xy: 590, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0039
-  rotate: false
-  xy: 850, 1562
+  xy: 722, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -95,13 +74,6 @@ genframe0045
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0046
-  rotate: false
-  xy: 1042, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 genframe0048
   rotate: false
   xy: 1562, 782
@@ -109,35 +81,49 @@ genframe0048
   orig: 256, 256
   offset: 0, 0
   index: -1
+genframe0049
+  rotate: false
+  xy: 2, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 genframe0050
   rotate: false
-  xy: 522, 2
+  xy: 262, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0051
   rotate: false
-  xy: 782, 2
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0052
   rotate: false
-  xy: 1042, 2
+  xy: 782, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0053
   rotate: false
-  xy: 1302, 2
+  xy: 1042, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0054
+  rotate: false
+  xy: 1302, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0055
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -146,14 +132,14 @@ genframe0054
   index: -1
 hqframe0001
   rotate: false
-  xy: 1370, 1562
+  xy: 1502, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0002
   rotate: false
-  xy: 1630, 1562
+  xy: 1762, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -161,13 +147,6 @@ hqframe0002
 hqframe0004
   rotate: false
   xy: 262, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0005
-  rotate: false
-  xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -193,13 +172,6 @@ hqframe0008
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0009
-  rotate: false
-  xy: 1562, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 hqframe0010
   rotate: false
   xy: 262, 522
@@ -221,9 +193,9 @@ hqframe0013
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0014
+hqframe0015
   rotate: false
-  xy: 1302, 522
+  xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -242,6 +214,13 @@ hqframe0018
   orig: 256, 256
   offset: 0, 0
   index: -1
+hqframe0038
+  rotate: false
+  xy: 1042, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 importerTOP
   rotate: false
   xy: 2, 1690
@@ -249,7 +228,21 @@ importerTOP
   orig: 64, 128
   offset: 0, 0
   index: -1
-outline_factoryFrame0026
+mineOFF
+  rotate: false
+  xy: 262, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+nodeNew
+  rotate: false
+  xy: 70, 1690
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0023
   rotate: false
   xy: 1302, 262
   size: 256, 256
@@ -258,7 +251,7 @@ outline_factoryFrame0026
   index: -1
 outline_factoryFrame0035
   rotate: false
-  xy: 262, 2
+  xy: 2, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -298,23 +291,37 @@ outline_genframe0064
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0027
+outline_hqframe0011
   rotate: false
-  xy: 330, 1562
+  xy: 1562, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0013
+  rotate: false
+  xy: 522, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0040
+  rotate: false
+  xy: 982, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0041
   rotate: false
-  xy: 1110, 1562
+  xy: 1242, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0050
+outline_hqframe0048
   rotate: false
-  xy: 2, 522
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -326,9 +333,9 @@ outline_hqframe0053
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0056
+outline_hqframe0055
   rotate: false
-  xy: 1562, 522
+  xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -360,126 +367,119 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-factoryFrame0022
-  rotate: false
-  xy: 262, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 factoryOFFframe
   rotate: false
-  xy: 522, 522
+  xy: 1042, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0055
+genframe0019
   rotate: false
-  xy: 2, 1562
+  xy: 1302, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0039
+  rotate: false
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0057
   rotate: false
-  xy: 522, 1562
+  xy: 262, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0058
   rotate: false
-  xy: 782, 1562
+  xy: 522, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0059
   rotate: false
-  xy: 1042, 1562
+  xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0060
   rotate: false
-  xy: 1562, 1042
+  xy: 1302, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0061
   rotate: false
-  xy: 2, 782
+  xy: 1562, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0062
   rotate: false
-  xy: 262, 782
+  xy: 2, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0063
   rotate: false
-  xy: 522, 782
+  xy: 262, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0064
   rotate: false
-  xy: 782, 782
+  xy: 522, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0065
   rotate: false
-  xy: 1042, 782
+  xy: 782, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0066
   rotate: false
-  xy: 1302, 782
+  xy: 1042, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0067
   rotate: false
-  xy: 1562, 782
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0068
   rotate: false
-  xy: 2, 522
+  xy: 1562, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0069
   rotate: false
-  xy: 262, 522
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0070
-  rotate: false
-  xy: 1302, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0071
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -488,75 +488,61 @@ genframe0071
   index: -1
 hqframe0020
   rotate: false
-  xy: 1302, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0021
-  rotate: false
-  xy: 1562, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0023
-  rotate: false
-  xy: 262, 1302
+  xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0024
   rotate: false
-  xy: 522, 1302
+  xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0026
   rotate: false
-  xy: 1042, 1302
+  xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0027
   rotate: false
-  xy: 1302, 1302
+  xy: 1042, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0028
   rotate: false
-  xy: 1562, 1302
+  xy: 1302, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0029
   rotate: false
-  xy: 2, 1042
+  xy: 1562, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0031
   rotate: false
-  xy: 782, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0032
-  rotate: false
-  xy: 1042, 522
+  xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0034
+  rotate: false
+  xy: 1302, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0035
   rotate: false
   xy: 1562, 522
   size: 256, 256
@@ -565,63 +551,56 @@ hqframe0034
   index: -1
 hqframe0036
   rotate: false
-  xy: 262, 262
+  xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0037
   rotate: false
-  xy: 522, 262
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0039
   rotate: false
-  xy: 1042, 262
+  xy: 782, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0050
   rotate: false
-  xy: 782, 262
+  xy: 522, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0052
   rotate: false
-  xy: 262, 1042
+  xy: 2, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-mineOFF
+outline_factoryFrame0008
   rotate: false
-  xy: 522, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0029
-  rotate: false
-  xy: 1302, 1042
+  xy: 262, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0031
   rotate: false
-  xy: 782, 1042
+  xy: 522, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0032
   rotate: false
-  xy: 1042, 2
+  xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -633,13 +612,6 @@ outline_factoryFrame0034
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0028
-  rotate: false
-  xy: 2, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 outline_genframe0050
   rotate: false
   xy: 1562, 262
@@ -647,42 +619,77 @@ outline_genframe0050
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0052
+outline_genframe0058
   rotate: false
-  xy: 522, 1042
+  xy: 262, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0056
+outline_hqframe0036
   rotate: false
-  xy: 782, 1302
+  xy: 2, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0042
   rotate: false
-  xy: 1302, 262
+  xy: 1042, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0044
+  rotate: false
+  xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0046
   rotate: false
-  xy: 1042, 1042
+  xy: 782, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0050
+  rotate: false
+  xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0054
   rotate: false
-  xy: 782, 2
+  xy: 1042, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0056
+  rotate: false
+  xy: 262, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0062
+  rotate: false
+  xy: 1302, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0063
+  rotate: false
+  xy: 1562, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0064
   rotate: false
   xy: 2, 1302
   size: 256, 256
@@ -691,14 +698,14 @@ outline_hqframe0063
   index: -1
 outline_hqframe0066
   rotate: false
-  xy: 262, 2
+  xy: 782, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0068
   rotate: false
-  xy: 1302, 522
+  xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -709,9 +716,9 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-factoryFrame0016
+factoryFrame0035
   rotate: false
-  xy: 2, 1302
+  xy: 2, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -723,9 +730,16 @@ factoryFrame0037
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0072
+genframe0071
   rotate: false
   xy: 2, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0072
+  rotate: false
+  xy: 262, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -739,140 +753,126 @@ hqframe0012
   index: -1
 hqframe0016
   rotate: false
-  xy: 1042, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0025
-  rotate: false
-  xy: 1042, 2
+  xy: 1302, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0041
   rotate: false
-  xy: 522, 1302
+  xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0042
   rotate: false
-  xy: 782, 1302
+  xy: 1042, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0043
   rotate: false
-  xy: 1042, 1302
+  xy: 1302, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0044
   rotate: false
-  xy: 1302, 1302
+  xy: 1562, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0045
   rotate: false
-  xy: 1562, 1302
+  xy: 2, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0046
   rotate: false
-  xy: 2, 1042
+  xy: 262, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0047
   rotate: false
-  xy: 262, 1042
+  xy: 522, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0049
+hqframe0048
   rotate: false
   xy: 782, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
+hqframe0049
+  rotate: false
+  xy: 1042, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 hqframe0051
   rotate: false
-  xy: 1042, 522
+  xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0053
   rotate: false
-  xy: 1562, 522
+  xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0054
   rotate: false
-  xy: 2, 262
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0055
   rotate: false
-  xy: 262, 262
+  xy: 522, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0056
   rotate: false
-  xy: 522, 262
+  xy: 782, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0058
   rotate: false
-  xy: 1042, 262
+  xy: 1302, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0059
   rotate: false
-  xy: 1302, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0005
-  rotate: false
-  xy: 782, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0010
-  rotate: false
-  xy: 1562, 1562
+  xy: 1562, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0014
   rotate: false
-  xy: 2, 2
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -884,14 +884,14 @@ outline_factoryFrame0016
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0028
+outline_factoryFrame0018
   rotate: false
-  xy: 1562, 262
+  xy: 1562, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0030
+outline_factoryFrame0028
   rotate: false
   xy: 262, 2
   size: 256, 256
@@ -907,98 +907,119 @@ outline_factoryFrame0037
   index: -1
 outline_factoryFrame0040
   rotate: false
-  xy: 782, 262
+  xy: 1042, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0041
   rotate: false
-  xy: 262, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryOFFframe
-  rotate: false
-  xy: 1302, 1042
+  xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0000
   rotate: false
-  xy: 522, 1562
+  xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0001
   rotate: false
-  xy: 782, 1562
+  xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0002
   rotate: false
-  xy: 1042, 1562
+  xy: 1302, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0003
   rotate: false
-  xy: 1302, 1562
+  xy: 1562, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0004
+  rotate: false
+  xy: 2, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0005
+  rotate: false
+  xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0010
   rotate: false
-  xy: 1042, 782
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0011
   rotate: false
-  xy: 1302, 782
+  xy: 1562, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0012
   rotate: false
-  xy: 1562, 782
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0013
   rotate: false
-  xy: 2, 522
+  xy: 262, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0015
   rotate: false
-  xy: 522, 522
+  xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0018
   rotate: false
-  xy: 1302, 522
+  xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0042
+outline_genframe0051
   rotate: false
-  xy: 262, 1562
+  xy: 1042, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0052
+  rotate: false
+  xy: 522, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0056
+  rotate: false
+  xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1012,14 +1033,7 @@ outline_genframe0068
   index: -1
 outline_genframe0070
   rotate: false
-  xy: 262, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0072
-  rotate: false
-  xy: 1562, 1042
+  xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1033,21 +1047,14 @@ outline_hqframe0008
   index: -1
 outline_hqframe0014
   rotate: false
-  xy: 522, 2
+  xy: 782, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0044
+outline_hqframe0071
   rotate: false
-  xy: 522, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0062
-  rotate: false
-  xy: 782, 522
+  xy: 1042, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1058,44 +1065,58 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-factoryFrame0048
-  rotate: false
-  xy: 2, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 genframe0004
   rotate: false
-  xy: 1302, 262
+  xy: 1042, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0024
+genframe0008
   rotate: false
-  xy: 1042, 262
+  xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0025
   rotate: false
-  xy: 1302, 522
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0027
+genframe0056
   rotate: false
-  xy: 1562, 2
+  xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0033
+hqframe0021
   rotate: false
-  xy: 2, 262
+  xy: 2, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0023
+  rotate: false
+  xy: 1562, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0040
+  rotate: false
+  xy: 2, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0057
+  rotate: false
+  xy: 262, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1110,20 +1131,6 @@ hqframe0060
 hqframe0061
   rotate: false
   xy: 262, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0062
-  rotate: false
-  xy: 522, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0063
-  rotate: false
-  xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1172,28 +1179,35 @@ hqframe0069
   index: -1
 hqframe0070
   rotate: false
-  xy: 2, 522
+  xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0071
   rotate: false
-  xy: 262, 522
+  xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0018
+mineON
   rotate: false
-  xy: 522, 522
+  xy: 1042, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0010
+  rotate: false
+  xy: 1302, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0020
   rotate: false
-  xy: 522, 262
+  xy: 1302, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1205,9 +1219,16 @@ outline_factoryFrame0022
   orig: 256, 256
   offset: 0, 0
   index: -1
+outline_factoryFrame0043
+  rotate: false
+  xy: 782, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 outline_factoryFrame0045
   rotate: false
-  xy: 262, 262
+  xy: 1042, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1233,13 +1254,6 @@ outline_genframe0022
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0023
-  rotate: false
-  xy: 1042, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 outline_genframe0024
   rotate: false
   xy: 1302, 1562
@@ -1254,128 +1268,128 @@ outline_genframe0025
   orig: 256, 256
   offset: 0, 0
   index: -1
+outline_genframe0028
+  rotate: false
+  xy: 522, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0029
+  rotate: false
+  xy: 782, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 outline_genframe0030
-  rotate: false
-  xy: 262, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0031
-  rotate: false
-  xy: 522, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0032
   rotate: false
   xy: 782, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0033
+outline_genframe0031
   rotate: false
-  xy: 1562, 1042
+  xy: 1042, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0034
+outline_genframe0032
   rotate: false
   xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
+outline_genframe0033
+  rotate: false
+  xy: 262, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0035
+  rotate: false
+  xy: 262, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0038
+  rotate: false
+  xy: 1042, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 outline_genframe0039
   rotate: false
-  xy: 782, 522
+  xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0040
   rotate: false
-  xy: 1562, 262
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0041
   rotate: false
-  xy: 2, 2
+  xy: 782, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0043
   rotate: false
-  xy: 262, 2
+  xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0044
   rotate: false
-  xy: 522, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0045
-  rotate: false
-  xy: 782, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0046
-  rotate: false
-  xy: 1042, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0047
-  rotate: false
-  xy: 1302, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0062
-  rotate: false
-  xy: 1562, 782
+  xy: 1562, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0066
   rotate: false
-  xy: 1042, 1042
+  xy: 1562, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0010
+  rotate: false
+  xy: 522, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0021
   rotate: false
-  xy: 1302, 1042
+  xy: 2, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0045
   rotate: false
-  xy: 1562, 522
+  xy: 522, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0052
   rotate: false
-  xy: 782, 262
+  xy: 1562, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1389,14 +1403,7 @@ outline_hqframe0060
   index: -1
 outline_hqframe0069
   rotate: false
-  xy: 1042, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0071
-  rotate: false
-  xy: 1042, 782
+  xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1409,42 +1416,49 @@ filter: Nearest,Nearest
 repeat: none
 creepergenOFFframe
   rotate: false
-  xy: 782, 522
+  xy: 2, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+creepergenONframe
+  rotate: false
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0000
   rotate: false
-  xy: 262, 1562
+  xy: 1562, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0002
   rotate: false
-  xy: 782, 1562
+  xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0003
   rotate: false
-  xy: 1042, 1562
+  xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0004
   rotate: false
-  xy: 1302, 1562
+  xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0005
   rotate: false
-  xy: 1562, 1562
+  xy: 1042, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1458,208 +1472,222 @@ factoryFrame0006
   index: -1
 factoryFrame0007
   rotate: false
-  xy: 262, 1302
+  xy: 1562, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0008
   rotate: false
-  xy: 522, 1302
+  xy: 2, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0011
-  rotate: false
-  xy: 1562, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0012
-  rotate: false
-  xy: 2, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0013
-  rotate: false
-  xy: 262, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0014
+factoryFrame0010
   rotate: false
   xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0017
+factoryFrame0011
   rotate: false
-  xy: 1302, 522
+  xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0018
-  rotate: false
-  xy: 1562, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0019
-  rotate: false
-  xy: 2, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0020
-  rotate: false
-  xy: 1302, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0021
-  rotate: false
-  xy: 1562, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0030
-  rotate: false
-  xy: 2, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0037
-  rotate: false
-  xy: 782, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0015
-  rotate: false
-  xy: 2, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0038
-  rotate: false
-  xy: 262, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0015
-  rotate: false
-  xy: 782, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0024
-  rotate: false
-  xy: 262, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0027
-  rotate: false
-  xy: 262, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0033
-  rotate: false
-  xy: 522, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0038
-  rotate: false
-  xy: 1302, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0042
-  rotate: false
-  xy: 262, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0007
-  rotate: false
-  xy: 522, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0038
+factoryFrame0012
   rotate: false
   xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0048
+factoryFrame0013
   rotate: false
-  xy: 1302, 262
+  xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0051
+factoryFrame0014
   rotate: false
-  xy: 522, 1042
+  xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0053
+factoryFrame0016
   rotate: false
-  xy: 1042, 1042
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0054
+factoryFrame0017
   rotate: false
-  xy: 1302, 1042
+  xy: 522, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0055
+factoryFrame0018
+  rotate: false
+  xy: 782, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0033
+  rotate: false
+  xy: 1302, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0007
+  rotate: false
+  xy: 1562, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0046
+  rotate: false
+  xy: 262, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0005
+  rotate: false
+  xy: 1562, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0033
+  rotate: false
+  xy: 1042, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0063
+  rotate: false
+  xy: 1302, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0072
   rotate: false
   xy: 1562, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0058
+outline_factoryFrame0006
+  rotate: false
+  xy: 2, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0024
+  rotate: false
+  xy: 1302, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0033
+  rotate: false
+  xy: 2, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0042
+  rotate: false
+  xy: 1302, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryOFFframe
+  rotate: false
+  xy: 782, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0007
+  rotate: false
+  xy: 1302, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0023
+  rotate: false
+  xy: 1042, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0045
+  rotate: false
+  xy: 2, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0046
+  rotate: false
+  xy: 262, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0047
+  rotate: false
+  xy: 522, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0048
+  rotate: false
+  xy: 782, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0049
+  rotate: false
+  xy: 1042, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0053
+  rotate: false
+  xy: 262, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0054
   rotate: false
   xy: 522, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0059
+outline_genframe0055
   rotate: false
   xy: 782, 782
   size: 256, 256
@@ -1668,84 +1696,63 @@ outline_genframe0059
   index: -1
 outline_genframe0060
   rotate: false
-  xy: 782, 262
+  xy: 2, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0061
   rotate: false
-  xy: 1042, 262
+  xy: 262, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0063
-  rotate: false
-  xy: 1562, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0065
-  rotate: false
-  xy: 2, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0067
+outline_genframe0062
   rotate: false
   xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0069
+outline_genframe0063
+  rotate: false
+  xy: 782, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0065
   rotate: false
   xy: 1042, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0010
+outline_genframe0067
   rotate: false
-  xy: 2, 1302
+  xy: 1562, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0012
   rotate: false
-  xy: 1042, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0040
-  rotate: false
-  xy: 782, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0059
-  rotate: false
-  xy: 1562, 1302
+  xy: 522, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0061
   rotate: false
-  xy: 2, 1042
+  xy: 1042, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0070
   rotate: false
-  xy: 1042, 782
+  xy: 262, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1758,343 +1765,343 @@ filter: Nearest,Nearest
 repeat: none
 factoryFrame0015
   rotate: false
-  xy: 782, 522
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0023
-  rotate: false
-  xy: 262, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0024
+factoryFrame0020
   rotate: false
   xy: 522, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0025
+factoryFrame0021
   rotate: false
   xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0027
-  rotate: false
-  xy: 1302, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0028
-  rotate: false
-  xy: 1562, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0029
-  rotate: false
-  xy: 2, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0031
-  rotate: false
-  xy: 262, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0032
-  rotate: false
-  xy: 522, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0033
-  rotate: false
-  xy: 782, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0034
-  rotate: false
-  xy: 1042, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0035
-  rotate: false
-  xy: 1302, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0039
-  rotate: false
-  xy: 522, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0040
-  rotate: false
-  xy: 1302, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0042
-  rotate: false
-  xy: 2, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0043
-  rotate: false
-  xy: 782, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0044
-  rotate: false
-  xy: 522, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0045
-  rotate: false
-  xy: 1302, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0046
-  rotate: false
-  xy: 1042, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0047
-  rotate: false
-  xy: 1302, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0013
-  rotate: false
-  xy: 2, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0015
-  rotate: false
-  xy: 782, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0047
-  rotate: false
-  xy: 1042, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0049
-  rotate: false
-  xy: 1302, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0022
-  rotate: false
-  xy: 2, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0030
-  rotate: false
-  xy: 1042, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0048
-  rotate: false
-  xy: 1042, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0057
-  rotate: false
-  xy: 262, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-mineON
-  rotate: false
-  xy: 1562, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0001
-  rotate: false
-  xy: 1562, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0003
-  rotate: false
-  xy: 262, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0007
-  rotate: false
-  xy: 2, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0008
-  rotate: false
-  xy: 262, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0009
-  rotate: false
-  xy: 522, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0012
-  rotate: false
-  xy: 1562, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0036
-  rotate: false
-  xy: 522, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0005
-  rotate: false
-  xy: 2, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0006
-  rotate: false
-  xy: 1042, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0009
-  rotate: false
-  xy: 522, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0026
-  rotate: false
-  xy: 782, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0027
-  rotate: false
-  xy: 2, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0029
-  rotate: false
-  xy: 1562, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0036
-  rotate: false
-  xy: 1302, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0057
-  rotate: false
-  xy: 1562, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0020
-  rotate: false
-  xy: 782, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0036
-  rotate: false
-  xy: 1562, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0037
-  rotate: false
-  xy: 262, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0064
+factoryFrame0022
   rotate: false
   xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
+factoryFrame0023
+  rotate: false
+  xy: 1302, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0024
+  rotate: false
+  xy: 1562, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0025
+  rotate: false
+  xy: 2, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0026
+  rotate: false
+  xy: 262, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0027
+  rotate: false
+  xy: 522, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0028
+  rotate: false
+  xy: 782, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0029
+  rotate: false
+  xy: 1042, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0031
+  rotate: false
+  xy: 1562, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0034
+  rotate: false
+  xy: 522, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0036
+  rotate: false
+  xy: 1042, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0039
+  rotate: false
+  xy: 2, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0040
+  rotate: false
+  xy: 522, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0041
+  rotate: false
+  xy: 782, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0042
+  rotate: false
+  xy: 1042, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0043
+  rotate: false
+  xy: 2, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0044
+  rotate: false
+  xy: 1562, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0045
+  rotate: false
+  xy: 782, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0035
+  rotate: false
+  xy: 1562, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0043
+  rotate: false
+  xy: 262, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0047
+  rotate: false
+  xy: 522, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0003
+  rotate: false
+  xy: 1302, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0009
+  rotate: false
+  xy: 522, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0022
+  rotate: false
+  xy: 1302, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0030
+  rotate: false
+  xy: 262, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0032
+  rotate: false
+  xy: 1042, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0001
+  rotate: false
+  xy: 1042, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0002
+  rotate: false
+  xy: 2, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0003
+  rotate: false
+  xy: 262, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0005
+  rotate: false
+  xy: 782, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0007
+  rotate: false
+  xy: 1302, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0009
+  rotate: false
+  xy: 1562, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0030
+  rotate: false
+  xy: 262, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0036
+  rotate: false
+  xy: 2, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0006
+  rotate: false
+  xy: 522, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0009
+  rotate: false
+  xy: 1562, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0026
+  rotate: false
+  xy: 2, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0027
+  rotate: false
+  xy: 1302, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0034
+  rotate: false
+  xy: 782, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0036
+  rotate: false
+  xy: 782, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0057
+  rotate: false
+  xy: 1042, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0069
+  rotate: false
+  xy: 262, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0072
+  rotate: false
+  xy: 1562, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0037
+  rotate: false
+  xy: 1302, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0059
+  rotate: false
+  xy: 2, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 outline_hqframe0065
   rotate: false
-  xy: 262, 262
+  xy: 1302, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2105,16 +2112,30 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-creepergenONframe
+factoryFrame0019
   rotate: false
-  xy: 2, 1302
+  xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0041
+factoryFrame0046
   rotate: false
-  xy: 1042, 1302
+  xy: 262, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0047
+  rotate: false
+  xy: 522, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0048
+  rotate: false
+  xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2129,6 +2150,13 @@ genframe0000
 genframe0001
   rotate: false
   xy: 782, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0002
+  rotate: false
+  xy: 1042, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2154,20 +2182,6 @@ genframe0006
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0007
-  rotate: false
-  xy: 522, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0008
-  rotate: false
-  xy: 782, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 genframe0009
   rotate: false
   xy: 1042, 782
@@ -2177,35 +2191,42 @@ genframe0009
   index: -1
 genframe0010
   rotate: false
-  xy: 2, 2
+  xy: 262, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0011
   rotate: false
-  xy: 262, 2
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0014
+genframe0013
   rotate: false
   xy: 1042, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0016
+genframe0014
+  rotate: false
+  xy: 1302, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+genframe0015
   rotate: false
   xy: 1562, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0043
+hqframe0014
   rotate: false
-  xy: 522, 1302
+  xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2213,20 +2234,6 @@ genframe0043
 hqframe0019
   rotate: false
   xy: 1302, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0035
-  rotate: false
-  xy: 262, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0072
-  rotate: false
-  xy: 1562, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2245,16 +2252,16 @@ outline_factoryFrame0004
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0006
+outline_factoryFrame0011
   rotate: false
-  xy: 1302, 2
+  xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0011
+outline_factoryFrame0012
   rotate: false
-  xy: 1042, 1562
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2266,9 +2273,16 @@ outline_factoryFrame0013
   orig: 256, 256
   offset: 0, 0
   index: -1
+outline_factoryFrame0015
+  rotate: false
+  xy: 2, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 outline_factoryFrame0017
   rotate: false
-  xy: 1302, 1302
+  xy: 1562, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2280,9 +2294,30 @@ outline_factoryFrame0025
   orig: 256, 256
   offset: 0, 0
   index: -1
+outline_factoryFrame0026
+  rotate: false
+  xy: 522, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0027
+  rotate: false
+  xy: 782, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0029
+  rotate: false
+  xy: 1302, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 outline_factoryFrame0046
   rotate: false
-  xy: 782, 1302
+  xy: 1302, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2294,16 +2329,9 @@ outline_factoryFrame0048
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0004
-  rotate: false
-  xy: 782, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 outline_genframe0014
   rotate: false
-  xy: 2, 262
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2315,9 +2343,9 @@ outline_genframe0019
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0049
+outline_genframe0059
   rotate: false
-  xy: 1042, 1042
+  xy: 2, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2331,28 +2359,28 @@ outline_genframe0071
   index: -1
 outline_hqframe0001
   rotate: false
-  xy: 2, 1562
+  xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0002
   rotate: false
-  xy: 522, 2
+  xy: 782, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0003
   rotate: false
-  xy: 522, 1562
+  xy: 1562, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0004
   rotate: false
-  xy: 782, 1562
+  xy: 2, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2364,37 +2392,16 @@ outline_hqframe0005
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0006
-  rotate: false
-  xy: 1302, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 outline_hqframe0007
   rotate: false
-  xy: 1562, 1562
+  xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0009
   rotate: false
-  xy: 262, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0011
-  rotate: false
-  xy: 1302, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0013
-  rotate: false
-  xy: 2, 522
+  xy: 1042, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2443,7 +2450,7 @@ outline_hqframe0047
   index: -1
 outline_hqframe0049
   rotate: false
-  xy: 262, 1562
+  xy: 1302, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2454,42 +2461,35 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-factoryFrame0026
+factoryFrame0030
   rotate: false
-  xy: 1562, 1302
+  xy: 782, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-factoryFrame0036
+factoryFrame0032
   rotate: false
-  xy: 1562, 782
+  xy: 1042, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0012
-  rotate: false
-  xy: 782, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0017
+genframe0016
   rotate: false
   xy: 2, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0018
+genframe0017
   rotate: false
   xy: 262, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-genframe0019
+genframe0018
   rotate: false
   xy: 522, 1562
   size: 256, 256
@@ -2498,301 +2498,308 @@ genframe0019
   index: -1
 genframe0020
   rotate: false
-  xy: 782, 1042
+  xy: 1042, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0021
   rotate: false
-  xy: 1042, 1042
+  xy: 1302, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0022
   rotate: false
-  xy: 1302, 1042
+  xy: 1562, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0023
   rotate: false
-  xy: 1562, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0026
-  rotate: false
-  xy: 522, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0028
-  rotate: false
-  xy: 1042, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0029
-  rotate: false
-  xy: 1302, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0030
-  rotate: false
-  xy: 1562, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0031
-  rotate: false
-  xy: 2, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0032
-  rotate: false
-  xy: 262, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0033
-  rotate: false
-  xy: 522, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0034
-  rotate: false
-  xy: 782, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0035
-  rotate: false
-  xy: 1042, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genframe0056
-  rotate: false
-  xy: 1562, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0000
-  rotate: false
-  xy: 1302, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0002
-  rotate: false
-  xy: 262, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0019
-  rotate: false
-  xy: 1302, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0021
-  rotate: false
-  xy: 522, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0023
-  rotate: false
-  xy: 782, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0039
-  rotate: false
-  xy: 782, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0043
-  rotate: false
   xy: 2, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0044
+genframe0024
   rotate: false
   xy: 262, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0017
+genframe0026
   rotate: false
-  xy: 1042, 522
+  xy: 782, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0035
+genframe0027
   rotate: false
-  xy: 522, 1042
+  xy: 1042, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0022
+genframe0028
   rotate: false
-  xy: 1042, 1562
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0023
+genframe0029
   rotate: false
-  xy: 1302, 1562
+  xy: 1562, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0024
+genframe0030
   rotate: false
-  xy: 1562, 1562
+  xy: 2, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0025
+genframe0031
   rotate: false
-  xy: 2, 1302
+  xy: 262, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0026
+genframe0032
   rotate: false
-  xy: 262, 1302
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0028
+genframe0033
   rotate: false
-  xy: 782, 1302
+  xy: 782, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0029
+genframe0034
   rotate: false
-  xy: 1042, 1302
+  xy: 1042, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0030
-  rotate: false
-  xy: 1042, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0031
-  rotate: false
-  xy: 1302, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0032
-  rotate: false
-  xy: 2, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0033
-  rotate: false
-  xy: 262, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0034
-  rotate: false
-  xy: 522, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0035
-  rotate: false
-  xy: 782, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0038
-  rotate: false
-  xy: 1562, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0039
-  rotate: false
-  xy: 2, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0043
-  rotate: false
-  xy: 262, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0051
+hqframe0025
   rotate: false
   xy: 2, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0055
+hqframe0062
+  rotate: false
+  xy: 782, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0000
+  rotate: false
+  xy: 1562, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0019
+  rotate: false
+  xy: 1562, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0021
+  rotate: false
+  xy: 782, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0038
+  rotate: false
+  xy: 1562, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0039
+  rotate: false
+  xy: 1042, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0044
+  rotate: false
+  xy: 522, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0017
+  rotate: false
+  xy: 1302, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0042
+  rotate: false
+  xy: 1302, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0020
+  rotate: false
+  xy: 782, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0022
+  rotate: false
+  xy: 1302, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0023
+  rotate: false
+  xy: 1562, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0024
+  rotate: false
+  xy: 2, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0025
+  rotate: false
+  xy: 262, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0026
   rotate: false
   xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0067
+outline_hqframe0027
+  rotate: false
+  xy: 782, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0028
+  rotate: false
+  xy: 1042, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0029
+  rotate: false
+  xy: 1302, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0030
   rotate: false
   xy: 1302, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0031
+  rotate: false
+  xy: 2, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0032
+  rotate: false
+  xy: 262, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0033
+  rotate: false
+  xy: 522, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0034
+  rotate: false
+  xy: 522, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0035
+  rotate: false
+  xy: 1042, 522
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0038
+  rotate: false
+  xy: 2, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0039
+  rotate: false
+  xy: 262, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0043
+  rotate: false
+  xy: 522, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0051
+  rotate: false
+  xy: 262, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0067
+  rotate: false
+  xy: 1562, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2805,14 +2812,21 @@ filter: Nearest,Nearest
 repeat: none
 creepergenPreview512
   rotate: false
-  xy: 2, 262
+  xy: 518, 1294
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
+factoryFrame0009
+  rotate: false
+  xy: 2, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 factoryPreview512
   rotate: false
-  xy: 2, 778
+  xy: 518, 778
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
@@ -2824,30 +2838,23 @@ generatorPreview512
   orig: 512, 512
   offset: 0, 0
   index: -1
-hqPreview512
-  rotate: false
-  xy: 518, 778
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-hqframe0003
+genframe0012
   rotate: false
   xy: 1034, 1034
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0040
+hqPreview512
   rotate: false
-  xy: 518, 518
-  size: 256, 256
-  orig: 256, 256
+  xy: 2, 262
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
 minePreview512
   rotate: false
-  xy: 518, 1294
+  xy: 2, 778
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
@@ -2859,9 +2866,9 @@ nodePreview512
   orig: 512, 512
   offset: 0, 0
   index: -1
-outline_hqframe0048
+outline_hqframe0006
   rotate: false
-  xy: 2, 2
+  xy: 518, 518
   size: 256, 256
   orig: 256, 256
   offset: 0, 0

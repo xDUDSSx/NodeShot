@@ -34,8 +34,8 @@ public class Chunk {
 	int visionProviderNumber = 0;
 	
 	public static float active = 0f;
-	public static float semiactive = 0.3f;
-	public static float deactivated = 0.5f;
+	public static float semiactive = 0.2f;
+	public static float deactivated = 0.35f;
 	
 	boolean borderChunk = false;
 	
