@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -36,6 +37,7 @@ public class MenuScreen implements Screen {
     float aspectRatio;
     
     public static String ver;
+    public static String subver;
     
     private SpriteBatch batch;
     protected Stage stage;
@@ -47,13 +49,13 @@ public class MenuScreen implements Screen {
     Table mainTable;
     
     Label version;
+    Label subVersion;
+    Label credits;
+    
     Label emptyLabel;
     
     TextButton playButton;
-    TextButton sendButton;
     TextButton exitButton;
-    TextButton generateButton;
-    TextButton closeButton;
     
     ShapeRenderer sR;
     SpriteBatch b;
@@ -90,14 +92,13 @@ public class MenuScreen implements Screen {
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
 
-        version = new Label(ver + " - ALPHA", skin, "font30");        
+        version = new Label(ver + " - ALPHA", skin, "font30");       
+        subVersion = new Label(subver, skin, "font15");
+        credits = new Label("A game by DUDSS (Dan Rakusan)", skin, "font15");
         emptyLabel = new Label("", skin, "font30");
         
         playButton = new TextButton("Start", skin, "hoverfont60");
-        sendButton = new TextButton("Send", skin, "hoverfont30");
         exitButton = new TextButton("Exit", skin, "hoverfont60");
-        generateButton = new TextButton("Generate terrain", skin, "hoverfont30");
-        closeButton = new TextButton("Close node", skin, "hoverfont30");
 
         logo = new Image(logoTex);
 
@@ -106,7 +107,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        //Stage should control input:
         Gdx.input.setInputProcessor(stage);
 
         sR = new ShapeRenderer();
@@ -117,9 +117,8 @@ public class MenuScreen implements Screen {
         //Create Table
         mainTable = new Table();
         
-        mainTable.setSize((float)(Gdx.graphics.getWidth()) * 0.5f, Gdx.graphics.getHeight() * 0.9f);
-        mainTable.top();
-        //mainTable.debugAll();        
+        mainTable.setSize((float)(Gdx.graphics.getWidth()) * 0.5f, Gdx.graphics.getHeight() * 1f);
+        mainTable.top();      
         mainTable.setPosition((Gdx.graphics.getWidth()) * 0.25f, 100);
         
         //Add buttons to table
@@ -127,15 +126,21 @@ public class MenuScreen implements Screen {
         //logo.setScale(0.6f);
         mainTable.add(logo).fill(true).colspan(2);
         mainTable.row();
-        mainTable.add(version).pad(10).padTop(4).center().fill(true);
+        mainTable.add(version).pad(10).padTop(4).padLeft(1).center().fill(true);
+        mainTable.row();
+        mainTable.add(subVersion).pad(1).left().fill(true);
         mainTable.row();
         mainTable.add(playButton).pad(10).colspan(2).fill(true).padTop(60);
         mainTable.row();
         mainTable.add(exitButton).pad(10).colspan(2).fill(true);
-        mainTable.row();
+        // mainTable.row();;
+        // mainTable.add(credits).pad(20).center().expandX();
+        credits.setAlignment(Align.bottom);
+        credits.setPosition(Gdx.graphics.getWidth() * 0.5f - (credits.getWidth()/2), 10);
         
         //Add table to stage
         stage.addActor(mainTable);
+        stage.addActor(credits);
         
         if (GameScreen.startedOnce) {
         	playButton.setText("Resume");
@@ -151,14 +156,7 @@ public class MenuScreen implements Screen {
                 	GameScreen.startedOnce = true;
                 }
             }
-        });
-        sendButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {              
-            	//FREE BUTTON
-            }
-        });
-        
+        });            
         exitButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {

@@ -268,5 +268,9 @@ public class Base {
 	public static float range(float OldValue, float OldMin, float OldMax, float NewMin, float NewMax) {
 		return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin;
 	}
+	
+	public static float angleDist(float a1, float a2) {
+		return Math.abs((Math.abs((a1 - a2) + 180) % 360) - 180);
+	}
 }
 

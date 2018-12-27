@@ -16,9 +16,11 @@ public class DesktopLauncher {
 	 * v5.0 - corruption optimisation update
 	 * v5.1 - fog of war update
 	 * v6.0 - building update
-	 * v6.1 - package system updates
+	 * v6.1 - package system update
+	 * v6.2 - build mode interface update
+	 * v6.3 - turret update
 	 * */
-	public static final String ver = "v6.1";
+	public static final String ver = "v6.3";
 	
 	/**The main method*/
 	public static void main (String[] arg) {
@@ -34,6 +36,9 @@ public class DesktopLauncher {
 		
 		//Dialogs.showErrorDialog(GameScreen.stage, "A runtime error occured.", ex);
 		
+		MenuScreen.ver = ver;
+		MenuScreen.subver = "Turret update";
+		
 		//Uncaught error handling
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
@@ -44,6 +49,5 @@ public class DesktopLauncher {
 		});
 		
 		new LwjglApplication(new BaseClass(), config);
-		MenuScreen.ver = ver;
 	}
 }

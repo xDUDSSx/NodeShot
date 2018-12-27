@@ -75,9 +75,9 @@ public class Importer extends AbstractIOPort {
 
 	@Override
 	public void build() {
-		this.input = new IONode(x + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);	
-		input.setInputSprite();
-		GameScreen.nodelist.add(input);
+		this.ioNode = new IONode(x + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);	
+		ioNode.setInputSprite();
+		GameScreen.nodelist.add(ioNode);
 		
 		importerChunk = GameScreen.chunks.getChunkAtWorldSpace(x, y);
 		

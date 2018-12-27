@@ -8,6 +8,7 @@ import org.dudss.nodeshot.buildings.Exporter;
 import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.buildings.Importer;
+import org.dudss.nodeshot.buildings.Turret;
 import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.buildings.PowerGenerator;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -56,6 +57,8 @@ public class ToolbarMenu extends VisWindow {
 		transfer.addBuildingTile(SpriteLoader.nodeDrawable, "Conveyor", new BuildListener(new NodeBuilding(0, 0)));		
 		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Importer", new BuildListener(new Importer(0, 0)));		
 		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Exporter", new BuildListener(new Exporter(0, 0)));
+		BuildTable weapons = new BuildTable();
+		weapons.addBuildingTile(SpriteLoader.turretDrawable, "Turret", new BuildListener(new Turret(0, 0)));
 		
 		final VisTable buildPanel = new VisTable();
 		VisList<String> buildList = new VisList<String>();
@@ -67,7 +70,7 @@ public class ToolbarMenu extends VisWindow {
                 switch(buildList.getSelected()) {
                 	case "STRUCTURES": buildPanel.add(structures).expand().fill(); break;
                 	case "TRANSFER": buildPanel.add(transfer).expand().fill(); break;
-                	case "WEAPONS": break;
+                	case "WEAPONS": buildPanel.add(weapons).expand().fill(); break;
                 	case "UTILS":  buildPanel.add(utils).expand().fill(); break;
                 }
             }

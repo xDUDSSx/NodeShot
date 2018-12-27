@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-public class NodeBuilding extends AbstractBuilding {
+public class NodeBuilding extends AbstractBuilding implements Connectable {
 	
 	static float width = Base.CHUNK_SIZE*1, height = Base.CHUNK_SIZE*1;
 	

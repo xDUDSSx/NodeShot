@@ -1,15 +1,11 @@
 package org.dudss.nodeshot.ui;
 
-import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.AmmoStorage;
 import org.dudss.nodeshot.buildings.BasicMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.buildings.Turret;
-import org.dudss.nodeshot.buildings.TurretCheat;
-import org.dudss.nodeshot.entities.nodes.ConveyorNode;
-import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.Gdx;
@@ -88,7 +84,6 @@ public class BuildMenu extends Window {
 		TextButton furnaceButton = new TextButton("Furnace", skin, "hoverfont30");		
 		TextButton ammoStorageButton  = new TextButton("Ammo storage", skin, "hoverfont30");	
 		TextButton turretButton = new TextButton("Turret", skin, "hoverfont30");	
-		TextButton turretCheatButton = new TextButton("Turret Unlimited", skin, "hoverfont30");	
 		TextButton creeperGenerator = new TextButton("Creeper Generator", skin, "hoverfont30");	
 		TextButton headquarters = new TextButton("Headquarters", skin, "hoverfont30");	
 		storageButton.setSize(100,100);
@@ -105,7 +100,6 @@ public class BuildMenu extends Window {
 		other.addActor(ammoStorageButton);
 		other.addActor(furnaceButton);
 		other.addActor(turretButton);
-		other.addActor(turretCheatButton);
 		other.addActor(creeperGenerator);
 		
 		other.setVisible(false);
@@ -221,15 +215,6 @@ public class BuildMenu extends Window {
 				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 					GameScreen.buildMode = true;
 					GameScreen.builtBuilding = new Turret(0, 0);
-				}		
-		    }
-	    });
-		turretCheatButton.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {	 		
-				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
-					GameScreen.buildMode = true;
-					GameScreen.builtBuilding = new TurretCheat(0, 0);
 				}		
 		    }
 	    });

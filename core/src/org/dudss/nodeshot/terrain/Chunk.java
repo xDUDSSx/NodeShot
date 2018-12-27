@@ -205,7 +205,7 @@ public class Chunk {
 	/**Returns an {@link AtlasRegion} representing this {@linkplain Chunk}s terrain.*/
 	public AtlasRegionContainer getTerrainTexture() {			
 		AtlasRegionContainer arc = new AtlasRegionContainer();
-				
+		
 		//Draw mine outlines
 		if (this.isOreOutlined) {
 			AtlasRegion outline = resolveOutlineEdges();
@@ -460,6 +460,7 @@ public class Chunk {
 		return null;
 	}
 	
+	/**Returns the appropriate texture for mine ore outlining*/
 	public AtlasRegion resolveOutlineEdges() {
 		if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
 			if (plusy.isOreOutlined() &&
@@ -528,7 +529,7 @@ public class Chunk {
 				minusy.isOreOutlined())  
 			{
 				return SpriteLoader.tileAtlas.findRegion("outlineST");
-			}
+			} else
 				
 			//Tile ends
 			if (plusy.isOreOutlined() == false && 
@@ -567,7 +568,7 @@ public class Chunk {
 				plusy.isOreOutlined() == false)  
 			{ 
 				return SpriteLoader.tileAtlas.findRegion("outlineSingle");
-			}
+			} else
 			
 			if (minusy.isOreOutlined() == false && 
 				plusx.isOreOutlined() && 
@@ -575,7 +576,7 @@ public class Chunk {
 				plusy.isOreOutlined() == false)  
 			{ 
 				return SpriteLoader.tileAtlas.findRegion("outlineYBS");
-			}
+			} else
 			if (minusy.isOreOutlined() && 
 				plusx.isOreOutlined() == false && 
 				minusx.isOreOutlined() == false &&
@@ -741,7 +742,7 @@ public class Chunk {
 				int h1 = (int) plusy.getAbsoluteCreeperLayer();
 				int h2 = (int) plusx.getAbsoluteCreeperLayer();
 				int h3 = (int) minusy.getAbsoluteCreeperLayer();
-				if (plusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0 && minusy.getCreeperLevel() == 0) {
+				if (plusy.getCreeperLevel() == 0 || plusx.getCreeperLevel() == 0 || minusy.getCreeperLevel() == 0) {
 					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrLB"));	
 				} else if ((h1 == h2) && (h2 == h3)) {
 					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrLB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
@@ -762,7 +763,7 @@ public class Chunk {
 				int h1 = (int) plusy.getAbsoluteCreeperLayer();
 				int h2 = (int) minusx.getAbsoluteCreeperLayer();
 				int h3 = (int) minusy.getAbsoluteCreeperLayer();
-				if (plusy.getCreeperLevel() == 0 && minusx.getCreeperLevel() == 0 && minusy.getCreeperLevel() == 0) {
+				if (plusy.getCreeperLevel() == 0 || minusx.getCreeperLevel() == 0 || minusy.getCreeperLevel() == 0) {
 					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrRB"));	
 				} else if ((h1 == h2) && (h2 == h3)) {
 					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrRB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
@@ -783,7 +784,7 @@ public class Chunk {
 				int h1 = (int) minusx.getAbsoluteCreeperLayer();
 				int h2 = (int) plusy.getAbsoluteCreeperLayer();
 				int h3 = (int) plusx.getAbsoluteCreeperLayer();
-				if (plusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0 && minusx.getCreeperLevel() == 0) {
+				if (plusy.getCreeperLevel() == 0 || plusx.getCreeperLevel() == 0 || minusx.getCreeperLevel() == 0) {
 					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTB"));	
 				} else if ((h1 == h2) && (h2 == h3)) {
 					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
@@ -804,7 +805,7 @@ public class Chunk {
 				int h1 = (int) minusx.getAbsoluteCreeperLayer();
 				int h2 = (int) minusy.getAbsoluteCreeperLayer();
 				int h3 = (int) plusx.getAbsoluteCreeperLayer();
-				if (minusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0 && minusx.getCreeperLevel() == 0) {
+				if (minusy.getCreeperLevel() == 0 || plusx.getCreeperLevel() == 0 || minusx.getCreeperLevel() == 0) {
 					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrBB"));	
 				} else if ((h1 == h2) && (h2 == h3)) {
 					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBB"), SpriteLoader.tileAtlas.findRegion("corr32"));									

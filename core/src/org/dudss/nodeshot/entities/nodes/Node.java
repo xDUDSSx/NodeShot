@@ -168,38 +168,42 @@ public class Node extends Sprite implements Entity {
 		return distance;
 	}
 
+	/**Connects this node to the specified target node with an appropriate {@link Connector}.*/
 	public void connectTo(Node targetnode) {
-		if ((connected_to.size() + connected_by.size()) >= this.maxConnections) {
-			// too many connections
-		} else if ((targetnode.connected_to.size() + targetnode.connected_by.size()) >= targetnode.maxConnections) {
-			// too many connections
-		} else {
-			if (!connected_by.contains(targetnode) && !connected_to.contains(targetnode)) {
-				connected_to.add(targetnode);
-				targetnode.connected_by.add(this);
-				connections++;
-				targetnode.connections++;
-				if (targetnode.connections >= targetnode.maxConnections) {
-					targetnode.setConnectable(false);
-				}
-
-				Connector nC = null;
-				if (this instanceof ConveyorNode || targetnode instanceof ConveyorNode || this instanceof IONode || targetnode instanceof IONode) {
-					nC = new Conveyor(this, targetnode);
-				} else {
-					nC = new Connector(this, targetnode);
-				}
-				GameScreen.connectorHandler.addConnector(nC);
-				this.connectors.add(nC);
-				targetnode.connectors.add(nC);
-
+		if (targetnode != null) {
+			if ((connected_to.size() + connected_by.size()) >= this.maxConnections) {
+				// too many connections
+			} else if ((targetnode.connected_to.size() + targetnode.connected_by.size()) >= targetnode.maxConnections) {
+				// too many connections
 			} else {
-				System.out.println("Nodes - " + this.getX() + ":" + this.getY() + " and " + targetnode.getX() + ":"
-						+ targetnode.getY() + " are already connected");
+				if (!connected_by.contains(targetnode) && !connected_to.contains(targetnode)) {
+					connected_to.add(targetnode);
+					targetnode.connected_by.add(this);
+					connections++;
+					targetnode.connections++;
+					if (targetnode.connections >= targetnode.maxConnections) {
+						targetnode.setConnectable(false);
+					}
+	
+					Connector nC = null;
+					if (this instanceof ConveyorNode || targetnode instanceof ConveyorNode || this instanceof IONode || targetnode instanceof IONode) {
+						nC = new Conveyor(this, targetnode);
+					} else {
+						nC = new Connector(this, targetnode);
+					}
+					GameScreen.connectorHandler.addConnector(nC);
+					this.connectors.add(nC);
+					targetnode.connectors.add(nC);
+	
+				} else {
+					System.out.println("Nodes - " + this.getX() + ":" + this.getY() + " and " + targetnode.getX() + ":"
+							+ targetnode.getY() + " are already connected");
+				}
 			}
 		}
 	}
 	
+	@Deprecated
 	public void connectTo(Node targetnode, EntityType eT) {
 		if ((connected_to.size() + connected_by.size()) >= this.maxConnections) {
 			// too many connections
@@ -232,10 +236,12 @@ public class Node extends Sprite implements Entity {
 		}
 	}
 	
+	@Deprecated
 	public int getNumberOfConnections() {
 		return connections;
 	}
 
+	/**Disconnects this node from any connections affiliated with the other {@link Node}.*/
 	public void disconnect(Node node) {
 		this.connected_to.remove(node);
 		this.connections -= 1;
@@ -266,10 +272,12 @@ public class Node extends Sprite implements Entity {
 		}
 	}
 
+	/**Adds this node the the game list of nodes. The node will get rendered and updated by the {@link SimulationThread}.*/
 	public void add() {
 		GameScreen.nodelist.add(this);
 	}
 	
+	/**Removes this node from the game list of nodes and disconnects it from any other connected {@linkplain Node}.*/
 	public void remove() {
 		for (Node n : connected_to) {
 			n.connected_by.remove(this);
@@ -334,18 +342,22 @@ public class Node extends Sprite implements Entity {
 		}
 	}
 
+	@Deprecated
 	public void sendPackage(Node target) {
 		GameScreen.packageHandler.addPath(this, target);
 	}
 
+	@Deprecated
 	public void sendPackage(Node target, Color c) {
 		GameScreen.packageHandler.addPath(this, target, c); 
 	}
 
+	@Deprecated
 	public void sendPackage(Node target, Package p) {
 		GameScreen.packageHandler.addPath(this, target, p);
 	}
 	
+	@Deprecated
 	public void sendPackage(Package p, Conveyor c) {
 		GameScreen.packageHandler.addIndefinitePath(p, c);
 	}

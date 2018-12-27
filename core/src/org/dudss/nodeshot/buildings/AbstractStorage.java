@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**Building that can accept and hold items in a single shared storage pool.*/
-public abstract class AbstractStorage extends AlertableBuilding {	
+public abstract class AbstractStorage extends AlertableBuilding implements Connectable {	
 	IONode ioNode;
 	boolean ioActive = false;
 	
@@ -30,7 +30,7 @@ public abstract class AbstractStorage extends AlertableBuilding {
 	
 	public AbstractStorage(float cx, float cy, float width, float height) {
 		super(cx, cy, width, height);
-		accepted = new ArrayList<ItemType>();				
+		accepted = new ArrayList<ItemType>();		
 	}
 		
 	@Override
@@ -116,7 +116,7 @@ public abstract class AbstractStorage extends AlertableBuilding {
 		storage.clear();
 	}
 	
-	public Node getNode() {
+	public IONode getNode() {
 		return ioNode;
 	}
 

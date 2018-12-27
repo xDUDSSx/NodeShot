@@ -1,8 +1,8 @@
 package org.dudss.nodeshot.entities;
 
-import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
+import org.dudss.nodeshot.terrain.Section;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -23,9 +23,9 @@ public class Bullet extends Sprite implements Entity {
 	float percentage = 0;
 	float speed = 5f;
 	float effectiveSpeed;
-	float damage = 0.6f;
+	float damage = 1f;
 	
-	int radius = 4;
+	float radius = 6.5f;
 	
 	/**A bullet object that travels from point A (turret) to point B (target) at a speed and damages corruption around its target (point B)
 	 * @param x Starting x coordinate.
@@ -71,20 +71,12 @@ public class Bullet extends Sprite implements Entity {
 	
 	/**Called when bullet reaches its target, damages corruption*/
 	protected void explode() {
-		for (int y = (-radius); y < radius; y++) {
-			for (int x = (-radius); x < radius; x++) {
-				Chunk current = GameScreen.chunks.getChunkAtTileSpace((int)(targetCoords.x/Base.CHUNK_SIZE) + x, (int)(targetCoords.y/Base.CHUNK_SIZE) + y); 
-				if (current != null) {
-					//System.out.println(Math.hypot((current.getX() + Base.CHUNK_SIZE/2) - targetCoords.x, (current.getY() + Base.CHUNK_SIZE/2) - targetCoords.y));
-					if (Math.hypot((current.getX() + Base.CHUNK_SIZE/2) - targetCoords.x, (current.getY() + Base.CHUNK_SIZE/2) - targetCoords.y) <= (radius*Base.CHUNK_SIZE)) {
-						current.setCreeperLevel(current.getCreeperLevel() - damage);
-					} 
-				}				
-			}
-		}		
-		int sx = (int)(targetCoords.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-		int sy = (int)(targetCoords.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-		GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], true);
+		for (Chunk c : GameScreen.chunks.getChunksAroundWorldSpacePoint(targetCoords.x, targetCoords.y, radius)) {
+			c.setCreeperLevel(c.getCreeperLevel() - damage);
+		}
+		for (Section s : GameScreen.chunks.getSectionsAroundWorldSpacePoint(targetCoords.x, targetCoords.y)) {
+			GameScreen.chunks.updateSectionMesh(s, true);
+		}
 	}
 	
 	@Override

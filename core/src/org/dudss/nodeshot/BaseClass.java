@@ -37,9 +37,11 @@ public class BaseClass extends Game {
 			
 			errorManager = new ErrorManager();
 			
+			MenuScreen menuScreen = new MenuScreen(this);
+			
 			//Creating game screen
 			mainGameScreen = new GameScreen(this);		
 			//Starting up menu
-			setScreen(new MenuScreen(this));							
+			setScreen(menuScreen);							
 	}
 }

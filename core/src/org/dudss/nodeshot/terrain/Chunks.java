@@ -934,7 +934,7 @@ public class Chunks {
 	}
 	
 	/**Gets the chunks around the world space point in a certain diameter (diameter is in tile space).*/
-	public List<Chunk> getChunksAroundWorldSpacePoint(float x, float y, int diameter) {
+	public List<Chunk> getChunksAroundWorldSpacePoint(float x, float y, float diameter) {
 		List<Chunk> chunksInRadius = new ArrayList<Chunk>();
 		
 		Chunk centerChunk = getChunkAtWorldSpace(x, y);
@@ -952,5 +952,31 @@ public class Chunks {
 		}
 		
 		return chunksInRadius;
+	}
+	
+	/**Gets the closest chunk that has its creeper level above the threshold around the world space point in a certain diameter (diameter is in tile space).*/
+	public Chunk getClosestCorruptionChunkToWorldSpace(float x, float y, float minDiameter, float maxDiameter, float creeperThreshold) {
+		Chunk closestChunk = null;
+		float closestDist = Float.MAX_VALUE;
+		
+		Chunk centerChunk = getChunkAtWorldSpace(x, y);
+		Chunk originChunk = getChunkAtWorldSpace(x - ((maxDiameter/2) * Base.CHUNK_SIZE), y - ((maxDiameter/2) * Base.CHUNK_SIZE));
+	
+		for (int sx = originChunk.ax; sx < originChunk.ax + maxDiameter; sx++) {
+			for (int sy = originChunk.ay; sy < originChunk.ay + maxDiameter; sy++) {
+				Chunk c = GameScreen.chunks.getChunkAtTileSpace(sx, sy);
+				if (c != null) {
+					float dist = (float) Math.hypot(centerChunk.getX() - c.getX(), centerChunk.getY() - c.getY());
+					if (dist <= ((float)(maxDiameter/2f))*Base.CHUNK_SIZE && c.getCreeperLevel() > creeperThreshold) {		
+						if (dist < closestDist && dist > minDiameter) {
+							closestChunk = c;
+							closestDist = dist;
+						}
+					}
+				}
+			}
+		}
+		
+		return closestChunk;
 	}
 }

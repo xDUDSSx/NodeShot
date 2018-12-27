@@ -61,7 +61,7 @@ public class SpriteLoader {
 	public static TextureRegion[] genanimoutlineFrames;
 	public static TextureRegion[] factoryanimFrames;
 	public static TextureRegion[] factoryanimoutlineFrames;
-	
+	public static TextureRegion[] turretFrames;
 	
 	public static TextureRegion creeperGenOnFrame;
 	public static TextureRegion creeperGenOffFrame;
@@ -83,6 +83,7 @@ public class SpriteLoader {
 	public static Drawable importerTopDrawable;
 	public static Drawable mineDrawable;
 	public static Drawable nodeDrawable;
+	public static Drawable turretDrawable;
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
@@ -174,6 +175,17 @@ public class SpriteLoader {
 			factoryanimoutlineFrames[i] = (TextureRegion) hqanimAtlas.findRegion("outline_factoryFrame00" + n);
 		}
 		
+		turretFrames = new TextureRegion[72];
+		for (int i = 0; i < 72; i++) {
+			String n;
+			if (i < 9) {
+				n = "0" + Integer.toString(i);
+			} else {
+				n = Integer.toString(i + 1);
+			}
+			turretFrames[i] = (TextureRegion) hqanimAtlas.findRegion("turretFrame00" + n);
+		}
+		
 		creeperGenOffFrame = hqanimAtlas.findRegion("creepergenOFFframe");
 		creeperGenOnFrame = hqanimAtlas.findRegion("creepergenONframe");
 		
@@ -214,6 +226,10 @@ public class SpriteLoader {
 		mineDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("minePreview512")));
 		mineDrawable.setMinHeight(Base.buildMenuImgSize);
 		mineDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		turretDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("turretPreview512")));
+		turretDrawable.setMinHeight(Base.buildMenuImgSize);
+		turretDrawable.setMinWidth(Base.buildMenuImgSize);
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);

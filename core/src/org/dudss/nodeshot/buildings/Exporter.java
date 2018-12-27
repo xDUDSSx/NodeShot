@@ -47,8 +47,8 @@ public class Exporter extends AbstractIOPort {
 	 * @param isIoStorage Whether the assigned building is a {@link AbstractIOStorage}.
 	 * */
 	public void exportAnItem(boolean isIoStorage) {
-		if (input.getAllConnectedNodes().size() > 0) {
-			if (input.getConnectors().get(0).checkEntrance(input, Base.PACKAGE_BLOCK_RANGE)) {
+		if (ioNode.getAllConnectedNodes().size() > 0) {
+			if (ioNode.getConnectors().get(0).checkEntrance(ioNode, Base.PACKAGE_BLOCK_RANGE)) {
 				Package export;
 				if (isIoStorage) {			
 					AbstractIOStorage ioStorage = (AbstractIOStorage) buildingChunk.getBuilding();
@@ -70,9 +70,9 @@ public class Exporter extends AbstractIOPort {
 
 				if (export != null) {
 					if (export.notSet == true) {
-						export.setParams(input, null);
+						export.setParams(ioNode, null);
 					}
-					this.input.sendIOPackage(export);
+					this.ioNode.sendIOPackage(export);
 					this.nextOperation = SimulationThread.simTick + ioSpeed;
 				}
 			}
@@ -120,9 +120,9 @@ public class Exporter extends AbstractIOPort {
 
 	@Override
 	public void build() {
-		this.input = new IONode(x + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);	
-		input.setOutputSprite();
-		GameScreen.nodelist.add(input);
+		this.ioNode = new IONode(x + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);	
+		ioNode.setOutputSprite();
+		GameScreen.nodelist.add(ioNode);
 		
 		importerChunk = GameScreen.chunks.getChunkAtWorldSpace(x, y);
 		

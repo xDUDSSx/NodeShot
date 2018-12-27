@@ -13,6 +13,8 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.buildings.AbstractIOPort;
+import org.dudss.nodeshot.buildings.BasicMine;
+import org.dudss.nodeshot.buildings.Connectable;
 import org.dudss.nodeshot.buildings.NodeBuilding;
 
 import static org.dudss.nodeshot.screens.GameScreen.*;
@@ -103,10 +105,12 @@ public class DesktopInputProcessor implements InputProcessor {
 								canBeBuilt = false;
 							}
 						}
-						
+												
 						if (canBeBuilt) {
-							GameScreen.builtBuilding.build();							
+							GameScreen.builtBuilding.build();	
+							
 							if (GameScreen.expandingANode && builtBuilding instanceof NodeBuilding) {
+								System.out.println("Connecting");
 								GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)builtBuilding).getNode());
 							}
 							
@@ -137,15 +141,17 @@ public class DesktopInputProcessor implements InputProcessor {
 						}
 					} else 
 					if (expandingANode) {
-						if (GameScreen.chunks.getChunkAtWorldSpace(worldPos.x,  worldPos.y).getBuilding() instanceof NodeBuilding) {
-							if(!((NodeBuilding)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode().getAllConnectedNodes().contains(GameScreen.expandedConveyorNode)) {
-								if(((NodeBuilding)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode() != GameScreen.expandedConveyorNode) {
-									GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode());
-									GameScreen.expandedConveyorNode = ((NodeBuilding)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode();
-								}
-							}			
+						if (GameScreen.chunks.getChunkAtWorldSpace(worldPos.x,  worldPos.y).getBuilding() instanceof Connectable) {
+							if (((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode() != null) {
+								if(!((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode().getAllConnectedNodes().contains(GameScreen.expandedConveyorNode)) {
+									if(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode() != GameScreen.expandedConveyorNode) {
+										GameScreen.expandedConveyorNode.connectTo(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode());
+										GameScreen.expandedConveyorNode = (ConveyorNode) ((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode();
+									}
+								}			
+							}
 						}
-					} 		
+					} 
 				} else {
 					GameScreen.checkHighlights(true);	
 				}

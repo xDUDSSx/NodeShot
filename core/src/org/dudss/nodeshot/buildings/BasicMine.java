@@ -24,6 +24,7 @@ public class BasicMine extends AbstractMine {
 		super(cx, cy);
 		on = new Sprite(SpriteLoader.mineOn);
 		off = new Sprite(SpriteLoader.mineOff);
+		activateIONode(true);
 	}
 
 	public void generate() {

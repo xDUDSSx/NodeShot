@@ -2,16 +2,17 @@ package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.nodes.IONode;
+import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 
 /**An Input/Output building that consists of two tiles and can interact with an {@link AbstractStorage} and its storage.*/
-public abstract class AbstractIOPort extends AlertableBuilding {
+public abstract class AbstractIOPort extends AlertableBuilding implements Connectable {
 	
 	Chunk importerChunk;
 	Chunk buildingChunk;
 	
-	IONode input;
+	IONode ioNode;
 	
 	int ioSpeed = 50;
 	int nextOperation = SimulationThread.simTick + ioSpeed;
@@ -24,13 +25,13 @@ public abstract class AbstractIOPort extends AlertableBuilding {
 	
 	@Override
 	public void update() {
-		input.update();
+		ioNode.update();
 	}
 	
 	@Override
 	public void demolish() {	
 		GameScreen.buildingManager.removeMisc(this);
-		input.remove();
+		ioNode.remove();
 		
 		clearBuildingChunks();
 		updateFogOfWar(false);
@@ -53,5 +54,10 @@ public abstract class AbstractIOPort extends AlertableBuilding {
 	
 	public AbstractBuilding getBuilding() {
 		return this.buildingChunk.getBuilding();
+	}
+	
+	@Override  
+	public Node getNode() {
+		return ioNode;
 	}
 }
