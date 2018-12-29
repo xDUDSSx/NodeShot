@@ -377,14 +377,14 @@ public class Chunks {
 							c.visibility = Chunk.active;
 						} else {
 							c.visibility = Chunk.semiactive;
+							c.visionProviderNumber = 0;
 						}
 					}
 				}
 			}
 		};
-	
+		
 		for (Section s : sectionsToUpdate) {
-			//s.updateAll();
 			GameScreen.chunks.updateFogOfWarMesh(s);
 		}
 	}

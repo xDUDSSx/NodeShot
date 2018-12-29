@@ -19,7 +19,7 @@ public abstract class AbstractMine extends AbstractStorage {
 		public int mineRange = 7;
 		
 		public StorableItem oreType;
-		public int productionRate = 400;
+		public int productionRate = 2000;
 		public int nextSimTick = -1;
 		
 		public boolean canGenerate = false;
@@ -27,10 +27,12 @@ public abstract class AbstractMine extends AbstractStorage {
 		public AbstractMine(float cx, float cy) {
 			super(cx, cy, width, height);
 			activateIONode(true);
+			maxStorage = 0;
 		}
 		
 		@Override
 		public void update() {
+			super.update();
 			if (nextSimTick <= SimulationThread.simTick) {
 				nextSimTick = SimulationThread.simTick + productionRate; 
 				generate();

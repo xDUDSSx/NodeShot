@@ -25,7 +25,7 @@ public class Factory extends AbstractIOStorage {
 	
 	public Factory(float cx, float cy) {
 		super(cx, cy, width, height);
-		accepted = Arrays.asList(ItemType.COAL);
+		accepted = Arrays.asList(ItemType.COAL, ItemType.IRON);
 		
 		factoryAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.factoryanimFrames);	
 		factoryOutlinedAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.factoryanimoutlineFrames);	
@@ -43,8 +43,9 @@ public class Factory extends AbstractIOStorage {
 		}
 	}
 
-	private void generate() {	
-		this.processedStorage.add(new StorableItem(ItemType.AMMO));
+	/**Method called by the buildings {@link #update()} method. Its called when a new {@link StorableItem} should be generated and added to factories processed storage.*/
+	protected void generate() {	
+		this.processedStorage.add(new StorableItem(ItemType.PROCESSED_MATERIAL));
 		this.storage.remove(storage.size()-1);
 		System.out.println("generating at " + SimulationThread.simTick + " storage: " + storage.size() + " processedStorage: " + processedStorage.size());
 	}

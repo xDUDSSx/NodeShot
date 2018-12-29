@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public interface Item {
 	/**Types of individual items.*/
 	public enum ItemType {
-		COAL, IRON, PACKAGE, AMMO
+		COAL, IRON, PACKAGE, AMMO, PROCESSED_MATERIAL
 	}
 	
 	public void draw(SpriteBatch batch);		

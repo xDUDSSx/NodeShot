@@ -20,6 +20,7 @@ public abstract class AbstractIOStorage extends AbstractStorage {
 
 	@Override
 	public void update() {
+		super.update();
 		if (ioActive) {
 			if (storage.size() < maxStorage && processedStorage.size() < maxProcessedStorage) {
 				ioNode.update();

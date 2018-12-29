@@ -1,7 +1,5 @@
 package org.dudss.nodeshot.misc;
 
-import static org.dudss.nodeshot.screens.GameScreen.builtBuilding;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -9,7 +7,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
-import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -118,5 +115,16 @@ public class BuildingManager {
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			BaseClass.errorManager.report(e, "Build mode building initialisation failed.");
 		}
+	}
+	
+	/**Disables the build mode*/
+	public void disableBuildMode() {
+		GameScreen.expandedConveyorNode = null;
+		GameScreen.expandingANode = false;
+		GameScreen.builtBuilding = null;
+		GameScreen.buildMode = false;
+		
+		//A terrain update necessary to clear build mode highlights
+		GameScreen.chunks.updateAllSectionMeshes(false);
 	}
 }

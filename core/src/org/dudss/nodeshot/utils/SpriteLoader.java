@@ -84,6 +84,7 @@ public class SpriteLoader {
 	public static Drawable mineDrawable;
 	public static Drawable nodeDrawable;
 	public static Drawable turretDrawable;
+	public static Drawable ammoProcessorDrawable;
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
@@ -230,6 +231,10 @@ public class SpriteLoader {
 		turretDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("turretPreview512")));
 		turretDrawable.setMinHeight(Base.buildMenuImgSize);
 		turretDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		ammoProcessorDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("ammoProcessorPreview512")));
+		ammoProcessorDrawable.setMinHeight(Base.buildMenuImgSize);
+		ammoProcessorDrawable.setMinWidth(Base.buildMenuImgSize);
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);

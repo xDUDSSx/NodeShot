@@ -50,7 +50,7 @@ public class Turret extends AbstractStorage {
 		accepted = Arrays.asList(ItemType.AMMO);
 		
 		maxStorage = 5;
-		activateIONode(true);
+		//activateIONode(true);
 	}
 	
 	@Override

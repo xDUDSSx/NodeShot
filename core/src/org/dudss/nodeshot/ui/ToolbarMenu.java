@@ -2,22 +2,23 @@ package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
+import org.dudss.nodeshot.buildings.AmmoProcessor;
 import org.dudss.nodeshot.buildings.BasicMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Exporter;
 import org.dudss.nodeshot.buildings.Factory;
 import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.buildings.Importer;
-import org.dudss.nodeshot.buildings.Turret;
 import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.buildings.PowerGenerator;
+import org.dudss.nodeshot.buildings.Turret;
+import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -51,6 +52,7 @@ public class ToolbarMenu extends VisWindow {
 		structures.addBuildingTile(SpriteLoader.mineDrawable, "Mine", new BuildListener(new BasicMine(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.genDrawable, "Power generator", new BuildListener(new PowerGenerator(0, 0)));
 		structures.addBuildingTile(SpriteLoader.factoryDrawable, "Factory", new BuildListener(new Factory(0, 0)));	
+		structures.addBuildingTile(SpriteLoader.ammoProcessorDrawable, "Ammo processor", new BuildListener(new AmmoProcessor(0, 0)));	
 		BuildTable utils = new BuildTable();
 		utils.addBuildingTile(SpriteLoader.creepergenDrawable, "Creeper generator", new BuildListener(new CreeperGenerator(0, 0)));	
 		BuildTable transfer = new BuildTable();

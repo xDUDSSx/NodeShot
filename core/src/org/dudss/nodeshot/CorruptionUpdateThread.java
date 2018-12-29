@@ -24,11 +24,8 @@ public class CorruptionUpdateThread extends Thread {
 	}
 	
 	public void run() {
-		//try {
-		    while(Base.running) {   	
-		    	System.out.println(this.getName() + " thread loop executed, last interval: " + (System.currentTimeMillis() - lastTick) + " Logic update time: " + elapsedTime);
-		    	lastTick = System.currentTimeMillis();
-		    	
+		try {
+		    while(Base.running) {   	    	
 		    	//Selective per section updating, sections are only updated if they are active
 		    	for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
 					for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
@@ -49,14 +46,14 @@ public class CorruptionUpdateThread extends Thread {
 		    	for (Section s : updatedSections) {
 					GameScreen.chunks.updateSectionMesh(s, true);
 		    	}
-		    	elapsedTime = System.currentTimeMillis() - lastTick; 
-		    	//synchronized(this) {
-		    		
-		    		//this.wait();
-		    	//}
+		    	updatedSections.clear();				
+		    	
+		    	synchronized(this) {	    		
+		    		this.wait();
+		    	}
 		    }
-		//} catch (InterruptedException e) {
-			//BaseClass.errorManager.report(e, "CorruptionUpdateThread error!");
-		//}
+		} catch (InterruptedException e) {
+			BaseClass.errorManager.report(e, "CorruptionUpdateThread error!");
+		}
 	}   
 }

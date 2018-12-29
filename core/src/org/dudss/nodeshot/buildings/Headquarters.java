@@ -1,7 +1,6 @@
 package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.nodes.BuildingNode;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -17,17 +16,10 @@ public class Headquarters extends AbstractBuilding {
 	Animation<TextureRegion> hqAnimation;
 	Animation<TextureRegion> hqOutlinedAnimation;
 	
-	BuildingNode hqNode;
-	
 	public Headquarters(float cx, float cy) {
 		super(cx, cy, width, height);
 		hqAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.hqanimFrames);	
 		hqOutlinedAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.hqanimoutlineFrames);	
-	}
-
-	@Override
-	public void update() {
-		
 	}
 
 	@Override
@@ -55,8 +47,6 @@ public class Headquarters extends AbstractBuilding {
 
 	@Override
 	public void build() {
-		hqNode = new BuildingNode(x + (width/2), y + (height/2), Base.RADIUS, this);
-		//hqNode.add();
 		GameScreen.buildingManager.addBuilding(this);
 		
 		updateFogOfWar(true);
@@ -65,7 +55,6 @@ public class Headquarters extends AbstractBuilding {
 	@Override
 	public void demolish() {
 		GameScreen.buildingManager.removeBuilding(this);
-		hqNode.remove();
 	
 		clearBuildingChunks();
 		updateFogOfWar(false);	

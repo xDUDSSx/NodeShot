@@ -3,7 +3,6 @@ package org.dudss.nodeshot.buildings;
 import static org.dudss.nodeshot.screens.GameScreen.buildingManager;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -14,8 +13,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 /**A creeper generator building that generates creeper*/
 public class CreeperGenerator extends AbstractGenerator {
 
-	OutputNode output;
-	
 	/**Height of the spawned creeper*/
 	public float spawnRate = Base.MAX_CREEP;
 	
@@ -68,19 +65,15 @@ public class CreeperGenerator extends AbstractGenerator {
 
 	@Override
 	public void build() { 
-		output = new OutputNode(x + (width/2), y + (height/2), Base.RADIUS, this);
 		buildingManager.addGenerator(this);
-		GameScreen.nodelist.add(output);
 		
 		GameScreen.chunks.getSectionByWorldSpace(x, y).setActive(true);
-		//GameScreen.chunks.updateFogOfWarMesh(Base.locateSectionByWorldSpace(x, y));
 	}
 
 	@Override
 	public void demolish() {
 		GameScreen.buildingManager.removeBuilding(this);	
-		this.output.remove();
-		
+	
 		clearBuildingChunks();
 	}
 }

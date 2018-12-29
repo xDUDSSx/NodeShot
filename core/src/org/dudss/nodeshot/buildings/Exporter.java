@@ -29,6 +29,7 @@ public class Exporter extends AbstractIOPort {
 	
 	@Override
 	public void update() {
+		super.update();
 		if (this.nextOperation < SimulationThread.simTick) {
 			if (buildingChunk.getBuilding() instanceof AbstractStorage) {		
 				boolean buildingChunkBuildingIsAnIOStorage = false;

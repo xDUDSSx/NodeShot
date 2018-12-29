@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.nodes.IONode;
-import org.dudss.nodeshot.entities.nodes.InputNode;
-import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.items.StorableItem;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -35,6 +32,7 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 		
 	@Override
 	public void update() {
+		super.update();
 		if (ioActive) {
 			if (storage.size() < maxStorage) {
 				ioNode.update();
@@ -96,6 +94,7 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 		}
 		GameScreen.buildingManager.addBuilding(this);
 		
+		System.out.println("BUILT");
 		updateFogOfWar(true);
 	}
 
@@ -105,6 +104,7 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 		if (ioActive) this.ioNode.remove();
 		
 		clearBuildingChunks();
+		System.out.println("DEMO");
 		updateFogOfWar(false);
 	}
 	

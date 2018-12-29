@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
@@ -110,8 +111,18 @@ public abstract class AbstractBuilding implements Entity {
 		return prefY;
 	}
 	
-	/**Building update method, updated by the {@link SimulationThread}.*/
-	public abstract void update();	
+	/**Building update method, updated by the {@link SimulationThread}.
+	 * The default {@link AbstractBuilding} update method handles creeper damage and building demolishing.
+	 * So if a building extending this object calls super.update() within its update method, it will be harmed by the creeper.*/
+	public void update() {
+		for (int i = 0; i < buildingChunks.length; i++) {
+			if (buildingChunks[i] != null) {
+				if (buildingChunks[i].getCreeperLevel() > 0) {
+					this.explode();
+				}
+			}
+		}
+	}	
 	
 	/**Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)*/
 	public abstract void draw(ShapeRenderer r, SpriteBatch batch);
@@ -123,6 +134,11 @@ public abstract class AbstractBuilding implements Entity {
 	public abstract void build();	
 	/**Called upon demolition*/
 	public abstract void demolish();
+	/**Called when demolised by force*/
+	public void explode() {
+		//Do explosion related stuff
+		this.demolish();
+	}
 	
 	/**Flags the building as outlined/selected*/
 	public void outline(boolean outline) {

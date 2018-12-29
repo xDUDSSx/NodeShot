@@ -31,6 +31,7 @@ public class PowerGenerator extends AbstractBuilding {
 
 	@Override
 	public void update() {
+		super.update();
 		if (nextUpdate < SimulationThread.simTick) {
 			GameScreen.resourceManager.addPower(1);
 			nextUpdate = SimulationThread.simTick + generationSpeed;

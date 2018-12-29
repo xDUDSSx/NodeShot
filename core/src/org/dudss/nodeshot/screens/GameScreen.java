@@ -13,9 +13,7 @@ import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
-import org.dudss.nodeshot.entities.nodes.InputNode;
 import org.dudss.nodeshot.entities.nodes.Node;
-import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.inputs.DesktopInputProcessor;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;
@@ -400,23 +398,14 @@ public class GameScreen implements Screen {
         //Drawing nodes & highlights
         for (int i = 0; i < nodelist.size(); i++) {
             Node n = nodelist.get(i);  
-            if (n instanceof OutputNode || n instanceof InputNode) {
-            	n.setScale(0.8f);
-            } else {
-            	n.setScale(0.45f);
-            	n.draw(batch);
-            }
+            n.setScale(0.45f);
+            n.draw(batch);
    
             if (n.getID() == selectedID) {
                 Sprite s = new Sprite(SpriteLoader.highlightSprite);              
                 s.setPosition(n.getX(), n.getY());
-                s.setOrigin(n.radius/2, n.radius/2);
-                
-                if (n instanceof OutputNode || n instanceof InputNode) {
-                	s.setScale(0.85f);
-                } else {
-                	s.setScale(0.50f);
-                }
+                s.setOrigin(n.radius/2, n.radius/2);                            
+                s.setScale(0.50f);             
                 s.draw(batch);
             }
            

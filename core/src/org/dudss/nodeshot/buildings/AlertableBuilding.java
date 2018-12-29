@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.entities.Package;
-import org.dudss.nodeshot.entities.nodes.InputNode;
 import org.dudss.nodeshot.items.StorableItem;
 
 /**Skeletal construction of a building that can be alerted by I/O {@link Node}s.*/

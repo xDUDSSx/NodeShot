@@ -47,9 +47,7 @@ public class SimulationThread extends Thread {
     		BaseClass.logger.info("Starting the CorruptionUpdateThread daemon!");
     		corruptionUpdateThread = new CorruptionUpdateThread();
     		corruptionUpdateThread.setDaemon(true);
-    		//CorruptionUpdateThread.start();
-    		//corruptionUpdateThread.wait();
-    		//corruptionUpdateThread.notify();
+    		corruptionUpdateThread.start();
     	}
     }
     
@@ -141,6 +139,7 @@ public class SimulationThread extends Thread {
 			//Notifying the corruption update thread, this will perform a single corruption update running on a different thread
 			next_chunk_tick += chunkUpdateRate;
 	    	
+			/*
 	    	//Selective per section updating, sections are only updated if they are active
 	    	for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
 				for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
@@ -162,9 +161,10 @@ public class SimulationThread extends Thread {
 				GameScreen.chunks.updateSectionMesh(s, true);
 	    	}
 	    	updatedSections.clear();
-			/*synchronized(corruptionUpdateThread) {
+			*/
+			synchronized(corruptionUpdateThread) {
 				corruptionUpdateThread.notify();
-			}*/
+			}
 		}		
 		
 		//Terrain update, currently unused

@@ -23,7 +23,7 @@ public class NodeBuilding extends AbstractBuilding implements Connectable {
 
 	@Override
 	public void update() {
-
+		super.update();
 	}
 
 	@Override

@@ -15,7 +15,7 @@ public class Section {
 	int size = Base.SECTION_SIZE;
 	 
 	/**Corruption update optimisation*/
-	boolean active = false;
+	boolean active = true;
 
 	boolean creeperUpdateOccured = false;
 	

@@ -25,6 +25,7 @@ public abstract class AbstractIOPort extends AlertableBuilding implements Connec
 	
 	@Override
 	public void update() {
+		super.update();
 		ioNode.update();
 	}
 	

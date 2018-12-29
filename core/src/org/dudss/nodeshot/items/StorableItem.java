@@ -22,6 +22,7 @@ public class StorableItem {
 			case IRON: return new Iron();
 			case AMMO: return new Ammo();
 			case PACKAGE: return new Package();
+			case  PROCESSED_MATERIAL: return new ProcessedMaterial();
 			default: break;
 			
 		}

@@ -12,10 +12,7 @@ import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
-import org.dudss.nodeshot.entities.nodes.BuildingNode;
-import org.dudss.nodeshot.entities.nodes.InputNode;
 import org.dudss.nodeshot.entities.nodes.Node;
-import org.dudss.nodeshot.entities.nodes.OutputNode;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.items.Coal;
 import org.dudss.nodeshot.items.Iron;
@@ -94,18 +91,6 @@ public class RightClickWindow extends Window {
 		mouseClickPos.set(mouseX, mouseY);
 		
 		switch (entity.getType()) {
-		case INPUTNODE:
-			populateInputNode(skin, (InputNode) entity);
-			this.setMovable(false);
-			break;
-		case BUILDINGNODE:
-			populateBuilding(skin, (BuildingNode) entity);
-			this.setMovable(false);
-			break;
-		case OUTPUTNODE:
-			populateOutputNode(skin, (OutputNode) entity);
-			this.setMovable(false);
-			break;
 		case NODE: 
 			populateNode(skin, (Node) entity);
 			this.setMovable(false);
@@ -156,27 +141,7 @@ public class RightClickWindow extends Window {
 
         this.addActor(table);
 	}
-	
-	private void populateInputNode(Skin skin, InputNode entity) {		  
-		table.top();
-        table.left();
-        table.setFillParent(true);   
 
-        initalizeNewWindowComponents(EntityType.INPUTNODE, entity, table, skin);
-
-        this.addActor(table);
-	}
-	
-	private void populateOutputNode(Skin skin, OutputNode entity) {		  
-		table.top();
-        table.left();
-        table.setFillParent(true);   
-
-        initalizeNewWindowComponents(EntityType.OUTPUTNODE, entity, table, skin);
-
-        this.addActor(table);
-	}
-	
 	private void populateConnector(Skin skin, Connector entity) {
 		table.top();
         table.left();
@@ -210,16 +175,6 @@ public class RightClickWindow extends Window {
         this.addActor(table);   
 	}
 
-	private void populateBuilding(Skin skin, BuildingNode entity) {
-		table.top();
-        table.left();
-        table.setFillParent(true);
-        
-        initalizeNewWindowComponents(EntityType.BUILDINGNODE, entity, table, skin);
-
-        this.addActor(table);   
-	}
-	
 	private void populateNone(Skin skin, Package entity) {
 		table.top();
         table.left();
@@ -463,216 +418,6 @@ public class RightClickWindow extends Window {
 		        table.add(toLabel).pad(1).fill(true).padLeft(10);      		       		              				
 				
 				break;
-			case BUILDINGNODE:
-				BuildingNode build = (BuildingNode) entity;
-				emptyLabel = new Label("", skin, "font15");
-		        
-				idLabel = new Label("ID: " + entity.getID(), skin, "font15");
-			    indexLabel = new Label("Index: " + entity.getIndex(), skin, "font15");
-				
-			    xLabel = new Label("Node X: " + build.getX(), skin, "font15");
-			    yLabel = new Label("Node Y: " + build.getY(), skin, "font15");
-			    radiusLabel = new Label("Radius: " + build.radius, skin, "font15");
-			    connectionsLabel = new Label("Connections: " + build.getNumberOfConnections(), skin, "font15");
-			    connectableLabel = new Label("Connectable: " + build.connectable, skin, "font15");
-			    connectorsLabel = new Label("Connectors: " + Base.nodeConnectorListToString(build.connectors), skin, "font15");
-			    connectorsLabel.setWrap(true);
-			    closedLabel = new Label("Closed: " + build.isClosed(), skin, "font15");
-			   
-		        table.add(emptyLabel);
-		        table.row();
-		        table.add(emptyLabel);
-		        
-		        table.row();
-		        table.add(idLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(indexLabel).pad(1).fill(true).padLeft(10);
-		        
-		        deleteButton = new TextButton("Demolish building", skin, "hoverfont15");			    
-		        deleteButton.addListener(new ClickListener(){
-		            @Override
-		            public void clicked(InputEvent event, float x, float y) {				    
-		            	if(nodelist.size() != 0) {
-		            		build.getAssignedBuilding().demolish();
-							GameScreen.rightClickMenuManager.removeMenu();
-						}
-		            }
-		        });             
-		 
-		        table.row();
-		        table.add(deleteButton).pad(1).fill(true).padLeft(10);
-		        
-		        table.row();
-		        table.add(emptyLabel);
-		        table.row();		        
-		        table.add(xLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(yLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(radiusLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectionsLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectableLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectorsLabel).pad(1).fill(true).padLeft(10);		       
-		        table.row();
-		        table.add(closedLabel).pad(1).fill(true).padLeft(10);
-		        
-		        if (build.connectors.size() > 2) {	        	
-		        	this.setSize(this.getWidth(), (15 * build.connectors.size() + this.getHeight()));
-		        }
-		        
-		        this.setPosition(GameScreen.mouseX + 10, Gdx.graphics.getHeight() - GameScreen.mouseY - this.getHeight() - 10);
-				break;
-			case OUTPUTNODE:
-				OutputNode out = (OutputNode) entity;
-				emptyLabel = new Label("", skin, "font15");
-		        
-				idLabel = new Label("ID: " + entity.getID(), skin, "font15");
-			    indexLabel = new Label("Index: " + entity.getIndex(), skin, "font15");
-				
-			    xLabel = new Label("Node X: " + out.getX(), skin, "font15");
-			    yLabel = new Label("Node Y: " + out.getY(), skin, "font15");
-			    radiusLabel = new Label("Radius: " + out.radius, skin, "font15");
-			    connectionsLabel = new Label("Connections: " + out.getNumberOfConnections(), skin, "font15");
-			    connectableLabel = new Label("Connectable: " + out.connectable, skin, "font15");
-			    connectorsLabel = new Label("Connectors: " + Base.nodeConnectorListToString(out.connectors), skin, "font15");
-			    connectorsLabel.setWrap(true);
-			    closedLabel = new Label("Closed: " + out.isClosed(), skin, "font15");
-			   
-		        table.add(emptyLabel);
-		        table.row();
-		        table.add(emptyLabel);
-		        
-		        table.row();
-		        table.add(idLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(indexLabel).pad(1).fill(true).padLeft(10);
-		        
-		        deleteButton = new TextButton("Demolish building", skin, "hoverfont15");			    
-		        deleteButton.addListener(new ClickListener(){
-		            @Override
-		            public void clicked(InputEvent event, float x, float y) {				    
-		            	if(nodelist.size() != 0) {
-		            		out.getAssignedBuilding().demolish();
-							GameScreen.rightClickMenuManager.removeMenu();
-						}
-		            }
-		        });             
-		 
-		        table.row();
-		        table.add(deleteButton).pad(1).fill(true).padLeft(10);
-		        
-		        table.row();
-		        table.add(emptyLabel);
-		        table.row();		        
-		        table.add(xLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(yLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(radiusLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectionsLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectableLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectorsLabel).pad(1).fill(true).padLeft(10);		       
-		        table.row();
-		        table.add(closedLabel).pad(1).fill(true).padLeft(10);
-		        
-		        if (out.connectors.size() > 2) {	        	
-		        	this.setSize(this.getWidth(), (15 * out.connectors.size() + this.getHeight()));
-		        }
-		        
-		        this.setPosition(GameScreen.mouseX + 10, Gdx.graphics.getHeight() - GameScreen.mouseY - this.getHeight() - 10);
-				break;
-			case INPUTNODE: 
-				InputNode in = (InputNode) entity;
-				emptyLabel = new Label("", skin, "font15");
-		        
-				idLabel = new Label("ID: " + entity.getID(), skin, "font15");
-			    indexLabel = new Label("Index: " + entity.getIndex(), skin, "font15");
-				
-			    xLabel = new Label("Node X: " + in.getX(), skin, "font15");
-			    yLabel = new Label("Node Y: " + in.getY(), skin, "font15");
-			    radiusLabel = new Label("Radius: " + in.radius, skin, "font15");
-			    connectionsLabel = new Label("Connections: " + in.getNumberOfConnections(), skin, "font15");
-			    connectableLabel = new Label("Connectable: " + in.connectable, skin, "font15");
-			    connectorsLabel = new Label("Connectors: " + Base.nodeConnectorListToString(in.connectors), skin, "font15");
-			    connectorsLabel.setWrap(true);
-			    closedLabel = new Label("Closed: " + in.isClosed(), skin, "font15");
-			   
-			  		    
-		        table.add(emptyLabel);
-		        table.row();
-		        table.add(emptyLabel);
-		        
-		        table.row();
-		        table.add(idLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(indexLabel).pad(1).fill(true).padLeft(10);
-		        
-		        deleteButton = new TextButton("Demolish building", skin, "hoverfont15");			    
-		        deleteButton.addListener(new ClickListener(){
-		            @Override
-		            public void clicked(InputEvent event, float x, float y) {				    
-		            	if(nodelist.size() != 0) {
-							((AbstractBuilding) in.getAssignedStorage()).demolish();
-							GameScreen.rightClickMenuManager.removeMenu();
-						}
-		            }
-		        });             
-		        		        
-		        emptyButton = new TextButton("Empty storage", skin, "hoverfont15");			    
-		        emptyButton.addListener(new ClickListener(){
-		            @Override
-		            public void clicked(InputEvent event, float x, float y) {
-		            	AbstractStorage s = (AbstractStorage) in.getAssignedStorage();
-		            	s.empty();
-		            }
-		        });  
-		        
-		        
-		        if (in.getAssignedStorage() instanceof AbstractStorage) {
-		        	  table.row();
-				      table.add(emptyButton).pad(1).fill(true).padLeft(10);
-				      
-				      AbstractStorage s = (AbstractStorage) in.getAssignedStorage();			     
-					  level = new Label("Amount: " + s.getStoredItems().size(), skin, "font15");
-		        }
-		        
-		        table.row();
-		        table.add(deleteButton).pad(1).fill(true).padLeft(10);
-		        
-		        if (in.getAssignedStorage() instanceof AbstractStorage) {		        	  
-		        	table.row();
-		        	table.add(level).pad(1).fill(true).padLeft(10);
-		        }
-		        
-		        table.row();
-		        table.add(emptyLabel);
-		        table.row();		        
-		        table.add(xLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(yLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(radiusLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectionsLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectableLabel).pad(1).fill(true).padLeft(10);
-		        table.row();
-		        table.add(connectorsLabel).pad(1).fill(true).padLeft(10);		       
-		        table.row();
-		        table.add(closedLabel).pad(1).fill(true).padLeft(10);
-		        
-		        if (in.connectors.size() > 2) {	        	
-		        	this.setSize(this.getWidth(), (15 * in.connectors.size() + this.getHeight()));
-		        }
-		        
-		        this.setPosition(GameScreen.mouseX + 10, Gdx.graphics.getHeight() - GameScreen.mouseY - this.getHeight() - 10);
-				break;
 			case NONE:
 				emptyLabel = new Label("", skin, "font15");
 				table.add(emptyLabel);
@@ -745,13 +490,6 @@ public class RightClickWindow extends Window {
 			    goingLabel.setText("Going: " + p.going);
 			    fromLabel.setText("From: " + p.from.getID());
 			    toLabel.setText("From: " + p.to.getID());			    
-				break;
-			case INPUTNODE:
-				InputNode in = (InputNode) entity;
-				if (in.getAssignedStorage() instanceof AbstractStorage) {		
-					AbstractStorage s = (AbstractStorage) in.getAssignedStorage();
-					level.setText("Amount: " + s.getStoredItems().size());
-			    }				
 				break;
 			default: break;
 		}

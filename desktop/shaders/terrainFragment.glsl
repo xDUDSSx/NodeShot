@@ -50,34 +50,4 @@ void main()
     }
 
     gl_FragColor = finalColor;
-
-    /*
-    gl_FragColor = vec4(1,1,1,0);
-
-    //tex1
-    if (tex1.a > 0.5) {
-        gl_FragColor = tex1 * v_color;
-    } else
-    if (tex2.a > 0.5) {
-        if (tex1.a == 0) {
-            gl_FragColor = tex2 * v_color;
-        } else {
-          	gl_FragColor = vec4(mix(tex1.rgb, tex2.rgb, 0.8), 1.0);
-        }
-    } else
-    if (tex3.a > 0.5) {
-        if (tex2.a == 0) {
-            gl_FragColor = tex3 * v_color;
-        } else {
-            gl_FragColor = vec4(mix(tex2.rgb, tex3.rgb, 0.8), 1.0);
-        }
-    } else
-    if (tex4.a > 0.5) {
-        if (tex3.a == 0) {
-            gl_FragColor = tex4 * v_color;
-        } else {
-            gl_FragColor = vec4(mix(tex3.rgb, tex4.rgb, 0.8), 1.0);
-        }
-    }
-    */
 }
