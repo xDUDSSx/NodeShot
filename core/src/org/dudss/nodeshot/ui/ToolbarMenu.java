@@ -11,6 +11,7 @@ import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.buildings.Importer;
 import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.buildings.PowerGenerator;
+import org.dudss.nodeshot.buildings.Shipdock;
 import org.dudss.nodeshot.buildings.Turret;
 import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -53,6 +54,7 @@ public class ToolbarMenu extends VisWindow {
 		structures.addBuildingTile(SpriteLoader.genDrawable, "Power generator", new BuildListener(new PowerGenerator(0, 0)));
 		structures.addBuildingTile(SpriteLoader.factoryDrawable, "Factory", new BuildListener(new Factory(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.ammoProcessorDrawable, "Ammo processor", new BuildListener(new AmmoProcessor(0, 0)));	
+		structures.addBuildingTile(SpriteLoader.shipdockDrawable, "Shipdock", new BuildListener(new Shipdock(0, 0)));	
 		BuildTable utils = new BuildTable();
 		utils.addBuildingTile(SpriteLoader.creepergenDrawable, "Creeper generator", new BuildListener(new CreeperGenerator(0, 0)));	
 		BuildTable transfer = new BuildTable();

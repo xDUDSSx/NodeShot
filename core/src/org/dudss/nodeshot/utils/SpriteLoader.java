@@ -85,6 +85,7 @@ public class SpriteLoader {
 	public static Drawable nodeDrawable;
 	public static Drawable turretDrawable;
 	public static Drawable ammoProcessorDrawable;
+	public static Drawable shipdockDrawable;
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
@@ -235,6 +236,10 @@ public class SpriteLoader {
 		ammoProcessorDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("ammoProcessorPreview512")));
 		ammoProcessorDrawable.setMinHeight(Base.buildMenuImgSize);
 		ammoProcessorDrawable.setMinWidth(Base.buildMenuImgSize);
+		
+		shipdockDrawable = new TextureRegionDrawable(new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("shipdockPreview512")));
+		shipdockDrawable.setMinHeight(Base.buildMenuImgSize);
+		shipdockDrawable.setMinWidth(Base.buildMenuImgSize);		
 		
 		packageSprite = new Sprite(spriteSheet, 0, 0, 16, 16);
 		packageHighlightSprite = new Sprite(spriteSheet, 17, 0, 16, 16);

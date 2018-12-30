@@ -48,7 +48,7 @@ public class Exporter extends AbstractIOPort {
 	 * @param isIoStorage Whether the assigned building is a {@link AbstractIOStorage}.
 	 * */
 	public void exportAnItem(boolean isIoStorage) {
-		if (ioNode.getAllConnectedNodes().size() > 0) {
+		if (ioNode.getAllConnectedNodes().size() > 0 || ioNode.getConnectors().size() > 0) {
 			if (ioNode.getConnectors().get(0).checkEntrance(ioNode, Base.PACKAGE_BLOCK_RANGE)) {
 				Package export;
 				if (isIoStorage) {			
