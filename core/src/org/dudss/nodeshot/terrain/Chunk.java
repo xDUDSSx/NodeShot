@@ -1115,6 +1115,16 @@ public class Chunk {
 		return y;
 	}
 	
+	/**@return World space x coordinate of this {@linkplain Chunk} centre.*/
+	public float getCX() {
+		return x + Base.CHUNK_SIZE/2;	
+	}
+	
+	/**@return World space y coordinate of this {@linkplain Chunk} centre.*/
+	public float getCY() {
+		return y + Base.CHUNK_SIZE/2;
+	}
+	
 	/**@return Tile space x coordinate of this {@linkplain Chunk}.*/
 	public int getAX() {
 		return ax;	

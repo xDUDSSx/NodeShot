@@ -1,14 +1,15 @@
 package org.dudss.nodeshot.buildings;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 /**The basic skeletal representation of a building. All buildings are subclasses of this abstract class.*/
 public abstract class AbstractBuilding implements Entity {
@@ -45,22 +46,9 @@ public abstract class AbstractBuilding implements Entity {
 	 * @return Returns whether this building intersects another building
 	 * */
 	public boolean setLocation(float cx, float cy, boolean snap) {
-		if (snap) {
-			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			
-			x = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
-			y = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
-			
-			this.cx = nx + Base.CHUNK_SIZE/2;
-			this.cy = ny + Base.CHUNK_SIZE/2;
-		} else {
-			this.cx = cx;
-			this.cy = cy;
-			
-			x = cx - (width/2);
-			y = cy - (height/2);
-		}
+		Vector2 newCoords = getCoordinates(cx, cy, snap);
+		x = newCoords.x;
+		y = newCoords.y;
 		
 		int index = 0;
 		int buildintWidthInTileSpace = Math.round(width/Base.CHUNK_SIZE);
@@ -89,26 +77,33 @@ public abstract class AbstractBuilding implements Entity {
 		}
 	}
 	
-	public float getPrefabX(float cx, boolean snap) {
-		float prefX;
+	/**Retrieves the coordinates that would apply for the following world-space cursor coordinates*/
+	protected Vector2 getCoordinates(float cx, float cy, boolean snap) {
+		float newX;
+		float newY;
+		
 		if (snap) {
 			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
-			prefX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
+			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
+			
+			newX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
+			newY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
+			
+			this.cx = nx + Base.CHUNK_SIZE/2;
+			this.cy = ny + Base.CHUNK_SIZE/2;
 		} else {
-			prefX = cx - (width/2);
+			this.cx = cx;
+			this.cy = cy;
+			
+			newX = cx - (width/2);
+			newY = cy - (height/2);
 		}
-		return prefX;
+		
+		return new Vector2(newX, newY);
 	}
 	
-	public float getPrefabY(float cy, boolean snap) {
-		float prefY;
-		if (snap) {;
-			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
-			prefY = ny - ((int)(height/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;	
-		} else {
-			prefY = cy - (height/2);
-		}
-		return prefY;
+	public Vector2 getPrefabVector(float cx, float cy, boolean snap) {
+		return getCoordinates(cx, cy, snap);
 	}
 	
 	/**Building update method, updated by the {@link SimulationThread}.
@@ -131,9 +126,18 @@ public abstract class AbstractBuilding implements Entity {
 	public abstract void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap);	
 	
 	/**Called when the building is built*/
-	public abstract void build();	
+	public void build() {
+		GameScreen.buildingManager.addBuilding(this);
+		
+		updateFogOfWar(true);
+	}	
 	/**Called upon demolition*/
-	public abstract void demolish();
+	public void demolish() {
+		GameScreen.buildingManager.removeBuilding(this);
+		
+		clearBuildingChunks();
+		updateFogOfWar(false);	
+	}
 	/**Called when demolised by force*/
 	public void explode() {
 		//Do explosion related stuff

@@ -701,8 +701,8 @@ public class GameScreen implements Screen {
             Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
             r.rectLine(	expandedConveyorNode.getCX(),
             			expandedConveyorNode.getCY(),
-            			builtBuilding.getPrefabX(worldPos.x, true) + builtBuilding.getWidth()/2,
-            			builtBuilding.getPrefabY(worldPos.y, true) + builtBuilding.getHeight()/2, 
+            			builtBuilding.getPrefabVector(worldPos.x, worldPos.y, true).x + builtBuilding.getWidth()/2,
+            			builtBuilding.getPrefabVector(worldPos.x, worldPos.y, true).y + builtBuilding.getHeight()/2, 
             			Base.lineWidth);
         }
         r.end();

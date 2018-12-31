@@ -1,7 +1,13 @@
 package org.dudss.nodeshot.entities.connectors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.buildings.ConveyorBuilding;
 import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.terrain.Chunk;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -12,9 +18,56 @@ public class Conveyor extends Connector {
 
 	public boolean reversed = false;
 	
+	List<ConveyorBuilding> conveyorBuildings;
+	
 	public Conveyor(Node from, Node to) {
 		super(from, to);
+		conveyorBuildings = new ArrayList<ConveyorBuilding>();
+		
+		List<Chunk> intersectedChunks = findLine((int) (from.getCX() / Base.CHUNK_SIZE),
+				(int) (from.getCY() / Base.CHUNK_SIZE),
+				(int)(to.getCX() / Base.CHUNK_SIZE), 
+				(int) (to.getCY() / Base.CHUNK_SIZE));
+		for (Chunk c : intersectedChunks) {
+			conveyorBuildings.add(new ConveyorBuilding(c.getCX(), c.getCY(), this));
+		}
 	}
+	
+	public List<Chunk> findLine(int x0, int y0, int x1, int y1) 
+    {                    
+        List<Chunk> line = new ArrayList<Chunk>();
+ 
+        int dx = Math.abs(x1 - x0);
+        int dy = Math.abs(y1 - y0);
+ 
+        int sx = x0 < x1 ? 1 : -1; 
+        int sy = y0 < y1 ? 1 : -1; 
+ 
+        int err = dx-dy;
+        int e2;
+ 
+        while (true) 
+        {
+            line.add(GameScreen.chunks.getChunkAtTileSpace(x0, y0));
+ 
+            if (x0 == x1 && y0 == y1) 
+                break;
+ 
+            e2 = 2 * err;
+            if (e2 > -dy) 
+            {
+                err = err - dy;
+                x0 = x0 + sx;
+            }
+ 
+            if (e2 < dx) 
+            {
+                err = err + dx;
+                y0 = y0 + sy;
+            }
+        }                                
+        return line;
+    }
 	
 	@Override
 	public void draw(ShapeRenderer sR) {

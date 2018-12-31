@@ -69,7 +69,7 @@ public class Factory extends AbstractIOStorage {
 		TextureRegion currentFrame = factoryAnimation.getKeyFrame(GameScreen.stateTime, true);
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 0.5f);
-		batch.draw(currentFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
+		batch.draw(currentFrame, getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 		batch.end();	
 	}
 }

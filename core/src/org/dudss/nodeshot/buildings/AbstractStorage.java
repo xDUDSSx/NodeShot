@@ -82,7 +82,7 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {				
 		r.set(ShapeType.Filled);
 		r.setColor(prefabColor);
-		r.rect(getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
+		r.rect(getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 	}
 	
 	@Override

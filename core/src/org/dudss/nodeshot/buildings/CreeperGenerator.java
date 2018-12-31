@@ -56,9 +56,9 @@ public class CreeperGenerator extends AbstractGenerator {
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 0.5f);
 		if (active) {
-			batch.draw(SpriteLoader.creeperGenOnFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
+			batch.draw(SpriteLoader.creeperGenOnFrame, getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 		} else {
-			batch.draw(SpriteLoader.creeperGenOffFrame, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
+			batch.draw(SpriteLoader.creeperGenOffFrame, getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 		}		
 		batch.end();	
 	}

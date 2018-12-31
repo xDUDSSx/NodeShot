@@ -106,7 +106,6 @@ public class DesktopInputProcessor implements InputProcessor {
 							GameScreen.builtBuilding.build();	
 							
 							if (GameScreen.expandingANode && builtBuilding instanceof NodeBuilding) {
-								System.out.println("Connecting");
 								GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)builtBuilding).getNode());
 							}
 							

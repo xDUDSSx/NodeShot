@@ -67,7 +67,7 @@ public class Importer extends AbstractIOPort {
 		sprite.setOrigin(Base.CHUNK_SIZE/2, Base.CHUNK_SIZE + Base.CHUNK_SIZE/2);
 		sprite.setRotation(this.spriteRotation);
 		sprite.setSize(width, height + Base.CHUNK_SIZE);
-		sprite.setPosition(getPrefabX(cx, snap), getPrefabY(cy, snap)  - Base.CHUNK_SIZE);
+		sprite.setPosition(getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y  - Base.CHUNK_SIZE);
 		sprite.draw(batch);		
 		//batch.draw(sprite, getPrefabX(cx, snap), getPrefabY(cy, snap)  - Base.CHUNK_SIZE, width, height + Base.CHUNK_SIZE);
 		batch.end();		

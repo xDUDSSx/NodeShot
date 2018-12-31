@@ -52,7 +52,7 @@ public class Shipdock extends AbstractStorage {
 	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {				
 		batch.begin();
 		batch.setColor(1f, 1f, 1f, 0.5f);
-		batch.draw(t, getPrefabX(cx, snap), getPrefabY(cy, snap), width, height);
+		batch.draw(t, getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 		batch.end();	
 	}
 }
