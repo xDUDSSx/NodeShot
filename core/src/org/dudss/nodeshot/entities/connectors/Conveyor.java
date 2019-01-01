@@ -20,6 +20,10 @@ public class Conveyor extends Connector {
 	
 	List<ConveyorBuilding> conveyorBuildings;
 	
+	/**Whether this {@link Conveyor} encountered building chunk collision while 
+	 * generating its {@link ConveyorBuilding}s*/
+	boolean encounteredBuildingCollision = false;
+	
 	public Conveyor(Node from, Node to) {
 		super(from, to);
 		conveyorBuildings = new ArrayList<ConveyorBuilding>();
@@ -28,14 +32,27 @@ public class Conveyor extends Connector {
 				(int) (from.getCY() / Base.CHUNK_SIZE),
 				(int)(to.getCX() / Base.CHUNK_SIZE), 
 				(int) (to.getCY() / Base.CHUNK_SIZE));
+		intersectedChunks.remove(GameScreen.chunks.getChunkAtWorldSpace(from.getCX(), from.getCY()));
+		intersectedChunks.remove(GameScreen.chunks.getChunkAtWorldSpace(to.getCX(), to.getCY()));
+				
+		boolean canBeBuilt = true;
 		for (Chunk c : intersectedChunks) {
-			conveyorBuildings.add(new ConveyorBuilding(c.getCX(), c.getCY(), this));
+			if (c.getBuilding() != null) {
+				canBeBuilt = false;
+				encounteredBuildingCollision = true;
+			}
+		}
+		if (canBeBuilt) {
+			for (Chunk c : intersectedChunks) {
+				conveyorBuildings.add(new ConveyorBuilding(c.getCX(), c.getCY(), this));
+			}
 		}
 	}
 	
+	/**Returns the list of {@link Chunk}s that a world space line intersects.*/
 	public List<Chunk> findLine(int x0, int y0, int x1, int y1) 
-    {                    
-        List<Chunk> line = new ArrayList<Chunk>();
+	{
+		List<Chunk> line = new ArrayList<Chunk>();
  
         int dx = Math.abs(x1 - x0);
         int dy = Math.abs(y1 - y0);
@@ -48,26 +65,37 @@ public class Conveyor extends Connector {
  
         while (true) 
         {
-            line.add(GameScreen.chunks.getChunkAtTileSpace(x0, y0));
+        	line.add(GameScreen.chunks.getChunkAtTileSpace(x0, y0));
  
-            if (x0 == x1 && y0 == y1) 
-                break;
+        	if (x0 == x1 && y0 == y1) 
+        		break;
  
-            e2 = 2 * err;
-            if (e2 > -dy) 
-            {
-                err = err - dy;
-                x0 = x0 + sx;
-            }
+        	e2 = 2 * err;
+        	if (e2 > -dy) 
+        	{
+        		err = err - dy;
+        		x0 = x0 + sx;
+        	}
  
-            if (e2 < dx) 
-            {
-                err = err + dx;
-                y0 = y0 + sy;
-            }
-        }                                
+        	if (e2 < dx) 
+        	{
+        		err = err + dx;
+        		y0 = y0 + sy;
+        	}
+        }
         return line;
-    }
+	}
+	
+	/**Demolishes all the {@link ConveyorBuilding}s that are assigned to this conveyor.*/
+	public void clearBuildingChunks() {
+		for (ConveyorBuilding c : conveyorBuildings) {
+			c.demolish();
+		}	
+	}
+	
+	public boolean isBuiltProperly() {
+		return !encounteredBuildingCollision;
+	}
 	
 	@Override
 	public void draw(ShapeRenderer sR) {

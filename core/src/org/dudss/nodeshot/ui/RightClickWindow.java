@@ -286,7 +286,7 @@ public class RightClickWindow extends Window {
 		            	Node n1 = c.getFrom();
 		            	Node n2 = c.getTo();
 		            	c.getFrom().disconnect(c.getTo());
-		            	n1.connectTo(n2, EntityType.CONVEYOR);
+		            	n1.connectTo(n2);
 		            	GameScreen.rightClickMenuManager.removeMenu();
 		            }
 		        });  
@@ -334,7 +334,7 @@ public class RightClickWindow extends Window {
 		            	Node n1 = co.getFrom();
 		            	Node n2 = co.getTo();
 		            	co.getFrom().disconnect(co.getTo());
-		            	n1.connectTo(n2, EntityType.CONNECTOR);
+		            	n1.connectTo(n2);
 		            	GameScreen.rightClickMenuManager.removeMenu();
 		            }
 		        });  

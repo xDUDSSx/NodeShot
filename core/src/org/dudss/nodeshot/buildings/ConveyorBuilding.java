@@ -2,6 +2,7 @@ package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
+import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -34,6 +35,21 @@ public class ConveyorBuilding extends AbstractBuilding {
 	@Override
 	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {
 		//This building CANNOT be drawn.	
+	}
+	
+	@Override
+	public void build() {
+		GameScreen.buildingManager.addMisc(this);
+		
+		updateFogOfWar(true);
+	}
+	
+	@Override
+	public void demolish() {
+		GameScreen.buildingManager.removeMisc(this);
+		
+		clearBuildingChunks();
+		updateFogOfWar(false);	
 	}
 	
 	/**Get the assigned {@link Conveyor}.*/

@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.Node;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -42,6 +43,8 @@ public class ConnectorHandler {
 		
 		nC.getTo().connectors.remove(nC);
 		nC.getFrom().connectors.remove(nC);
+		
+		if (nC instanceof Conveyor) ((Conveyor) nC).clearBuildingChunks();
 		
 		connectors.remove(nC); 
 	}

@@ -35,15 +35,11 @@ public class Node extends Sprite implements Entity {
 	public int id;
 
 	public int radius;
-	public int connections;
 	public Boolean connectable = true;
 
 	public int maxConnections;
 	
 	public Boolean closed = false;
-
-	public List<Node> connected_to;
-	public List<Node> connected_by;
 
 	public List<Connector> connectors;
 
@@ -75,9 +71,6 @@ public class Node extends Sprite implements Entity {
 
 		x = cx - (radius / 2);
 		y = cy - (radius / 2);
-
-		connected_to = new CopyOnWriteArrayList<Node>();
-		connected_by = new CopyOnWriteArrayList<Node>();
 
 		connectors = new CopyOnWriteArrayList<Connector>();
 
@@ -171,17 +164,9 @@ public class Node extends Sprite implements Entity {
 	/**Connects this node to the specified target node with an appropriate {@link Connector}.*/
 	public void connectTo(Node targetnode) {
 		if (targetnode != null) {
-			if ((connected_to.size() + connected_by.size()) >= this.maxConnections) {
-				// too many connections
-			} else if ((targetnode.connected_to.size() + targetnode.connected_by.size()) >= targetnode.maxConnections) {
-				// too many connections
-			} else {
-				if (!connected_by.contains(targetnode) && !connected_to.contains(targetnode)) {
-					connected_to.add(targetnode);
-					targetnode.connected_by.add(this);
-					connections++;
-					targetnode.connections++;
-					if (targetnode.connections >= targetnode.maxConnections) {
+			if (!(connectors.size() >= this.maxConnections) && !(targetnode.getConnectors().size() >= targetnode.maxConnections)) {				
+				if (!targetnode.isConnectedTo(this)) {							
+					if (targetnode.getConnectors().size() >= targetnode.maxConnections) {
 						targetnode.setConnectable(false);
 					}
 	
@@ -203,7 +188,7 @@ public class Node extends Sprite implements Entity {
 		}
 	}
 	
-	@Deprecated
+	/*@Deprecated
 	public void connectTo(Node targetnode, EntityType eT) {
 		if ((connected_to.size() + connected_by.size()) >= this.maxConnections) {
 			// too many connections
@@ -234,41 +219,28 @@ public class Node extends Sprite implements Entity {
 						+ targetnode.getY() + " are already connected");
 			}
 		}
-	}
+	}*/
 	
-	@Deprecated
 	public int getNumberOfConnections() {
-		return connections;
+		return connectors.size();
 	}
 
 	/**Disconnects this node from any connections affiliated with the other {@link Node}.*/
 	public void disconnect(Node node) {
-		this.connected_to.remove(node);
-		this.connections -= 1;
-		if (this.connections < this.maxConnections) {
-			this.setConnectable(true);
-		}
-		node.connected_by.remove(this);
-		node.connections -= 1;
-		if (node.connections < node.maxConnections) {
-			node.setConnectable(true);
-		}
-
-		Connector toBeRemoved = null;
-		for (Connector nC : this.connectors) {
-			if (nC.getTo() == node) {
-				toBeRemoved = nC;
-			}
-			if (toBeRemoved != null) {
-				break;
-			}
-		}
+		//Shared connector
+		Connector c = this.getConnectorConnecting(node);
 		
-		this.connectors.remove(toBeRemoved);
-		node.connectors.remove(toBeRemoved);
-		
-		if (toBeRemoved != null) {
-			GameScreen.connectorHandler.removeConnector(toBeRemoved);
+		if (c != null) {
+			this.connectors.remove(c);
+			node.getConnectors().remove(c);
+			
+			if (this.getNumberOfConnections() < this.maxConnections) {
+				this.setConnectable(true);
+			}
+			if (node.getNumberOfConnections() < node.maxConnections) {
+				node.setConnectable(true);
+			}
+			GameScreen.connectorHandler.removeConnector(c);
 		}
 	}
 
@@ -279,25 +251,11 @@ public class Node extends Sprite implements Entity {
 	
 	/**Removes this node from the game list of nodes and disconnects it from any other connected {@linkplain Node}.*/
 	public void remove() {
-		for (Node n : connected_to) {
-			n.connected_by.remove(this);
-			n.connections -= 1;
-			if (n.connections < n.maxConnections) {
-				n.setConnectable(true);
-			}
+		//Disconnects from all connected nodes
+		for (Node n : this.getAllConnectedNodes()) {
+			this.disconnect(n);
 		}
-		for (Node n : connected_by) {
-			n.connected_to.remove(this);
-			n.connections -= 1;
-			if (n.connections < n.maxConnections) {
-				n.setConnectable(true);
-			}
-		}
-
-		// Removing connectors to this node
-		for (Connector nC : GameScreen.connectorHandler.getAllConnectorsToNode(this)) {
-			GameScreen.connectorHandler.removeConnector(nC);
-		}
+		
 		// Highlight fix
 		if (GameScreen.selectedID == this.getID()) {
 			Selector.deselect();
@@ -306,26 +264,48 @@ public class Node extends Sprite implements Entity {
 		if (GameScreen.nodelist.size() != 0) {
 			GameScreen.nodelist.remove(this);
 		}
-
 	}
 
-	public List<Node> getConnectedToNodes() {
-		return this.connected_to;
-	}
-
-	public List<Node> getConnectedByNodes() {
-		return this.connected_by;
-	}
-
+	/**Returns a list of all {@link Node}s that share a {@link Connector} with this node.*/
 	public ArrayList<Node> getAllConnectedNodes() {
 		ArrayList<Node> mergedArray = new ArrayList<Node>();
-		mergedArray.addAll(this.connected_by);
-		mergedArray.addAll(this.connected_to);
+		for (Connector c : this.connectors) {
+			if (c.getTo() != this) {
+				mergedArray.add(c.getTo());			
+			} else {
+				mergedArray.add(c.getFrom());
+			};
+		}
 		return mergedArray;
 	}
 
 	public List<Connector> getConnectors() {
 		return connectors;
+	}
+	
+	/**Returns true if this and targetnode share a common {@link Connector}*/
+	public boolean isConnectedTo(Node targetnode) {
+		for (Connector tc : targetnode.getConnectors()) {
+			for (Connector c : connectors) {
+				if (tc == c) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**Returns the {@link Connector} shared between these {@link Node}s.
+	 * null is returned where no common Connector was found.*/
+	public Connector getConnectorConnecting(Node targetnode) {
+		for (Connector tc : targetnode.getConnectors()) {
+			for (Connector c : connectors) {
+				if (tc == c) {
+					return c;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public int getStepsTo(Node target) {

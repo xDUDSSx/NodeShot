@@ -367,12 +367,15 @@ public class GameScreen implements Screen {
         	);
         }
         
+        //IOPorts, nodeBuildings and conveyorBuildings
         buildingManager.drawAllMisc(r, batch);
-        buildingManager.drawAllBuildings(r, batch);
-
+        
         //Connector rendering
         drawConnectors(r);
-    
+        
+        buildingManager.drawAllBuildings(r, batch);
+
+       
         if (buildMode && builtBuilding != null) {
         	r.begin(ShapeType.Filled);
         	Gdx.gl.glEnable(GL20.GL_BLEND);       
@@ -694,6 +697,9 @@ public class GameScreen implements Screen {
     }
     
     void drawConnectors(ShapeRenderer sR) {
+    	if(!nodelist.isEmpty()) {
+            connectorHandler.drawAll(sR);
+        }
     	r.begin(ShapeType.Filled);
         r.setColor(Color.WHITE);
         //ConnectMode line
@@ -706,10 +712,6 @@ public class GameScreen implements Screen {
             			Base.lineWidth);
         }
         r.end();
-        
-        if(!nodelist.isEmpty()) {
-            connectorHandler.drawAll(sR);
-        }
     }
 
     void drawPrefab(ShapeRenderer sR, SpriteBatch batch) {
@@ -864,8 +866,6 @@ public class GameScreen implements Screen {
                             font.draw(batch, "Radius: " + n.radius, (int)x, (int)y - textheight*4);
                             font.draw(batch, "Connections: " + n.getNumberOfConnections(), (int)x, (int)y - textheight*5);
                             font.draw(batch, "Connectable: " + n.connectable, (int)x, (int)y - textheight*6);
-                            font.draw(batch, "Connected To: " + Base.nodeListToString(n.connected_to), (int)x, (int)y - textheight*7);
-                            font.draw(batch, "Connected By: " + Base.nodeListToString(n.connected_by), (int)x, (int)y - textheight*8);
                             font.draw(batch, "Connectors: " + Base.nodeConnectorListToString(n.connectors), (int)x, (int)y - textheight*9);
                             font.draw(batch, "Closed: " + n.isClosed(), (int)x, (int)y - textheight*10);
                         }

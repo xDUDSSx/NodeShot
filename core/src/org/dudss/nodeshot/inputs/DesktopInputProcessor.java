@@ -2,6 +2,7 @@ package org.dudss.nodeshot.inputs;
 
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.entities.nodes.Node;
@@ -103,12 +104,16 @@ public class DesktopInputProcessor implements InputProcessor {
 						}
 												
 						if (canBeBuilt) {
-							GameScreen.builtBuilding.build();	
+							GameScreen.builtBuilding.build();
 							
 							if (GameScreen.expandingANode && builtBuilding instanceof NodeBuilding) {
-								GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)builtBuilding).getNode());
+								GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)builtBuilding).getNode());	
+								if (!((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((NodeBuilding)builtBuilding).getNode())).isBuiltProperly()) {
+									GameScreen.expandedConveyorNode.disconnect(((NodeBuilding)builtBuilding).getNode());	
+									GameScreen.builtBuilding.demolish();
+								}
 							}
-							
+													
 							if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
 								try {					
 									if (builtBuilding instanceof NodeBuilding) {
@@ -175,11 +180,7 @@ public class DesktopInputProcessor implements InputProcessor {
 				Entity clickedEntity = GameScreen.checkHighlights(true);				
 
 				if (buildMode) {
-					GameScreen.buildMode = false;
-					GameScreen.builtBuilding = null;
-					GameScreen.expandedConveyorNode = null;
-					GameScreen.expandingANode = false;
-					GameScreen.chunks.updateAllSectionMeshes(false);
+					GameScreen.buildingManager.disableBuildMode();
 				}
 				
 				if (clickedEntity instanceof NodeBuilding || clickedEntity instanceof ConveyorNode || clickedEntity instanceof IONode) {

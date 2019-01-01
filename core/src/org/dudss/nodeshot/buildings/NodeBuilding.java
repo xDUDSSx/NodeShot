@@ -114,14 +114,14 @@ public class NodeBuilding extends AbstractBuilding implements Connectable {
 	public void build() {
 		n = new ConveyorNode(x + (width/2), y + (height/2), Base.RADIUS, this);
 		n.add();
-		GameScreen.buildingManager.addBuilding(this);
+		GameScreen.buildingManager.addMisc(this);
 		//Nodes are not updating fog of war - or do they?
 		updateFogOfWar(true);
 	}
 
 	@Override
 	public void demolish() {
-		GameScreen.buildingManager.removeBuilding(this);
+		GameScreen.buildingManager.removeMisc(this);
 		n.remove();
 	
 		clearBuildingChunks();
