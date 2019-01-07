@@ -16,7 +16,7 @@ public abstract class AbstractMine extends AbstractStorage {
 
 		static float width = Base.CHUNK_SIZE*3, height = Base.CHUNK_SIZE*3;
 		
-		public int mineRange = 7;
+		public int mineRange = 11;
 		
 		public StorableItem oreType;
 		public int productionRate = 2000;
@@ -26,16 +26,16 @@ public abstract class AbstractMine extends AbstractStorage {
 		
 		public AbstractMine(float cx, float cy) {
 			super(cx, cy, width, height);
-			activateIONode(true);
-			maxStorage = 0;
+			//activateIONode(true);
+			maxStorage = 1;
 		}
 		
 		@Override
 		public void update() {
 			super.update();
-			if (nextSimTick <= SimulationThread.simTick) {
-				nextSimTick = SimulationThread.simTick + productionRate; 
+			if (nextSimTick <= SimulationThread.simTick && storage.size() < this.maxStorage) {
 				generate();
+				nextSimTick = SimulationThread.simTick + productionRate; 
 			}
 		}
 
@@ -95,5 +95,10 @@ public abstract class AbstractMine extends AbstractStorage {
 			}
 			
 			nextSimTick = SimulationThread.simTick + productionRate;			
+		}
+		
+		@Override
+		public boolean canStore(StorableItem p) {
+			return false;
 		}
 }

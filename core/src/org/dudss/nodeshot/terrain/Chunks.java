@@ -284,7 +284,7 @@ public class Chunks {
 	public void drawTerrain() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
-		SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
+		SpriteLoader.terrainAtlas.findRegion("tiledCoal").getTexture().bind();   
 	    Shaders.terrainShader.begin();
 	    Shaders.terrainShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
 	    Shaders.terrainShader.setUniformi("u_texture", 0);
@@ -314,7 +314,7 @@ public class Chunks {
 	    //GameScreen.corrBuffers.get(layer).begin();
         //Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
  		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
- 		SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture().bind();   
+ 		SpriteLoader.terrainAtlas.findRegion("tiledCoal").getTexture().bind();   
  		 		
 		Shaders.corruptionShader.begin();
 		Shaders.corruptionShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
@@ -549,10 +549,10 @@ public class Chunks {
 		  	        //All the texture coordinates are set to a blank (alpha = 0) texture to properly work with the terrain shaders
 		  	        //(Since the texture layering checks are based on alpha values)
 		  	      	//Texture 1 texture coordinates
-		  	      	float au = SpriteLoader.tileAtlas.findRegion("0void").getU();
-		  	        float av = SpriteLoader.tileAtlas.findRegion("0void").getV();
-		  	        float au2 = SpriteLoader.tileAtlas.findRegion("0void").getU2();
-		  	        float av2 = SpriteLoader.tileAtlas.findRegion("0void").getV2();
+		  	      	float au = SpriteLoader.terrainAtlas.findRegion("0void").getU();
+		  	        float av = SpriteLoader.terrainAtlas.findRegion("0void").getV();
+		  	        float au2 = SpriteLoader.terrainAtlas.findRegion("0void").getU2();
+		  	        float av2 = SpriteLoader.terrainAtlas.findRegion("0void").getV2();
 		  	        
 		  	        //Texture 2 texture coordinates
 		  	        float bu = au;
@@ -872,7 +872,7 @@ public class Chunks {
 		}
 		return patchPixmap;
 	}
-
+	
 	/**Returns all 9 sections around this particular point in world space (Including the middle section).
 	 * @param x X world space coordinate
 	 * @param y Y world space coordinate
@@ -979,4 +979,42 @@ public class Chunks {
 		
 		return closestChunk;
 	}
+	
+	/**Returns the list of {@link Chunk}s that a world space line intersects.*/
+	public List<Chunk> retrieveChunksIntersectingLine(int x0, int y0, int x1, int y1) 
+	{
+		List<Chunk> line = new ArrayList<Chunk>();
+ 
+        int dx = Math.abs(x1 - x0);
+        int dy = Math.abs(y1 - y0);
+ 
+        int sx = x0 < x1 ? 1 : -1; 
+        int sy = y0 < y1 ? 1 : -1; 
+ 
+        int err = dx-dy;
+        int e2;
+ 
+        while (true) 
+        {
+        	line.add(getChunkAtTileSpace(x0, y0));
+ 
+        	if (x0 == x1 && y0 == y1) 
+        		break;
+ 
+        	e2 = 2 * err;
+        	if (e2 > -dy) 
+        	{
+        		err = err - dy;
+        		x0 = x0 + sx;
+        	}
+ 
+        	if (e2 < dx) 
+        	{
+        		err = err + dx;
+        		y0 = y0 + sy;
+        	}
+        }
+        return line;
+	}
+	
 }

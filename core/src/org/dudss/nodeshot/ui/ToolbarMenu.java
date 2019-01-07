@@ -60,7 +60,7 @@ public class ToolbarMenu extends VisWindow {
 		BuildTable transfer = new BuildTable();
 		transfer.addBuildingTile(SpriteLoader.nodeDrawable, "Conveyor", new BuildListener(new NodeBuilding(0, 0)));		
 		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Importer", new BuildListener(new Importer(0, 0)));		
-		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Exporter", new BuildListener(new Exporter(0, 0)));
+		transfer.addBuildingTile(SpriteLoader.exporterTopDrawable, "Exporter", new BuildListener(new Exporter(0, 0)));
 		BuildTable weapons = new BuildTable();
 		weapons.addBuildingTile(SpriteLoader.turretDrawable, "Turret", new BuildListener(new Turret(0, 0)));
 		
@@ -195,7 +195,7 @@ public class ToolbarMenu extends VisWindow {
 			this.desc = desc;
 			
 			addActor(this.btn);
-			addActor(new VisLabel(this.desc));
+			//addActor(new VisLabel(this.desc));
 		}
 		
 		/**Adds a click listener to the assigned {@link VisImageButton}.*/

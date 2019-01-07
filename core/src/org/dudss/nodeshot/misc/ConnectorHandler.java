@@ -9,6 +9,7 @@ import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.Node;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -86,17 +87,17 @@ public class ConnectorHandler {
 		}
 	}
 	
-	public void drawAll(ShapeRenderer sR) {
+	public void drawAll(ShapeRenderer sR, SpriteBatch batch) {
 		sR.begin(ShapeType.Filled);
 		for (Connector nC : connectors) {
-			nC.draw(sR);
+			nC.draw(sR, batch);
 		}
 		sR.end();
 	}
 	
-	public void draw(Connector nC, ShapeRenderer sR) {
+	public void draw(Connector nC, ShapeRenderer sR, SpriteBatch batch) {
 		sR.begin(ShapeType.Filled);
-		nC.draw(sR);
+		nC.draw(sR, batch);
 		sR.end();
 	}
 	

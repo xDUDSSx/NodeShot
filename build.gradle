@@ -61,6 +61,7 @@ project(":core") {
         compile "com.miglayout:miglayout:3.7.2:swing@jar"
         compile "com.kotcrab.vis:vis-ui:$visuiVersion"
         compile group: 'org.orbisgis', name: 'poly2tri-core', version: '0.1.2'
+        compile group: 'com.badlogicgames.gdx', name: 'gdx-tools', version: '1.9.9'
     }
 }
 

@@ -30,12 +30,14 @@ public class Chunk {
 	 * 0.4f -> activated but not in vision
 	 * 0f -> active vision
 	 * */
-	public float visibility = deactivated;
+	public float visibility = Base.DEFAULT_VISIBILITY;
 	int visionProviderNumber = 0;
 	
 	public static float active = 0f;
-	public static float semiactive = 0.2f;
-	public static float deactivated = 0.35f;
+	public static float semiactive = 0f;
+	public static float deactivated = 1f;
+	/*public static float semiactive = 0.2f;
+	public static float deactivated = 0.35f;*/
 	
 	boolean borderChunk = false;
 	
@@ -88,6 +90,7 @@ public class Chunk {
 		BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT,
 		END_LEFT, END_RIGHT, END_TOP, END_BOTTOM,
 		STRAIGHT_LEFT, STRAIGHT_RIGHT, STRAIGHT_TOP, STRAIGHT_BOTTOM,
+		BR_CORNER_TOP, BR_CORNER_BOTTOM,
 		DOUBLE_X, DOUBLE_Y,
 		SINGLE, NONE
 	}
@@ -204,13 +207,13 @@ public class Chunk {
 		
 	/**Returns an {@link AtlasRegion} representing this {@linkplain Chunk}s terrain.*/
 	public AtlasRegionContainer getTerrainTexture() {			
-		AtlasRegionContainer arc = new AtlasRegionContainer();
+		AtlasRegionContainer misc = new AtlasRegionContainer();
 		
 		//Draw mine outlines
 		if (this.isOreOutlined) {
 			AtlasRegion outline = resolveOutlineEdges();
 			if (outline != null) {
-				arc.addTexture(outline);
+				misc.addTexture(outline);
 			}
 		}		
 		
@@ -219,7 +222,7 @@ public class Chunk {
 			if (this.getOreLevel() > 0) {
 				AtlasRegion ore = getOreTexture();
 				if (ore != null) {
-					arc.addTexture(ore);
+					misc.addTexture(ore);
 				}
 			}
 		}
@@ -227,29 +230,189 @@ public class Chunk {
 		//Draw build outlines
 		if (GameScreen.buildMode) {
 			if (this.isDiagonalTerrainEdge() || this.getBuilding() != null) {
-				arc.addTexture(SpriteLoader.tileAtlas.findRegion("buildOverlayRed"));
+				misc.addTexture(SpriteLoader.terrainAtlas.findRegion("buildOverlayRed"));
 			} else {
-				arc.addTexture(SpriteLoader.tileAtlas.findRegion("buildOverlayGreen"));
+				misc.addTexture(SpriteLoader.terrainAtlas.findRegion("buildOverlayGreen"));
 			}
 		}
 		
+		AtlasRegionContainer terrain = new AtlasRegionContainer();
 		
 		switch(height) {
 			case 0: this.setTerrainEdge(false, 0, EdgeType.NONE); return null; //TODO: ore at level 0?
-			case 1: arc.addContainer(resolveTerrainEdges(1)); break;
-			case 2: arc.addContainer(resolveTerrainEdges(2)); break;
-			case 3: arc.addContainer(resolveTerrainEdges(3)); break;
-			case 4: arc.addContainer(resolveTerrainEdges(4)); break;
-			case 5: arc.addContainer(resolveTerrainEdges(5)); break;
-			case 6: arc.addContainer(resolveTerrainEdges(6)); break;
-			case 7: arc.addContainer(resolveTerrainEdges(7)); break;
-			case 8: arc.addContainer(resolveTerrainEdges(8)); break;
-			case 9: arc.addContainer(resolveTerrainEdges(9)); break;
-			case 10: arc.addContainer(resolveTerrainEdges(10)); break;	
+			case 1: terrain.addContainer(resolveTerrainEdges(1)); break;
+			case 2: terrain.addContainer(resolveTerrainEdges(2)); break;
+			case 3:	terrain.addContainer(resolveTerrainEdges(3)); break;
+			case 4: terrain.addContainer(resolveTerrainEdges(4)); break;
+			case 5: terrain.addContainer(resolveTerrainEdges(5)); break;
+			case 6: terrain.addContainer(resolveTerrainEdges(6)); break;
+			case 7: terrain.addContainer(resolveTerrainEdges(7)); break;
+			case 8: terrain.addContainer(resolveTerrainEdges(8)); break;
+			case 9: terrain.addContainer(resolveTerrainEdges(9)); break;
+			case 10: terrain.addContainer(resolveTerrainEdges(10)); break;	
 		}
-		return arc;		
+	
+		AtlasRegionContainer secondaryTerrain = null;
+		
+		switch(height) {
+			case 0: return null;
+			case 1: secondaryTerrain = resolveSecondaryTerrainEdges(1); break;
+			case 2: secondaryTerrain = resolveSecondaryTerrainEdges(2); break;
+			case 3:	secondaryTerrain = resolveSecondaryTerrainEdges(3); break;
+			case 4: secondaryTerrain = resolveSecondaryTerrainEdges(4); break;
+			case 5: secondaryTerrain = resolveSecondaryTerrainEdges(5); break;
+			case 6: secondaryTerrain = resolveSecondaryTerrainEdges(6); break;
+			case 7: secondaryTerrain = resolveSecondaryTerrainEdges(7); break;
+			case 8: secondaryTerrain = resolveSecondaryTerrainEdges(8); break;
+			case 9: secondaryTerrain = resolveSecondaryTerrainEdges(9); break;
+			case 10: secondaryTerrain = resolveSecondaryTerrainEdges(10); break;	
+		}
+		
+		if (secondaryTerrain != null) {
+			return misc.addContainer(secondaryTerrain);
+		} else {
+			return misc.addContainer(terrain);
+		}
 	}
+	
+	private AtlasRegionContainer resolveSecondaryTerrainEdges(int level) {
+		if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
+				if (minusx.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT &&
+					plusy.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR_fill"));
+				} else
+				
+				if (minusx.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT &&
+					plusx.getTerrainEdgeType() == EdgeType.STRAIGHT_TOP &&
+					minusy.isTerrainEdge() == false &&
+					plusy.getHeight() < this.height) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR_corner_top"));
+				} else
+				
+				if (plusy.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT &&
+					minusy.getTerrainEdgeType() == EdgeType.STRAIGHT_LEFT &&
+					plusx.isTerrainEdge() == false &&
+					minusx.getHeight() < this.height) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR_corner_bottom"));
+				} else
+				if (plusy.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT &&
+					minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_TOP)			
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR_fill_corner_ST_BR"));
+				} else
+				if (plusy.getTerrainEdgeType() == EdgeType.STRAIGHT_LEFT &&
+					minusx.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT)				
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR_fill_corner_BR_SL"));
+				}
+				
+				
+				
+				if (plusx.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT &&
+					plusy.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL_fill"));
+				} else
+				
+				if (plusx.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT &&
+					minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_TOP &&
+					minusy.isTerrainEdge() == false &&
+					plusy.getHeight() < this.height) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL_corner_top"));
+				} else
+				
+				if (plusy.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT &&
+					minusy.getTerrainEdgeType() == EdgeType.STRAIGHT_RIGHT &&
+					minusx.isTerrainEdge() == false &&
+					plusx.getHeight() < this.height) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL_corner_bottom"));
+				} else
+				if (plusy.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT &&
+					plusx.getTerrainEdgeType() == EdgeType.STRAIGHT_TOP)
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL_fill_corner_BL_ST"));
+				} else
+				if (plusy.getTerrainEdgeType() == EdgeType.STRAIGHT_RIGHT &&
+					plusx.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT)			
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL_fill_corner_SR_BL"));
+				}
 
+				
+				
+				if (plusx.getTerrainEdgeType() == EdgeType.TOP_LEFT &&
+					minusy.getTerrainEdgeType() == EdgeType.TOP_LEFT) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL_fill"));
+				} else
+				
+				if (minusy.getTerrainEdgeType() == EdgeType.TOP_LEFT &&
+					plusy.getTerrainEdgeType() == EdgeType.STRAIGHT_RIGHT &&
+					minusx.isTerrainEdge() == false &&
+					plusx.getHeight() < this.height) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL_corner_top"));
+				} else
+				
+				if (plusx.getTerrainEdgeType() == EdgeType.TOP_LEFT &&
+					minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_BOTTOM &&
+					plusy.isTerrainEdge() == false &&
+					minusy.getHeight() < this.height) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL_corner_bottom"));
+				} else
+				if (minusy.getTerrainEdgeType() == EdgeType.STRAIGHT_RIGHT &&
+					plusx.getTerrainEdgeType() == EdgeType.TOP_LEFT)
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL_fill_corner_SR_TL"));
+				} else
+				if (plusx.getTerrainEdgeType() == EdgeType.STRAIGHT_BOTTOM &&
+					minusy.getTerrainEdgeType() == EdgeType.TOP_LEFT)			
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL_fill_corner_TL_SB"));
+				}
+				
+				
+				if (minusx.getTerrainEdgeType() == EdgeType.TOP_RIGHT &&
+					minusy.getTerrainEdgeType() == EdgeType.TOP_RIGHT) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR_fill"));
+				} else
+				
+				if (minusy.getTerrainEdgeType() == EdgeType.TOP_RIGHT &&
+					plusy.getTerrainEdgeType() == EdgeType.STRAIGHT_LEFT &&
+					plusx.isTerrainEdge() == false &&
+					minusx.getHeight() < this.height) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR_corner_top"));
+				} else
+				
+				if (minusx.getTerrainEdgeType() == EdgeType.TOP_RIGHT &&
+					plusx.getTerrainEdgeType() == EdgeType.STRAIGHT_BOTTOM &&
+					plusy.isTerrainEdge() == false &&
+					minusy.getHeight() < this.height) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR_corner_bottom"));
+				} else
+				if (minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_BOTTOM &&
+					minusy.getTerrainEdgeType() == EdgeType.TOP_RIGHT)
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR_fill_corner_SB_TR"));
+				} else
+				if (minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_LEFT &&
+					minusy.getTerrainEdgeType() == EdgeType.TOP_RIGHT)			
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR_fill_corner_TR_SL"));
+				}
+		}
+		return null;
+	}
+	
 	/**Returns the appropriate {@link AtlasRegion} for the specified terrain height.
 	 * @param level Target height level.
 	 * */
@@ -261,16 +424,41 @@ public class Chunk {
 				plusx.getHeight() < level &&
 				minusx.getHeight() >= level && 
 				minusy.getHeight() >= level) 
-			{	
-				int h1 = (int) plusx.getHeight();
-				int h2 = (int) plusy.getHeight();
-				if (h1 == h2) {
-					lowerLevel = level - h1;
-					setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_LEFT);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
-				}				
+			{					
+				lowerLevel = level - (int)plusx.getHeight();
+				setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_LEFT);
+				
+				if (plusx.getHeight() == plusy.getHeight()) {	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				} else if (plusx.getHeight() > plusy.getHeight()) {
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "ST"));
+				} else {
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SR"));
+				}		
+			} else				
+			if (plusy.getHeight() < level && 
+				plusx.getHeight() >= level &&
+				minusx.getHeight() < level &&				 
+				minusy.getHeight() >= level)  
+			{		
+				lowerLevel = level - (int)minusx.getHeight();
+				setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_RIGHT);
+				
+				if (minusx.getHeight() == plusy.getHeight()) {	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				} else if (minusx.getHeight() > plusy.getHeight()) {
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "ST"));
+				} else {
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SL"));
+				}		
 			} else
+			/*
 			if (plusy.getHeight() < level && 
 				plusx.getHeight() >= level &&
 				minusx.getHeight() < level &&				 
@@ -281,37 +469,47 @@ public class Chunk {
 				if (h1 == h2) {
 					lowerLevel = level - h1;
 					setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_RIGHT);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
-			} else
+			*/
 			if (minusy.getHeight() < level && 
 				plusx.getHeight() < level &&
 			    plusy.getHeight() >= level &&
 			    minusx.getHeight() >= level)  
-			{
-				int h1 = (int) minusy.getHeight();
-				int h2 = (int) plusx.getHeight();
-				if (h1 == h2) {
-					lowerLevel = level - h1;
-					setTerrainEdge(true, lowerLevel, EdgeType.TOP_LEFT);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
-				}
+			{	
+				lowerLevel = level - (int)minusy.getHeight();
+				setTerrainEdge(true, lowerLevel, EdgeType.TOP_LEFT);
+				
+				if (minusy.getHeight() == plusx.getHeight()) {	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				} else if (minusy.getHeight() > plusx.getHeight()) {
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SR"));
+				} else {
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SB"));
+				}		
 			} else
 			if (minusy.getHeight() < level && 
 				minusx.getHeight() < level && 
 			    plusx.getHeight() >= level &&
 			    plusy.getHeight() >= level)  
 			{
-				int h1 = (int) minusy.getHeight();
-				int h2 = (int) minusx.getHeight();
-				if (h1 == h2) {
-					lowerLevel = level - h1;
-					setTerrainEdge(true, lowerLevel, EdgeType.TOP_RIGHT);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
-				}
+				lowerLevel = level - (int)minusy.getHeight();
+				setTerrainEdge(true, lowerLevel, EdgeType.TOP_RIGHT);
+				
+				if (minusy.getHeight() == minusx.getHeight()) {	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				} else if (minusy.getHeight() > minusx.getHeight()) {
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SL"));
+				} else {
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SB"));
+				}						
 			} else
 				
 			//Straight line borders
@@ -322,8 +520,8 @@ public class Chunk {
 			{
 				setTerrainEdge(true, 0, EdgeType.STRAIGHT_RIGHT);
 				lowerLevel = level - (int)plusx.getHeight();
-				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SR"),
-												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "SR"),
+												SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 			} else
 			if (plusx.getHeight() >= level && 
 				minusx.getHeight() >= level && 
@@ -332,8 +530,8 @@ public class Chunk {
 			{	
 				setTerrainEdge(true, 0, EdgeType.STRAIGHT_BOTTOM);
 				lowerLevel = level - (int)minusy.getHeight();
-				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SB"),
-												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "SB"),
+												SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 			} else
 			if (plusx.getHeight() >= level && 
 				minusx.getHeight() < level &&
@@ -342,9 +540,20 @@ public class Chunk {
 			{	
 				setTerrainEdge(true, 0, EdgeType.STRAIGHT_LEFT);
 				lowerLevel = level - (int)minusx.getHeight();
-				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "SL"),
-												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "SL"),
+												SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 			} else
+			/*
+			if (plusx.getHeight() >= level && 
+				minusx.getHeight() < level &&
+				plusy.getHeight()  >= level &&
+				minusy.getHeight()  >= level)  
+			{	
+				setTerrainEdge(true, 0, EdgeType.STRAIGHT_LEFT);
+				lowerLevel = level - (int)minusx.getHeight();
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "SL"),
+												SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+			} else*/
 			if (plusx.getHeight()  >= level && 
 				minusx.getHeight() >= level && 
 				plusy.getHeight()  < level &&
@@ -352,9 +561,20 @@ public class Chunk {
 			{
 				setTerrainEdge(true, 0, EdgeType.STRAIGHT_TOP);
 				lowerLevel = level - (int)plusy.getHeight();
-				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "ST"),
-												SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "ST"),
+												SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 			} else
+			/*
+			if (plusx.getHeight()  >= level && 
+				minusx.getHeight() >= level && 
+				plusy.getHeight()  < level &&
+				minusy.getHeight() >= level)  
+			{
+				setTerrainEdge(true, 0, EdgeType.STRAIGHT_TOP);
+				lowerLevel = level - (int)plusy.getHeight();
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "ST"),
+												SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+			} else*/
 				
 			//Tile ends
 			if (plusy.getHeight() < level && 
@@ -368,8 +588,8 @@ public class Chunk {
 				if ((h1 == h2) && (h2 == h3)) {
 					lowerLevel = level - h1;
 					setTerrainEdge(true, lowerLevel, EdgeType.END_RIGHT);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "RB"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "RB"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
 			if (plusy.getHeight() < level && 
@@ -383,8 +603,8 @@ public class Chunk {
 				if ((h1 == h2) && (h2 == h3)) {
 					lowerLevel = level - h1;
 					setTerrainEdge(true, lowerLevel, EdgeType.END_LEFT);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "LB"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "LB"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
 			if (plusy.getHeight() < level && 
@@ -398,8 +618,8 @@ public class Chunk {
 				if ((h1 == h2) && (h2 == h3)) {
 					lowerLevel = level - h1;
 					setTerrainEdge(true, lowerLevel, EdgeType.END_TOP);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "TB"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TB"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			} else
 			if (minusy.getHeight() < level && 
@@ -413,8 +633,8 @@ public class Chunk {
 				if ((h1 == h2) && (h2 == h3)) {
 					lowerLevel = level - h1;
 					setTerrainEdge(true, lowerLevel, EdgeType.END_BOTTOM);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "BB"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BB"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));	
 				}
 			} else 
 				
@@ -431,30 +651,30 @@ public class Chunk {
 				if ((h1 == h2) && (h2 == h3) && (h3 == h4)) {
 					lowerLevel = level - h1;
 					setTerrainEdge(true, lowerLevel, EdgeType.SINGLE);
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level] + "Single"),
-													SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "Single"),
+													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				}
 			}
 		}
 		setTerrainEdge(false, 0, EdgeType.NONE);
-		return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion(Chunks.terrainLayerNames[level]));
+		return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level]));
 	}
 	
 	/**Returns the appropriate ore {@link AtlasRegion} for this {@linkplain Chunk}.*/
 	private AtlasRegion getOreTexture() {
 		if (coalOre != 0) {	
 			if (coalOre > 0.25f) {
-				return SpriteLoader.tileAtlas.findRegion("renderedCoalLevel1");
+				return SpriteLoader.terrainAtlas.findRegion("renderedCoalLevel1");
 			} else {
-				return SpriteLoader.tileAtlas.findRegion("renderedCoalLevel0");
+				return SpriteLoader.terrainAtlas.findRegion("renderedCoalLevel0");
 			}
 		}	
 	
 		if (ironOre != 0) {
 			if (ironOre > 0.25f) {
-				return SpriteLoader.tileAtlas.findRegion("renderedIronLevel1");
+				return SpriteLoader.terrainAtlas.findRegion("renderedIronLevel1");
 			} else {
-				return SpriteLoader.tileAtlas.findRegion("renderedIronLevel0");
+				return SpriteLoader.terrainAtlas.findRegion("renderedIronLevel0");
 			}		
 		}
 		return null;
@@ -468,7 +688,7 @@ public class Chunk {
 				minusx.isOreOutlined() && 
 				minusy.isOreOutlined()) 
 			{					
-				return SpriteLoader.tileAtlas.findRegion("outlineEmpty");
+				return SpriteLoader.terrainAtlas.findRegion("outlineEmpty");
 			} else
 			
 			//Diagonal edges
@@ -477,28 +697,28 @@ public class Chunk {
 				minusx.isOreOutlined() == false && 
 				minusy.isOreOutlined() == false) 
 			{					
-				return SpriteLoader.tileAtlas.findRegion("outlineBL");
+				return SpriteLoader.terrainAtlas.findRegion("outlineBL");
 			} else
 			if (plusy.isOreOutlined() && 
 				plusx.isOreOutlined() == false &&
 				minusx.isOreOutlined() &&				 
 			    minusy.isOreOutlined() == false)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("outlineBR");
+				return SpriteLoader.terrainAtlas.findRegion("outlineBR");
 			} else
 			if (minusy.isOreOutlined() && 
 				plusx.isOreOutlined() &&
 			    plusy.isOreOutlined() == false &&
 			    minusx.isOreOutlined() == false)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("outlineTL");
+				return SpriteLoader.terrainAtlas.findRegion("outlineTL");
 			} else
 			if (minusy.isOreOutlined() && 
 				minusx.isOreOutlined()&& 
 			    plusx.isOreOutlined() == false &&
 			    plusy.isOreOutlined() == false)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("outlineTR");								
+				return SpriteLoader.terrainAtlas.findRegion("outlineTR");								
 			} else
 				
 			//Straight line borders
@@ -507,28 +727,28 @@ public class Chunk {
 				plusy.isOreOutlined() &&
 				minusy.isOreOutlined())  
 			{
-				return SpriteLoader.tileAtlas.findRegion("outlineSR");
+				return SpriteLoader.terrainAtlas.findRegion("outlineSR");
 			} else
 			if (plusx.isOreOutlined() && 
 				minusx.isOreOutlined() && 
 				plusy.isOreOutlined() &&
 				minusy.isOreOutlined() == false)  
 			{
-				return SpriteLoader.tileAtlas.findRegion("outlineSB");
+				return SpriteLoader.terrainAtlas.findRegion("outlineSB");
 			} else
 			if (plusx.isOreOutlined() && 
 				minusx.isOreOutlined() == false && 
 				plusy.isOreOutlined() &&
 				minusy.isOreOutlined())  
 			{
-				return SpriteLoader.tileAtlas.findRegion("outlineSL");
+				return SpriteLoader.terrainAtlas.findRegion("outlineSL");
 			} else
 			if (plusx.isOreOutlined() && 
 				minusx.isOreOutlined() && 
 				plusy.isOreOutlined() == false &&
 				minusy.isOreOutlined())  
 			{
-				return SpriteLoader.tileAtlas.findRegion("outlineST");
+				return SpriteLoader.terrainAtlas.findRegion("outlineST");
 			} else
 				
 			//Tile ends
@@ -537,28 +757,28 @@ public class Chunk {
 				minusy.isOreOutlined() == false &&
 				minusx.isOreOutlined())  
 			{
-				return SpriteLoader.tileAtlas.findRegion("outlineRB");
+				return SpriteLoader.terrainAtlas.findRegion("outlineRB");
 			} else 
 			if (plusy.isOreOutlined() == false && 
 				minusx.isOreOutlined() == false && 
 				minusy.isOreOutlined() == false &&
 				plusx.isOreOutlined())  
 			{	
-				return SpriteLoader.tileAtlas.findRegion("outlineLB");
+				return SpriteLoader.terrainAtlas.findRegion("outlineLB");
 			} else
 			if (plusy.isOreOutlined() == false && 
 				plusx.isOreOutlined() == false && 
 				minusx.isOreOutlined() == false &&
 				minusy.isOreOutlined())  
 			{	
-				return SpriteLoader.tileAtlas.findRegion("outlineTB");
+				return SpriteLoader.terrainAtlas.findRegion("outlineTB");
 			} else
 			if (minusy.isOreOutlined() == false && 
 				plusx.isOreOutlined() == false && 
 				minusx.isOreOutlined() == false &&
 				plusy.isOreOutlined())  
 			{			
-				return SpriteLoader.tileAtlas.findRegion("outlineBB");
+				return SpriteLoader.terrainAtlas.findRegion("outlineBB");
 			} else 
 				
 			//Single creeper tile
@@ -567,7 +787,7 @@ public class Chunk {
 				minusx.isOreOutlined() == false &&
 				plusy.isOreOutlined() == false)  
 			{ 
-				return SpriteLoader.tileAtlas.findRegion("outlineSingle");
+				return SpriteLoader.terrainAtlas.findRegion("outlineSingle");
 			} else
 			
 			if (minusy.isOreOutlined() == false && 
@@ -575,14 +795,14 @@ public class Chunk {
 				minusx.isOreOutlined() &&
 				plusy.isOreOutlined() == false)  
 			{ 
-				return SpriteLoader.tileAtlas.findRegion("outlineYBS");
+				return SpriteLoader.terrainAtlas.findRegion("outlineYBS");
 			} else
 			if (minusy.isOreOutlined() && 
 				plusx.isOreOutlined() == false && 
 				minusx.isOreOutlined() == false &&
 				plusy.isOreOutlined())  
 			{ 
-				return SpriteLoader.tileAtlas.findRegion("outlineXBS");
+				return SpriteLoader.terrainAtlas.findRegion("outlineXBS");
 			}
 		}
 		return null;
@@ -618,13 +838,13 @@ public class Chunk {
 			{
 				setCorruptionEdge(true, EdgeType.BOTTOM_LEFT);
 				if (plusx.getCreeperLevel() == 0 && plusy.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrBL"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrBL"));	
 				} else if (plusx.getAbsoluteCreeperLayer() == plusy.getAbsoluteCreeperLayer()) {
-					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBL"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBL"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 				} else if (plusx.getAbsoluteCreeperLayer() > plusy.getAbsoluteCreeperLayer()) {
-					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBL"), SpriteLoader.tileAtlas.findRegion("corrST"));	
+					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBL"), SpriteLoader.terrainAtlas.findRegion("corrST"));	
 				} else {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBL"), SpriteLoader.tileAtlas.findRegion("corrSR"));	
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBL"), SpriteLoader.terrainAtlas.findRegion("corrSR"));	
 				}
 			} else
 			if (plusy.getAbsoluteCreeperLayer() < level && 
@@ -634,15 +854,15 @@ public class Chunk {
 			{
 				setCorruptionEdge(true, EdgeType.BOTTOM_RIGHT);		
 				if (minusx.getCreeperLevel() == 0 && plusy.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrBR"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrBR"));	
 				} else if ((minusx.getCreeperLevel() == 0 && minusx.getHeight() > level) && (plusy.getCreeperLevel() == 0 && plusy.getHeight() > level)) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrCBR"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrCBR"));	
 				} else if (minusx.getAbsoluteCreeperLayer() == plusy.getAbsoluteCreeperLayer()) {
-					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBR"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBR"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 				} else if (minusx.getAbsoluteCreeperLayer() > plusy.getAbsoluteCreeperLayer()) {
-					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBR"), SpriteLoader.tileAtlas.findRegion("corrST"));	
+					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBR"), SpriteLoader.terrainAtlas.findRegion("corrST"));	
 				} else {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBR"), SpriteLoader.tileAtlas.findRegion("corrSL"));	
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBR"), SpriteLoader.terrainAtlas.findRegion("corrSL"));	
 				}		
 			} else
 			if (minusy.getAbsoluteCreeperLayer() < level && 
@@ -652,13 +872,13 @@ public class Chunk {
 			{
 				setCorruptionEdge(true, EdgeType.TOP_LEFT);				
 				if (minusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTL"));					
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrTL"));					
 				} else if (minusy.getAbsoluteCreeperLayer() == plusx.getAbsoluteCreeperLayer()) {
-					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTL"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTL"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 				} else if (minusy.getAbsoluteCreeperLayer() > plusx.getAbsoluteCreeperLayer()) {
-					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTL"), SpriteLoader.tileAtlas.findRegion("corrSR"));	
+					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTL"), SpriteLoader.terrainAtlas.findRegion("corrSR"));	
 				} else {
-					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTL"), SpriteLoader.tileAtlas.findRegion("corrSB"));	
+					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTL"), SpriteLoader.terrainAtlas.findRegion("corrSB"));	
 				}
 			} else
 			if (minusy.getAbsoluteCreeperLayer() < level && 
@@ -668,15 +888,15 @@ public class Chunk {
 			{
 				setCorruptionEdge(true, EdgeType.TOP_RIGHT);	
 				if (minusx.getCreeperLevel() == 0 && minusy.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTR"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrTR"));	
 				} else if ((minusx.getCreeperLevel() == 0 && minusx.getHeight() > level) && (minusy.getCreeperLevel() == 0 && minusy.getHeight() > level)) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrCTR"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrCTR"));	
 				} else if (minusx.getAbsoluteCreeperLayer() == minusy.getAbsoluteCreeperLayer()) {
-					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTR"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTR"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 				} else if (minusx.getAbsoluteCreeperLayer() > minusy.getAbsoluteCreeperLayer()) {
-					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTR"), SpriteLoader.tileAtlas.findRegion("corrSB"));	
+					return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTR"), SpriteLoader.terrainAtlas.findRegion("corrSB"));	
 				} else {
-					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTR"), SpriteLoader.tileAtlas.findRegion("corrSL"));	
+					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTR"), SpriteLoader.terrainAtlas.findRegion("corrSL"));	
 				}
 			} else
 				
@@ -687,7 +907,7 @@ public class Chunk {
 				minusy.getAbsoluteCreeperLayer() >= level)  
 			{
 				setCorruptionEdge(true, EdgeType.STRAIGHT_RIGHT);
-				return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrSR"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+				return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrSR"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 			} else
 			if (plusx.getAbsoluteCreeperLayer() >= level && 
 				minusx.getAbsoluteCreeperLayer() >= level && 
@@ -695,7 +915,7 @@ public class Chunk {
 				minusy.getAbsoluteCreeperLayer() < level)  
 			{	
 				setCorruptionEdge(true, EdgeType.STRAIGHT_BOTTOM);
-				return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrSB"), SpriteLoader.tileAtlas.findRegion("corr32"));		
+				return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrSB"), SpriteLoader.terrainAtlas.findRegion("corr32"));		
 			} else
 			if (plusx.getAbsoluteCreeperLayer() >= level && 
 				minusx.getAbsoluteCreeperLayer() < level &&
@@ -703,7 +923,7 @@ public class Chunk {
 				minusy.getAbsoluteCreeperLayer()  >= level)  
 			{	
 				setCorruptionEdge(true, EdgeType.STRAIGHT_LEFT);
-				return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrSL"), SpriteLoader.tileAtlas.findRegion("corr32"));		
+				return new AtlasRegionContainer(minusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrSL"), SpriteLoader.terrainAtlas.findRegion("corr32"));		
 			} else
 			if (plusx.getAbsoluteCreeperLayer()  >= level && 
 				minusx.getAbsoluteCreeperLayer() >= level && 
@@ -711,7 +931,7 @@ public class Chunk {
 				minusy.getAbsoluteCreeperLayer() >= level)  
 			{
 				setCorruptionEdge(true, EdgeType.STRAIGHT_TOP);
-				return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrST"), SpriteLoader.tileAtlas.findRegion("corr32"));		
+				return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrST"), SpriteLoader.terrainAtlas.findRegion("corr32"));		
 			} else
 			
 			//Double edges
@@ -721,7 +941,7 @@ public class Chunk {
 				minusy.getAbsoluteCreeperLayer() >= level)  
 			{
 				setCorruptionEdge(true, EdgeType.DOUBLE_X);
-				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrXBS"));									
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrXBS"));									
 			} else
 			if (plusx.getAbsoluteCreeperLayer() >= level && 
 				minusx.getAbsoluteCreeperLayer() >= level && 
@@ -729,7 +949,7 @@ public class Chunk {
 				minusy.getAbsoluteCreeperLayer() < level)  
 			{	
 				setCorruptionEdge(true, EdgeType.DOUBLE_Y);
-				return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrYBS"));		
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrYBS"));		
 			} else
 				
 			//Tile ends
@@ -743,15 +963,15 @@ public class Chunk {
 				int h2 = (int) plusx.getAbsoluteCreeperLayer();
 				int h3 = (int) minusy.getAbsoluteCreeperLayer();
 				if (plusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0 && minusy.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrLB"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrLB"));	
 				} else if ((h1 == h2) && (h2 == h3)) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrLB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrLB"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 				} else if (h1 == h3 && h3 != h2) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrLB"), SpriteLoader.tileAtlas.findRegion("corrSR"));
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrLB"), SpriteLoader.terrainAtlas.findRegion("corrSR"));
 				} else if (h1 == h2 && h2 != h3) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrLB"), SpriteLoader.tileAtlas.findRegion("corrSB"));
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrLB"), SpriteLoader.terrainAtlas.findRegion("corrSB"));
 				} else if (h2 == h3 && h3 != h1) {
-					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrLB"), SpriteLoader.tileAtlas.findRegion("corrST"));
+					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrLB"), SpriteLoader.terrainAtlas.findRegion("corrST"));
 				}
 			} else
 			if (plusy.getAbsoluteCreeperLayer() < level && 
@@ -764,15 +984,15 @@ public class Chunk {
 				int h2 = (int) minusx.getAbsoluteCreeperLayer();
 				int h3 = (int) minusy.getAbsoluteCreeperLayer();
 				if (plusy.getCreeperLevel() == 0 && minusx.getCreeperLevel() == 0 && minusy.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrRB"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrRB"));	
 				} else if ((h1 == h2) && (h2 == h3)) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrRB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrRB"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 				} else if (h1 == h3 && h3 != h2) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrRB"), SpriteLoader.tileAtlas.findRegion("corrSL"));
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrRB"), SpriteLoader.terrainAtlas.findRegion("corrSL"));
 				} else if (h1 == h2 && h2 != h3) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrRB"), SpriteLoader.tileAtlas.findRegion("corrSB"));
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrRB"), SpriteLoader.terrainAtlas.findRegion("corrSB"));
 				} else if (h2 == h3 && h3 != h1) {
-					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrRB"), SpriteLoader.tileAtlas.findRegion("corrST"));
+					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrRB"), SpriteLoader.terrainAtlas.findRegion("corrST"));
 				}	
 			} else
 			if (plusy.getAbsoluteCreeperLayer() < level && 
@@ -785,15 +1005,15 @@ public class Chunk {
 				int h2 = (int) plusy.getAbsoluteCreeperLayer();
 				int h3 = (int) plusx.getAbsoluteCreeperLayer();
 				if (plusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0 && minusx.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrTB"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrTB"));	
 				} else if ((h1 == h2) && (h2 == h3)) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTB"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 				} else if (h1 == h3 && h3 != h2) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTB"), SpriteLoader.tileAtlas.findRegion("corrST"));
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTB"), SpriteLoader.terrainAtlas.findRegion("corrST"));
 				} else if (h1 == h2 && h2 != h3) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTB"), SpriteLoader.tileAtlas.findRegion("corrSR"));
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTB"), SpriteLoader.terrainAtlas.findRegion("corrSR"));
 				} else if (h2 == h3 && h3 != h1) {
-					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrTB"), SpriteLoader.tileAtlas.findRegion("corrSL"));
+					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrTB"), SpriteLoader.terrainAtlas.findRegion("corrSL"));
 				}
 			} else
 			if (minusy.getAbsoluteCreeperLayer() < level && 
@@ -806,15 +1026,15 @@ public class Chunk {
 				int h2 = (int) minusy.getAbsoluteCreeperLayer();
 				int h3 = (int) plusx.getAbsoluteCreeperLayer();
 				if (minusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0 && minusx.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrBB"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrBB"));	
 				} else if ((h1 == h2) && (h2 == h3)) {
-					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBB"), SpriteLoader.tileAtlas.findRegion("corr32"));									
+					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBB"), SpriteLoader.terrainAtlas.findRegion("corr32"));									
 				} else if (h1 == h3 && h3 != h2) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBB"), SpriteLoader.tileAtlas.findRegion("corrSB"));
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBB"), SpriteLoader.terrainAtlas.findRegion("corrSB"));
 				} else if (h1 == h2 && h2 != h3) {
-					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBB"), SpriteLoader.tileAtlas.findRegion("corrSR"));
+					return new AtlasRegionContainer(plusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBB"), SpriteLoader.terrainAtlas.findRegion("corrSR"));
 				} else if (h2 == h3 && h3 != h1) {
-					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrBB"), SpriteLoader.tileAtlas.findRegion("corrSL"));
+					return new AtlasRegionContainer(minusy.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrBB"), SpriteLoader.terrainAtlas.findRegion("corrSL"));
 				}	
 			} else 
 				
@@ -830,15 +1050,15 @@ public class Chunk {
 				int h3 = (int) minusx.getAbsoluteCreeperLayer();
 				int h4 = (int) minusy.getAbsoluteCreeperLayer();
 				if (plusy.getCreeperLevel() == 0 && plusx.getCreeperLevel() == 0 && minusy.getCreeperLevel() == 0 && minusx.getCreeperLevel() == 0) {
-					return new AtlasRegionContainer(SpriteLoader.tileAtlas.findRegion("corrSingle"));	
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corrSingle"));	
 				} else 
 				if ((h1 == h2) && (h2 == h3) && (h3 == h4)) {
-					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.tileAtlas.findRegion("corrSingle"), SpriteLoader.tileAtlas.findRegion("corr32"));	
+					return new AtlasRegionContainer(plusx.calculateShade(), SpriteLoader.terrainAtlas.findRegion("corrSingle"), SpriteLoader.terrainAtlas.findRegion("corr32"));	
 				}
 			}
 		}
 		setCorruptionEdge(false, EdgeType.NONE);
-		return new AtlasRegionContainer(1f, SpriteLoader.tileAtlas.findRegion("corr32"));					
+		return new AtlasRegionContainer(1f, SpriteLoader.terrainAtlas.findRegion("corr32"));					
 	}
 	
 	/**Method that populates all the neighbour chunks. Called by {@link Chunks#create()} at initialisation.*/

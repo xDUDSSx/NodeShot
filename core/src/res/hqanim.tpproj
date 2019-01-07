@@ -21,8 +21,8 @@ pot=true
 rotation=false
 stripWhitespaceX=false
 stripWhitespaceY=false
-wrapX=ClampToEdge
-wrapY=ClampToEdge
+wrapX=Repeat
+wrapY=Repeat
 premultiplyAlpha=false
 grid=false
 square=false
@@ -31,7 +31,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../../../Desktop/NodeShot/sprites/creepergenONframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/creepergenOFFframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/factoryOFFframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/outline_factoryOFFframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/HQanimation256textured,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:../../../../Desktop/NodeShot/sprites/importerTOP.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/previews/importerTOPpreview256.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/previews,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:../../../../Desktop/NodeShot/sprites/mineON.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/mineOFF.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/previews/nodePreview512.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/nodeNew.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/ammoProcessor.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/processedMaterial.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/shipdock.png,type:Input,regionName:null}]
+inputFiles=[{path:../../../../Desktop/NodeShot/sprites/creepergenONframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/creepergenOFFframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/factoryOFFframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/outline_factoryOFFframe.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/HQanimation256textured,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:../../../../Desktop/NodeShot/previews/importerTOPpreview256.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/previews,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:../../../../Desktop/NodeShot/sprites/mineON.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/mineOFF.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/previews/nodePreview512.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/nodeNew.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/ammoProcessor.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/processedMaterial.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/shipdock.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/exporterTOP.png,type:Input,regionName:null},{path:../../../../Desktop/NodeShot/sprites/importerTOP.png,type:Input,regionName:null}]
 
 
 -PROJ-

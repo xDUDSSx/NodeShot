@@ -104,7 +104,6 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 		if (ioActive) this.ioNode.remove();
 		
 		clearBuildingChunks();
-		System.out.println("DEMO");
 		updateFogOfWar(false);
 	}
 	

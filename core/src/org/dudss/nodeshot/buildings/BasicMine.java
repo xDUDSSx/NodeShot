@@ -2,6 +2,8 @@ package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.utils.SpriteLoader;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.items.StorableItem;
+import org.dudss.nodeshot.items.Item.ItemType;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -24,16 +26,16 @@ public class BasicMine extends AbstractMine {
 		super(cx, cy);
 		on = new Sprite(SpriteLoader.mineOn);
 		off = new Sprite(SpriteLoader.mineOff);
-		activateIONode(true);
 	}
 
 	public void generate() {
-		if (canGenerate) {	
-			if (ioNode.canSendPackage()) {
+		if (canGenerate) {
+			storage.add(new StorableItem(oreType.getType()));
+			/*if (ioNode.canSendPackage()) {
 				Package p = oreType.getPackage();
 				p.setParams(ioNode, null);
 				ioNode.sendIOPackage(p);		
-			} 
+			}*/
 		}
 	}
 	

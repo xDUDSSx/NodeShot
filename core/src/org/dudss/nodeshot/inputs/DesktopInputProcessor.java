@@ -111,6 +111,7 @@ public class DesktopInputProcessor implements InputProcessor {
 								if (!((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((NodeBuilding)builtBuilding).getNode())).isBuiltProperly()) {
 									GameScreen.expandedConveyorNode.disconnect(((NodeBuilding)builtBuilding).getNode());	
 									GameScreen.builtBuilding.demolish();
+									return false;
 								}
 							}
 													
@@ -142,7 +143,7 @@ public class DesktopInputProcessor implements InputProcessor {
 							if (((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode() != null) {
 								if(!((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode().getAllConnectedNodes().contains(GameScreen.expandedConveyorNode)) {
 									if(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode() != GameScreen.expandedConveyorNode) {
-										GameScreen.expandedConveyorNode.connectTo(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode());
+										GameScreen.expandedConveyorNode.connectTo(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(GameScreen.builtBuilding.getX(), GameScreen.builtBuilding.getY()).getBuilding()).getNode());
 										if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {				
 											GameScreen.expandedConveyorNode = (ConveyorNode) ((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode();
 										} else {
@@ -217,6 +218,10 @@ public class DesktopInputProcessor implements InputProcessor {
 				worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
 				lastMousePress = worldPos;
 				lastMousePressType = MouseType.MOUSE_2;
+				
+				if (GameScreen.buildMode == true && GameScreen.builtBuilding instanceof AbstractIOPort) {
+					((AbstractIOPort)GameScreen.builtBuilding).rotateRight();
+				} 
 		}
 		return false;
 	}

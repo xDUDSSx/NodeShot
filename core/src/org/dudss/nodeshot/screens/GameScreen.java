@@ -315,6 +315,15 @@ public class GameScreen implements Screen {
         */     	
         
         Gdx.input.setInputProcessor(multiplexer); 
+        
+        //Initial fog of war visibility
+        for (Chunk c : GameScreen.chunks.getChunksAroundWorldSpacePoint(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.SECTION_SIZE*2)) {
+        	if (c != null) {
+        		c.visibility = Chunk.active;
+        	}
+        };
+        
+        GameScreen.chunks.updateAllFogOfWarMeshes();
     }
 
     @Override
@@ -371,7 +380,7 @@ public class GameScreen implements Screen {
         buildingManager.drawAllMisc(r, batch);
         
         //Connector rendering
-        drawConnectors(r);
+        drawConnectors(r, batch);
         
         buildingManager.drawAllBuildings(r, batch);
 
@@ -420,9 +429,18 @@ public class GameScreen implements Screen {
         
         //Drawing creeper generators on top of creeper itself
         buildingManager.drawAllGenerators(r, batch);
-        
+    
         //Drawing the fog of war.
         chunks.drawFogOfWar();
+        
+        r.begin(ShapeType.Filled);
+        r.setColor(0.2f, 0.2f, 0.2f,1);
+        r.rectLine(0, 0, Base.WORLD_SIZE, 0, 16);
+    	r.rectLine(Base.WORLD_SIZE, 0, Base.WORLD_SIZE, Base.WORLD_SIZE, 16);
+    	r.rectLine(Base.WORLD_SIZE, Base.WORLD_SIZE, 0, Base.WORLD_SIZE, 16);
+    	r.rectLine(0, Base.WORLD_SIZE, 0, 0, 16);
+        r.end();
+        
         
         bulletHandler.drawAll(r, batch);
 
@@ -687,18 +705,28 @@ public class GameScreen implements Screen {
  		Shaders.solidCloudShader.setUniformf("pos", cam.position.x, cam.position.y);
  		Shaders.solidCloudShader.end(); 		        
         
+ 		Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+ 		Vector3 lbc = new Vector3(0, 0, 0);
+ 		Vector3 rtc = new Vector3(Base.WORLD_SIZE, Base.WORLD_SIZE, 0);
+ 		Vector3 nlbc = cam.project(lbc);
+ 		Vector3 nrtc = cam.project(rtc);
+ 		Gdx.gl.glScissor((int)nlbc.x, (int)nlbc.y, (int) (nrtc.x - nlbc.x), (int) (nrtc.y - nlbc.y));
+ 		
         batch.begin();
         batch.setShader(Shaders.solidCloudShader);       
         //This particular batch function requires a texture to bind, so I'm binding the texture used later in chunk rendering 
         //TODO: stop using spritebatch and call the render from an actual Mesh object (will be cleaner and will not require an extra texture bind)
         batch.draw(SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
+       
  		batch.end();
  		batch.setShader(Shaders.defaultShader);
+ 		
+ 		Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }
     
-    void drawConnectors(ShapeRenderer sR) {
+    void drawConnectors(ShapeRenderer sR, SpriteBatch batch) {
     	if(!nodelist.isEmpty()) {
-            connectorHandler.drawAll(sR);
+            connectorHandler.drawAll(sR, batch);
         }
     	r.begin(ShapeType.Filled);
         r.setColor(Color.WHITE);

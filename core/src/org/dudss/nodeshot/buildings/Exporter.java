@@ -23,7 +23,7 @@ public class Exporter extends AbstractIOPort {
 	
 	public Exporter(float cx, float cy) {
 		super(cx, cy, width, height);
-		sprite = new Sprite(SpriteLoader.importerTop);
+		sprite = new Sprite(SpriteLoader.exporterTop);
 		
 	}
 	

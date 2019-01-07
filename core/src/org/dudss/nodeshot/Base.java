@@ -11,6 +11,8 @@ import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.terrain.Chunk;
+import org.dudss.nodeshot.terrain.Chunks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -46,6 +48,8 @@ public class Base {
 	public static float COAL_THRESHOLD = 0.74f;
 	public static float IRON_THRESHOLD = 0.74f;
 	public static float TERRAIN_THRESHOLD = 0.6f;
+	
+	public static float DEFAULT_VISIBILITY = Chunk.active;
 	
 	public static int MAX_CREEP = 15;
 	public static int MAX_HEIGHT = 10; 

@@ -1,6 +1,7 @@
 package org.dudss.nodeshot.entities.connectors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -58,7 +59,7 @@ public class Connector implements Entity{
 	/**
 	* Draw the connector
 	*/
-	public void draw(ShapeRenderer sR) {
+	public void draw(ShapeRenderer sR, SpriteBatch batch) {
 		if (GameScreen.selectedID == this.getID()) {
 			sR.setColor(Color.WHITE);
 			sR.rectLine(from.getCX(), from.getCY(), to.getCX(), to.getCY(), Base.lineWidth + 1);

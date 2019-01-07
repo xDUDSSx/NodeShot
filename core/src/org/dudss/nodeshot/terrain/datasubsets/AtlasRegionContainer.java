@@ -45,8 +45,9 @@ public class AtlasRegionContainer {
 	
 	/**Adds all the textures of an {@link AtlasRegionContainer} to the end of this one.
 	 * @param arc The {@link AtlasRegionContainer} that will be added.
+	 * @return Returns the combined container for chaining.
 	 */
-	public void addContainer(AtlasRegionContainer arc) {
+	public AtlasRegionContainer addContainer(AtlasRegionContainer arc) {
 		int startSize = size;
 		size += arc.size;
 		
@@ -59,6 +60,11 @@ public class AtlasRegionContainer {
 		}
 		
 		this.textures = tempTextures;
+		return this;
+	}
+	
+	public void removeContainer(AtlasRegionContainer arc) {
+		
 	}
 	
 	/**Returns an {@linkplain AtlasRegion} corresponding to the index

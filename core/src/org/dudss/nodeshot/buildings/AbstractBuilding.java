@@ -60,9 +60,13 @@ public abstract class AbstractBuilding implements Entity {
 		for (int gx = 0; gx < buildintWidthInTileSpace; gx++) {
 			for (int gy = 0; gy < buildingHeightInTileSpace; gy++) {
 				Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(this.x/Base.CHUNK_SIZE) + gx, (int)(this.y/Base.CHUNK_SIZE) + gy);
-				buildingChunks[index++] = c;		
-				if (c.getBuilding() != null) {
-					intersectsAnotherBuilding = true;
+				if (c != null) {
+					buildingChunks[index++] = c;		
+					if (c.getBuilding() != null) {
+						intersectsAnotherBuilding = true;
+					}
+				} else {
+					return false;
 				}
 			}
 		}

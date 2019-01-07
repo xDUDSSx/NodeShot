@@ -19,8 +19,10 @@ public class DesktopLauncher {
 	 * v6.1 - package system update
 	 * v6.2 - build mode interface update
 	 * v6.3 - turret update
+	 * v6.4 - conveyor update
+	 * v7.0 - terrain update
 	 * */
-	public static final String ver = "v6.3";
+	public static final String ver = "v7.0";
 	
 	/**The main method*/
 	public static void main (String[] arg) {
@@ -37,7 +39,7 @@ public class DesktopLauncher {
 		//Dialogs.showErrorDialog(GameScreen.stage, "A runtime error occured.", ex);
 		
 		MenuScreen.ver = ver;
-		MenuScreen.subver = "Turret update";
+		MenuScreen.subver = "Terrain update";
 		
 		//Uncaught error handling
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
