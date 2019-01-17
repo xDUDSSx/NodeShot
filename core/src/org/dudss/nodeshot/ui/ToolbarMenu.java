@@ -13,6 +13,7 @@ import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.buildings.PowerGenerator;
 import org.dudss.nodeshot.buildings.Shipdock;
 import org.dudss.nodeshot.buildings.Turret;
+import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -20,6 +21,7 @@ import org.dudss.nodeshot.utils.SpriteLoader;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -35,11 +37,22 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
 public class ToolbarMenu extends VisWindow {
-	
 	VisTable mainTable;
+	
+	VisTable buildWrapper;
+	VisTable buildPanel;
+	VisList<String> buildList;
+	
+	VisTable selectWrapper;
+	
+	BuildTable structures;
+	BuildTable utils;
+	BuildTable transfer;
+	BuildTable weapons;
 	
 	VisLabel bitLabel;
 	VisLabel powerLabel;
+	VisLabel test;
 	
 	public ToolbarMenu(String title) {
 		super("Toolbar", false);	
@@ -48,35 +61,29 @@ public class ToolbarMenu extends VisWindow {
 		setMovable(false);
 		getTitleTable().clear();	
 		
-		BuildTable structures = new BuildTable();
+		structures = new BuildTable();
 		structures.addBuildingTile(SpriteLoader.hqDrawable, "Headquarters", new BuildListener(new Headquarters(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.mineDrawable, "Mine", new BuildListener(new BasicMine(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.genDrawable, "Power generator", new BuildListener(new PowerGenerator(0, 0)));
 		structures.addBuildingTile(SpriteLoader.factoryDrawable, "Factory", new BuildListener(new Factory(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.ammoProcessorDrawable, "Ammo processor", new BuildListener(new AmmoProcessor(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.shipdockDrawable, "Shipdock", new BuildListener(new Shipdock(0, 0)));	
-		BuildTable utils = new BuildTable();
+		utils = new BuildTable();
 		utils.addBuildingTile(SpriteLoader.creepergenDrawable, "Creeper generator", new BuildListener(new CreeperGenerator(0, 0)));	
-		BuildTable transfer = new BuildTable();
+		transfer = new BuildTable();
 		transfer.addBuildingTile(SpriteLoader.nodeDrawable, "Conveyor", new BuildListener(new NodeBuilding(0, 0)));		
 		transfer.addBuildingTile(SpriteLoader.importerTopDrawable, "Importer", new BuildListener(new Importer(0, 0)));		
 		transfer.addBuildingTile(SpriteLoader.exporterTopDrawable, "Exporter", new BuildListener(new Exporter(0, 0)));
-		BuildTable weapons = new BuildTable();
+		weapons = new BuildTable();
 		weapons.addBuildingTile(SpriteLoader.turretDrawable, "Turret", new BuildListener(new Turret(0, 0)));
 		
-		final VisTable buildPanel = new VisTable();
-		VisList<String> buildList = new VisList<String>();
+		buildPanel = new VisTable();
+		buildList = new VisList<String>();
 		buildList.setItems("STRUCTURES", "TRANSFER", "WEAPONS", "UTILS"); 		
 		buildList.addCaptureListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	buildPanel.clearChildren();
-                switch(buildList.getSelected()) {
-                	case "STRUCTURES": buildPanel.add(structures).expand().fill(); break;
-                	case "TRANSFER": buildPanel.add(transfer).expand().fill(); break;
-                	case "WEAPONS": buildPanel.add(weapons).expand().fill(); break;
-                	case "UTILS":  buildPanel.add(utils).expand().fill(); break;
-                }
+            	updateMainPanel();
             }
         });
 		
@@ -88,45 +95,61 @@ public class ToolbarMenu extends VisWindow {
 		defaults().top();
 		
 		mainTable = new VisTable();
-		mainTable.top();
-		mainTable.defaults().top();
+		mainTable.align(Align.topLeft);
 		TableUtils.setSpacingDefaults(mainTable);
 		
 		VisTable infoTable = new VisTable();
 		infoTable.top();
-		TableUtils.setSpacingDefaults(infoTable);
-		//this.getTitleLabel().setText("Bits: " + Base.START_BITS);
-		
+		TableUtils.setSpacingDefaults(infoTable);	
 		this.getTitleTable().left();
 		bitLabel = new VisLabel("Bits: " + Base.START_BITS);
 		powerLabel = new VisLabel("Power: " + GameScreen.resourceManager.getPower() + " / " + GameScreen.resourceManager.getMaxPower());
 		this.getTitleTable().add(bitLabel).width(bitLabel.getWidth() + 50);
-		this.getTitleTable().add(powerLabel);
-		
-		//infoTable.add(bitLabel).fillX().left().top();
-		//infoTable.row();
-		//infoTable.add(powerLabel).fillX().left().top();
+		this.getTitleTable().add(powerLabel).width(powerLabel.getWidth() + 50);	
 		mainTable.add(infoTable).fill();
 		
-		VisTable buildTable = new VisTable();
-		buildTable.top();
-		TableUtils.setSpacingDefaults(buildTable);
-		buildTable.add(buildList);
-		buildTable.addSeparator(true);
-		buildTable.add(buildPanel).expand().fill();
-		mainTable.add(buildTable).expand().fill();
+		buildWrapper = new VisTable();
+		buildWrapper.align(Align.topLeft);
+		TableUtils.setSpacingDefaults(buildWrapper);
+		buildWrapper.add(buildList);
+		buildWrapper.addSeparator(true);
+		buildWrapper.add(buildPanel).expand().fill();
+		mainTable.add(buildWrapper).expand().fill();
+		
+		selectWrapper = new VisTable();
+		selectWrapper.top();
+		TableUtils.setSpacingDefaults(selectWrapper);
 		
 		add(mainTable).expand().fill();
 		
 		//debugAll();
 		
-		updateBounds();
-		
+		updateBounds();		
 		pack();		
 	}
 	
+	/**Update the menu selection. Should be called when the menu should switch panels.*/
+	public void updateMainPanel() {
+		if (GameScreen.selectedEntity == null) {
+			mainTable.clearChildren();
+			mainTable.add(buildWrapper);
+			buildPanel.clearChildren();
+	        switch(buildList.getSelected()) {
+	        	case "STRUCTURES": buildPanel.add(structures).expand().fill(); break;
+	        	case "TRANSFER": buildPanel.add(transfer).expand().fill(); break;
+	        	case "WEAPONS": buildPanel.add(weapons).expand().fill(); break;
+	        	case "UTILS":  buildPanel.add(utils).expand().fill(); break;
+	        }
+		} else {
+			mainTable.clearChildren();
+			mainTable.add(selectWrapper);
+			selectWrapper.clearChildren();
+			selectWrapper.add(new SelectTable(GameScreen.selectedEntity));
+		}
+	}
+	
+	/**Updates the menu info data*/
 	public void updateInfoPanel() {
-		//bitLabel.setText("Bits: " + GameScreen.resourceManager.getBits());
 		bitLabel.setText("Bits: " + GameScreen.resourceManager.getBits());
 		powerLabel.setText("Power: " + GameScreen.resourceManager.getPower() + " / " + GameScreen.resourceManager.getMaxPower());
 	}
@@ -138,6 +161,23 @@ public class ToolbarMenu extends VisWindow {
 			setSize(Gdx.graphics.getWidth()/2, this.getHeight());
 		}
 		setPosition(Gdx.graphics.getWidth()/2 - this.getWidth()/2, 0);
+	}
+	
+	private class SelectTable extends VisTable {
+		VisLabel infoLabel;
+		
+		public SelectTable(Entity e) {
+			super(true);
+			
+			TableUtils.setSpacingDefaults(this);
+			align(Align.topLeft);						
+			
+			infoLabel = new VisLabel(e.getType().toString());
+			add(infoLabel).left();
+			
+			Image thumbnail = new Image(SpriteLoader.hqDrawable);
+			add(thumbnail).right();
+		}
 	}
 	
 	/**A {@link Table} that holds individual building {@link BuildingTile}s. Supports horizontal scrolling.*/

@@ -1,38 +1,48 @@
 package org.dudss.nodeshot.inputs;
 
-import org.dudss.nodeshot.entities.Entity;
-import org.dudss.nodeshot.entities.Entity.EntityType;
-import org.dudss.nodeshot.entities.connectors.Conveyor;
-import org.dudss.nodeshot.entities.nodes.ConveyorNode;
-import org.dudss.nodeshot.entities.nodes.IONode;
-import org.dudss.nodeshot.entities.nodes.Node;
-import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.terrain.Chunk;
-import org.dudss.nodeshot.terrain.Section;
-import org.dudss.nodeshot.utils.Selector;
-import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
-import org.dudss.nodeshot.buildings.AbstractBuilding;
-import org.dudss.nodeshot.buildings.AbstractIOPort;
-import org.dudss.nodeshot.buildings.BasicMine;
-import org.dudss.nodeshot.buildings.Connectable;
-import org.dudss.nodeshot.buildings.NodeBuilding;
-
-import static org.dudss.nodeshot.screens.GameScreen.*;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import static org.dudss.nodeshot.screens.GameScreen.buildMode;
+import static org.dudss.nodeshot.screens.GameScreen.builtBuilding;
+import static org.dudss.nodeshot.screens.GameScreen.cam;
+import static org.dudss.nodeshot.screens.GameScreen.expandingANode;
+import static org.dudss.nodeshot.screens.GameScreen.lastMousePress;
+import static org.dudss.nodeshot.screens.GameScreen.lastMousePressType;
+import static org.dudss.nodeshot.screens.GameScreen.mousePos;
+import static org.dudss.nodeshot.screens.GameScreen.mouseX;
+import static org.dudss.nodeshot.screens.GameScreen.mouseY;
+import static org.dudss.nodeshot.screens.GameScreen.nodelist;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.buildings.AbstractBuilding;
+import org.dudss.nodeshot.buildings.AbstractIOPort;
+import org.dudss.nodeshot.buildings.Connectable;
+import org.dudss.nodeshot.buildings.NodeBuilding;
+import org.dudss.nodeshot.entities.Entity;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
+import org.dudss.nodeshot.entities.effects.Explosion;
+import org.dudss.nodeshot.entities.effects.Shockwave;
+import org.dudss.nodeshot.entities.effects.SmokePoof;
+import org.dudss.nodeshot.entities.nodes.ConveyorNode;
+import org.dudss.nodeshot.entities.nodes.IONode;
+import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.screens.GameScreen.MouseType;
+import org.dudss.nodeshot.terrain.TerrainEditor;
+import org.dudss.nodeshot.utils.Selector;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+
 public class DesktopInputProcessor implements InputProcessor {
+
 	@Override
 	public boolean keyDown(int keycode) {		
 		if (keycode == Keys.SPACE) {
@@ -45,17 +55,17 @@ public class DesktopInputProcessor implements InputProcessor {
 	public boolean keyUp(int keycode) {
 		
 		switch (keycode) {
-			case Keys.NUMPAD_0: GameScreen.terrainLayerSelected = 0; break;
-			case Keys.NUMPAD_1: GameScreen.terrainLayerSelected = 1; break;
-			case Keys.NUMPAD_2: GameScreen.terrainLayerSelected = 2; break;
-			case Keys.NUMPAD_3: GameScreen.terrainLayerSelected = 3; break;
-			case Keys.NUMPAD_4: GameScreen.terrainLayerSelected = 4; break;
-			case Keys.NUMPAD_5: GameScreen.terrainLayerSelected = 5; break;
-			case Keys.NUMPAD_6: GameScreen.terrainLayerSelected = 6; break;
-			case Keys.NUMPAD_7: GameScreen.terrainLayerSelected = 7; break;
-			case Keys.NUMPAD_8: GameScreen.terrainLayerSelected = 8; break;
-			case Keys.NUMPAD_9: GameScreen.terrainLayerSelected = 9; break;
-			case Keys.STAR: GameScreen.terrainLayerSelected = 10; break;
+			case Keys.NUMPAD_0: TerrainEditor.terrainLayerSelected = 0; break;
+			case Keys.NUMPAD_1: TerrainEditor.terrainLayerSelected = 1; break;
+			case Keys.NUMPAD_2: TerrainEditor.terrainLayerSelected = 2; break;
+			case Keys.NUMPAD_3: TerrainEditor.terrainLayerSelected = 3; break;
+			case Keys.NUMPAD_4: TerrainEditor.terrainLayerSelected = 4; break;
+			case Keys.NUMPAD_5: TerrainEditor.terrainLayerSelected = 5; break;
+			case Keys.NUMPAD_6: TerrainEditor.terrainLayerSelected = 6; break;
+			case Keys.NUMPAD_7: TerrainEditor.terrainLayerSelected = 7; break;
+			case Keys.NUMPAD_8: TerrainEditor.terrainLayerSelected = 8; break;
+			case Keys.NUMPAD_9: TerrainEditor.terrainLayerSelected = 9; break;
+			case Keys.STAR: TerrainEditor.terrainLayerSelected = 10; break;
 		}
 		
 		if (keycode == Keys.ESCAPE) {
@@ -86,11 +96,13 @@ public class DesktopInputProcessor implements InputProcessor {
 				mouseY = Gdx.input.getY();		
 				mousePos.x = mouseX;;
 				mousePos.y = mouseY;		
-	
+				
 				Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
 				lastMousePress = worldPos;
 				lastMousePressType = MouseType.MOUSE_1;
-				
+								
+				//new Explosion(worldPos.x, worldPos.y);
+
 				//Building
 				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {				
 					if (GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true)) {
@@ -240,49 +252,7 @@ public class DesktopInputProcessor implements InputProcessor {
 					Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
 					
 					lastMousePress = worldPos;
-					
-					/*
-					if (draggingConnection == true) {
-						Rectangle rect = new Rectangle(worldPos.x-0.5f, worldPos.y-0.5f, 1, 1);
-						
-						//If there is no node yet, create one
-						if ((nodelist.size() > 0)) {
-							Boolean nodeIntersected = false;
-							for(int i = 0; i < nodelist.size(); i++) {		
-								if(nodelist.get(i).getBoundingRectangle().overlaps(rect)) {
-								if (nodelist.get(i) != nodelist.get(selectedIndex)) {
-									nodelist.get(newConnectionFromIndex).connectTo(nodelist.get(i));
-								}
-								
-								Selector.selectNode(nodelist.get(i));
-								newConnectionFromIndex = -1;
-								
-								nodeIntersected = true;
-								break;
-							}
-						}				
-						if (!nodeIntersected) {
-							Node newNode = null;
-							if (nodelist.get(selectedIndex) instanceof ConveyorNode || nodelist.get(selectedIndex) instanceof IONode) {
-								newNode = new ConveyorNode(worldPos.x, worldPos.y, Base.RADIUS);
-							} else {
-								newNode = new Node(worldPos.x, worldPos.y, Base.RADIUS);
-							}
-							nodelist.add(newNode);
-							nodelist.get(selectedIndex).connectTo(newNode);
-							
-							Selector.selectNode(newNode);
-							newNode.setLocation(worldPos.x, worldPos.y, true);
-							
-							newConnectionFromIndex = selectedIndex;				
-						}
-						draggingConnection = false;
-						buildMode = false;
-						}
-					}
-					*/
-				break;
-				
+				break;				
 				case Input.Buttons.LEFT: break;
 			}
 		//}
@@ -292,7 +262,6 @@ public class DesktopInputProcessor implements InputProcessor {
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		//if (!gamePaused) {
-			//Getting old pos
 			Vector2 previousMousePos = new Vector2(mousePos.x, mousePos.y);
 			
 			updateMousePos(screenX, screenY);
@@ -303,59 +272,12 @@ public class DesktopInputProcessor implements InputProcessor {
 			if (Gdx.input.isButtonPressed(Buttons.RIGHT)) {
 				//Cancel right click menu if one is present
 				GameScreen.rightClickMenuManager.removeMenu();
-				
-				/*if (selectedIndex != -1 && selectedType == EntityType.NODE) {
-					Node highlightedNode = nodelist.get(selectedIndex);
-		            double distance = Math.hypot( highlightedNode.getCX() - lastMousePress.x,  highlightedNode.getCY() - lastMousePress.y);
-		            
-		            //Basically, if the cursor is still in the node area when first drag is called, initiate a new dragging connection
-		            //A way to prevent bugs, a more simple way could be used, but this should not cause issues
-		            if (distance <= highlightedNode.radius) {
-		                newConnectionFromIndex = highlightedNode.getIndex();
-		                draggingConnection = true;
-		                buildMode = true;
-		            }
-				} else if (selectedIndex != -1 && draggingConnection == true ) {
-					//Dragging a connection action //TODO: Maybe implement some info later
-					//System.out.println("drag action --");
-				} 
-				*/
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.C)) {
-				for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
-					for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-						Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
-						if (c != null) {
-							c.setCreeperLevel(GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() + 1);
-						}
-					}
-				}						
-				GameScreen.chunks.updateAllSectionMeshes(true);
+				GameScreen.terrainEditor.modifyCreeper(worldMousePos, true);
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.V)) {
-				for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
-					for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-						Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
-						if (c != null) {
-							c.setCreeperLevel(GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y).getCreeperLevel() - Base.MAX_CREEP * 0.02f);
-						}
-					}
-				}							
-				GameScreen.chunks.updateAllSectionMeshes(true);					
+				GameScreen.terrainEditor.modifyCreeper(worldMousePos, false);	
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isKeyPressed(Keys.T)) {	
-				for (int y = -(GameScreen.terrainBrushSize); y < GameScreen.terrainBrushSize; y++) {
-					for (int x = -(GameScreen.terrainBrushSize); x < GameScreen.terrainBrushSize; x++) {
-						Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(worldMousePos.x/Base.CHUNK_SIZE) + x, (int)(worldMousePos.y/Base.CHUNK_SIZE) + y);
-						if (c != null) {
-							c.setHeight(GameScreen.terrainLayerSelected);
-						}
-					}
-				}
-				/*int sx = (int)(worldMousePos.x / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-				int sy = (int)(worldMousePos.y / (Base.SECTION_SIZE * Base.CHUNK_SIZE));
-				if (!(sx < 0 || sx > Base.SECTION_AMOUNT-1 || sy < 0 || sy > Base.SECTION_AMOUNT-1)) {						
-					GameScreen.chunks.updateSectionMesh(GameScreen.chunks.sections[sx][sy], false, -1);
-				}*/
-				
-				GameScreen.chunks.updateAllSectionMeshes(false);		
+				GameScreen.terrainEditor.setTerrain(worldMousePos);
 			} else if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 					float xPos = previousWorldMousePos.x - worldMousePos.x;
 					float yPos = previousWorldMousePos.y - worldMousePos.y;
@@ -399,22 +321,18 @@ public class DesktopInputProcessor implements InputProcessor {
 			
 			if (amount == 1) {
 				if (Gdx.input.isKeyPressed(Keys.T)) {
-					GameScreen.terrainBrushSize -= 1;
-					if (GameScreen.terrainBrushSize < 0) {
-						GameScreen.terrainBrushSize = 0;
+					TerrainEditor.terrainBrushSize -= 1;
+					if (TerrainEditor.terrainBrushSize < 0) {
+						TerrainEditor.terrainBrushSize = 0;
 					}
 				} else {
-					cam.zoom += 0.2f;
-					cam.zoom = Base.round(cam.zoom, 2);
-					GameScreen.chunks.updateView(cam);
+					GameScreen.zoomTo(cam.zoom + 0.8f, 0.6f);
 				}
 			} else {
 				if (Gdx.input.isKeyPressed(Keys.T)) {
-					GameScreen.terrainBrushSize += 1;
+					TerrainEditor.terrainBrushSize += 1;
 				} else {
-					cam.zoom -= 0.2f;
-					cam.zoom = Base.round(cam.zoom, 2);						
-					GameScreen.chunks.updateView(cam);
+					GameScreen.zoomTo(cam.zoom - 0.8f, 0.6f);
 				}
 			}
 		return true;

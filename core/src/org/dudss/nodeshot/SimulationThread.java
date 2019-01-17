@@ -6,7 +6,8 @@ import java.util.List;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Section;
 
-/**The simulation daemon thread, runs a simulation loop*/
+/**The simulation daemon thread, runs the simulation loop.
+ * It's subsidiary thread is the {@link CorruptionUpdateThread} that updates the grid based cellular-automata corruption separately.*/
 public class SimulationThread extends Thread {
 	//double interpolation; //TODO: implement interpolation
 	
@@ -35,6 +36,11 @@ public class SimulationThread extends Thread {
     public static int lastTicksPerSecond = 30;
     public static int simTick;
     
+    //Last tick
+    long t1;
+    private static float delta = 1f;
+    public static float stateTime = 1f;
+    
     /**The simulation daemon thread, runs a simulation loop
      * @throws InterruptedException */
     public SimulationThread() throws InterruptedException {
@@ -54,14 +60,19 @@ public class SimulationThread extends Thread {
     public void run() {
     	BaseClass.logger.info("SimulationThread daemon running!");       	
     	GameScreen.simFac = 1.0;
+    	t1 = getTickCount(); 
     	
     	//Start the simulation loop
     	simLoop();
 	}   
     
+    /**Get the amount of seconds since the last update.*/
+    public static float getDelta() {
+    	return delta / 1000f;
+    }
+    
     public void simLoop() {
     	long remainder;
-    	long t1;
     	long t2;
     	long timeElapsed;
    
@@ -79,10 +90,14 @@ public class SimulationThread extends Thread {
    	        if(getTickCount() > next_game_tick) {	
    	        	next_game_tick += (SKIP_TICKS/GameScreen.simFac); //Set next expected sim calc, modify with simFactor
    	        	
-   	        	t1 = getTickCount();
+  	        	delta = getTickCount() - t1;
+  	        	stateTime += getDelta();
+  	        	
+   	        	t1 = getTickCount();   	        	
    	        	updateLogic();
    				t2 = getTickCount();
    				timeElapsed = t2 - t1;
+   				
    				
    				//Can't keep up?
    				if (timeElapsed > SKIP_TICKS) {
@@ -94,6 +109,7 @@ public class SimulationThread extends Thread {
    				//sFPS calculation
    				GameScreen.currentSimTimeTick = System.currentTimeMillis();
    				GameScreen.simFrameCount++;	 
+   				
 	   	        if(GameScreen.currentSimTimeTick >= GameScreen.nextSimTimeTick) {
 	   	        	GameScreen.nextSimTimeTick = GameScreen.currentSimTimeTick + 1000;
 	   	        	GameScreen.sfps = GameScreen.simFrameCount;
@@ -190,6 +206,8 @@ public class SimulationThread extends Thread {
 		
 		//Updating rightClickMenu text
 		GameScreen.rightClickMenuManager.update();
+		
+		GameScreen.effectManager.updateAllEffects();
 	}
 	
 	/**Sets the targeted simulation loop tick rate

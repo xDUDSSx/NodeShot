@@ -3,6 +3,9 @@ package org.dudss.nodeshot.buildings;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.Entity;
+import org.dudss.nodeshot.entities.effects.Explosion;
+import org.dudss.nodeshot.entities.effects.Shockwave;
+import org.dudss.nodeshot.entities.effects.SmokePoof;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
@@ -10,6 +13,7 @@ import org.dudss.nodeshot.terrain.Chunks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 /**The basic skeletal representation of a building. All buildings are subclasses of this abstract class.*/
 public abstract class AbstractBuilding implements Entity {
@@ -142,9 +146,9 @@ public abstract class AbstractBuilding implements Entity {
 		clearBuildingChunks();
 		updateFogOfWar(false);	
 	}
-	/**Called when demolised by force*/
-	public void explode() {
-		//Do explosion related stuff
+	/**Called when demolished by force*/
+	public void explode() {	
+		new Explosion(cx, cy);
 		this.demolish();
 	}
 	

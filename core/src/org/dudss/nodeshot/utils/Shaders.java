@@ -20,6 +20,7 @@ public class Shaders {
 	public static ShaderProgram rotatingCloudShader;
 	public static ShaderProgram terrainShader;
 	public static ShaderProgram fogOfWarShader;
+	public static ShaderProgram waveShader;
 	
 	/**Loads and compiles all GLSL shaders
 	 * @throws Throws {@link RuntimeException} when one or more shaders did not compile successfully. Also dumps the compilation logs to the {@link ErrorManager}. 
@@ -57,6 +58,9 @@ public class Shaders {
 		String rotatingcloudFragShader = Gdx.files.internal("shaders/rotatingsolidcloudFragment.glsl").readString();
 		rotatingCloudShader = new ShaderProgram(vertexDefaultShader, rotatingcloudFragShader);
 		
+		String waveFragmentShader = Gdx.files.internal("shaders/waveFragment.glsl").readString();
+		waveShader = new ShaderProgram(vertexDefaultShader, waveFragmentShader);
+		
 		//Shader compilation diagnostics and logging
 		compiled.put(defaultShader, "default shader");
 		compiled.put(defaultShader, "corruption shader");
@@ -66,6 +70,7 @@ public class Shaders {
 		compiled.put(cloudShader, "cloud shader");
 		compiled.put(solidCloudShader, "solidCloud shader");
 		compiled.put(rotatingCloudShader, "rotatingCloud shader");
+		compiled.put(waveShader, "wave shader");
 		
 		StringBuilder sb = new StringBuilder();
 		Iterator it = compiled.entrySet().iterator();

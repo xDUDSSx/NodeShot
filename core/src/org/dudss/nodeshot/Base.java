@@ -17,8 +17,8 @@ import org.dudss.nodeshot.terrain.Chunks;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 
+/**A static class that functions as of wrapper of some constant variables and utility methods.*/
 public class Base {
-
 	static Boolean running = true;	
 
 	public static int SCREEN_WIDTH;
@@ -49,7 +49,7 @@ public class Base {
 	public static float IRON_THRESHOLD = 0.74f;
 	public static float TERRAIN_THRESHOLD = 0.6f;
 	
-	public static float DEFAULT_VISIBILITY = Chunk.active;
+	public static float DEFAULT_VISIBILITY = Chunk.deactivated;
 	
 	public static int MAX_CREEP = 15;
 	public static int MAX_HEIGHT = 10; 

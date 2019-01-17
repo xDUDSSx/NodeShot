@@ -107,8 +107,8 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
-
+        Gdx.input.setInputProcessor(stage);      
+        
         sR = new ShapeRenderer();
         sR.setColor(Color.DARK_GRAY);
         
@@ -228,6 +228,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
+    	System.out.println("menu dispose");
         skin.dispose();
         atlas.dispose();
         sR.dispose();
@@ -269,7 +270,7 @@ public class MenuScreen implements Screen {
         batch.setShader(Shaders.rotatingCloudShader);       
         //This particular batch function requires a texture to bind, so I'm binding the texture used later in chunk rendering 
         //TODO: stop using spritebatch and call the render from an actual Mesh object (will be cleaner and will not require an extra texture bind)
-        batch.draw(SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
+        batch.draw(SpriteLoader.terrainAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
  		batch.end();
  		batch.setShader(Shaders.defaultShader);
     }

@@ -37,7 +37,7 @@ public class Conveyor extends Connector {
 		super(from, to);
 		conveyorBuildings = new ArrayList<ConveyorBuilding>();
 		reg = new TextureRegion(SpriteLoader.conveyorTexture);	
-		anim = new Animation<Texture>(0.023f, SpriteLoader.conveyorVertical);	
+		anim = new Animation<Texture>(0.0215f, SpriteLoader.conveyorVertical);	
 		
 		List<Chunk> intersectedChunks = GameScreen.chunks.retrieveChunksIntersectingLine((int) (from.getCX() / Base.CHUNK_SIZE),
 				(int) (from.getCY() / Base.CHUNK_SIZE),

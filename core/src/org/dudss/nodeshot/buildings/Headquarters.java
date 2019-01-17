@@ -1,6 +1,7 @@
 package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -58,5 +59,10 @@ public class Headquarters extends AbstractBuilding {
 	
 		clearBuildingChunks();
 		updateFogOfWar(false);	
+	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.HQ;
 	}
 }

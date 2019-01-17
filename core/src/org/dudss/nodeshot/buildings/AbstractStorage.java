@@ -94,7 +94,6 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 		}
 		GameScreen.buildingManager.addBuilding(this);
 		
-		System.out.println("BUILT");
 		updateFogOfWar(true);
 	}
 

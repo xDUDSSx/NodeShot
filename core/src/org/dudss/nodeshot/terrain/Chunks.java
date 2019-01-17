@@ -9,10 +9,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
+import org.dudss.nodeshot.misc.ChunkOperation;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.terrain.datasubsets.AtlasRegionContainer;
 import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
 import org.dudss.nodeshot.terrain.datasubsets.TextureContainer;
-import org.dudss.nodeshot.terrain.datasubsets.AtlasRegionContainer;
 import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -935,17 +936,31 @@ public class Chunks {
 	
 	/**Gets the chunks around the world space point in a certain diameter (diameter is in tile space).*/
 	public List<Chunk> getChunksAroundWorldSpacePoint(float x, float y, float diameter) {
+		return getChunksAroundWorldSpacePoint(x, y, diameter, null);
+	}
+	
+	/**{@inheritDoc #getChunksAroundWorldSpacePoint(float, float, float)}*/
+	public List<Chunk> getChunksAroundWorldSpacePoint(float x, float y, float diameter, ChunkOperation o) {
 		List<Chunk> chunksInRadius = new ArrayList<Chunk>();
 		
-		Chunk centerChunk = getChunkAtWorldSpace(x, y);
-		Chunk originChunk = getChunkAtWorldSpace(x - ((diameter/2) * Base.CHUNK_SIZE), y - ((diameter/2) * Base.CHUNK_SIZE));
-	
-		for (int sx = originChunk.ax; sx < originChunk.ax + diameter; sx++) {
-			for (int sy = originChunk.ay; sy < originChunk.ay + diameter; sy++) {
+		int centerAX = (int) (x / Base.CHUNK_SIZE);
+		int centerAY = (int) (y / Base.CHUNK_SIZE);
+		
+		int originAX = centerAX - (int)(diameter/2);
+		int originAY = centerAY - (int)(diameter/2);
+		
+		for (int sx = originAX; sx < originAX + diameter; sx++) {
+			for (int sy = originAY; sy < originAY + diameter; sy++) {
 				Chunk c = GameScreen.chunks.getChunkAtTileSpace(sx, sy);
 				if (c != null) {
-					if (Math.hypot(centerChunk.getX() - c.getX(), centerChunk.getY() - c.getY()) <= ((float)(diameter/2f))*Base.CHUNK_SIZE) {		
+					double dist = Math.hypot(centerAX * Base.CHUNK_SIZE - c.getX(), centerAY * Base.CHUNK_SIZE - c.getY());
+					double boundary = ((float)(diameter/2f))*Base.CHUNK_SIZE;
+					
+					if (dist <= boundary) {		
 						chunksInRadius.add(c);
+						if (o != null) {
+							o.execute(c, dist, boundary);
+						}
 					}
 				}
 			}

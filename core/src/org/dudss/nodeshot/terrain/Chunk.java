@@ -8,13 +8,11 @@ import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunks.OreType;
-import org.dudss.nodeshot.terrain.Chunks.Visibility;
 import org.dudss.nodeshot.terrain.datasubsets.AtlasRegionContainer;
+import org.dudss.nodeshot.terrain.datasubsets.TerrainEdge;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
 
 /**A square tile representation.
  * @see Managed by {@link Chunks}.
@@ -240,21 +238,21 @@ public class Chunk {
 		
 		switch(height) {
 			case 0: this.setTerrainEdge(false, 0, EdgeType.NONE); return null; //TODO: ore at level 0?
-			case 1: terrain.addContainer(resolveTerrainEdges(1)); break;
-			case 2: terrain.addContainer(resolveTerrainEdges(2)); break;
-			case 3:	terrain.addContainer(resolveTerrainEdges(3)); break;
-			case 4: terrain.addContainer(resolveTerrainEdges(4)); break;
-			case 5: terrain.addContainer(resolveTerrainEdges(5)); break;
-			case 6: terrain.addContainer(resolveTerrainEdges(6)); break;
-			case 7: terrain.addContainer(resolveTerrainEdges(7)); break;
-			case 8: terrain.addContainer(resolveTerrainEdges(8)); break;
-			case 9: terrain.addContainer(resolveTerrainEdges(9)); break;
-			case 10: terrain.addContainer(resolveTerrainEdges(10)); break;	
+			case 1: terrain.addContainer(resolveTerrainEdges2(1)); break;
+			case 2: terrain.addContainer(resolveTerrainEdges2(2)); break;
+			case 3:	terrain.addContainer(resolveTerrainEdges2(3)); break;
+			case 4: terrain.addContainer(resolveTerrainEdges2(4)); break;
+			case 5: terrain.addContainer(resolveTerrainEdges2(5)); break;
+			case 6: terrain.addContainer(resolveTerrainEdges2(6)); break;
+			case 7: terrain.addContainer(resolveTerrainEdges2(7)); break;
+			case 8: terrain.addContainer(resolveTerrainEdges2(8)); break;
+			case 9: terrain.addContainer(resolveTerrainEdges2(9)); break;
+			case 10: terrain.addContainer(resolveTerrainEdges2(10)); break;	
 		}
 	
 		AtlasRegionContainer secondaryTerrain = null;
 		
-		switch(height) {
+		/*switch(height) {
 			case 0: return null;
 			case 1: secondaryTerrain = resolveSecondaryTerrainEdges(1); break;
 			case 2: secondaryTerrain = resolveSecondaryTerrainEdges(2); break;
@@ -266,7 +264,7 @@ public class Chunk {
 			case 8: secondaryTerrain = resolveSecondaryTerrainEdges(8); break;
 			case 9: secondaryTerrain = resolveSecondaryTerrainEdges(9); break;
 			case 10: secondaryTerrain = resolveSecondaryTerrainEdges(10); break;	
-		}
+		}*/
 		
 		if (secondaryTerrain != null) {
 			return misc.addContainer(secondaryTerrain);
@@ -278,13 +276,15 @@ public class Chunk {
 	private AtlasRegionContainer resolveSecondaryTerrainEdges(int level) {
 		if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
 				if (minusx.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT &&
-					plusy.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT) 
+					plusy.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT &&
+					plusy.getHeight() == minusx.getHeight()) 
 				{
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR_fill"));
 				} else
 				
 				if (minusx.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT &&
-					plusx.getTerrainEdgeType() == EdgeType.STRAIGHT_TOP &&
+					plusx.getHeight() >= this.height &&
+					this.isTerrainEdge() == true &&
 					minusy.isTerrainEdge() == false &&
 					plusy.getHeight() < this.height) 
 				{
@@ -292,7 +292,8 @@ public class Chunk {
 				} else
 				
 				if (plusy.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT &&
-					minusy.getTerrainEdgeType() == EdgeType.STRAIGHT_LEFT &&
+					minusy.getHeight() >= this.height &&
+					this.isTerrainEdge() == true &&
 					plusx.isTerrainEdge() == false &&
 					minusx.getHeight() < this.height) 
 				{
@@ -307,18 +308,20 @@ public class Chunk {
 					minusx.getTerrainEdgeType() == EdgeType.BOTTOM_RIGHT)				
 				{
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR_fill_corner_BR_SL"));
-				}
+				} else
 				
 				
 				
 				if (plusx.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT &&
-					plusy.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT) 
+					plusy.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT &&
+					plusx.getHeight() == plusy.getHeight()) 
 				{
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL_fill"));
 				} else
 				
 				if (plusx.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT &&
-					minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_TOP &&
+					minusx.getHeight() >= this.height &&
+					this.isTerrainEdge() == true &&
 					minusy.isTerrainEdge() == false &&
 					plusy.getHeight() < this.height) 
 				{
@@ -326,7 +329,8 @@ public class Chunk {
 				} else
 				
 				if (plusy.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT &&
-					minusy.getTerrainEdgeType() == EdgeType.STRAIGHT_RIGHT &&
+					minusy.getHeight() >= this.height &&
+					this.isTerrainEdge() == true &&
 					minusx.isTerrainEdge() == false &&
 					plusx.getHeight() < this.height) 
 				{
@@ -341,18 +345,20 @@ public class Chunk {
 					plusx.getTerrainEdgeType() == EdgeType.BOTTOM_LEFT)			
 				{
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL_fill_corner_SR_BL"));
-				}
+				} else
 
 				
 				
 				if (plusx.getTerrainEdgeType() == EdgeType.TOP_LEFT &&
-					minusy.getTerrainEdgeType() == EdgeType.TOP_LEFT) 
+					minusy.getTerrainEdgeType() == EdgeType.TOP_LEFT &&
+					plusx.getHeight() == minusy.getHeight()) 
 				{
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL_fill"));
 				} else
 				
 				if (minusy.getTerrainEdgeType() == EdgeType.TOP_LEFT &&
-					plusy.getTerrainEdgeType() == EdgeType.STRAIGHT_RIGHT &&
+					plusy.getHeight() >= this.height &&
+					this.isTerrainEdge() == true &&
 					minusx.isTerrainEdge() == false &&
 					plusx.getHeight() < this.height) 
 				{
@@ -360,7 +366,8 @@ public class Chunk {
 				} else
 				
 				if (plusx.getTerrainEdgeType() == EdgeType.TOP_LEFT &&
-					minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_BOTTOM &&
+					minusx.getHeight() >= this.height &&
+					this.isTerrainEdge() == true &&
 					plusy.isTerrainEdge() == false &&
 					minusy.getHeight() < this.height) 
 				{
@@ -375,17 +382,19 @@ public class Chunk {
 					minusy.getTerrainEdgeType() == EdgeType.TOP_LEFT)			
 				{
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL_fill_corner_TL_SB"));
-				}
+				} else
 				
 				
 				if (minusx.getTerrainEdgeType() == EdgeType.TOP_RIGHT &&
-					minusy.getTerrainEdgeType() == EdgeType.TOP_RIGHT) 
+					minusy.getTerrainEdgeType() == EdgeType.TOP_RIGHT &&
+					minusx.getHeight() == minusy.getHeight()) 
 				{
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR_fill"));
 				} else
 				
 				if (minusy.getTerrainEdgeType() == EdgeType.TOP_RIGHT &&
-					plusy.getTerrainEdgeType() == EdgeType.STRAIGHT_LEFT &&
+					plusy.getHeight() >= this.height &&
+					this.isTerrainEdge() == true &&
 					plusx.isTerrainEdge() == false &&
 					minusx.getHeight() < this.height) 
 				{
@@ -393,7 +402,8 @@ public class Chunk {
 				} else
 				
 				if (minusx.getTerrainEdgeType() == EdgeType.TOP_RIGHT &&
-					plusx.getTerrainEdgeType() == EdgeType.STRAIGHT_BOTTOM &&
+					plusx.getHeight() >= this.height &&
+					this.isTerrainEdge() == true &&
 					plusy.isTerrainEdge() == false &&
 					minusy.getHeight() < this.height) 
 				{
@@ -408,9 +418,99 @@ public class Chunk {
 					minusy.getTerrainEdgeType() == EdgeType.TOP_RIGHT)			
 				{
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR_fill_corner_TR_SL"));
+				} else 
+				
+				if (plusy.getTerrainEdgeType() == EdgeType.END_TOP &&
+					this.terrainEdge == false) 
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TB_fill"));
+				} else
+				
+				if (plusx.getTerrainEdgeType() == EdgeType.STRAIGHT_BOTTOM && plusx.getHeight() == height &&
+					minusy.getTerrainEdgeType() == EdgeType.STRAIGHT_RIGHT && minusy.getHeight() == height &&
+					minusx.getHeight() >= height && plusy.getHeight() >= height &&
+					this.cornerBottomRight.getHeight() < height)
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "CornerTL"));
+				} else
+				
+				if (minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_BOTTOM && minusx.getHeight() == height &&
+					minusy.getTerrainEdgeType() == EdgeType.STRAIGHT_LEFT && minusy.getHeight() == height &&
+					plusx.getHeight() >= height && minusy.getHeight() >= height &&
+					this.cornerBottomLeft.getHeight() < height)
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "CornerTR"));
+				} else
+				
+				if (minusx.getTerrainEdgeType() == EdgeType.STRAIGHT_TOP && minusx.getHeight() == height &&
+					plusy.getTerrainEdgeType() == EdgeType.STRAIGHT_LEFT && plusy.getHeight() == height &&
+					plusx.getHeight() >= height && minusy.getHeight() >= height &&
+					this.cornerTopLeft.getHeight() < height)
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "CornerBR"));
+				} else		
+
+				if (plusx.getTerrainEdgeType() == EdgeType.STRAIGHT_TOP && plusx.getHeight() == height &&
+					plusy.getTerrainEdgeType() == EdgeType.STRAIGHT_RIGHT && plusy.getHeight() == height &&
+					minusx.getHeight() >= height && minusy.getHeight() >= height &&
+					this.cornerTopRight.getHeight() < height)
+				{
+					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "CornerBL"));
 				}
 		}
 		return null;
+	}
+	
+	private AtlasRegionContainer resolveTerrainEdges2(int level) {
+		TerrainEdge topLayer = null;
+		TerrainEdge bottomLayer = null;
+		int lowerLevel = 0;
+		
+		if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
+			//Upper layer
+			char[] topDiffs = new char[8];
+			for (int i = 0; i < 8; i++) {
+				topDiffs[i] = (char) (neighbours[i].getHeight() < height ? '1' : '0');
+				if (topDiffs[i] == '1') {
+					if (neighbours[i].getHeight() > lowerLevel) {
+						lowerLevel = (int) neighbours[i].getHeight();
+					}
+				}
+			}
+			
+			if (topLayer == null) {
+				topLayer = TerrainEdgeResolver.resolveDiagonalEdges(topDiffs, this);			
+				if (topLayer != null) {
+					//Bottom Layer
+					char[] bottomDiffs = new char[8];
+					for (int i = 0; i < 8; i++) {
+						bottomDiffs[i] = (char) (neighbours[i].getHeight() < lowerLevel ? '1' : '0');
+					}
+					
+					if (bottomLayer == null) {
+						bottomLayer = TerrainEdgeResolver.resolveSolidEdges(bottomDiffs, this);
+					}
+				}
+			}
+			if (topLayer == null) {
+				topLayer = TerrainEdgeResolver.resolveSolidEdges(topDiffs, this);
+			}
+		}
+		
+		if (topLayer != null) {
+			AtlasRegionContainer terrainCont = new AtlasRegionContainer();			
+			terrainCont.addTexture(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + topLayer.name));
+			if (bottomLayer != null) {
+				terrainCont.addTexture(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[lowerLevel] + bottomLayer.name));
+				setTerrainEdge(topLayer.isTerrainEdge, height - lowerLevel, topLayer.type);
+				return terrainCont;
+			}
+			setTerrainEdge(topLayer.isTerrainEdge, height, topLayer.type);
+			return terrainCont;
+		} else {
+			setTerrainEdge(false, 0, EdgeType.NONE);
+			return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level]));
+		}
 	}
 	
 	/**Returns the appropriate {@link AtlasRegion} for the specified terrain height.
@@ -425,16 +525,19 @@ public class Chunk {
 				minusx.getHeight() >= level && 
 				minusy.getHeight() >= level) 
 			{					
-				lowerLevel = level - (int)plusx.getHeight();
-				setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_LEFT);
-				
 				if (plusx.getHeight() == plusy.getHeight()) {	
+					lowerLevel = level - (int)plusx.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_LEFT);					
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				} else if (plusx.getHeight() > plusy.getHeight()) {
+					lowerLevel = level - (int)plusx.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_LEFT);					
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "ST"));
 				} else {
+					lowerLevel = level - (int)plusy.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_LEFT);					
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BL"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SR"));
 				}		
@@ -443,17 +546,20 @@ public class Chunk {
 				plusx.getHeight() >= level &&
 				minusx.getHeight() < level &&				 
 				minusy.getHeight() >= level)  
-			{		
-				lowerLevel = level - (int)minusx.getHeight();
-				setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_RIGHT);
-				
+			{						
 				if (minusx.getHeight() == plusy.getHeight()) {	
+					lowerLevel = level - (int)minusx.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_RIGHT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				} else if (minusx.getHeight() > plusy.getHeight()) {
+					lowerLevel = level - (int)minusx.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_RIGHT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "ST"));
 				} else {
+					lowerLevel = level - (int)minusy.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.BOTTOM_RIGHT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "BR"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SL"));
 				}		
@@ -478,16 +584,20 @@ public class Chunk {
 			    plusy.getHeight() >= level &&
 			    minusx.getHeight() >= level)  
 			{	
-				lowerLevel = level - (int)minusy.getHeight();
-				setTerrainEdge(true, lowerLevel, EdgeType.TOP_LEFT);
 				
 				if (minusy.getHeight() == plusx.getHeight()) {	
+					lowerLevel = level - (int)minusy.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.TOP_LEFT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				} else if (minusy.getHeight() > plusx.getHeight()) {
+					lowerLevel = level - (int)minusy.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.TOP_LEFT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SR"));
 				} else {
+					lowerLevel = level - (int)plusx.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.TOP_LEFT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TL"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SB"));
 				}		
@@ -497,16 +607,19 @@ public class Chunk {
 			    plusx.getHeight() >= level &&
 			    plusy.getHeight() >= level)  
 			{
-				lowerLevel = level - (int)minusy.getHeight();
-				setTerrainEdge(true, lowerLevel, EdgeType.TOP_RIGHT);
-				
 				if (minusy.getHeight() == minusx.getHeight()) {	
+					lowerLevel = level - (int)minusy.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.TOP_RIGHT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel]));
 				} else if (minusy.getHeight() > minusx.getHeight()) {
+					lowerLevel = level - (int)minusy.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.TOP_RIGHT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SL"));
 				} else {
+					lowerLevel = level - (int)minusx.getHeight();
+					setTerrainEdge(true, lowerLevel, EdgeType.TOP_RIGHT);
 					return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "TR"),
 													SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level-lowerLevel] + "SB"));
 				}						
@@ -638,6 +751,26 @@ public class Chunk {
 				}
 			} else 
 				
+			//Double edges
+			if (plusx.getHeight() < level && 
+				minusx.getHeight() < level && 
+				plusy.getHeight() >= level &&
+				minusy.getHeight() >= level)  
+			{
+				lowerLevel = level;
+				setTerrainEdge(true, level, EdgeType.DOUBLE_Y);
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "YBS"));									
+			} else
+			if (plusx.getHeight() >= level && 
+				minusx.getHeight() >= level && 
+				plusy.getHeight() < level &&
+				minusy.getHeight() < level)  
+			{	
+				lowerLevel = level;
+				setTerrainEdge(true, level, EdgeType.DOUBLE_X);
+				return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level] + "XBS"));		
+			} else
+								
 			//Single creeper tile
 			if (minusy.getHeight() < level && 
 				plusx.getHeight() < level && 
@@ -659,6 +792,8 @@ public class Chunk {
 		setTerrainEdge(false, 0, EdgeType.NONE);
 		return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[level]));
 	}
+	
+	
 	
 	/**Returns the appropriate ore {@link AtlasRegion} for this {@linkplain Chunk}.*/
 	private AtlasRegion getOreTexture() {
@@ -1080,13 +1215,13 @@ public class Chunk {
 		neighbours = new Chunk[8];	
 		int n = 0;
 		neighbours[n++] = plusy;
-		//neighbours[n++] = cornerTopRight;
+		neighbours[n++] = cornerTopRight;
 		neighbours[n++] = plusx;
-		//neighbours[n++] = cornerBottomRight;
+		neighbours[n++] = cornerBottomRight;
 		neighbours[n++] = minusy;
-		//neighbours[n++] = cornerBottomLeft;
+		neighbours[n++] = cornerBottomLeft;
 		neighbours[n++] = minusx;
-		//neighbours[n++] = cornerTopLeft;
+		neighbours[n++] = cornerTopLeft;
 		
 		//null checks TOOD: fix map edge
 		/*

@@ -30,19 +30,6 @@ public class AtlasRegionContainer {
 		this.secondaryShade = secondaryShade;
 	} 
 
-	/**Adds a texture to the last unoccupied slot of this container.
-	 * @param texture The {@link AtlasRegion} that will be added.
-	 */
-	public void addTexture(AtlasRegion texture) {
-		size++;
-		AtlasRegion[] tempTextures = new AtlasRegion[size];		
-		for (int i = 0; i < textures.length; i++) {
-			tempTextures[i] = textures[i];
-		}
-		tempTextures[tempTextures.length-1] = texture;
-		this.textures = tempTextures;
-	}
-	
 	/**Adds all the textures of an {@link AtlasRegionContainer} to the end of this one.
 	 * @param arc The {@link AtlasRegionContainer} that will be added.
 	 * @return Returns the combined container for chaining.
@@ -63,8 +50,17 @@ public class AtlasRegionContainer {
 		return this;
 	}
 	
-	public void removeContainer(AtlasRegionContainer arc) {
-		
+	/**Adds a texture to the last unoccupied slot of this container.
+	 * @param texture The {@link AtlasRegion} that will be added.
+	 */
+	public void addTexture(AtlasRegion texture) {
+		size++;
+		AtlasRegion[] tempTextures = new AtlasRegion[size];		
+		for (int i = 0; i < textures.length; i++) {
+			tempTextures[i] = textures[i];
+		}
+		tempTextures[tempTextures.length-1] = texture;
+		this.textures = tempTextures;
 	}
 	
 	/**Returns an {@linkplain AtlasRegion} corresponding to the index
@@ -76,6 +72,17 @@ public class AtlasRegionContainer {
 			return null;
 		}
 		return textures[index];
+	}
+	
+	/**Sets an {@linkplain AtlasRegion} at the specified location. The position must exist (The container size must accommodate it).
+	 * @param newRegion The new {@linkplain AtlasRegion}.
+	 * @param index Index of the replaced position.
+	 */
+	public void setTexture(AtlasRegion newRegion, int index) {
+		if (index > textures.length - 1) {
+			return;
+		}
+		textures[index] = newRegion;
 	}
 	
 	public AtlasRegion[] getTextures() {

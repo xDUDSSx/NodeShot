@@ -20,12 +20,13 @@ import org.dudss.nodeshot.items.Iron;
 import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.misc.BulletHandler;
 import org.dudss.nodeshot.misc.ConnectorHandler;
+import org.dudss.nodeshot.misc.EffectManager;
 import org.dudss.nodeshot.misc.PackageHandler;
 import org.dudss.nodeshot.misc.ResourceManager;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
 import org.dudss.nodeshot.terrain.Section;
-import org.dudss.nodeshot.ui.BuildMenu;
+import org.dudss.nodeshot.terrain.TerrainEditor;
 import org.dudss.nodeshot.ui.PauseMenu;
 import org.dudss.nodeshot.ui.RightClickMenuManager;
 import org.dudss.nodeshot.ui.ToolbarMenu;
@@ -41,9 +42,12 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -51,26 +55,25 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
 
-/**The main game screen*/
+/**The main game screen. Currently holds its resources statically.*/
 public class GameScreen implements Screen {
 
     public static Game nodeshotGame;
@@ -105,11 +108,16 @@ public class GameScreen implements Screen {
 	public static ConnectorHandler connectorHandler;
 	public static BuildingManager buildingManager;
 	public static BulletHandler bulletHandler;
+	public static EffectManager effectManager;
 	
 	public static Vector2 mousePos = new Vector2();
 	public static int mouseX;
 	public static int mouseY;
 	public static Vector3 lastMousePress = new Vector3(0,0,0);
+	public static float timeToCameraZoomTarget;
+	public static float cameraZoomTarget = 5f;
+	public static float cameraZoomOrigin;
+	public static float cameraZoomDuration;
 	public static enum MouseType {
 		MOUSE_1, MOUSE_2, MOUSE_3
 	}
@@ -123,12 +131,9 @@ public class GameScreen implements Screen {
 	
 	//Terrain
 	public static Chunks chunks;
+	public static TerrainEditor terrainEditor;
 	public static Chunk hoverChunk = null;
-	public static int terrainLayerSelected = 2;
-	public static int terrainBrushSize = 2;
-	
-	public static float viewportWidth = 312f;
-    FreeTypeFontGenerator generator;
+
 	
     //Build mode
 	public static boolean buildMode = false;
@@ -139,41 +144,50 @@ public class GameScreen implements Screen {
 	public static ConveyorNode expandedConveyorNode;
 	public static boolean expandingANode = false;
 	
-    //libGDX
+    //libGDX rendering wrappers
     static SpriteBatch batch;
-    Texture img;
     ShapeRenderer r;
     
+    //Fonts
     public static BitmapFont font;
     public static BitmapFont fontLarge;
+    FreeTypeFontGenerator generator;
     GlyphLayout layout;
 
+    //Camera
     public static OrthographicCamera cam;
     public static Vector3 lastCamPos;
     public static float lastZoom;
     public static Boolean zooming = false;
+	public static float viewportWidth = 312f;
     
     //Background shader helper vars
     public static float off = 0.5f;
     public static Vector3 prevCameraOffset;
-    
-    TextureAtlas atlas;
-    
-    //UI
-    public static Rectangle backButton = new Rectangle();
-    public static Rectangle buildButton = new Rectangle();
-    public static Rectangle deleteButton = new Rectangle();
 
+    //UI
+    TextureAtlas defaultSkinAtlas;
+    
     public static Skin skin;
     public static Stage stage;
     public static Viewport stageViewport;
     public static RightClickMenuManager rightClickMenuManager;
-    public static BuildMenu buildMenu;
     public static PauseMenu pauseMenu;
     public static ToolbarMenu toolbarMenu;
     
     public static GLProfiler glProfiler;
     
+    //Post processing
+    //Main game screen buffer
+    public static FrameBuffer screenBuffer;
+    //Main game fullscreen quad
+    public static Mesh screenMesh;
+    
+    public static FrameBuffer creeperBuffer;
+    //Displacement map used for space distortions
+    public static FrameBuffer displacementBuffer;
+    
+    //Temporary buffers? Kinda unused.
     public static FrameBuffer corrBuffer;
     public static FrameBuffer blurBuffer;
     
@@ -186,17 +200,14 @@ public class GameScreen implements Screen {
         
         if (Base.enableGlProgilerLogging) glProfiler.enable();  
         
-        //Loading resources
-        Shaders.load();
-        SpriteLoader.loadAll();
-        VisUI.load();
-        
         packageHandler = new PackageHandler();
         resourceManager = new ResourceManager(Base.START_POWER, Base.START_BITS);
         connectorHandler = new ConnectorHandler();
         buildingManager = new BuildingManager();       
         bulletHandler = new BulletHandler();  
+        effectManager = new EffectManager();
         chunks = new Chunks();        
+        terrainEditor = new TerrainEditor();
         rightClickMenuManager = new RightClickMenuManager();             
         
         WIDTH = Gdx.graphics.getWidth();
@@ -205,12 +216,12 @@ public class GameScreen implements Screen {
         
         //LineWidth
         Gdx.gl.glLineWidth(2);
-        
+               
         //Cam
         cam = new OrthographicCamera(viewportWidth , viewportWidth * (HEIGHT / WIDTH));
         if (lastCamPos == null) {
             cam.position.set(Base.WORLD_SIZE / 2f, Base.WORLD_SIZE / 2f, 0);
-            cam.zoom = 3f;           
+            cam.zoom = 5f;           
         } else {
             cam.position.set(lastCamPos);
             cam.zoom = lastZoom;
@@ -228,6 +239,10 @@ public class GameScreen implements Screen {
         }       
         //Updates the view
         chunks.updateView(cam);
+       
+        screenBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
+        creeperBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
+        displacementBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
         
         blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
 		corrBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
@@ -255,34 +270,20 @@ public class GameScreen implements Screen {
        
         //User Interface             
         if (Gdx.app.getType() == ApplicationType.Android) {
-        	atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
-        	skin = new Skin(Gdx.files.internal("uiskin.json"), atlas);
+        	defaultSkinAtlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
+        	skin = new Skin(Gdx.files.internal("uiskin.json"), defaultSkinAtlas);
         } else if (Gdx.app.getType() == ApplicationType.Desktop) {
-        	atlas = new TextureAtlas("res/data/uiskin.atlas");
-        	skin = new Skin(Gdx.files.classpath("res/data/uiskin.json"), atlas);
+        	defaultSkinAtlas = new TextureAtlas("res/data/uiskin.atlas");
+        	skin = new Skin(Gdx.files.classpath("res/data/uiskin.json"), defaultSkinAtlas);
         }
         stageViewport = new StretchViewport(WIDTH, HEIGHT);
         stage = new Stage(stageViewport);         
-       
-        buildMenu = new BuildMenu("Build menu", skin);    
-        stage.addActor(buildMenu);
                 
         toolbarMenu = new ToolbarMenu("Menu");
         stage.addActor(toolbarMenu);
         
         pauseMenu = new PauseMenu(false);
         stage.addActor(pauseMenu);
-        
-        TextButton imgButton = new TextButton("Build", skin, "hoverfont15");
-        imgButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-            	buildMenu.setVisible(!(buildMenu.isVisible()));
-            }
-        });
-        imgButton.setSize(64, 64);
-        imgButton.setPosition(10, 10);        
-        stage.addActor(imgButton);
     }
 
     public static int getWidth() {return WIDTH;}
@@ -343,14 +344,22 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+    	Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1f);
+ 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	
+ 		GameScreen.screenBuffer.begin();
+    	
     	stateTime += delta;
     	 	
-        handleInput();
+        handleInput(delta);
         cam.update();	        	
         toolbarMenu.updateInfoPanel();
-        
-        Gdx.gl.glClearColor(0, 0, 0, 1f);
+
+        /*Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+         */
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
      
         //OpenGL performance logging
         if (Base.enableGlProgilerLogging) glProfiler.reset();           
@@ -424,14 +433,11 @@ public class GameScreen implements Screen {
         }
         batch.end();     
         
-        //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
-        chunks.drawCorruption();
-        
         //Drawing creeper generators on top of creeper itself
         buildingManager.drawAllGenerators(r, batch);
     
         //Drawing the fog of war.
-        chunks.drawFogOfWar();
+        //chunks.drawFogOfWar();
         
         r.begin(ShapeType.Filled);
         r.setColor(0.2f, 0.2f, 0.2f,1);
@@ -443,16 +449,39 @@ public class GameScreen implements Screen {
         
         
         bulletHandler.drawAll(r, batch);
-
+        effectManager.drawRegularEffects(batch);
+        
         //Draw debug infographics
-        drawDebug(r);
-           
+        drawDebug(r);              
+       
+        screenBuffer.end();
+        
+        creeperBuffer.begin();
+        //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
+        chunks.drawCorruption();
+        creeperBuffer.end();
+        		
+		displacementBuffer.begin();
+		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		effectManager.drawDisplacementEffects(batch);
+		displacementBuffer.end();
+	
+		drawScreenBuffer();
+		
+		//batch.setProjectionMatrix(cam.combined);
+		
+		//postProcessor.capture();
+		//effectManager.drawRegularEffects(batch);
+		//postProcessor.render();
+		  			
         //HUD, draw last
         //setting screen matrix    
         setHudProjectionMatrix(batch);
-        setHudProjectionMatrix(r); 
+        setHudProjectionMatrix(r);     
         
         batch.begin(); 
+        batch.setShader(Shaders.defaultShader);
         if (Base.drawGeneralStats) drawStats(batch);
         drawFps(batch);
         //drawInfo(batch);
@@ -472,6 +501,68 @@ public class GameScreen implements Screen {
         
         if (Base.enableGlProgilerLogging) glProfiler.reset(); 
     }   
+    
+    /**All main scene rendering is done on an off-screen {@link GameScreen#screenBuffer}. This buffer is then rendered as a single quad
+     * to the actual screen and custom shaders can then be used.
+     * This method creates the full-screen quad mesh primitive and draws it with shaders applied.
+     */
+    public void drawScreenBuffer() {    	     	
+    	Texture displacementTexture = displacementBuffer.getColorBufferTexture();
+		Texture screenTexture = screenBuffer.getColorBufferTexture();
+	    screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+	    displacementTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+	    
+	    screenTexture.bind(1);
+	    displacementTexture.bind(0);
+	    	  
+	    Matrix4 uiMatrix = cam.combined.cpy();
+        uiMatrix.setToOrtho2D(0, 0, 1, 1);
+        
+        Shaders.waveShader.begin();        
+        Shaders.waveShader.setUniformi("u_texture", 1);	
+		Shaders.waveShader.setUniformi("displacementMap", 0);	
+	    Shaders.waveShader.setUniformMatrix("u_projTrans", uiMatrix);
+	    
+	    float[] verts = new float[20];
+    	int i = 0;
+    	
+    	verts[i++] = 0f;
+    	verts[i++] = 0f;
+    	verts[i++] = Color.toFloatBits(1f, 1f, 1f, 1f);
+    	verts[i++] = 0f;
+    	verts[i++] = 0f;
+    	
+    	verts[i++] = 1f;
+    	verts[i++] = 0f;
+    	verts[i++] = Color.toFloatBits(1f, 1f, 1f, 1f);
+    	verts[i++] = 1f;
+    	verts[i++] = 0f;
+    	
+    	verts[i++] = 1f;
+    	verts[i++] = 1f;
+    	verts[i++] = Color.toFloatBits(1f, 1f, 1f, 1f);
+    	verts[i++] = 1f;
+    	verts[i++] = 1f;
+    	
+    	verts[i++] = 0f;
+    	verts[i++] = 1f;
+    	verts[i++] = Color.toFloatBits(1f, 1f, 1f, 1f);
+    	verts[i++] = 0f;
+    	verts[i++] = 1f;
+    	
+    	short[] indices = { 0, 1, 3, 3, 2, 1 };
+    	
+    	if (screenMesh == null) {
+    		screenMesh = new Mesh(false, 4, 6, 
+	    			new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
+	    			new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+	    			new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+    	}
+    	screenMesh.setVertices(verts);
+    	screenMesh.setIndices(indices);    	
+    	screenMesh.render(Shaders.defaultShader, GL20.GL_TRIANGLES);
+    	Shaders.waveShader.end();    
+    }
     
     /**Draws all debug infographics if enabled*/
     public static void drawDebug(ShapeRenderer r) {
@@ -716,7 +807,7 @@ public class GameScreen implements Screen {
         batch.setShader(Shaders.solidCloudShader);       
         //This particular batch function requires a texture to bind, so I'm binding the texture used later in chunk rendering 
         //TODO: stop using spritebatch and call the render from an actual Mesh object (will be cleaner and will not require an extra texture bind)
-        batch.draw(SpriteLoader.tileAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
+        batch.draw(SpriteLoader.terrainAtlas.findRegion("tiledCoal").getTexture(), verts, 0, 20);
        
  		batch.end();
  		batch.setShader(Shaders.defaultShader);
@@ -849,9 +940,9 @@ public class GameScreen implements Screen {
 			sb.append("Ore level: (" + GameScreen.hoverChunk.getOreType().toString() + ") " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
 			
 			StringBuilder sb2 = new StringBuilder();
-			sb2.append("Layer: " + GameScreen.terrainLayerSelected);
+			sb2.append("Layer: " + TerrainEditor.terrainLayerSelected);
 			sb2.append(", ");
-			sb2.append("Brush: " + GameScreen.terrainBrushSize);
+			sb2.append("Brush: " + TerrainEditor.terrainBrushSize);
 			
 			layout.setText(font, sb.toString());
 			float textwidth = layout.width;
@@ -971,7 +1062,14 @@ public class GameScreen implements Screen {
         uiMatrix.setToOrtho2D(0, 0, WIDTH, HEIGHT);
         return uiMatrix;
     }
-    private void handleInput() {
+    private void handleInput(float delta) {
+    	if (timeToCameraZoomTarget >= 0){
+    	    timeToCameraZoomTarget -= delta;
+    	    float progress = timeToCameraZoomTarget < 0 ? 1 : 1f - timeToCameraZoomTarget / cameraZoomDuration;
+    	    cam.zoom = Interpolation.pow3Out.apply(cameraZoomOrigin, cameraZoomTarget, progress);       
+    	    chunks.updateView(cam);
+    	}
+
         if (Gdx.input.isKeyPressed(Input.Keys.PAGE_DOWN)) {
             cam.zoom += 0.1f;
 			GameScreen.chunks.updateView(cam);
@@ -1028,6 +1126,12 @@ public class GameScreen implements Screen {
         cam.position.y = MathUtils.clamp(cam.position.y, 0 - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE * 1.2f);   		
     }
 
+    public static void zoomTo(float newZoom, float duration){
+        cameraZoomOrigin = cam.zoom;
+        cameraZoomTarget = newZoom;
+        timeToCameraZoomTarget = cameraZoomDuration = duration;
+    }
+    
     public static Entity checkHighlights(boolean select) {
         Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
         Rectangle rect = new Rectangle(worldPos.x, worldPos.y, 1, 1);;
@@ -1041,13 +1145,11 @@ public class GameScreen implements Screen {
         		highlightedEntity = checkBuildings(rect, worldPos, select);
         		if (highlightedEntity == null) {
         			highlightedEntity = checkConnectors(rect, worldPos, select);
-        			if (highlightedEntity == null) {
-        				return null;
-        			}
         		}
         	}
         }
         
+        GameScreen.toolbarMenu.updateMainPanel();
         return highlightedEntity;
     }
 
@@ -1177,12 +1279,15 @@ public class GameScreen implements Screen {
         cam.viewportWidth = viewportWidth;
         cam.viewportHeight = viewportWidth * height/width;
         cam.update();
-
+        
+        screenBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
+        creeperBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
+        displacementBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
+        
         stageViewport = new FillViewport(width, height);
         stage.setViewport(stageViewport);
         stage.getViewport().update(width, height, true);
-        
-        buildMenu.resize();
+
         toolbarMenu.updateBounds();
         pauseMenu.resize();
     }
@@ -1199,5 +1304,10 @@ public class GameScreen implements Screen {
 		SpriteLoader.tileAtlas.dispose();
 		skin.dispose();
 		VisUI.dispose();
+		defaultSkinAtlas.dispose();
+		displacementBuffer.dispose();
+		screenBuffer.dispose();
+		creeperBuffer.dispose();
+		SpriteLoader.unloadAll();
     }  
 }

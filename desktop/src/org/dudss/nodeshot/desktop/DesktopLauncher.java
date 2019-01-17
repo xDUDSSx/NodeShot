@@ -5,9 +5,14 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.screens.MenuScreen;
+import org.dudss.nodeshot.utils.Shaders;
+import org.dudss.nodeshot.utils.SpriteLoader;
+import org.lwjgl.opengl.Display;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.tools.particleeditor.ParticleEditor;
+import com.kotcrab.vis.ui.VisUI;
 
 /**Desktop launcher that initialises and configures the lwjgl application.*/
 public class DesktopLauncher {
@@ -21,8 +26,9 @@ public class DesktopLauncher {
 	 * v6.3 - turret update
 	 * v6.4 - conveyor update
 	 * v7.0 - terrain update
+	 * v7.1 - effects update
 	 * */
-	public static final String ver = "v7.0";
+	public static final String ver = "v7.1";
 	
 	/**The main method*/
 	public static void main (String[] arg) {
@@ -37,9 +43,9 @@ public class DesktopLauncher {
 		config.fullscreen = Base.fullscreen;
 		
 		//Dialogs.showErrorDialog(GameScreen.stage, "A runtime error occured.", ex);
-		
+
 		MenuScreen.ver = ver;
-		MenuScreen.subver = "Terrain update";
+		MenuScreen.subver = "Effects update";
 		
 		//Uncaught error handling
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
@@ -49,7 +55,7 @@ public class DesktopLauncher {
 				org.dudss.nodeshot.BaseClass.errorManager.report(ex, "An unexpected runtime error occurred! (in Thread: " + thread.getName() + ")");						
 			}
 		});
-		
-		new LwjglApplication(new BaseClass(), config);
+
+		new LwjglApplication(new BaseClass(ver), config);
 	}
 }

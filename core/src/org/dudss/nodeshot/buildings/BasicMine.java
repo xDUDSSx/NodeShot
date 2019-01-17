@@ -2,6 +2,7 @@ package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.utils.SpriteLoader;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.items.StorableItem;
 import org.dudss.nodeshot.items.Item.ItemType;
 
@@ -57,6 +58,11 @@ public class BasicMine extends AbstractMine {
 		batch.setColor(1f, 1f, 1f, 0.5f);
 		batch.draw(SpriteLoader.mineOff, getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 		batch.end();		
+	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.MINE;
 	}
 }
 

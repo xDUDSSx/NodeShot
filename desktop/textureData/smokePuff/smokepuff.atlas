@@ -1,0 +1,181 @@
+
+smokepuff.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+blackSmoke00
+  rotate: false
+  xy: 1465, 228
+  size: 362, 336
+  orig: 362, 336
+  offset: 0, 0
+  index: -1
+blackSmoke01
+  rotate: false
+  xy: 1173, 1661
+  size: 398, 364
+  orig: 398, 364
+  offset: 0, 0
+  index: -1
+blackSmoke02
+  rotate: false
+  xy: 1173, 1317
+  size: 386, 342
+  orig: 386, 342
+  offset: 0, 0
+  index: -1
+blackSmoke03
+  rotate: false
+  xy: 370, 426
+  size: 351, 367
+  orig: 351, 367
+  offset: 0, 0
+  index: -1
+blackSmoke04
+  rotate: false
+  xy: 1573, 1661
+  size: 386, 364
+  orig: 386, 364
+  offset: 0, 0
+  index: -1
+blackSmoke05
+  rotate: false
+  xy: 1524, 950
+  size: 377, 348
+  orig: 377, 348
+  offset: 0, 0
+  index: -1
+blackSmoke06
+  rotate: false
+  xy: 1, 795
+  size: 368, 407
+  orig: 368, 407
+  offset: 0, 0
+  index: -1
+blackSmoke07
+  rotate: false
+  xy: 381, 1628
+  size: 395, 397
+  orig: 395, 397
+  offset: 0, 0
+  index: -1
+blackSmoke08
+  rotate: false
+  xy: 1, 1610
+  size: 378, 415
+  orig: 378, 415
+  offset: 0, 0
+  index: -1
+blackSmoke09
+  rotate: false
+  xy: 736, 218
+  size: 338, 360
+  orig: 338, 360
+  offset: 0, 0
+  index: -1
+blackSmoke10
+  rotate: false
+  xy: 723, 580
+  size: 372, 370
+  orig: 372, 370
+  offset: 0, 0
+  index: -1
+blackSmoke11
+  rotate: false
+  xy: 778, 1325
+  size: 393, 327
+  orig: 393, 327
+  offset: 0, 0
+  index: -1
+blackSmoke12
+  rotate: false
+  xy: 1149, 951
+  size: 373, 364
+  orig: 373, 364
+  offset: 0, 0
+  index: -1
+blackSmoke13
+  rotate: false
+  xy: 1, 1
+  size: 371, 388
+  orig: 371, 388
+  offset: 0, 0
+  index: -1
+blackSmoke14
+  rotate: false
+  xy: 1, 1204
+  size: 378, 404
+  orig: 378, 404
+  offset: 0, 0
+  index: -1
+blackSmoke15
+  rotate: false
+  xy: 769, 952
+  size: 378, 371
+  orig: 378, 371
+  offset: 0, 0
+  index: -1
+blackSmoke16
+  rotate: false
+  xy: 374, 53
+  size: 360, 371
+  orig: 360, 371
+  offset: 0, 0
+  index: -1
+blackSmoke17
+  rotate: false
+  xy: 371, 804
+  size: 350, 398
+  orig: 350, 398
+  offset: 0, 0
+  index: -1
+blackSmoke18
+  rotate: false
+  xy: 1561, 1300
+  size: 382, 359
+  orig: 382, 359
+  offset: 0, 0
+  index: -1
+blackSmoke19
+  rotate: false
+  xy: 1465, 566
+  size: 356, 382
+  orig: 356, 382
+  offset: 0, 0
+  index: -1
+blackSmoke20
+  rotate: false
+  xy: 1076, 212
+  size: 369, 350
+  orig: 369, 350
+  offset: 0, 0
+  index: -1
+blackSmoke21
+  rotate: false
+  xy: 381, 1232
+  size: 386, 394
+  orig: 386, 394
+  offset: 0, 0
+  index: -1
+blackSmoke22
+  rotate: false
+  xy: 1097, 564
+  size: 366, 385
+  orig: 366, 385
+  offset: 0, 0
+  index: -1
+blackSmoke23
+  rotate: false
+  xy: 1, 391
+  size: 367, 402
+  orig: 367, 402
+  offset: 0, 0
+  index: -1
+blackSmoke24
+  rotate: false
+  xy: 778, 1654
+  size: 393, 371
+  orig: 393, 371
+  offset: 0, 0
+  index: -1
