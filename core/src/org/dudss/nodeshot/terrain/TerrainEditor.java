@@ -41,15 +41,13 @@ public class TerrainEditor {
 	public void explosion(Vector3 at, float diameter) {
 		Set<Section> sections = new HashSet<Section>();
 		Chunk c = GameScreen.chunks.getChunkAtWorldSpace(at.x, at.y);
-		if (c != null) {
-			int defaultHeight = (int) c.getHeight();
-			
+		if (c != null) {		
 			GameScreen.chunks.getChunksAroundWorldSpacePoint(at.x, at.y, diameter, new ChunkOperation() {
 				@Override
 				public void execute(Chunk c, double dist, double boundary) {
 					float per = 1f - (float)(dist/boundary);			
-					int hdiff = (int)(4f*Interpolation.fade.apply(per));				
-					c.setHeight(defaultHeight - hdiff);
+					int hdiff = (int)(4f*Interpolation.fade.apply(per));	
+					c.setHeight((int)c.getHeight() - (int) (hdiff * 0.75f));
 					sections.add(c.getSection());
 				}
 				

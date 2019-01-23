@@ -78,7 +78,7 @@ public class SplashScreen extends JFrame {
     private void loaded() {
     	infoLabel.setText("Done loading!");
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			BaseClass.errorManager.report(e, "SplashScreen interrupted!");
 		}

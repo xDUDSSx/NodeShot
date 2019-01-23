@@ -137,6 +137,7 @@ public class GameScreen implements Screen {
 	
     //Build mode
 	public static boolean buildMode = false;
+	public static boolean buildMoving = false;
 	public static AbstractBuilding builtBuilding = null;
 	public static int activeRotation = 0;
 
@@ -186,6 +187,10 @@ public class GameScreen implements Screen {
     public static FrameBuffer creeperBuffer;
     //Displacement map used for space distortions
     public static FrameBuffer displacementBuffer;
+    
+    public static FrameBuffer bloomBuffer;
+    public static FrameBuffer bloomSourceBuffer;
+    public static FrameBuffer temporaryBloomBuffer;
     
     //Temporary buffers? Kinda unused.
     public static FrameBuffer corrBuffer;
@@ -244,9 +249,14 @@ public class GameScreen implements Screen {
         creeperBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
         displacementBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
         
-        blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
-		corrBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
+        bloomSourceBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/4, HEIGHT/4, false);
+        bloomBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/4, HEIGHT/4, false);
+      	temporaryBloomBuffer = new FrameBuffer(Format.RGBA8888, WIDTH/4, HEIGHT/4, false);
+        
+      	//blurBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
+		//corrBuffer = new FrameBuffer(Format.RGBA8888, WIDTH, HEIGHT, false);
 		
+        
         batch = new SpriteBatch();
         r = new ShapeRenderer();
         r.setAutoShapeType(true);
@@ -392,13 +402,12 @@ public class GameScreen implements Screen {
         drawConnectors(r, batch);
         
         buildingManager.drawAllBuildings(r, batch);
-
-       
+        
         if (buildMode && builtBuilding != null) {
         	r.begin(ShapeType.Filled);
         	Gdx.gl.glEnable(GL20.GL_BLEND);       
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);                  	
-        	drawPrefab(r, batch);
+        	drawPrefab(r, batch);        	
         	r.end();         	 
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
@@ -447,39 +456,40 @@ public class GameScreen implements Screen {
     	r.rectLine(0, Base.WORLD_SIZE, 0, 0, 16);
         r.end();
         
+        chunks.drawCorruption();
         
         bulletHandler.drawAll(r, batch);
         effectManager.drawRegularEffects(batch);
-        
-        //Draw debug infographics
+       
+        //Draw debug info-graphics
         drawDebug(r);              
        
         screenBuffer.end();
+         		
+        bloomSourceBuffer.begin();
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);  
+        buildingManager.drawAllBuildings(r, batch);
+        effectManager.drawRegularEffects(batch);
+        bloomSourceBuffer.end();
         
-        creeperBuffer.begin();
-        //Drawing the visible corruption. Corruption is no longer rendered as individual mesh layers (since v5.0 30.11.2018)
-        chunks.drawCorruption();
-        creeperBuffer.end();
-        		
 		displacementBuffer.begin();
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		effectManager.drawDisplacementEffects(batch);
 		displacementBuffer.end();
-	
-		drawScreenBuffer();
 		
-		//batch.setProjectionMatrix(cam.combined);
-		
-		//postProcessor.capture();
-		//effectManager.drawRegularEffects(batch);
-		//postProcessor.render();
-		  			
         //HUD, draw last
         //setting screen matrix    
         setHudProjectionMatrix(batch);
         setHudProjectionMatrix(r);     
-        
+       
+		drawScreenBuffer();
+
+		//postProcessor.capture();
+		//effectManager.drawRegularEffects(batch);
+		//postProcessor.render();
+		  		
         batch.begin(); 
         batch.setShader(Shaders.defaultShader);
         if (Base.drawGeneralStats) drawStats(batch);
@@ -504,23 +514,64 @@ public class GameScreen implements Screen {
     
     /**All main scene rendering is done on an off-screen {@link GameScreen#screenBuffer}. This buffer is then rendered as a single quad
      * to the actual screen and custom shaders can then be used.
-     * This method creates the full-screen quad mesh primitive and draws it with shaders applied.
+     * This method creates the full-screen quad mesh primitive and draws it with post-processing shaders applied (Bloom, Space distortion, Glow(tbd))
+     * 
+     * Bloom threshold is set in the glsl shader code itself.
+     * Bloom takes a FrameBuffer with highlights, blurs it and then overlays it over the screenBuffer (Using threshold and blur shaders)
+     * 
+     * Wave distortion strenght is hard coded as well but can be changed by editing the distortion/displacement map.
+     * Distortion shader is named waveShader.
      */
     public void drawScreenBuffer() {    	     	
+    	bloomBuffer.begin();
+		batch.setShader(Shaders.thresholdShader);   	
+				
+		Sprite bufferSprite = new Sprite(bloomSourceBuffer.getColorBufferTexture());
+		Matrix4 hudMatrix = new Matrix4();
+		hudMatrix.setToOrtho2D(0, 0, bloomSourceBuffer.getWidth(), bloomSourceBuffer.getHeight());
+		batch.setProjectionMatrix(hudMatrix);	
+
+		bufferSprite.flip(false, true);
+		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);                 	   	
+		batch.begin();
+		bufferSprite.draw(batch);
+		batch.end();
+		batch.setShader(Shaders.defaultShader);
+		bloomBuffer.end();
+    	
+    	blur(bloomBuffer, temporaryBloomBuffer, bloomBuffer, 1.8f*2f, 900*cam.zoom);
+    	
+    	//screenBuffer.begin();
+    	Sprite targetSourceTexture = new Sprite(bloomBuffer.getColorBufferTexture());
+		Matrix4 m2 = new Matrix4();
+		m2.setToOrtho2D(0, 0, screenBuffer.getWidth(), screenBuffer.getHeight());
+		batch.setProjectionMatrix(m2);	
+		targetSourceTexture.flip(false, true);
+		//batch.begin();
+		//targetSourceTexture.setPosition(0, 0);
+		//targetSourceTexture.setSize(screenBuffer.getWidth(), screenBuffer.getHeight());
+		//targetSourceTexture.draw(batch);
+		//batch.end();
+    	//screenBuffer.end();
+		
     	Texture displacementTexture = displacementBuffer.getColorBufferTexture();
 		Texture screenTexture = screenBuffer.getColorBufferTexture();
 	    screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 	    displacementTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+	    targetSourceTexture.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 	    
-	    screenTexture.bind(1);
-	    displacementTexture.bind(0);
-	    	  
+	    screenTexture.bind(2);
+	    displacementTexture.bind(1);
+	    targetSourceTexture.getTexture().bind(0);
+	    
 	    Matrix4 uiMatrix = cam.combined.cpy();
         uiMatrix.setToOrtho2D(0, 0, 1, 1);
         
         Shaders.waveShader.begin();        
-        Shaders.waveShader.setUniformi("u_texture", 1);	
-		Shaders.waveShader.setUniformi("displacementMap", 0);	
+        Shaders.waveShader.setUniformi("u_texture", 2);	
+		Shaders.waveShader.setUniformi("displacementMap", 1);	
+		Shaders.waveShader.setUniformi("bloomMap", 0);	
 	    Shaders.waveShader.setUniformMatrix("u_projTrans", uiMatrix);
 	    
 	    float[] verts = new float[20];
@@ -720,50 +771,56 @@ public class GameScreen implements Screen {
 	        r.end();
         }
     }
+  
     
-    //Shader related rendering methods
-    public static void blurBuffer(FrameBuffer fboA, FrameBuffer fboB, Texture texture, float x, float y) {
-    	fboB.begin();
+    /**Executes a dual pass gaussian-blur across three {@link FrameBuffer}s. Blur is done using a custom shader ({@link Shaders#blurShader}.
+     * @param source The source buffer
+     * @param temporaryBuffer A temporary buffer thats needed for the second pass
+     * @param target The target buffer where final rendered texture will be rendered
+     * @param radius Radius of the blur (shader specific)
+     * @param resolution Resolution of the blur (shader specific)
+     */
+    public static void blur(FrameBuffer source, FrameBuffer temporaryBuffer, FrameBuffer target, float radius, float resolution) {
+    	temporaryBuffer.begin();
     	Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 1.0f, 0.0f);
-    	Shaders.blurShader.setUniformf("radius", 0.05f);
-        Shaders.blurShader.setUniformf("resolution", (cam.zoom * 300) * aspectRatio);
+    	Shaders.blurShader.setUniformf("radius", radius);
+        Shaders.blurShader.setUniformf("resolution", resolution);
     	Shaders.blurShader.end();
 		batch.setShader(Shaders.blurShader);   	
 				
-		Sprite s = new Sprite(texture);
-		Matrix4 m = new Matrix4();
-		m.setToOrtho2D(0, 0, fboA.getWidth(), fboA.getHeight());
-		batch.setProjectionMatrix(m);	
+		Sprite bufferSprite = new Sprite(source.getColorBufferTexture());
+		Matrix4 hudMatrix = new Matrix4();
+		hudMatrix.setToOrtho2D(0, 0, source.getWidth(), source.getHeight());
+		batch.setProjectionMatrix(hudMatrix);	
 
-		s.flip(false, false);
+		bufferSprite.flip(false, true);
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);                 	   	
 		batch.begin();
-		s.draw(batch);
+		bufferSprite.draw(batch);
 		batch.end();
-		fboB.end();
+		temporaryBuffer.end();
 		
-		Shaders.blurShader.begin();
+		target.begin();
+    	Shaders.blurShader.begin();
     	Shaders.blurShader.setUniformf("dir", 0.0f, 1.0f);
-    	Shaders.blurShader.setUniformf("radius", 0.05f);
-    	Shaders.blurShader.setUniformf("resolution", cam.zoom * 300);
+    	Shaders.blurShader.setUniformf("radius", radius);
+        Shaders.blurShader.setUniformf("resolution", resolution);
     	Shaders.blurShader.end();
-		  	
-    	batch.setShader(Shaders.blurShader);   	
-		s = new Sprite(fboB.getColorBufferTexture());
-		
-		m.setToOrtho2D(0, 0, fboB.getWidth(), fboB.getHeight());		
-		batch.setProjectionMatrix(m);
-		
-		s.flip(false, false);
+		batch.setShader(Shaders.blurShader);   	
+				
+		bufferSprite = new Sprite(temporaryBuffer.getColorBufferTexture());
+		bufferSprite.flip(false, true);
+		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);            	   	
 		batch.begin();
-		s.draw(batch);
+		bufferSprite.draw(batch);
 		batch.end();
-		
-		batch.setProjectionMatrix(cam.combined);
+		target.end();
 		batch.setShader(Shaders.defaultShader);
-	}   
+    }
+    
     
     public void drawBackgroundClouds(SpriteBatch batch) {
         //Getting the time this application has run for, the is fed to the cloud shader and makes it "animated"
@@ -1128,6 +1185,7 @@ public class GameScreen implements Screen {
 
     public static void zoomTo(float newZoom, float duration){
         cameraZoomOrigin = cam.zoom;
+        cam.zoom = MathUtils.clamp(cam.zoom, Base.MIN_ZOOM, Base.WORLD_SIZE*3/cam.viewportWidth);
         cameraZoomTarget = newZoom;
         timeToCameraZoomTarget = cameraZoomDuration = duration;
     }
@@ -1298,8 +1356,10 @@ public class GameScreen implements Screen {
         font.dispose();
         fontLarge.dispose();
         r.dispose();
-        corrBuffer.dispose();
-		blurBuffer.dispose();
+        bloomBuffer.dispose();
+        temporaryBloomBuffer.dispose();
+        //corrBuffer.dispose();
+		//blurBuffer.dispose();
 		stage.dispose();
 		SpriteLoader.tileAtlas.dispose();
 		skin.dispose();

@@ -101,19 +101,33 @@ public class BuildingManager {
 	 * @param b The built building type.
 	 * */
 	public void startBuildMode(AbstractBuilding b) {
-		try {
-			Class<? extends AbstractBuilding> buildingClass = b.getClass();
-			Constructor<? extends AbstractBuilding> buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});	
-			Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
-		
+		startBuildMode(b, false);
+	}
+	
+	public void startBuildMode(AbstractBuilding b, boolean moving) {
+		if (moving) {
 			if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
 				GameScreen.buildMode = true;
-				GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);
+				GameScreen.buildMoving = true;
+				GameScreen.builtBuilding = b;
 				GameScreen.chunks.updateAllSectionMeshes(false);
 			}
+		} else {
+			try {
+				Class<? extends AbstractBuilding> buildingClass = b.getClass();
+				Constructor<? extends AbstractBuilding> buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});	
+				Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
 			
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			BaseClass.errorManager.report(e, "Build mode building initialisation failed.");
+				if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {
+					GameScreen.buildMode = true;
+					GameScreen.buildMoving = false;
+					GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);
+					GameScreen.chunks.updateAllSectionMeshes(false);
+				}
+				
+			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				BaseClass.errorManager.report(e, "Build mode building initialisation failed.");
+			}
 		}
 	}
 	
@@ -122,6 +136,7 @@ public class BuildingManager {
 		GameScreen.expandedConveyorNode = null;
 		GameScreen.expandingANode = false;
 		GameScreen.builtBuilding = null;
+		GameScreen.buildMoving = false;
 		GameScreen.buildMode = false;
 		
 		//A terrain update necessary to clear build mode highlights

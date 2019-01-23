@@ -36,7 +36,7 @@ public class Explosion extends VisualEffect {
 		
 		GameScreen.effectManager.addRegularEffect(this, layer);
 		
-		new Shockwave(x, y, 50, 300, 15, 7);		
+		new Shockwave(x, y, 1, 400, 30, 10);		
 		new SmokePoof(x, y);	
 		GameScreen.terrainEditor.explosion(new Vector3(x, y, 0), 11);
 	}

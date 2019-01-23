@@ -3,8 +3,11 @@ package org.dudss.nodeshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dudss.nodeshot.entities.Bullet;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Section;
+
+import com.badlogic.gdx.math.Vector2;
 
 /**The simulation daemon thread, runs the simulation loop.
  * It's subsidiary thread is the {@link CorruptionUpdateThread} that updates the grid based cellular-automata corruption separately.*/
@@ -31,7 +34,7 @@ public class SimulationThread extends Thread {
     int next_terrain_tick = 30;
     
     int chunkUpdateRate = 10;
-    int terrainMeshUpdateRate = 30;
+    int terrainMeshUpdateRate = 5;
     
     public static int lastTicksPerSecond = 30;
     public static int simTick;
@@ -142,7 +145,7 @@ public class SimulationThread extends Thread {
     /**Call a single global game logic update*/
 	void updateLogic() {
 		simTick++;
-		
+
 		//Updating projectiles
 		GameScreen.bulletHandler.updateAll();
 		
@@ -187,9 +190,9 @@ public class SimulationThread extends Thread {
 		if (simTick >= next_terrain_tick) {
 			next_terrain_tick += terrainMeshUpdateRate;
 			
-			/*for (Section s : GameScreen.chunks.sectionsInView) {
-				GameScreen.chunks.updateSectionMesh(s, false);
-			}*/
+			for (Section s : GameScreen.chunks.sectionsInView) {
+				if (s.isActive()) GameScreen.chunks.updateSectionMesh(s, true);			
+    		}					
 		}
 
 		//Updating pathHandler logic

@@ -104,7 +104,10 @@ public class DesktopInputProcessor implements InputProcessor {
 				//new Explosion(worldPos.x, worldPos.y);
 
 				//Building
-				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {				
+				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {		
+					if (GameScreen.buildMoving) {
+						GameScreen.builtBuilding.demolish();
+					}
 					if (GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true)) {
 						boolean canBeBuilt = true;
 						int buildingHeight = (int) GameScreen.builtBuilding.getBuildingChunks()[0].getHeight();
@@ -115,7 +118,7 @@ public class DesktopInputProcessor implements InputProcessor {
 							}
 						}
 												
-						if (canBeBuilt) {
+						if (canBeBuilt) {						
 							GameScreen.builtBuilding.build();
 							
 							if (GameScreen.expandingANode && builtBuilding instanceof NodeBuilding) {
@@ -126,25 +129,29 @@ public class DesktopInputProcessor implements InputProcessor {
 									return false;
 								}
 							}
-													
-							if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
-								try {					
-									if (builtBuilding instanceof NodeBuilding) {
-										GameScreen.expandingANode = true;
-										GameScreen.expandedConveyorNode = ((NodeBuilding) builtBuilding).getNode();
+									
+							if (!GameScreen.buildMoving) {
+								if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
+									try {					
+										if (builtBuilding instanceof NodeBuilding) {
+											GameScreen.expandingANode = true;
+											GameScreen.expandedConveyorNode = ((NodeBuilding) builtBuilding).getNode();
+										}
+										Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
+										Constructor buildingConstructor;
+										buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
+										Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
+										GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
+									} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
+										BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
 									}
-									Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
-									Constructor buildingConstructor;
-									buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
-									Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
-									GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
-								} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
-									BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
-								}
-													
+														
+								} else {
+									GameScreen.buildingManager.disableBuildMode();
+								}			
 							} else {
 								GameScreen.buildingManager.disableBuildMode();
-							}							
+							}
 						} else {
 							GameScreen.builtBuilding.clearBuildingChunks();
 						}
@@ -326,13 +333,13 @@ public class DesktopInputProcessor implements InputProcessor {
 						TerrainEditor.terrainBrushSize = 0;
 					}
 				} else {
-					GameScreen.zoomTo(cam.zoom + 0.8f, 0.6f);
+					GameScreen.zoomTo(cam.zoom + 1f, 0.5f);
 				}
 			} else {
 				if (Gdx.input.isKeyPressed(Keys.T)) {
 					TerrainEditor.terrainBrushSize += 1;
 				} else {
-					GameScreen.zoomTo(cam.zoom - 0.8f, 0.6f);
+					GameScreen.zoomTo(cam.zoom - 1f, 0.5f);
 				}
 			}
 		return true;

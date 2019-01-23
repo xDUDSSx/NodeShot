@@ -10,6 +10,8 @@ import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -57,7 +59,7 @@ public class Turret extends AbstractStorage {
 	public void update() {
 		super.update();
 		
-		if (SimulationThread.simTick >= nextShot && aimed && this.storage.size() > 0) {				
+		if (SimulationThread.simTick >= nextShot && aimed && this.storage.size() > 0 && Gdx.input.isKeyPressed(Keys.SPACE)) {				
 			fire();
 			this.storage.remove(0);
 		} else {
@@ -91,7 +93,7 @@ public class Turret extends AbstractStorage {
 	
 	/**Creates a new {@link Bullet} and launches it towards it's {@link #target}.*/
 	protected void fire() {
-		Bullet b = new Bullet(this.cx, this.cy, target);
+		Bullet b = new Bullet(this.cx, this.cy, target, 5f, 0);
 		GameScreen.bulletHandler.addBullet(b);
 		
 		lastShot = SimulationThread.simTick;

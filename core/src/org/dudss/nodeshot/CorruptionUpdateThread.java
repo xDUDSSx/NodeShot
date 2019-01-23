@@ -2,6 +2,7 @@ package org.dudss.nodeshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Section;
@@ -12,7 +13,7 @@ public class CorruptionUpdateThread extends Thread {
 	
 	long lastTick = System.currentTimeMillis();
 	
-	List<Section> updatedSections;
+	public static List<Section> updatedSections;
 	
 	long elapsedTime;
 	
@@ -20,12 +21,13 @@ public class CorruptionUpdateThread extends Thread {
 	 * @since <b>v5.1</b> (3.12.18) Part of the corruption optimisation update.*/
 	CorruptionUpdateThread() {
 		this.setName("CorruptionUpdateThread");
-		updatedSections = new ArrayList<Section>();
+		updatedSections = new CopyOnWriteArrayList<Section>();
 	}
 	
 	public void run() {
 		try {
-		    while(Base.running) {   	    	
+		    while(Base.running) {   
+		    	long t1 = System.currentTimeMillis();
 		    	//Selective per section updating, sections are only updated if they are active
 		    	for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
 					for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
@@ -43,10 +45,12 @@ public class CorruptionUpdateThread extends Thread {
 		    	
 		    	//BaseClass.logger.info("CorruptionUpdateThread update report: " + updatedSections.size() + " out of " + Base.SECTION_AMOUNT*Base.SECTION_AMOUNT + " sections updated.");
 		    	
-		    	for (Section s : updatedSections) {
+		    	/*for (Section s : updatedSections) {
 					GameScreen.chunks.updateSectionMesh(s, true);
-		    	}
+		    	}*/
 		    	updatedSections.clear();				
+		    	long t2 = System.currentTimeMillis() - t1;
+		    	//BaseClass.logger.info("t2: " + t2 + " / " + SimulationThread.SKIP_TICKS);
 		    	
 		    	synchronized(this) {	    		
 		    		this.wait();

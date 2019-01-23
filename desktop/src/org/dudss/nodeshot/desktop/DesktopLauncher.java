@@ -5,14 +5,10 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.screens.MenuScreen;
-import org.dudss.nodeshot.utils.Shaders;
-import org.dudss.nodeshot.utils.SpriteLoader;
-import org.lwjgl.opengl.Display;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.tools.particleeditor.ParticleEditor;
-import com.kotcrab.vis.ui.VisUI;
 
 /**Desktop launcher that initialises and configures the lwjgl application.*/
 public class DesktopLauncher {
@@ -41,6 +37,7 @@ public class DesktopLauncher {
 		config.vSyncEnabled = Base.vSyncEnabled;
 		config.title = "NodeEngine." + ver + " OpenGL";
 		config.fullscreen = Base.fullscreen;
+		config.addIcon("textureData/assets/icon32.png", FileType.Local);
 		
 		//Dialogs.showErrorDialog(GameScreen.stage, "A runtime error occured.", ex);
 
@@ -55,7 +52,7 @@ public class DesktopLauncher {
 				org.dudss.nodeshot.BaseClass.errorManager.report(ex, "An unexpected runtime error occurred! (in Thread: " + thread.getName() + ")");						
 			}
 		});
-
+		
 		new LwjglApplication(new BaseClass(ver), config);
 	}
 }

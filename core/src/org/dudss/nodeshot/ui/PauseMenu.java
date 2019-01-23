@@ -19,7 +19,7 @@ public class PauseMenu extends VisWindow {
 	VisTable table;
 	
 	public PauseMenu(boolean showWindowBorder) {
-		super("Pause menu" , showWindowBorder);
+		super(" Pause menu" , true);
 		setVisible(false);
 		setMovable(true);
 		setResizable(true);

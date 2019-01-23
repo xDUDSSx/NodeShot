@@ -11,7 +11,9 @@ import org.dudss.nodeshot.utils.Shaders;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 
 /**The core game setup class.*/
@@ -50,7 +52,7 @@ public class BaseClass extends Game {
 		splashScreen = new SplashScreen();
 		//Loading resources
         Shaders.load();
-        VisUI.load();
+        VisUI.load(new Skin(Gdx.files.local("textureData/assets/neutralizerui/neutralizer-ui.json")));
         SpriteLoader.loadAll();
         
         //Waiting for the splash screen to finish (should happen immediately)
@@ -65,7 +67,7 @@ public class BaseClass extends Game {
         //Starting up
         menuScreen = new MenuScreen(this);		
 		setScreen(menuScreen);	
-	
+		
 		mainGameScreen = new GameScreen(this);		
 	}
 	

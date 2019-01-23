@@ -49,7 +49,7 @@ public class Base {
 	public static float IRON_THRESHOLD = 0.74f;
 	public static float TERRAIN_THRESHOLD = 0.6f;
 	
-	public static float DEFAULT_VISIBILITY = Chunk.deactivated;
+	public static float DEFAULT_VISIBILITY = Chunk.active;
 	
 	public static int MAX_CREEP = 15;
 	public static int MAX_HEIGHT = 10; 
@@ -109,7 +109,7 @@ public class Base {
 	public static Dimension defaultWindowSize = new Dimension(1300, 795);
 	public static int MSAAsamples = 10;
 	
-	public static float getRandomFloatNumberInRange(int min, int max) {
+	public static float getRandomFloatNumberInRange(float min, float max) {
 		if (min == 0 && max == 0) {
 			return 0;
 		}

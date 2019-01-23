@@ -1,13 +1,13 @@
 package org.dudss.nodeshot.utils;
  
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.terrain.Chunks;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -16,7 +16,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -84,10 +83,28 @@ public class SpriteLoader {
 	public static TextureRegion[] factoryanimoutlineFrames;
 	public static TextureRegion[] turretFrames;
 	public static TextureRegion[] explosionFrames;
+
 	public static Texture[] conveyorHorizontal;
 	public static Texture[] conveyorVertical;
 	
-	
+	public static TextureRegion artilleryBase;
+	public static TextureRegion[] artilleryFiringFrames0;
+	public static TextureRegion[] artilleryFiringFrames22;
+	public static TextureRegion[] artilleryFiringFrames45;
+	public static TextureRegion[] artilleryFiringFrames67;
+	public static TextureRegion[] artilleryFiringFrames90;
+	public static TextureRegion[] artilleryFiringFrames112;
+	public static TextureRegion[] artilleryFiringFrames135;
+	public static TextureRegion[] artilleryFiringFrames157;
+	public static TextureRegion[] artilleryFiringFrames180;
+	public static TextureRegion[] artilleryFiringFrames202;
+	public static TextureRegion[] artilleryFiringFrames225;
+	public static TextureRegion[] artilleryFiringFrames247;
+	public static TextureRegion[] artilleryFiringFrames270;
+	public static TextureRegion[] artilleryFiringFrames292;
+	public static TextureRegion[] artilleryFiringFrames315;
+	public static TextureRegion[] artilleryFiringFrames337;
+	public static HashMap<Integer, TextureRegion[]> artilleryFiringFrames;
 	
 	public static TextureRegion creeperGenOnFrame;
 	public static TextureRegion creeperGenOffFrame;
@@ -116,6 +133,7 @@ public class SpriteLoader {
 	public static Drawable mineDrawable;
 	public static Drawable nodeDrawable;
 	public static Drawable turretDrawable;
+	public static Drawable artilleryDrawable;
 	public static Drawable ammoProcessorDrawable;
 	public static Drawable shipdockDrawable;
 	
@@ -131,7 +149,7 @@ public class SpriteLoader {
 		setMessage("Loading sprites");
 		
 		count = 1;
-		total = 139;
+		total = 141 + 26;
 		
 		smokePuffAtlas = new TextureAtlas(Gdx.files.local("/textureData/smokePuff/smokepuff.atlas"));
 		textureAtlases.add(smokePuffAtlas);
@@ -274,6 +292,62 @@ public class SpriteLoader {
 			turretFrames[i] = (TextureRegion) hqanimAtlas.findRegion("turretFrame00" + n);
 		}
 		updateProgress(count++, total);
+
+		artilleryFiringFrames = new HashMap<Integer, TextureRegion[]>();
+		artilleryFiringFrames0 = new TextureRegion[26];
+		artilleryFiringFrames.put(0, artilleryFiringFrames0);
+		artilleryFiringFrames22 = new TextureRegion[26];
+		artilleryFiringFrames.put(22, artilleryFiringFrames22);
+		artilleryFiringFrames45 = new TextureRegion[26];
+		artilleryFiringFrames.put(45, artilleryFiringFrames45);
+		artilleryFiringFrames67 = new TextureRegion[26];
+		artilleryFiringFrames.put(67, artilleryFiringFrames67);
+		artilleryFiringFrames90 = new TextureRegion[26];
+		artilleryFiringFrames.put(90, artilleryFiringFrames90);
+		artilleryFiringFrames112 = new TextureRegion[26];
+		artilleryFiringFrames.put(112, artilleryFiringFrames112);
+		artilleryFiringFrames135 = new TextureRegion[26];
+		artilleryFiringFrames.put(135, artilleryFiringFrames135);
+		artilleryFiringFrames157 = new TextureRegion[26];
+		artilleryFiringFrames.put(157, artilleryFiringFrames157);
+		artilleryFiringFrames180 = new TextureRegion[26];
+		artilleryFiringFrames.put(180, artilleryFiringFrames180);
+		artilleryFiringFrames202 = new TextureRegion[26];
+		artilleryFiringFrames.put(202, artilleryFiringFrames202);
+		artilleryFiringFrames225 = new TextureRegion[26];
+		artilleryFiringFrames.put(225, artilleryFiringFrames225);
+		artilleryFiringFrames247 = new TextureRegion[26];
+		artilleryFiringFrames.put(247, artilleryFiringFrames247);
+		artilleryFiringFrames270 = new TextureRegion[26]; 
+		artilleryFiringFrames.put(270, artilleryFiringFrames270);
+		artilleryFiringFrames292 = new TextureRegion[26]; 
+		artilleryFiringFrames.put(292, artilleryFiringFrames292);
+		artilleryFiringFrames315 = new TextureRegion[26]; 
+		artilleryFiringFrames.put(315, artilleryFiringFrames315);
+		artilleryFiringFrames337 = new TextureRegion[26]; 
+		artilleryFiringFrames.put(337, artilleryFiringFrames337);
+		
+		for (int i = 0; i < 26; i++) {
+			artilleryFiringFrames0[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim0", i);  
+			artilleryFiringFrames22[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim22", i);   
+			artilleryFiringFrames45[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim45", i);   
+			artilleryFiringFrames67[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim67", i);   
+			artilleryFiringFrames90[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim90", i);   
+			artilleryFiringFrames112[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim112", i);  
+			artilleryFiringFrames135[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim135", i);  
+			artilleryFiringFrames157[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim157", i);  
+			artilleryFiringFrames180[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim180", i);  
+			artilleryFiringFrames202[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim202", i);  
+			artilleryFiringFrames225[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim225", i);  
+			artilleryFiringFrames247[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim247", i);  
+			artilleryFiringFrames270[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim270", i);  
+			artilleryFiringFrames292[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim292", i);  
+			artilleryFiringFrames315[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim315", i);  
+			artilleryFiringFrames337[i] = (TextureRegion) hqanimAtlas.findRegion("cannonFireAnim337", i);
+			updateProgress(count++, total);	
+		}
+		artilleryBase = (TextureRegion) hqanimAtlas.findRegion("cannonBase");
+		updateProgress(count++, total);	
 		
 		conveyorHorizontal = new Texture[48];
 		for (int i = 0; i < 48; i++) {
@@ -360,6 +434,11 @@ public class SpriteLoader {
 		turretDrawable.setMinWidth(Base.buildMenuImgSize);
 		updateProgress(count++, total);
 		
+		artilleryDrawable = new TextureRegionDrawable(new TextureRegion(hqanimAtlas.findRegion("artilleryPreview512")));
+		artilleryDrawable.setMinHeight(Base.buildMenuImgSize);
+		artilleryDrawable.setMinWidth(Base.buildMenuImgSize);
+		updateProgress(count++, total);
+		
 		ammoProcessorDrawable = new TextureRegionDrawable(new TextureRegion(hqanimAtlas.findRegion("ammoProcessorPreview512")));
 		ammoProcessorDrawable.setMinHeight(Base.buildMenuImgSize);
 		ammoProcessorDrawable.setMinWidth(Base.buildMenuImgSize);
@@ -410,71 +489,78 @@ public class SpriteLoader {
 		setMessage("Generating terrain textures");
 		double genTimeStart = System.currentTimeMillis();	
 		count = 1;
-		total = 470;
+		total = 510;
 		
-		for (int i = 1; i < Chunks.terrainLayerNames.length; i++) {		
-			/*generateTexture("maskBR", "overlayBR", Chunks.terrainLayerNames[i], "BR");	
-			generateTexture("maskFULL", "overlayBR_corner_bottom", Chunks.terrainLayerNames[i], "BR_corner_bottom");			
-			generateTexture("maskFULL", "overlayBR_corner_top", Chunks.terrainLayerNames[i], "BR_corner_top");		
-			generateTexture("maskFULL", "overlayBR_fill", Chunks.terrainLayerNames[i], "BR_fill");		
-			generateTexture("maskFULL", "overlayBR_fill_corner_BR_SL", Chunks.terrainLayerNames[i], "BR_fill_corner_BR_SL");		
-			generateTexture("maskFULL", "overlayBR_fill_corner_ST_BR", Chunks.terrainLayerNames[i], "BR_fill_corner_ST_BR");			
+		for (int i = 0; i < Chunks.terrainLayerNames.length; i++) {		
+			String base = null;
+			if (i == 0) {
+				base = "corr";
+			} else {
+				base = Chunks.terrainLayerNames[i];
+			}
+			/*generateTexture("maskBR", "overlayBR", base, "BR");	
+			generateTexture("maskFULL", "overlayBR_corner_bottom", base, "BR_corner_bottom");			
+			generateTexture("maskFULL", "overlayBR_corner_top", base, "BR_corner_top");		
+			generateTexture("maskFULL", "overlayBR_fill", base, "BR_fill");		
+			generateTexture("maskFULL", "overlayBR_fill_corner_BR_SL", base, "BR_fill_corner_BR_SL");		
+			generateTexture("maskFULL", "overlayBR_fill_corner_ST_BR", base, "BR_fill_corner_ST_BR");			
 			
-			generateTexture("maskBL", "overlayBL", Chunks.terrainLayerNames[i], "BL");		
-			generateTexture("maskFULL", "overlayBL_corner_bottom", Chunks.terrainLayerNames[i], "BL_corner_bottom");			
-			generateTexture("maskFULL", "overlayBL_corner_top", Chunks.terrainLayerNames[i], "BL_corner_top");			
-			generateTexture("maskFULL", "overlayBL_fill", Chunks.terrainLayerNames[i], "BL_fill");			
-			generateTexture("maskFULL", "overlayBL_fill_corner_BL_ST", Chunks.terrainLayerNames[i], "BL_fill_corner_BL_ST");			
-			generateTexture("maskFULL", "overlayBL_fill_corner_SR_BL", Chunks.terrainLayerNames[i], "BL_fill_corner_SR_BL"); 		
+			generateTexture("maskBL", "overlayBL", base, "BL");		
+			generateTexture("maskFULL", "overlayBL_corner_bottom", base, "BL_corner_bottom");			
+			generateTexture("maskFULL", "overlayBL_corner_top", base, "BL_corner_top");			
+			generateTexture("maskFULL", "overlayBL_fill", base, "BL_fill");			
+			generateTexture("maskFULL", "overlayBL_fill_corner_BL_ST", base, "BL_fill_corner_BL_ST");			
+			generateTexture("maskFULL", "overlayBL_fill_corner_SR_BL", base, "BL_fill_corner_SR_BL"); 		
 			
-			generateTexture("maskTR", "overlayTR", Chunks.terrainLayerNames[i], "TR"); 
-			generateTexture("maskFULL", "overlayTR_corner_bottom", Chunks.terrainLayerNames[i], "TR_corner_bottom"); 
-			generateTexture("maskFULL", "overlayTR_corner_top", Chunks.terrainLayerNames[i], "TR_corner_top"); 
-			generateTexture("maskFULL", "overlayTR_fill", Chunks.terrainLayerNames[i], "TR_fill"); 
-			generateTexture("maskFULL", "overlayTR_fill_corner_SB_TR", Chunks.terrainLayerNames[i], "TR_fill_corner_SB_TR"); 
-			generateTexture("maskFULL", "overlayTR_fill_corner_TR_SL", Chunks.terrainLayerNames[i], "TR_fill_corner_TR_SL"); 
+			generateTexture("maskTR", "overlayTR", base, "TR"); 
+			generateTexture("maskFULL", "overlayTR_corner_bottom", base, "TR_corner_bottom"); 
+			generateTexture("maskFULL", "overlayTR_corner_top", base, "TR_corner_top"); 
+			generateTexture("maskFULL", "overlayTR_fill", base, "TR_fill"); 
+			generateTexture("maskFULL", "overlayTR_fill_corner_SB_TR", base, "TR_fill_corner_SB_TR"); 
+			generateTexture("maskFULL", "overlayTR_fill_corner_TR_SL", base, "TR_fill_corner_TR_SL"); 
 			
-			generateTexture("maskTL", "overlayTL", Chunks.terrainLayerNames[i], "TL"); 
-			generateTexture("maskFULL", "overlayTL_corner_bottom", Chunks.terrainLayerNames[i], "TL_corner_bottom"); 
-			generateTexture("maskFULL", "overlayTL_corner_top", Chunks.terrainLayerNames[i], "TL_corner_top"); 
-			generateTexture("maskFULL", "overlayTL_fill", Chunks.terrainLayerNames[i], "TL_fill"); 
-			generateTexture("maskFULL", "overlayTL_fill_corner_SR_TL", Chunks.terrainLayerNames[i], "TL_fill_corner_SR_TL"); 
-			generateTexture("maskFULL", "overlayTL_fill_corner_TL_SB", Chunks.terrainLayerNames[i], "TL_fill_corner_TL_SB"); 
+			generateTexture("maskTL", "overlayTL", base, "TL"); 
+			generateTexture("maskFULL", "overlayTL_corner_bottom", base, "TL_corner_bottom"); 
+			generateTexture("maskFULL", "overlayTL_corner_top", base, "TL_corner_top"); 
+			generateTexture("maskFULL", "overlayTL_fill", base, "TL_fill"); 
+			generateTexture("maskFULL", "overlayTL_fill_corner_SR_TL", base, "TL_fill_corner_SR_TL"); 
+			generateTexture("maskFULL", "overlayTL_fill_corner_TL_SB", base, "TL_fill_corner_TL_SB"); 
 			
-			generateTexture("maskFULL", "overlaySR_corner_mid", Chunks.terrainLayerNames[i], "SR_corner_mid"); 
-			generateTexture("maskFULL", "overlaySL_corner_mid", Chunks.terrainLayerNames[i], "SL_corner_mid"); 
-			generateTexture("maskFULL", "overlayST_corner_mid", Chunks.terrainLayerNames[i], "ST_corner_mid"); 
-			generateTexture("maskFULL", "overlaySB_corner_mid", Chunks.terrainLayerNames[i], "SB_corner_mid"); 
+			generateTexture("maskFULL", "overlaySR_corner_mid", base, "SR_corner_mid"); 
+			generateTexture("maskFULL", "overlaySL_corner_mid", base, "SL_corner_mid"); 
+			generateTexture("maskFULL", "overlayST_corner_mid", base, "ST_corner_mid"); 
+			generateTexture("maskFULL", "overlaySB_corner_mid", base, "SB_corner_mid"); 
 			
-			generateTexture("maskFULL", "overlaySR", Chunks.terrainLayerNames[i], "SR"); 
-			generateTexture("maskFULL", "overlaySL", Chunks.terrainLayerNames[i], "SL"); 
-			generateTexture("maskFULL", "overlayST", Chunks.terrainLayerNames[i], "ST"); 
-			generateTexture("maskFULL", "overlaySB", Chunks.terrainLayerNames[i], "SB"); 
+			generateTexture("maskFULL", "overlaySR", base, "SR"); 
+			generateTexture("maskFULL", "overlaySL", base, "SL"); 
+			generateTexture("maskFULL", "overlayST", base, "ST"); 
+			generateTexture("maskFULL", "overlaySB", base, "SB"); 
 			
-			generateTexture("maskFULL", "overlayRB", Chunks.terrainLayerNames[i], "RB"); 
-			generateTexture("maskFULL", "overlayLB", Chunks.terrainLayerNames[i], "LB"); 
-			generateTexture("maskFULL", "overlayTB", Chunks.terrainLayerNames[i], "TB"); 
-			generateTexture("maskFULL", "overlayBB", Chunks.terrainLayerNames[i], "BB"); 
+			generateTexture("maskFULL", "overlayRB", base, "RB"); 
+			generateTexture("maskFULL", "overlayLB", base, "LB"); 
+			generateTexture("maskFULL", "overlayTB", base, "TB"); 
+			generateTexture("maskFULL", "overlayBB", base, "BB"); 
 			
-			generateTexture("maskFULL", "overlayTL_corner", Chunks.terrainLayerNames[i], "TL_corner"); 
-			generateTexture("maskFULL", "overlayBL_corner", Chunks.terrainLayerNames[i], "BL_corner"); 
-			generateTexture("maskFULL", "overlayBR_corner", Chunks.terrainLayerNames[i], "BR_corner"); 
-			generateTexture("maskFULL", "overlayTR_corner", Chunks.terrainLayerNames[i], "TR_corner"); 
+			generateTexture("maskFULL", "overlayTL_corner", base, "TL_corner"); 
+			generateTexture("maskFULL", "overlayBL_corner", base, "BL_corner"); 
+			generateTexture("maskFULL", "overlayBR_corner", base, "BR_corner"); 
+			generateTexture("maskFULL", "overlayTR_corner", base, "TR_corner"); 
 			
-			generateTexture("maskFULL", "overlayRB_fill", Chunks.terrainLayerNames[i], "RB_fill"); 
-			generateTexture("maskFULL", "overlayLB_fill", Chunks.terrainLayerNames[i], "LB_fill"); 
-			generateTexture("maskFULL", "overlayTB_fill", Chunks.terrainLayerNames[i], "TB_fill"); 
-			generateTexture("maskFULL", "overlayBB_fill", Chunks.terrainLayerNames[i], "BB_fill"); 
+			generateTexture("maskFULL", "overlayRB_fill", base, "RB_fill"); 
+			generateTexture("maskFULL", "overlayLB_fill", base, "LB_fill"); 
+			generateTexture("maskFULL", "overlayTB_fill", base, "TB_fill"); 
+			generateTexture("maskFULL", "overlayBB_fill", base, "BB_fill"); 
 			
-			generateTexture("maskFULL", "overlayCornerTL", Chunks.terrainLayerNames[i], "CornerTL"); 
-			generateTexture("maskFULL", "overlayCornerBL", Chunks.terrainLayerNames[i], "CornerBL"); 
-			generateTexture("maskFULL", "overlayCornerBR", Chunks.terrainLayerNames[i], "CornerBR"); 
-			generateTexture("maskFULL", "overlayCornerTR", Chunks.terrainLayerNames[i], "CornerTR"); 
+			generateTexture("maskFULL", "overlayCornerTL", base, "CornerTL"); 
+			generateTexture("maskFULL", "overlayCornerBL", base, "CornerBL"); 
+			generateTexture("maskFULL", "overlayCornerBR", base, "CornerBR"); 
+			generateTexture("maskFULL", "overlayCornerTR", base, "CornerTR"); 
 			
-			generateTexture("maskFULL", "overlayXBS", Chunks.terrainLayerNames[i], "XBS"); 
-			generateTexture("maskFULL", "overlayYBS", Chunks.terrainLayerNames[i], "YBS"); 
+			generateTexture("maskFULL", "overlayXBS", base, "XBS"); 
+			generateTexture("maskFULL", "overlayYBS", base, "YBS"); 
 			
-			generateTexture("maskFULL", "overlaySingle", Chunks.terrainLayerNames[i], "Single");*/
+			generateTexture("maskFULL", "overlaySingle", base, "Single");
+			*/
 		}
 		
 		double genTimeEnd = System.currentTimeMillis();	

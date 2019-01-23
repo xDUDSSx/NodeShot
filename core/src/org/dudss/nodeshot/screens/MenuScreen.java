@@ -228,7 +228,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-    	System.out.println("menu dispose");
         skin.dispose();
         atlas.dispose();
         sR.dispose();

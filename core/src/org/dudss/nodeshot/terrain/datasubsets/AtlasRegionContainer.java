@@ -94,6 +94,10 @@ public class AtlasRegionContainer {
 		return secondaryShade;
 	}
 	
+	public void setSecondaryShade(float newShade) {
+		this.secondaryShade = newShade;
+	}
+	
 	/**Get number of textures in this container*/
 	public int getSize() {
 		return size;

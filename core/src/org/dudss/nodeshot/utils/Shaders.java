@@ -21,6 +21,7 @@ public class Shaders {
 	public static ShaderProgram terrainShader;
 	public static ShaderProgram fogOfWarShader;
 	public static ShaderProgram waveShader;
+	public static ShaderProgram thresholdShader;
 	
 	/**Loads and compiles all GLSL shaders
 	 * @throws Throws {@link RuntimeException} when one or more shaders did not compile successfully. Also dumps the compilation logs to the {@link ErrorManager}. 
@@ -61,6 +62,10 @@ public class Shaders {
 		String waveFragmentShader = Gdx.files.internal("shaders/waveFragment.glsl").readString();
 		waveShader = new ShaderProgram(vertexDefaultShader, waveFragmentShader);
 		
+		//Shader for thresholding bright areas, used for explosion bloom effect
+		String thresholdFragmentShader = Gdx.files.internal("shaders/thresholdFragment.glsl").readString();
+		thresholdShader = new ShaderProgram(vertexDefaultShader, thresholdFragmentShader);
+		
 		//Shader compilation diagnostics and logging
 		compiled.put(defaultShader, "default shader");
 		compiled.put(defaultShader, "corruption shader");
@@ -71,6 +76,7 @@ public class Shaders {
 		compiled.put(solidCloudShader, "solidCloud shader");
 		compiled.put(rotatingCloudShader, "rotatingCloud shader");
 		compiled.put(waveShader, "wave shader");
+		compiled.put(thresholdShader, "brightness threshold shader");
 		
 		StringBuilder sb = new StringBuilder();
 		Iterator it = compiled.entrySet().iterator();

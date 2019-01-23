@@ -3,6 +3,7 @@ package org.dudss.nodeshot.ui;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.buildings.AmmoProcessor;
+import org.dudss.nodeshot.buildings.ArtilleryCannon;
 import org.dudss.nodeshot.buildings.BasicMine;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Exporter;
@@ -34,6 +35,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisList;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
 public class ToolbarMenu extends VisWindow {
@@ -55,10 +57,10 @@ public class ToolbarMenu extends VisWindow {
 	VisLabel test;
 	
 	public ToolbarMenu(String title) {
-		super("Toolbar", false);	
+		super("Toolbar", true);	
 		TableUtils.setSpacingDefaults(this);
-		setResizable(false);
-		setMovable(false);
+		setResizable(true);
+		setMovable(true);
 		getTitleTable().clear();	
 		
 		structures = new BuildTable();
@@ -76,6 +78,7 @@ public class ToolbarMenu extends VisWindow {
 		transfer.addBuildingTile(SpriteLoader.exporterTopDrawable, "Exporter", new BuildListener(new Exporter(0, 0)));
 		weapons = new BuildTable();
 		weapons.addBuildingTile(SpriteLoader.turretDrawable, "Turret", new BuildListener(new Turret(0, 0)));
+		weapons.addBuildingTile(SpriteLoader.artilleryDrawable, "Artillery Cannon", new BuildListener(new ArtilleryCannon(0, 0)));
 		
 		buildPanel = new VisTable();
 		buildList = new VisList<String>();
@@ -104,8 +107,8 @@ public class ToolbarMenu extends VisWindow {
 		this.getTitleTable().left();
 		bitLabel = new VisLabel("Bits: " + Base.START_BITS);
 		powerLabel = new VisLabel("Power: " + GameScreen.resourceManager.getPower() + " / " + GameScreen.resourceManager.getMaxPower());
-		this.getTitleTable().add(bitLabel).width(bitLabel.getWidth() + 50);
-		this.getTitleTable().add(powerLabel).width(powerLabel.getWidth() + 50);	
+		this.getTitleTable().add(bitLabel).width(bitLabel.getWidth() + 50).pad(5);
+		this.getTitleTable().add(powerLabel).width(powerLabel.getWidth() + 50).pad(5);	
 		mainTable.add(infoTable).fill();
 		
 		buildWrapper = new VisTable();
@@ -124,8 +127,9 @@ public class ToolbarMenu extends VisWindow {
 		
 		//debugAll();
 		
-		updateBounds();		
-		pack();		
+		pack();
+		updateBounds();	
+		updateMainPanel();
 	}
 	
 	/**Update the menu selection. Should be called when the menu should switch panels.*/
@@ -165,6 +169,7 @@ public class ToolbarMenu extends VisWindow {
 	
 	private class SelectTable extends VisTable {
 		VisLabel infoLabel;
+		VisTextButton moveBtn;
 		
 		public SelectTable(Entity e) {
 			super(true);
@@ -177,6 +182,17 @@ public class ToolbarMenu extends VisWindow {
 			
 			Image thumbnail = new Image(SpriteLoader.hqDrawable);
 			add(thumbnail).right();
+			
+			moveBtn = new VisTextButton("move");
+			moveBtn.addListener(new ClickListener(){
+				@Override
+				public void clicked(InputEvent event, float x, float y) {	 	
+					if (e instanceof AbstractBuilding) {
+						GameScreen.buildingManager.startBuildMode((AbstractBuilding) e, true);
+					}
+			    }
+		    });		
+			add(moveBtn);
 		}
 	}
 	
@@ -187,21 +203,23 @@ public class ToolbarMenu extends VisWindow {
 		/**A {@link Table} that holds individual building {@link BuildingTile}s. Supports horizontal scrolling.*/
 		public BuildTable() {
 			super(true);
-			
 			TableUtils.setSpacingDefaults(this);
 			align(Align.topLeft);						
 			
 			buildingTable = new VisTable();
 			TableUtils.setSpacingDefaults(buildingTable);
 			buildingTable.align(Align.topLeft);
+			buildingTable.padBottom(20);
+			buildingTable.padLeft(5);
+			buildingTable.padRight(5);
+			buildingTable.padTop(2);
 			
 			VisScrollPane scrollPane = new VisScrollPane(buildingTable);
-			scrollPane.setFadeScrollBars(false);
+			scrollPane.setFadeScrollBars(true);
 			scrollPane.setFlickScroll(false);
 			scrollPane.setOverscroll(false, false);
 			scrollPane.setScrollingDisabled(false, true);
 			add(scrollPane).grow().fill();
-			
 			//Disables the scrollPane mouse wheel listener!
 			scrollPane.getListeners().removeIndex(scrollPane.getListeners().size-1);
 		}
@@ -233,8 +251,7 @@ public class ToolbarMenu extends VisWindow {
 		BuildingTile(VisImageButton btn, String desc) {
 			this.btn = btn;
 			this.desc = desc;
-			
-			addActor(this.btn);
+			addActor(btn);
 			//addActor(new VisLabel(this.desc));
 		}
 		

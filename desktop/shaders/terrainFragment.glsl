@@ -24,28 +24,32 @@ void main()
         if (tex4.a == 1.0) {
             finalColor = tex4;
         } else {
-            finalColor = vec4(mix(tex4.rgb, finalColor, 0.8), 1.0);
+            //finalColor = vec4(1);
+            finalColor = vec4(mix(tex4.rgb, finalColor.rgb, 0.8), 1.0);
         }
     }
     if (tex3.a > 0.15) {
         if (tex3.a == 1.0) {
             finalColor = tex3;
         } else {
-            finalColor = vec4(mix(tex3.rgb, finalColor, 0.8), 1.0);
+            //finalColor = vec4(1);
+            finalColor = vec4(mix(tex3.rgb, finalColor.rgb, 0.8), 1.0);
         }
     }
     if (tex2.a > 0.15) {
         if (tex2.a == 1.0) {
             finalColor = tex2;
         } else {
-            finalColor = vec4(mix(tex2.rgb, finalColor, 0.8), 1.0);
+            //finalColor = vec4(1);
+            finalColor = vec4(mix(tex2.rgb, finalColor.rgb, 0.8), 1.0);
         }
     }
     if (tex1.a > 0.15) {
         if (tex1.a == 1.0) {
             finalColor = tex1;
         } else {
-            finalColor = vec4(mix(tex1.rgb, finalColor, 0.8), 1.0);
+            //finalColor = vec4(1);
+            finalColor = vec4(mix(tex1.rgb, finalColor.rgb, 0.8), 1.0);
         }
     }
 
