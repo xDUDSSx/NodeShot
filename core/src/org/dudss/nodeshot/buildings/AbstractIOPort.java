@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.buildings;
 
+import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.entities.nodes.Node;
@@ -51,6 +52,15 @@ public abstract class AbstractIOPort extends AlertableBuilding implements Connec
 			this.spriteRotation -= 90;
 		}
 		GameScreen.activeRotation = spriteRotation;
+	}
+	
+	
+	@Override
+	public void build() {
+		super.build(false);
+		this.ioNode = new IONode(x + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);
+		GameScreen.nodelist.add(ioNode);
+		this.register();
 	}
 	
 	public AbstractBuilding getBuilding() {

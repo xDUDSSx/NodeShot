@@ -59,7 +59,7 @@ public class IONode extends ConveyorNode {
 		}
 	}
 	
-	/**Whether this node can send a Package*/
+	/**Whether this node can send a Package to any {@link Conveyor}s.*/
 	public boolean canSendPackage() {
 		//Picks a random accessible conveyor
 		List<Conveyor> possiblePaths = new ArrayList<Conveyor>();

@@ -167,9 +167,10 @@ public class NodeBuilding extends AbstractBuilding implements Connectable {
 
 	@Override
 	public void build() {
-		super.build();
+		super.build(false);
 		n = new ConveyorNode(x + (width/2), y + (height/2), Base.RADIUS, this);
 		n.add();
+		this.register();
 	}
 
 	@Override

@@ -230,13 +230,15 @@ public abstract class AbstractBuilding implements Entity {
 	/**Prefab draw method (prefab is the building representation following the cursor when in build mode)*/
 	public abstract void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap);	
 	
-	/**Called when the building is built*/
+	/**Called when the building is built. Registers it to its {@link BuildingManager}.*/
 	public void build() {
-		switch(buildingType) {
-			case BUILDING: GameScreen.buildingManager.addBuilding(this); break;
- 			case MISC: GameScreen.buildingManager.addMisc(this); break;
-			case GENERATOR: GameScreen.buildingManager.addGenerator(this); break;
-		}
+		build(true);
+	}
+	
+	/**Called when the building is built.
+	 * @param register Whether to register the building to its {@link BuildingManager} immediately.
+	 */
+	public void build(boolean register) {
 		GameScreen.resourceManager.removeBits(this.buildingCost);
 		GameScreen.resourceManager.removePower(this.initialEnergyCost);
 		
@@ -245,12 +247,34 @@ public abstract class AbstractBuilding implements Entity {
 		if (isUsingEnergy) {
 			nextEnergyTick = SimulationThread.simTick + Base.ENERGY_COST_UPDATE_RATE;
 		}
+		
+		if (register) register();
 	}	
 	
-	/**Builds the building but flattens the terrain under the building first.*/
+	/**Registers the building to a {@link BuildingManager}. Making it drawable and updateable.
+	 * Some buildings need this to be called at the end of their {@link #build()} methods.
+	 * <br><br>If a building needs to initialise some variables before starting its update cycle.
+	 * You can call super.build(false) and then this.register at the end of the overriden build method.*/
+	protected void register() {
+		switch(buildingType) {
+			case BUILDING: GameScreen.buildingManager.addBuilding(this); break;
+			case MISC: GameScreen.buildingManager.addMisc(this); break;
+			case GENERATOR: GameScreen.buildingManager.addGenerator(this); break;
+		}
+	}
+	
+	/**Builds the building but flattens the terrain under the building first.
+	 * @param register Whether to register the building to its {@link BuildingManager} immediately.
+	 */
+	public void buildAndLevel(boolean register) {
+		levelTerrainOfBuildingChunks();
+		build(register);
+	}
+	
+	/**Builds the building but flattens the terrain under the building first. The building is registered to its {@link BuildingManager}. */
 	public void buildAndLevel() {
 		levelTerrainOfBuildingChunks();
-		build();
+		build(true);
 	}
 	
 	/**Called upon demolition. Adds the building to a {@link BuildingManager} and updates fog of war.*/
@@ -357,9 +381,7 @@ public abstract class AbstractBuilding implements Entity {
 	}
 
 	@Override
-	public EntityType getType() {
-		return EntityType.BUILDING;
-	}
+	public abstract EntityType getType();
 
 	@Override
 	public float getX() {

@@ -33,13 +33,11 @@ public class Exporter extends AbstractIOPort {
 	public void update() {
 		super.update();
 		if (this.nextOperation < SimulationThread.simTick) {
-			if (buildingChunk.getBuilding() instanceof AbstractStorage) {		
-				boolean buildingChunkBuildingIsAnIOStorage = false;
-				if (buildingChunk.getBuilding() instanceof AbstractIOStorage) {
-					buildingChunkBuildingIsAnIOStorage = true;
-				}			
-				
-				exportAnItem(buildingChunkBuildingIsAnIOStorage);	
+			AbstractBuilding b = buildingChunk.getBuilding();
+			if (b != null) {
+				if (b instanceof AbstractStorage) {							
+					exportAnItem(b);	
+				}
 			}
 		}
 	}
@@ -47,37 +45,41 @@ public class Exporter extends AbstractIOPort {
 	/**Removes a {@link StorableItem} from the assigned {@link AbstractStorage} and initialises a new {@link Package} and if a {@link Conveyor} is connected,
 	 * this {@linkplain Item} is sent along it using the {@link IndefinitePathHandler}.
 	 * When a {@link AbstractIOStorage} is assigned, it will first export items from its secondary processed storage.
-	 * @param isIoStorage Whether the assigned building is a {@link AbstractIOStorage}.
+	 * @param b The {@link AbstractBuilding} we are exporting from.
 	 * */
-	public void exportAnItem(boolean isIoStorage) {
+	public void exportAnItem(AbstractBuilding b) {
 		if (ioNode.getAllConnectedNodes().size() > 0 || ioNode.getConnectors().size() > 0) {
-			if (ioNode.getConnectors().get(0).checkEntrance(ioNode, Base.PACKAGE_BLOCK_RANGE)) {
-				Package export;
-				if (isIoStorage) {			
-					AbstractIOStorage ioStorage = (AbstractIOStorage) buildingChunk.getBuilding();
-					if (ioStorage.getProcessedStorage().size() > 0) {
-						export = ioStorage.getProcessedStorage().get(0).getPackage();
-						ioStorage.getProcessedStorage().remove(0);
-					} else {
-						return; //Storage is empty
-					}
+			StorableItem exportItem;
+			if (b instanceof AbstractIOStorage) {			
+				AbstractIOStorage ioStorage = (AbstractIOStorage) b;
+				if (ioStorage.getProcessedStorage().size() > 0) {
+					exportItem = ioStorage.getProcessedStorage().get(0);
 				} else {
-					AbstractStorage storage = (AbstractStorage) buildingChunk.getBuilding();
-					if (storage.getStoredItems().size() > 0) {
-						export = storage.getStoredItems().get(0).getPackage();
-						storage.getStoredItems().remove(0);
-					} else {
-						return; //Storage is empty
-					}
+					return; //Storage is empty
 				}
-
-				if (export != null) {
-					if (export.notSet == true) {
-						export.setParams(ioNode, null);
-					}
-					this.ioNode.sendIOPackage(export);
-					this.nextOperation = SimulationThread.simTick + ioSpeed;
+			} else {
+				AbstractStorage storage = (AbstractStorage) b;
+				if (storage.getStoredItems().size() > 0) {
+					exportItem = storage.getStoredItems().get(0);
+				} else {
+					return; //Storage is empty
 				}
+			}
+			
+			if (ioNode.canSendPackage()) {
+				Package exportPackage = exportItem.getPackage();
+				if (exportPackage.notSet == true) {
+					exportPackage.setParams(ioNode, null);
+				}
+				this.ioNode.sendIOPackage(exportPackage);
+				if (b instanceof AbstractIOStorage) {
+					((AbstractIOStorage)b).getProcessedStorage().remove(0);
+				} else
+				if (b instanceof AbstractStorage) {
+					((AbstractStorage)b).getStoredItems().remove(0);
+				}
+				
+				this.nextOperation = SimulationThread.simTick + ioSpeed;
 			}
 		}
 	}
@@ -118,10 +120,8 @@ public class Exporter extends AbstractIOPort {
 
 	@Override
 	public void build() {
-		super.build();
-		this.ioNode = new IONode(x + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);	
+		super.build();		
 		ioNode.setOutputSprite();
-		GameScreen.nodelist.add(ioNode);
 		
 		importerChunk = GameScreen.chunks.getChunkAtWorldSpace(x, y);
 		

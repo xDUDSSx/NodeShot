@@ -136,6 +136,7 @@ public class SpriteLoader {
 	public static Drawable artilleryDrawable;
 	public static Drawable ammoProcessorDrawable;
 	public static Drawable shipdockDrawable;
+	public static Drawable storageDrawable;
 	public static Drawable missingImage;
 	
 	public static Sprite turret;
@@ -152,7 +153,7 @@ public class SpriteLoader {
 		setMessage("Loading sprites");
 		
 		count = 1;
-		total = 141 + 28;
+		total = 141 + 29;
 		
 		selectReticle = new Texture("res/selectReticle.png");
 		textures.add(selectReticle);
@@ -454,6 +455,11 @@ public class SpriteLoader {
 		shipdockDrawable = new TextureRegionDrawable(new TextureRegion(hqanimAtlas.findRegion("shipdockPreview512")));
 		shipdockDrawable.setMinHeight(Base.buildMenuImgSize);
 		shipdockDrawable.setMinWidth(Base.buildMenuImgSize);		
+		updateProgress(count++, total);
+
+		storageDrawable = new TextureRegionDrawable(new TextureRegion(hqanimAtlas.findRegion("storagePreview512")));
+		storageDrawable.setMinHeight(Base.buildMenuImgSize);
+		storageDrawable.setMinWidth(Base.buildMenuImgSize);		
 		updateProgress(count++, total);
 		
 		missingImage = new TextureRegionDrawable(new TextureRegion(hqanimAtlas.findRegion("missingIconImage")));

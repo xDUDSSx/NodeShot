@@ -20,10 +20,7 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 	boolean ioActive = false;
 	
 	List<StorableItem> storage = new ArrayList<StorableItem>();
-	float maxStorage = 50;
-	
-	protected Color prefabColor = new Color(218f/255f, 165f/255f, 32f/255f, 0.5f);
-	protected Color color = Color.GOLDENROD;
+	int maxStorage = 50;
 	
 	public AbstractStorage(float cx, float cy, float width, float height) {
 		super(cx, cy, width, height);
@@ -82,6 +79,10 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 	
 	public void empty() {
 		storage.clear();
+	}
+	
+	public int getMaxStorage() {
+		return maxStorage;
 	}
 	
 	public IONode getNode() {

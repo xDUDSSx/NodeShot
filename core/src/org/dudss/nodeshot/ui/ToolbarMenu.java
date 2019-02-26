@@ -17,8 +17,8 @@ import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.buildings.PowerGenerator;
 import org.dudss.nodeshot.buildings.Shipdock;
 import org.dudss.nodeshot.buildings.Turret;
+import org.dudss.nodeshot.buildings.UniversalStorage;
 import org.dudss.nodeshot.entities.Entity;
-import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -82,6 +82,7 @@ public class ToolbarMenu extends VisWindow {
 		structures.addBuildingTile(SpriteLoader.mineDrawable, "Mine", new BuildListener(new BasicMine(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.genDrawable, "Power generator", new BuildListener(new PowerGenerator(0, 0)));
 		structures.addBuildingTile(SpriteLoader.factoryDrawable, "Factory", new BuildListener(new Factory(0, 0)));	
+		structures.addBuildingTile(SpriteLoader.storageDrawable, "Universal storage", new BuildListener(new UniversalStorage(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.ammoProcessorDrawable, "Ammo processor", new BuildListener(new AmmoProcessor(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.shipdockDrawable, "Shipdock", new BuildListener(new Shipdock(0, 0)));	
 		utils = new BuildTable();
@@ -194,6 +195,7 @@ public class ToolbarMenu extends VisWindow {
 		VisLabel infoLabel;
 		VisTextButton moveBtn;
 		VisTextButton demoBtn;
+		VisTextButton demoConveyorBtn;
 		VisTextButton reverseBtn;
 		
 		VisLabel storageValue;
@@ -242,13 +244,28 @@ public class ToolbarMenu extends VisWindow {
 					}
 			    }
 		    });	
+			demoConveyorBtn = new VisTextButton("Disconnect");
+			demoConveyorBtn.addListener(new ClickListener(){
+				@Override
+				public void clicked(InputEvent event, float x, float y) {	 	
+					if (e instanceof ConveyorBuilding) {
+						((ConveyorBuilding) e).getConveyor().getFrom().disconnect(((ConveyorBuilding) e).getConveyor().getTo());
+						Selector.deselect();
+						updateMainPanel();
+					}
+			    }
+		    });	
 			if (e instanceof AbstractBuilding && !(e instanceof CreeperGenerator)) {							
 				if (!(e instanceof Headquarters)) {
 					btns.add(moveBtn).fillX();		
+				}
+				if (!(e instanceof Headquarters) && !(e instanceof ConveyorBuilding)) {
 					btns.row();
 					btns.add(demoBtn).fillX();
 				}
 				if (e instanceof ConveyorBuilding) {
+					btns.row();
+					btns.add(demoConveyorBtn).fillX();
 					btns.row();
 					btns.add(reverseBtn).fillX();
 				}
@@ -287,7 +304,7 @@ public class ToolbarMenu extends VisWindow {
 		
 		/**Updates the selection data.*/
 		public void updateInfo(Entity e) {
-			if (e instanceof AbstractStorage) storageValue.setText("Storage: " + ((AbstractStorage)e).getStoredItems().size());
+			if (e instanceof AbstractStorage) storageValue.setText("Storage: " + ((AbstractStorage)e).getStoredItems().size() + "/" + ((AbstractStorage)e).getMaxStorage());
 			if (e instanceof AbstractIOStorage) processedValue.setText("Processed: " + ((AbstractIOStorage)e).getProcessedStorage().size());
 			if (e instanceof CreeperGenerator) healthDamage.setText("Health: " + ((((CreeperGenerator)e).health) - ((CreeperGenerator)e).damage));
 			if (e instanceof Package) percentageLabel.setText("Percentage: " + ((Package)e).percentage);
@@ -308,7 +325,8 @@ public class ToolbarMenu extends VisWindow {
 				case SHIPDOCK: return SpriteLoader.shipdockDrawable;
 				case AMMO_PROCESSOR: return SpriteLoader.ammoProcessorDrawable;
 				case MINE: return SpriteLoader.mineDrawable;
-				case HQ: return SpriteLoader.hqDrawable;			
+				case HQ: return SpriteLoader.hqDrawable;		
+				case UNIVERSAL_STORAGE: return SpriteLoader.storageDrawable;
 				default: return SpriteLoader.missingImage;
 			}
 		}

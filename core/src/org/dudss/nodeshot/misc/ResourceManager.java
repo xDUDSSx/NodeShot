@@ -47,6 +47,7 @@ public class ResourceManager {
 	
 	public void addBits(int add) {
 		this.bits += add;
+		System.out.println("Added Bits " + add);
 	}
 	
 	public void removeBits(int remove) {
@@ -54,6 +55,7 @@ public class ResourceManager {
 		if (bits < 0) {
 			bits = 0;
 		}
+		System.out.println("Removed bits" + remove);
 	}
 	
 	public void setPower(int power) {

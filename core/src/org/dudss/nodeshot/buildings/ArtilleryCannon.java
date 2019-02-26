@@ -35,9 +35,9 @@ public class ArtilleryCannon extends Turret {
 	public ArtilleryCannon(float cx, float cy) {
 		super(cx, cy);
 		
-		for (int i = 0; i < 50; i++) {
+		/*for (int i = 0; i < 50; i++) {
 			this.storage.add(new StorableItem(ItemType.AMMO));
-		}
+		}*/
 		
 		this.fogOfWarRadius = 40;
 		inaccuracy = 64;
@@ -146,8 +146,11 @@ public class ArtilleryCannon extends Turret {
 			if (b != null) {
 				float dist = (float) Math.hypot(x - b.getX(), y - b.getY());
 				if (dist < closestDist && dist > minDiameter && dist < maxDiameter) {
-					targetChunk = GameScreen.chunks.getChunkAtWorldSpace(b.getCX(), b.getCY());
-					closestDist = dist;				
+					Chunk c = GameScreen.chunks.getChunkAtWorldSpace(b.getCX(), b.getCY());
+					if (c.visibility == Chunk.active) {
+						targetChunk = c;
+						closestDist = dist;				
+					}
 				}
 			}			
 		} 

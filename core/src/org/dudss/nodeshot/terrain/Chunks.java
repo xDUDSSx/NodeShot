@@ -822,7 +822,9 @@ public class Chunks {
 		float[][] ironMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.45f, 0.018f);
 		sn.randomizeMutatorTable();
 		BaseClass.logger.info("Generating noise (3/3)");
-		float[][] heightMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 5, 0.5f, 0.009f);
+		//float[][] heightMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 3, 0.35f, 0.009f); //Smooth noise
+		//float[][] heightMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 5, 0.5f, 0.009f);
+		float[][] heightMap = sn.generateOctavedSimplexNoise(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, 4, 0.5f, 0.017f);
 		
 		BaseClass.logger.info("Creating pixmaps");
 		Pixmap coalPixmap = new Pixmap(Base.CHUNK_AMOUNT, Base.CHUNK_AMOUNT, Format.RGBA8888);
@@ -910,8 +912,9 @@ public class Chunks {
  		Pixmap patchPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.RGBA8888);
 		for (int x = 0; x < pixmap.getWidth(); x++) {
 			for (int y = 0; y < pixmap.getHeight(); y++) {
-				Color c = new Color(pixmap.getPixel(x, y));				
-				int val = (int) Base.range(c.r, 0, 1f, 0, Base.MAX_HEIGHT);
+				Color c = new Color(pixmap.getPixel(x, y));		
+				//float iVal = Interpolation.exp5In.apply(c.r);
+				int val = (int) Base.range(c.r, 0, 1f, 1, Base.MAX_HEIGHT-1);			
 				chunks[x][y].setHeight(val);
 			}
 		}

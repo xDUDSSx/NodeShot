@@ -24,7 +24,8 @@ public interface Entity {
 		NODE_BUILDING, 
 		SHIPDOCK, 
 		TURRET,
-		VISUAL_EFFECT
+		VISUAL_EFFECT,
+		UNIVERSAL_STORAGE
 	}
 	
 	/**Returns a unique specifier.*/
