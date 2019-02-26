@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.Bullet;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
@@ -22,7 +23,7 @@ public class Turret extends AbstractStorage {
 	static float width = Base.CHUNK_SIZE*3, height = Base.CHUNK_SIZE*3;
 	
 	/**Minimum delay between shots*/
-	int rechargeRate = 100;
+	int rechargeRate = 68;
 	/**Sim tick of the next possible shot*/
 	int nextShot = SimulationThread.simTick + rechargeRate;
 	/**Last shot tick*/
@@ -39,12 +40,17 @@ public class Turret extends AbstractStorage {
 	float animStep = 5f;	
 	/**Previous turret target*/
 	Vector2 lastTarget;
-	/**Current turret targer*/
+	/**Current turret target*/
 	Vector2 target;	
 	/**Minimal range*/
-	int minRadius = 4*2;
+	int minDiameter = 32*2;
 	/**Maximum range*/
-	int maxRadius = 20*2;
+	int maxDiameter = 176*2;	
+	/**Amount of ammo consumed per shot.*/
+	int ammoPerShot = 1;
+	
+	int targetPollingRate = 60;
+	int nextTargetSearch = SimulationThread.simTick + targetPollingRate;
 	
 	/**A turret that targets chunks with corruption. Requires ammo to be stored in order to fire a {@link Bullet}.*/
 	public Turret(float cx, float cy) {
@@ -59,28 +65,31 @@ public class Turret extends AbstractStorage {
 	public void update() {
 		super.update();
 		
-		if (SimulationThread.simTick >= nextShot && aimed && this.storage.size() > 0 && Gdx.input.isKeyPressed(Keys.SPACE)) {				
+		if (SimulationThread.simTick >= nextShot && aimed && this.storage.size() >= ammoPerShot) {				
 			fire();
-			this.storage.remove(0);
+			for (int i = 0; i < ammoPerShot; i++) {
+				System.out.println("removing ammo " + storage.size());
+				this.storage.remove(0);
+			}			
 		} else {
 			if (target != null) {
 				aim(target);
-			} else {
+			} else if (SimulationThread.simTick > nextTargetSearch) {
 				target = findTarget();
+				System.out.println("turret search");
+				nextTargetSearch += targetPollingRate;
 			}
 		}
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {	
-		batch.begin();
+	public void draw(SpriteBatch batch) {	
 		batch.setColor(1f, 1f, 1f, 1f);		
 		if ((int)(angle/animStep) == 72 || (int)(angle/animStep) == 0) {
 			batch.draw(SpriteLoader.turretFrames[0], x, y, width, height);
 		} else {
 			batch.draw(SpriteLoader.turretFrames[(int) (angle/animStep) - 1], x, y, width, height);	
 		}
-		batch.end();
 	}
 	
 	@Override
@@ -93,13 +102,13 @@ public class Turret extends AbstractStorage {
 	
 	/**Creates a new {@link Bullet} and launches it towards it's {@link #target}.*/
 	protected void fire() {
-		Bullet b = new Bullet(this.cx, this.cy, target, 5f, 0);
+		Bullet b = new Bullet(this.cx, this.cy, target, 20f, 0, 0);
 		GameScreen.bulletHandler.addBullet(b);
 		
 		lastShot = SimulationThread.simTick;
 		nextShot = SimulationThread.simTick + rechargeRate;
 		lastTarget = target;						
-		target = findTarget();
+		target = null;
 		aimed = false;
 	}
 	
@@ -132,11 +141,11 @@ public class Turret extends AbstractStorage {
 		}
 	}
 	
-	/**Sets the turret {@link target} appropriately and in regard with the turrets {@link #minRadius} and {@link #maxRadius}.*/
+	/**Sets the turret {@link target} appropriately and in regard with the turrets {@link #minDiameter} and {@link #maxDiameter}.*/
 	protected Vector2 findTarget() {
 		Vector2 target = null;
 	
-		Chunk targetChunk = GameScreen.chunks.getClosestCorruptionChunkToWorldSpace(this.cx, this.cy, minRadius, maxRadius, 0f);
+		Chunk targetChunk = GameScreen.chunks.getClosestCorruptionChunkToWorldSpace(this.cx, this.cy, minDiameter, maxDiameter, 0f);
 		
 		if (targetChunk == null) {
 			return null;
@@ -144,5 +153,10 @@ public class Turret extends AbstractStorage {
 		
 		target = new Vector2(targetChunk.getX() + (Base.CHUNK_SIZE/2), targetChunk.getY() + (Base.CHUNK_SIZE/2));		
 		return target;
+	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.TURRET;
 	}
 }

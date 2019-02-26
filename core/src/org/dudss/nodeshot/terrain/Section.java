@@ -1,7 +1,7 @@
 package org.dudss.nodeshot.terrain;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.datasubsets.MeshVertexData;
 
@@ -221,7 +221,7 @@ public class Section {
 		this.active = active;
 	}
 	
-	/**@see {@link #setActive(boolean)}.
+	/**@see #setActive(boolean)
 	 * @since <b>v5.1</b> (3.12.18) Part of the corruption optimisation update.*/
 	public boolean isActive() {
 		return active;

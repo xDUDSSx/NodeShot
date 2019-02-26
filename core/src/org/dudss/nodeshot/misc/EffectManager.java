@@ -1,18 +1,14 @@
 package org.dudss.nodeshot.misc;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.BaseClass;
-import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.VisualEffect;
 import org.dudss.nodeshot.utils.Shaders;
-import org.dudss.nodeshot.utils.SpriteLoader;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -24,8 +20,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class EffectManager {
 	List<VisualEffect> allEffects;
 	List<VisualEffect> displacementEffects;
-	//List<VisualEffect> regularEffects;
-	
 	Map<Integer, List<VisualEffect>> regularEffects;
 	
 	int nOfLayers = 3;
@@ -39,6 +33,7 @@ public class EffectManager {
 		allEffects =  new CopyOnWriteArrayList<VisualEffect>();
 	}
 	
+	/**Draws all displacement effects*/
 	public void drawDisplacementEffects(SpriteBatch batch) {
 		batch.begin();
 		for (VisualEffect v : displacementEffects) {

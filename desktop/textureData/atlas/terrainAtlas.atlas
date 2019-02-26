@@ -2,7 +2,7 @@
 terrainAtlas.png
 size: 4096,4096
 format: RGBA8888
-filter: MipMapLinearNearest,Nearest
+filter: MipMapLinearLinear,Nearest
 repeat: none
 0void
   rotate: false
@@ -4334,7 +4334,7 @@ tiledIronTR
 terrainAtlas2.png
 size: 128,128
 format: RGBA8888
-filter: MipMapLinearNearest,Nearest
+filter: MipMapLinearLinear,Nearest
 repeat: none
 assets/icon32
   rotate: false
@@ -4347,7 +4347,7 @@ assets/icon32
 terrainAtlas3.png
 size: 1024,1024
 format: RGBA8888
-filter: MipMapLinearNearest,Nearest
+filter: MipMapLinearLinear,Nearest
 repeat: none
 assets/neutralizerui/neutralizer-ui
   rotate: false
@@ -4360,7 +4360,7 @@ assets/neutralizerui/neutralizer-ui
 terrainAtlas4.png
 size: 4096,4096
 format: RGBA8888
-filter: MipMapLinearNearest,Nearest
+filter: MipMapLinearLinear,Nearest
 repeat: none
 smokePuff/smokepuff
   rotate: false
@@ -4373,7 +4373,7 @@ smokePuff/smokepuff
 terrainAtlas5.png
 size: 4096,2048
 format: RGBA8888
-filter: MipMapLinearNearest,Nearest
+filter: MipMapLinearLinear,Nearest
 repeat: none
 smokePuff/blacksmoke/blackSmoke00
   rotate: false

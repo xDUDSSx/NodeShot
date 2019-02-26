@@ -27,7 +27,7 @@ public abstract class AbstractIOStorage extends AbstractStorage {
 			}
 		}
 	}
-	
+		
 	@Override
 	public boolean canStore(StorableItem p) {
 		if (this.accepted.size() > 0) {

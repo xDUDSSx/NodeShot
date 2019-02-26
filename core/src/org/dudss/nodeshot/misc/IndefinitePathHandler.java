@@ -10,8 +10,9 @@ import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.screens.GameScreen;
 
-/**A {@link PathHandler} that has no path-finding algorithm backing it up. This handler moves packages forward along one-way {@link Conveyors}.*/
+/**A {@link PathHandler} that has no path-finding algorithm backing it up. This handler moves packages forward along one-way {@link Conveyor}s.*/
 public class IndefinitePathHandler implements PathHandler {
 
 	Package currentPackage;
@@ -19,6 +20,7 @@ public class IndefinitePathHandler implements PathHandler {
 		
 	boolean done = false;
 	
+	/**A {@link PathHandler} that has no path-finding algorithm backing it up. This handler moves packages forward along one-way {@link Conveyor}s.*/
 	IndefinitePathHandler(Package p, Conveyor c) {
 		currentPackage = p;
 		currentConnector = c;
@@ -81,6 +83,7 @@ public class IndefinitePathHandler implements PathHandler {
 	@Override
 	public void finish() {
 		done = true;
+		GameScreen.packageHandler.pathHandlers.remove(this);
 	}
 
 	@Override

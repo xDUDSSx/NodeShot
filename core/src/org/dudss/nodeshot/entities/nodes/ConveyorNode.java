@@ -3,9 +3,11 @@ package org.dudss.nodeshot.entities.nodes;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.utils.SpriteLoader;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+/**A {@link Node} that connects {@link Conveyor}s.*/
 public class ConveyorNode extends Node {
 
 	/**The building this conveyor node is a part of.*/

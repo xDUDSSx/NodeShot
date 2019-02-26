@@ -11,7 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**A shock-wave effect that distorts space and radially expands.
  * Needs to be rendered inside of a gray displacement screen buffer that is rendered using the {@link Shaders#waveShader}.
- * @see {@link GameScreen#displacementBuffer}*/
+ * @see GameScreen#displacementBuffer
+ */
 public class Shockwave extends VisualEffect {
 	
 	Sprite displacementSprite;

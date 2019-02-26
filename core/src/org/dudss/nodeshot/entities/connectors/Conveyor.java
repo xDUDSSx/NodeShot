@@ -6,18 +6,22 @@ import java.util.List;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.ConveyorBuilding;
 import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
+/**A special type of a {@link Connector} that has a representation in the world as {@link ConveyorBuilding}s.
+ * It's also ONE WAY.*/
 public class Conveyor extends Connector {
 
 	Animation<Texture> anim;
@@ -33,6 +37,7 @@ public class Conveyor extends Connector {
 	 * generating its {@link ConveyorBuilding}s*/
 	boolean encounteredBuildingCollision = false;
 	
+	/**A special type of a {@link Connector} that has a representation in the world as {@link ConveyorBuilding}s.*/
 	public Conveyor(Node from, Node to) {
 		super(from, to);
 		conveyorBuildings = new ArrayList<ConveyorBuilding>();
@@ -109,6 +114,7 @@ public class Conveyor extends Connector {
 		}	
 	}
 	
+	/**Whether an obstacle was encountered during the last build attempt.*/
 	public boolean isBuiltProperly() {
 		return !encounteredBuildingCollision;
 	}
@@ -125,74 +131,37 @@ public class Conveyor extends Connector {
 		
 		reg = new TextureRegion(currentFrame);
 		reg.setRegion(0, 0, (int)(currentFrame.getWidth()*(this.lenght/50f)), currentFrame.getHeight());
-		batch.draw(reg, this.from.getCX(), this.from.getCY() - 8, 0, 8, (float) this.lenght, 16, 1, 1, angle);
+		
+		if (!reversed) {
+			batch.draw(reg, this.from.getCX(), this.from.getCY() - 8, 0, 8, (float) this.lenght, 16, 1, 1, angle);
+		} else {
+			reg.flip(true, false);
+			batch.draw(reg, this.from.getCX(), this.from.getCY() - 8, 0, 8, (float) this.lenght, 16, 1, 1, angle);
+		}
 		
 		batch.end();
 		
 		sR.begin(ShapeType.Filled);
-		/*super.draw(sR);
-		
-		float distanceVector = ((float) this.lenght / 6);		
-		int numberOfArrows = Math.round((float)(this.lenght / distanceVector));
-		
-		float[] verts = new float[10 * numberOfArrows];
-				
-		int index = 0;
-		
-		float lPX;
-		float lPY;
-		Vector2 connectorVector;
-		if (!reversed) {
-			lPX = from.getCX();
-			lPY = from.getCY();
-			connectorVector = new Vector2((to.getCX() - from.getCX()), (to.getCY() - from.getCY()));
-		} else {
-			lPX = to.getCX();
-			lPY = to.getCY();
-			connectorVector = new Vector2((from.getCX() - to.getCX()), (from.getCY() - to.getCY()));
-		}
-		
-		Vector2 connectorNormalVector = new Vector2(connectorVector.y, -(connectorVector.x));
-		double perc = this.lenght / 100;
-		float linePerc = (float) (((float) Base.lineWidth/2) / perc);		
-		float distanceVectorPerc = (float) ((float) distanceVector / perc);
-		
-		for (int i = 0; i < numberOfArrows; i++) {
-			verts[index++] = lPX;
-			verts[index++] = lPY;
-			
-			float a1 = lPX + connectorVector.x * (distanceVectorPerc/100);
-			float a2 = lPY + connectorVector.y * (distanceVectorPerc/100);
-			
-			lPX = Float.valueOf(a1);
-			lPY = Float.valueOf(a2);
-			
-			verts[index++] = lPX;
-			verts[index++] = lPY;
-			
-			verts[index++] = new Float(lPX) + connectorNormalVector.x * (linePerc/100) - connectorVector.x * (linePerc/100);
-			verts[index++] = new Float(lPY) + connectorNormalVector.y * (linePerc/100) - connectorVector.y * (linePerc/100);
-
-			verts[index++] = lPX;
-			verts[index++] = lPY;
-			
-			verts[index++] = new Float(lPX)- connectorNormalVector.x * (linePerc/100) - connectorVector.x * (linePerc/100);
-			verts[index++] = new Float(lPY) - connectorNormalVector.y * (linePerc/100) - connectorVector.y * (linePerc/100);
-		}
-
-		sR.set(ShapeType.Line);
-		Color c = sR.getColor();;
-		Color newColor = new Color(c.r * 0.6f, c.g * 0.6f, c.b * 0.6f,1.0f);
-		sR.setColor(newColor);	
-		sR.polyline(verts);
-		sR.set(ShapeType.Filled);
-		*/
 	}
 	
+	/**Reverses the direction of {@linkplain Package}s in this conveyor.*/
 	public void reverse() {
 		reversed = !reversed;
+		recalculateReversePositions();
 	}
 	
+	/**Recalculates positions of conveyor packages and swaps their targets.*/
+	private void recalculateReversePositions() {
+		for (Package p : packages) {
+			Node n = p.from;
+			p.from = p.to;
+			p.to = n;
+			
+			p.percentage = 100 - p.percentage;
+		}
+	}
+	
+	/**Whether this conveyor is reversed (relative to its initial start/target {@link Node}s.*/
 	public boolean isReversed() {
 		return reversed;
 	}

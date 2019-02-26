@@ -7,6 +7,7 @@ import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
+/**Unsed = undocumented*/
 public class GraphComponentsAlgorithm {
 	
 	ArrayList<String> state = new ArrayList<String>();

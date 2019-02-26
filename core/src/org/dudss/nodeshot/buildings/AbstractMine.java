@@ -19,7 +19,7 @@ public abstract class AbstractMine extends AbstractStorage {
 		public int mineRange = 11;
 		
 		public StorableItem oreType;
-		public int productionRate = 2000;
+		public int productionRate = 800;
 		public int nextSimTick = -1;
 		
 		public boolean canGenerate = false;
@@ -38,7 +38,8 @@ public abstract class AbstractMine extends AbstractStorage {
 				nextSimTick = SimulationThread.simTick + productionRate; 
 			}
 		}
-
+		
+		/**A call to generate the specified {@link StorableItem}.*/
 		abstract public void generate();
 		
 		@Override
@@ -51,8 +52,6 @@ public abstract class AbstractMine extends AbstractStorage {
 			for (Section s : sectionsToUpdate) {
 				GameScreen.chunks.updateSectionMesh(s, false);
 			}
-			
-			updateFogOfWar(true);
 		}
 		
 		private void calculateProductionRate() {

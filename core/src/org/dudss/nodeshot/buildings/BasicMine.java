@@ -1,10 +1,8 @@
 package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.utils.SpriteLoader;
-import org.dudss.nodeshot.entities.Package;
-import org.dudss.nodeshot.entities.Entity.EntityType;
+import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.items.StorableItem;
-import org.dudss.nodeshot.items.Item.ItemType;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -13,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**A building that generates ores when on {@link Chunk}s containing ore.*/
 public class BasicMine extends AbstractMine {
 	
 	Sprite on;
@@ -23,12 +22,14 @@ public class BasicMine extends AbstractMine {
 	
 	Color color = new Color(Color.argb8888(0.2f, 0.2f, 0.2f, 1f));
 	
+	/**A building that generates ores when on {@link Chunk}s containing ore.*/
 	public BasicMine(float cx, float cy) {
 		super(cx, cy);
 		on = new Sprite(SpriteLoader.mineOn);
 		off = new Sprite(SpriteLoader.mineOff);
 	}
 
+	/**A call to generate the specified ore.*/
 	public void generate() {
 		if (canGenerate) {
 			storage.add(new StorableItem(oreType.getType()));
@@ -41,15 +42,13 @@ public class BasicMine extends AbstractMine {
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {	
-		batch.begin();
+	public void draw(SpriteBatch batch) {	
 		batch.setColor(1f, 1f, 1f, 1f);		
 		if (canGenerate) {
 			batch.draw(SpriteLoader.mineOn, x, y, width, height);
 		} else {
 			batch.draw(SpriteLoader.mineOff, x, y, width, height);
 		}		
-		batch.end();
 	}
 	
 	@Override

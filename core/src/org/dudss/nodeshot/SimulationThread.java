@@ -31,11 +31,11 @@ public class SimulationThread extends Thread {
      * To prevent stalling of the main logic loop this calculation is moved to a separate thread so it can calculate within its slower loops free time.
      * */
     int next_chunk_tick = 10;
-    int next_terrain_tick = 30;
-    
     int chunkUpdateRate = 10;
-    int terrainMeshUpdateRate = 5;
     
+    long corruptionMeshUpdateDelayInMs = 200;
+    long nextCorruptionMeshUpdate = getTickCount() + corruptionMeshUpdateDelayInMs;
+      
     public static int lastTicksPerSecond = 30;
     public static int simTick;
     
@@ -64,6 +64,8 @@ public class SimulationThread extends Thread {
     	BaseClass.logger.info("SimulationThread daemon running!");       	
     	GameScreen.simFac = 1.0;
     	t1 = getTickCount(); 
+    	nextCorruptionMeshUpdate = getTickCount() + corruptionMeshUpdateDelayInMs;
+    	next_game_tick = getTickCount() + SKIP_TICKS;
     	
     	//Start the simulation loop
     	simLoop();
@@ -155,48 +157,21 @@ public class SimulationThread extends Thread {
 		//Updating chunks and geometry of each section corruption mesh every chunkUpdateRate ticks
 		//Terrain geometry is updated every terrainMeshUpdateRate ticks
 		if (simTick >= next_chunk_tick) {
-			//Notifying the corruption update thread, this will perform a single corruption update running on a different thread
 			next_chunk_tick += chunkUpdateRate;
-	    	
-			/*
-	    	//Selective per section updating, sections are only updated if they are active
-	    	for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
-				for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
-					if (GameScreen.chunks.sections[x][y].isActive()) {
-						updatedSections.add(GameScreen.chunks.sections[x][y]);
-						GameScreen.chunks.sections[x][y].updateAll();
-					}
-				}
-	    	}
-	    	
-	    	//Applies the update in all updated sections
-	    	for (Section s : updatedSections) {
-	    		s.applyUpdates();
-	    	}
-	    	
-	    	//BaseClass.logger.info("CorruptionUpdateThread update report: " + updatedSections.size() + " out of " + Base.SECTION_AMOUNT*Base.SECTION_AMOUNT + " sections updated.");
-	    	
-	    	for (Section s : updatedSections) {
-				GameScreen.chunks.updateSectionMesh(s, true);
-	    	}
-	    	updatedSections.clear();
-			*/
+	
+			//Notifying the corruption update thread, this will perform a single corruption update running on a different thread
 			synchronized(corruptionUpdateThread) {
 				corruptionUpdateThread.notify();
 			}
 		}		
 		
-		//Terrain update, currently unused
-		if (simTick >= next_terrain_tick) {
-			next_terrain_tick += terrainMeshUpdateRate;
-			
+		//Corruption mesh updates
+		if (getTickCount() >= nextCorruptionMeshUpdate) {
+			nextCorruptionMeshUpdate += corruptionMeshUpdateDelayInMs;
 			for (Section s : GameScreen.chunks.sectionsInView) {
 				if (s.isActive()) GameScreen.chunks.updateSectionMesh(s, true);			
     		}					
 		}
-
-		//Updating pathHandler logic
-		//GameScreen.packageHandler.update();
 		
 		//Updating connector logic
 		GameScreen.connectorHandler.update();		
@@ -205,11 +180,12 @@ public class SimulationThread extends Thread {
 		GameScreen.buildingManager.updateAllMisc();
 		
 		//Updating buildings
-		GameScreen.buildingManager.updateAllBuildings();
+		GameScreen.buildingManager.updateAllRegularBuildings();
 		
 		//Updating rightClickMenu text
 		GameScreen.rightClickMenuManager.update();
 		
+		//Updating visual effects
 		GameScreen.effectManager.updateAllEffects();
 	}
 	

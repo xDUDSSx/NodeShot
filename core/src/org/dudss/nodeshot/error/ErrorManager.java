@@ -3,6 +3,8 @@ package org.dudss.nodeshot.error;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dudss.nodeshot.error.ErrorReporter;
+
 import javax.swing.SwingUtilities;
 
 /**A manager that handles {@link ErrorReporter} initialisations*/
@@ -21,7 +23,8 @@ public class ErrorManager {
 	 * A visual window will not be displayed if there are {@value MAX_ACTIVE_REPORTERS} displayed already to prevent overwhelming the user.
 	 * @param t Exception throwable.
 	 * @param message Additional exception description.
-	 * @see {@link ErrorReporter}*/
+	 * @see ErrorReporter
+	 */
 	public void report(Throwable t, String message) {
 		t.printStackTrace();
 		if (activeErrorReporters.size() >= MAX_ACTIVE_REPORTERS) {
@@ -46,7 +49,8 @@ public class ErrorManager {
 	 * @param t Exception throwable.
 	 * @param message Additional exception description.
 	 * @param customDetails Additional details added after the stacktrace.
-	 * @see {@link ErrorReporter}*/
+	 * @see ErrorReporter
+	 */
 	public void reportWithCustomDetails(Throwable t, String message, String customDetails) {
 		t.printStackTrace();
 		if (activeErrorReporters.size() >= MAX_ACTIVE_REPORTERS) {

@@ -1,8 +1,11 @@
 package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
+import org.dudss.nodeshot.entities.effects.Explosion;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,38 +25,35 @@ public class ConveyorBuilding extends AbstractBuilding {
 	public ConveyorBuilding(float cx, float cy, Conveyor c) {
 		super(cx, cy, width, height);
 		this.assignedConveyor = c;
+		this.buildingType = BuildingType.MISC;
 		this.fogOfWarRadius = 6;
 		this.setLocation(cx, cy, true);
 		this.build();
 	}
 
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {
-		//This building CANNOT be drawn.
+	public void draw(SpriteBatch batch) {
+		//This building CANNOT be drawn.	
 	}
-
+	
 	@Override
 	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {
 		//This building CANNOT be drawn.	
 	}
 	
 	@Override
-	public void build() {
-		GameScreen.buildingManager.addMisc(this);
-		
-		updateFogOfWar(true);
-	}
-	
-	@Override
-	public void demolish() {
-		GameScreen.buildingManager.removeMisc(this);
-		
-		clearBuildingChunks();
-		updateFogOfWar(false);	
+	public void explode() {
+		new Explosion(cx, cy);
+		assignedConveyor.getFrom().disconnect(assignedConveyor.getTo());
 	}
 	
 	/**Get the assigned {@link Conveyor}.*/
 	public Conveyor getConveyor() {
 		return assignedConveyor;
+	}
+
+	@Override
+	public EntityType getType() {
+		return EntityType.CONVEYOR;
 	}
 }

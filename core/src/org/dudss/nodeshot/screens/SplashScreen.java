@@ -75,6 +75,7 @@ public class SplashScreen extends JFrame {
     	}
     }
     
+    /**Method called when loading is finished.*/
     private void loaded() {
     	infoLabel.setText("Done loading!");
 		try {

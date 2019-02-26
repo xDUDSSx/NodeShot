@@ -10,6 +10,7 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.algorithms.GraphComponentsAlgorithm;
 import org.dudss.nodeshot.entities.nodes.Node;
 
+/**Unused = undocumented*/
 public class PathfindingStepAlgorithm {
 	
 	int steps = -1;

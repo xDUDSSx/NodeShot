@@ -21,21 +21,21 @@ public abstract class AbstractIOPort extends AlertableBuilding implements Connec
 	
 	public AbstractIOPort(float cx, float cy, float width, float height) {
 		super(cx, cy, width, height);
+		buildingType = BuildingType.MISC;
 	}
 	
 	@Override
 	public void update() {
 		super.update();
-		ioNode.update();
+		if (ioNode != null) {
+			ioNode.update();
+		}
 	}
 	
 	@Override
 	public void demolish() {	
-		GameScreen.buildingManager.removeMisc(this);
+		super.demolish();
 		ioNode.remove();
-		
-		clearBuildingChunks();
-		updateFogOfWar(false);
 	}
 	
 	public void rotateRight() {

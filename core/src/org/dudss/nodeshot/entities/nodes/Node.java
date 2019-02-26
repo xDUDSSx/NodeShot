@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -13,10 +14,9 @@ import org.dudss.nodeshot.algorithms.PathfindingDistanceAlgorithm;
 import org.dudss.nodeshot.algorithms.PathfindingStepAlgorithm;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
-import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
-import org.dudss.nodeshot.items.Item;
+import org.dudss.nodeshot.terrain.Chunk;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -47,7 +47,6 @@ public class Node extends Sprite implements Entity {
 
 	public Point movementVector;
 
-	//TODO: Node code is old and not necessarily best for the current use, rewrite at one point!!
 	/**
 	 * Creates a new Node that functions as a Sprite
 	 * 
@@ -78,15 +77,12 @@ public class Node extends Sprite implements Entity {
 		this.setPosition(x, y);
 	}
 	
+	/**Positions the node precisely in world-space*/
 	public void setLocation(float cx, float cy) {
-		this.cx = cx;
-		this.cy = cy;
-		x = cx - (radius / 2);
-		y = cy - (radius / 2);
-		this.setPosition(x, y);
+		setLocation(cx, cy, false);
 	}
 	
-	
+	/**Positions the node in world-space and snaps it to the nearest {@link Chunk}.*/
 	public void setLocation(float cx, float cy, Boolean snap) {
 		if (snap) {
 			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
@@ -110,43 +106,51 @@ public class Node extends Sprite implements Entity {
 		}	
 	}
 
-	// Draw replaced by Sprite.draw();
+	/**Sets the {@link Sprite} representing this node.*/
 	public void setSprite(Sprite s) {
 		this.set(s);
 	}
 
+	@Deprecated
 	public void setRadius(int radius) {
 		this.radius = radius;
 	}
 
+	/**Return the X coordinate of its centre.*/
 	public float getCX() {
 		return x + radius / 2;
 	}
-
+	
+	/**Return the Y coordinate of its centre.*/
 	public float getCY() {
 		return y + radius / 2;
 	}
 
+	@Deprecated
 	public int getRadius() {
 		return radius;
 	}
 
+	/**Whether other {@link Node}s can connect to this one.*/
 	public void setConnectable(Boolean b) {
 		this.connectable = b;
 	}
-
-	public Boolean getConnectable() {
+	
+	public Boolean isConnectable() {
 		return this.connectable;
 	}
 
+	@Deprecated
 	public void setState(String state) {
 		this.state = state;
 	}
 
+	@Deprecated
 	public String getState() {
 		return state;
 	}
 
+	/**Returns distance between the nodes in world units.*/
 	public double getDistance(Node node) {
 		double nodex = (double) node.getCX();
 		double nodey = (double) node.getCY();
@@ -308,11 +312,13 @@ public class Node extends Sprite implements Entity {
 		return null;
 	}
 	
+	@Deprecated
 	public int getStepsTo(Node target) {
 		PathfindingStepAlgorithm pSA = new PathfindingStepAlgorithm(this, target);
 		return pSA.getSteps();
 	}
 	
+	@Deprecated
 	public double getShortestDistanceTo(Node target) {
 		PathfindingDistanceAlgorithm pDA = new PathfindingDistanceAlgorithm(this, target);
 		if (!(pDA.failed())) {
@@ -355,6 +361,7 @@ public class Node extends Sprite implements Entity {
 		return closed;
 	}
 
+	/**Flags this node as closed so that {@link Package}s can't pass through it.*/
 	public void setClosed(Boolean closed) {
 		this.closed = closed;
 		if (closed == true) {

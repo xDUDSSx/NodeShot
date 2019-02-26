@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**A building that produces {@link ItemType#AMMO}.*/
 public class AmmoProcessor extends Factory {
 
 	TextureRegion t = new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("ammoProcessor"));
@@ -29,11 +30,9 @@ public class AmmoProcessor extends Factory {
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {
-		batch.begin();
+	public void draw(SpriteBatch batch) {	
 		batch.setColor(1f, 1f, 1f, 1f);		
 		batch.draw(t, x, y, width, height);	
-		batch.end();
 	}
 
 	@Override
@@ -42,5 +41,10 @@ public class AmmoProcessor extends Factory {
 		batch.setColor(1f, 1f, 1f, 0.5f);
 		batch.draw(t, getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 		batch.end();	
+	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.AMMO_PROCESSOR;
 	}
 }

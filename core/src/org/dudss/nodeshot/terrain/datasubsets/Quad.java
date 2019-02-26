@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 public class Quad {
 	float[] vertices;
 	
+	/**Holds vertex data of a single quad (rectangle)*/
 	public Quad(float[] verts) {
 		vertices = new float[20];
 		
@@ -34,6 +35,7 @@ public class Quad {
 		vertices[Batch.V4] = verts[Batch.V4];
 	}
 	
+	/**Returns the quad vertices.*/
 	public float[] getVertices() {
 		return vertices;
 	}

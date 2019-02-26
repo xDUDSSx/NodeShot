@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.algorithms.SimplexNoiseGenerator;
+import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.misc.ChunkOperation;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.datasubsets.AtlasRegionContainer;
@@ -30,11 +31,12 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 /**Manages terrain and corruption generation, updating, optimising and rendering.
  * Both terrain and corruption are rendered as direct OpenGL draw calls with their own
  * vertex and index buffers that get uploaded to the GPU. They are also rendered using custom GLSL shaders
- * @see {@link Shaders#corruptionShader} and {@link Shaders#terrainShader}.
+ * @see Shaders
  * */
 public class Chunks {
 	
@@ -210,7 +212,7 @@ public class Chunks {
 	 * TheWholeMap boolean states whether to only update {@link #sectionsInView} or the whole {@link #sections} array, eg. every {@link Section} on the map.
 	 * @param corr Whether a terrain or corruption mesh should be updated
 	 * @param theWholeMap Whether all the sections in the world should be updated. If false this method behaves like {@link #updateAllSectionMeshes(boolean)}
-	 * @see Overloaded {@link #updateAllSectionMeshes(boolean)}
+	 * @see #updateAllSectionMeshes(boolean)
 	 */
 	public void updateAllSectionMeshes(boolean corr, boolean theWholeMap) {
 		if (theWholeMap) {
@@ -306,7 +308,8 @@ public class Chunks {
 	 * @since As of the version <b>v5.0 (30.11.2018)</b>. Corruption and its edge resolving operates in a single mesh. Before, there were separate meshes for
 	 * every corruption layer. That allowed me to tint different layers a specific shade. I've overcome this need by using a glsl shader that blends textures together.
 	 * Thus I didn't need to keep corruption layers as separate meshes but as a single mesh (per {@link Section}) which increases performance.
-	 * @see {@link Chunk#getCorruptionTexture()}*/
+	 * @see Chunk#getCorruptionTexture()
+	 */
 	public void drawCorruption() {
 	 	Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	    
@@ -338,7 +341,8 @@ public class Chunks {
 	
 	public void drawFogOfWar() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      	
+	  
 	    Shaders.fogOfWarShader.begin();
 	    Shaders.fogOfWarShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
 	    for (Section s : sectionsInView) {
@@ -351,7 +355,7 @@ public class Chunks {
 	    }
 	    
 	    Shaders.fogOfWarShader.end();	
-	    Gdx.gl.glDisable(GL20.GL_BLEND);
+	    Gdx.gl.glDisable(GL20.GL_BLEND);	    
 	}
 	
 	/**
@@ -363,14 +367,53 @@ public class Chunks {
 	 * @param visibility Type of visibility.
 	 */
 	public void setVisibility(float x, float y, int radius, Visibility visibility) {
-		List<Section> sectionsToUpdate = getSectionsAroundWorldSpacePoint(x, y);
+		Set<Section> sectionsToUpdate = new HashSet<Section>();
+		
+		int centerAX = (int) (x / Base.CHUNK_SIZE);
+		int centerAY = (int) (y / Base.CHUNK_SIZE);
+		
+		int originAX = centerAX - (int)(radius);
+		int originAY = centerAY - (int)(radius);
+		
+		for (int sx = originAX; sx < originAX + radius*2; sx++) {
+			for (int sy = originAY; sy < originAY + radius*2; sy++) {
+				Chunk c = GameScreen.chunks.getChunkAtTileSpace(sx, sy);
+				if (c != null) {
+					double dist = Math.hypot(centerAX * Base.CHUNK_SIZE - c.getX(), centerAY * Base.CHUNK_SIZE - c.getY());
+					double boundary = ((float)(radius))*Base.CHUNK_SIZE;					
+					if (dist <= boundary) {		
+						switch(visibility) {
+							case ACTIVE: c.visibility = Chunk.active; c.visionProviderNumber++; break;
+							case SEMIACTIVE: c.visibility = Chunk.semiactive; c.visionProviderNumber--; break;
+							case DEACTIVATED: c.visibility = Chunk.deactivated; c.visionProviderNumber--; break;
+						}
+						
+						if (c.visionProviderNumber > 0) {
+							c.visibility = Chunk.active;
+						} else {
+							c.visibility = Chunk.semiactive;
+							c.visionProviderNumber = 0;
+						}
+						
+						sectionsToUpdate.add(c.getSection());
+					}
+				}
+			}
+		}
+		
+		for (Section s : sectionsToUpdate) {
+			GameScreen.chunks.updateFogOfWarMesh(s);
+		}
+		
+		//OLD
+		/*List<Section> sectionsToUpdate = getSectionsAroundWorldSpacePoint(x, y);
 		for (Section sec : sectionsToUpdate) {
 			for (int sx = 0; sx < Base.SECTION_SIZE; sx++) {
 				for (int sy = 0; sy < Base.SECTION_SIZE; sy++) {
 					Chunk c = sec.getChunk(sx, sy);
 					if (Math.hypot(x - c.getX(), y - c.getY()) < radius*Base.CHUNK_SIZE) {						
 						switch(visibility) {
-							case ACTIVE: c.visibility = Chunk.active; c.visionProviderNumber++; break;
+							case ACTIVE: c.visibility = Chunk.active; c.visionProviderNumber++; System.out.println("adding visibility " + c.visionProviderNumber); break;
 							case SEMIACTIVE: c.visibility = Chunk.semiactive; c.visionProviderNumber--; break;
 							case DEACTIVATED: c.visibility = Chunk.deactivated; c.visionProviderNumber--; break;
 						}
@@ -388,6 +431,7 @@ public class Chunks {
 		for (Section s : sectionsToUpdate) {
 			GameScreen.chunks.updateFogOfWarMesh(s);
 		}
+		*/
 	}
 	
 	/**Generates the fog of war {@link Mesh} for the specified {@link Section}. The generated mesh uses GL_TRIANGLE_STRIP and degenerate
@@ -473,7 +517,7 @@ public class Chunks {
 	}
 	
 	/**Generates and initialises a terrain or a corruption mesh. Should be only called once 
-	 * and the initialised mesh than can get updated using the the {@link #generateMeshVertexData(Section, boolean, int)} method.
+	 * and the initialised mesh than can get updated using the the {@link #generateMeshVertexData(Section, boolean)} method.
 	 * @param s The assigned section.
 	 * @param corr Whether a terrain or a corruption mesh should be generated
 	 * @return Returns the generated Mesh object*/
@@ -602,7 +646,7 @@ public class Chunks {
 			  	        	bv2 = tC.getTexture(1).getV2();
 			  	        	
 			  	        	//Get the shade of the secondary texture (This is used to shade the corruption mesh)
-			  	        	if (corr) shade1 = tC.getSecondaryShade();			  	        		 
+			  	        	if (corr) shade1 = Chunk.calculateShadeForValue(tC.getSecondaryShade());		
 			  	        }
 			  	        
 			  	        //Third set of texture coordinates IF supplied by the AtlasRegionContainer
@@ -628,7 +672,8 @@ public class Chunks {
 			  	        */
 			  	        float f = 0;
 			  	        if (corr) {
-			  	        	shade = c.calculateShade();	  	        				  	        	
+			  	        	shade = c.calculateShade();	  	        				  	       
+			  	        	//Transparency and shade interpolation assigns different gradient types to the overall structure
 			  	        	float alpha = Interpolation.exp5Out.apply(0.8f, 1f, shade);			  	        	
 			  	        	float alpha1 = Interpolation.exp5Out.apply(0.8f, 1f, shade1);			  	        	
 			  	        	f = Color.toFloatBits(alpha, alpha1, 1f, 1f);	
@@ -637,7 +682,6 @@ public class Chunks {
 			  	        } else {
 			  	        	f = Color.toFloatBits(1f, 1f, 1f, 1f);
 			  	        }
-
 			  	        
 			  	        //Set the individual vertex attributes to each of the 4 vertexes of this square
 			  	     	setValuesInArrayForVertex(verticesWithColor, au, av2, bu, bv2, cu, cv2, du, dv2, tileX, tileY, f, shade, shade1, rectangleOffsetInArray, 0);
@@ -874,6 +918,50 @@ public class Chunks {
 		return patchPixmap;
 	}
 	
+	/**Places {@link CreeperGenerator}s randomly in the world.*/
+	public void generateCreeperSpawners() {
+		for (int y = 0; y < Base.SECTION_AMOUNT; y++) {
+			for (int x = 0; x < Base.SECTION_AMOUNT; x++) {
+				Section s = sections[x][y];
+				int chance = Base.getRandomIntNumberInRange(0, 100);
+				if (chance < 5) {
+					int rX = Base.getRandomIntNumberInRange(0, Base.SECTION_SIZE);
+					int rY = Base.getRandomIntNumberInRange(0, Base.SECTION_SIZE);
+					
+					CreeperGenerator gen = new CreeperGenerator(0, 0); 
+					
+					float bX = s.getChunk(0, 0).getX() + (rX*Base.CHUNK_SIZE);
+					float bY = s.getChunk(0, 0).getY() + (rY*Base.CHUNK_SIZE);
+					
+					double dist = Math.hypot(bX - Base.WORLD_SIZE/2, bY - Base.WORLD_SIZE/2);				
+					if (dist > Base.GENERATOR_SAFEZONE) {
+						if (bX > gen.getWidth() && bX < Base.WORLD_SIZE - gen.getWidth() && bY > gen.getHeight() && bY < Base.WORLD_SIZE - gen.getHeight()) {
+							gen.setLocation(s.getChunk(0, 0).getX() + (rX*Base.CHUNK_SIZE), s.getChunk(0, 0).getY() + (rY*Base.CHUNK_SIZE), true);
+							gen.buildAndLevel();
+						}
+					}
+				}
+				if (chance < 50) {
+					int rX = Base.getRandomIntNumberInRange(0, Base.SECTION_SIZE);
+					int rY = Base.getRandomIntNumberInRange(0, Base.SECTION_SIZE);
+					
+					CreeperGenerator gen = new CreeperGenerator(0, 0); 
+					
+					float bX = s.getChunk(0, 0).getX() + (rX*Base.CHUNK_SIZE);
+					float bY = s.getChunk(0, 0).getY() + (rY*Base.CHUNK_SIZE);
+					
+					double dist = Math.hypot(bX - Base.WORLD_SIZE/2, bY - Base.WORLD_SIZE/2);				
+					if (dist > Base.GENERATOR_SAFEZONE) {
+						if (bX > gen.getWidth() && bX < Base.WORLD_SIZE - gen.getWidth() && bY > gen.getHeight() && bY < Base.WORLD_SIZE - gen.getHeight()) {
+							gen.setLocation(s.getChunk(0, 0).getX() + (rX*Base.CHUNK_SIZE), s.getChunk(0, 0).getY() + (rY*Base.CHUNK_SIZE), true);
+							gen.buildAndLevel();
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	/**Returns all 9 sections around this particular point in world space (Including the middle section).
 	 * @param x X world space coordinate
 	 * @param y Y world space coordinate
@@ -934,12 +1022,28 @@ public class Chunks {
 		return GameScreen.chunks.getChunkAtTileSpace(tileX, tileY);
 	}
 	
+	/**Converts the world-space coordinates to tile-space.*/
+	public Vector2 toTileSpace(float x, float y) {
+		return new Vector2((int) (x / Base.CHUNK_SIZE), (int) (y / Base.CHUNK_SIZE));
+	}
+	
+	/**Converts the tile-space coordinates to world-space.*/
+	public Vector2 toWorldSpace(int x, int y) {
+		return new Vector2((x * Base.CHUNK_SIZE), (y * Base.CHUNK_SIZE));
+	}
+	
 	/**Gets the chunks around the world space point in a certain diameter (diameter is in tile space).*/
 	public List<Chunk> getChunksAroundWorldSpacePoint(float x, float y, float diameter) {
 		return getChunksAroundWorldSpacePoint(x, y, diameter, null);
 	}
 	
-	/**{@inheritDoc #getChunksAroundWorldSpacePoint(float, float, float)}*/
+	/**Gets the chunks around the world space point in a certain diameter (diameter is in tile space).
+	 * @param x Center X coordinate.
+	 * @param y Center Y coordinate.
+	 * @param diameter Diameter of the selection.
+	 * @param o {@link ChunkOperation} to be executed for each {@link Chunk}.
+	 * @return A list of all selected {@linkplain Chunk}s.
+	 */
 	public List<Chunk> getChunksAroundWorldSpacePoint(float x, float y, float diameter, ChunkOperation o) {
 		List<Chunk> chunksInRadius = new ArrayList<Chunk>();
 		
@@ -969,19 +1073,19 @@ public class Chunks {
 		return chunksInRadius;
 	}
 	
-	/**Gets the closest chunk that has its creeper level above the threshold around the world space point in a certain diameter (diameter is in tile space).*/
+	/**Gets the closest chunk that has its creeper level above the threshold around the world space point in a certain diameter (diameter is in world space).*/
 	public Chunk getClosestCorruptionChunkToWorldSpace(float x, float y, float minDiameter, float maxDiameter, float creeperThreshold) {
 		Chunk closestChunk = null;
 		float closestDist = Float.MAX_VALUE;
 		
-		Chunk centerChunk = getChunkAtWorldSpace(x, y);
-		Chunk originChunk = getChunkAtWorldSpace(x - ((maxDiameter/2) * Base.CHUNK_SIZE), y - ((maxDiameter/2) * Base.CHUNK_SIZE));
-	
-		for (int sx = originChunk.ax; sx < originChunk.ax + maxDiameter; sx++) {
-			for (int sy = originChunk.ay; sy < originChunk.ay + maxDiameter; sy++) {
+		//Center chunk should not be null (since the requesting object / building should be standing on it)
+		Vector2 originChunk = toTileSpace(x - ((maxDiameter/2)), y - ((maxDiameter/2)));
+		
+		for (int sx = (int) originChunk.x; sx < originChunk.x + maxDiameter; sx++) {
+			for (int sy = (int) originChunk.y; sy < originChunk.y + maxDiameter; sy++) {
 				Chunk c = GameScreen.chunks.getChunkAtTileSpace(sx, sy);
 				if (c != null) {
-					float dist = (float) Math.hypot(centerChunk.getX() - c.getX(), centerChunk.getY() - c.getY());
+					float dist = (float) Math.hypot(x - c.getX(), y - c.getY());
 					if (dist <= ((float)(maxDiameter/2f))*Base.CHUNK_SIZE && c.getCreeperLevel() > creeperThreshold) {		
 						if (dist < closestDist && dist > minDiameter) {
 							closestChunk = c;

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.items.StorableItem;
 import org.dudss.nodeshot.screens.GameScreen;
@@ -13,11 +14,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**A building that can exchange {@link ItemType#PROCESSED_MATERIAL} for bits.*/
 public class Shipdock extends AbstractStorage {
 
 	static float width = Base.CHUNK_SIZE*3, height = Base.CHUNK_SIZE*3;
 	
 	TextureRegion t = new TextureRegion(SpriteLoader.hqanimAtlas.findRegion("shipdock"));	
+	
+	int generatedBits = 5;
 	
 	public Shipdock(float cx, float cy) {
 		super(cx, cy, width, height);
@@ -34,18 +38,16 @@ public class Shipdock extends AbstractStorage {
 	        { 
 	        	i.next();
 	        	i.remove();
-	        	GameScreen.resourceManager.addBits(5);
+	        	GameScreen.resourceManager.addBits(generatedBits);
 	        	System.out.println("Selling processed material for 5 bits!");
 	        }
 		}
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {
-		batch.begin();
+	public void draw(SpriteBatch batch) {
 		batch.setColor(1f, 1f, 1f, 1f);		
 		batch.draw(t, x, y, width, height);	
-		batch.end();
 	}
 
 	@Override
@@ -54,5 +56,10 @@ public class Shipdock extends AbstractStorage {
 		batch.setColor(1f, 1f, 1f, 0.5f);
 		batch.draw(t, getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 		batch.end();	
+	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.SHIPDOCK;
 	}
 }

@@ -2,6 +2,7 @@ package org.dudss.nodeshot.misc;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -10,28 +11,33 @@ import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 
 /**Manages all buildings in the game world. Calls logic updates and render calls*/
 public class BuildingManager {
 
-	List<AbstractBuilding> buildings;
+	List<AbstractBuilding> regularBuildings;
 	List<AbstractBuilding> generators;
 	List<AbstractBuilding> misc;
 	
+	//A lot of methods in this class are self-explanatory so I haven't written any documentation.
+	/**Manages all buildings in the game world. Calls logic updates and render calls*/
 	public BuildingManager() {
-		buildings = new CopyOnWriteArrayList<AbstractBuilding>();
+		regularBuildings = new CopyOnWriteArrayList<AbstractBuilding>();
 		generators = new CopyOnWriteArrayList<AbstractBuilding>();
 		misc = new CopyOnWriteArrayList<AbstractBuilding>();
 	}
 	
-	public void updateAllBuildings() {
-		for (AbstractBuilding b : buildings) {
+	public void updateAllRegularBuildings() {
+		for (AbstractBuilding b : regularBuildings) {
 			b.update();
 		}
 	}
 	
 	public void updateAllGenerators() {
+		if (generators.size() == 0) {
+			Dialogs.showOKDialog(GameScreen.stage, "You win", "All creeper generators destroyed! You WIN!");
+		}
 		for (AbstractBuilding b : generators) {
 			b.update();
 		}
@@ -43,34 +49,40 @@ public class BuildingManager {
 		}
 	}
 	
-	public void drawAllBuildings(ShapeRenderer r, SpriteBatch batch) {
-		for (AbstractBuilding b : buildings) {
-			b.draw(r, batch);
+	public void drawAllRegularBuildings(SpriteBatch batch) {
+		batch.begin();
+		for (AbstractBuilding b : regularBuildings) {
+			b.draw(batch);
 		}
+		batch.end();
 	}
 	
-	public void drawAllGenerators(ShapeRenderer r, SpriteBatch batch) {
+	public void drawAllGenerators(SpriteBatch batch) {
+		batch.begin();
 		for (AbstractBuilding b : generators) {
-			b.draw(r, batch);
+			b.draw(batch);
 		}
+		batch.end();
 	}
 	
-	public void drawAllMisc(ShapeRenderer r, SpriteBatch batch) {
+	public void drawAllMisc(SpriteBatch batch) {
+		batch.begin();
 		for (AbstractBuilding b : misc) {
-			b.draw(r, batch);
+			b.draw(batch);
 		}
+		batch.end();
 	}
 	
 	public void addBuilding(AbstractBuilding b) {
-		buildings.add(b);
+		regularBuildings.add(b);
 	}
 	
-	public void removeBuilding(AbstractBuilding b) {
-		buildings.remove(b);
+	public void removeRegularBuilding(AbstractBuilding b) {
+		regularBuildings.remove(b);
 	}
 	
-	public List<AbstractBuilding> getAllBuildings() {
-		return buildings;
+	public List<AbstractBuilding> getAllRegularBuildings() {
+		return regularBuildings;
 	}
 	
 	public void addGenerator(AbstractBuilding b) {
@@ -97,6 +109,15 @@ public class BuildingManager {
 		return misc;
 	}	
 	
+	/**@return A combined list of all buildings handled by this manager.*/
+	public List<AbstractBuilding> getAllBuildings() {
+		List<AbstractBuilding> allBuildings = new ArrayList<AbstractBuilding>();
+		allBuildings.addAll(regularBuildings);
+		allBuildings.addAll(misc);
+		allBuildings.addAll(generators);
+		return allBuildings;
+	}
+	
 	/**Initialises a new {@link AbstractBuilding} and assigns it to build mode.
 	 * @param b The built building type.
 	 * */
@@ -104,6 +125,10 @@ public class BuildingManager {
 		startBuildMode(b, false);
 	}
 	
+	/**Initialises a new {@link AbstractBuilding} and assigns it to build mode.
+	 * @param b The built building type.
+	 * @param moving Whether an already existing building is being just moved.
+	 * */
 	public void startBuildMode(AbstractBuilding b, boolean moving) {
 		if (moving) {
 			if (GameScreen.buildMode == false && GameScreen.builtBuilding == null) {

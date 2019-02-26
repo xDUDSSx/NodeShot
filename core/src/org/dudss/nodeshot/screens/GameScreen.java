@@ -8,6 +8,7 @@ import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
+import org.dudss.nodeshot.buildings.Headquarters;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.Package;
@@ -76,13 +77,17 @@ import com.kotcrab.vis.ui.VisUI;
 /**The main game screen. Currently holds its resources statically.*/
 public class GameScreen implements Screen {
 
+	/**A game object representing the game session.*/
     public static Game nodeshotGame;
-
-    //new variables
+    
+    /**Window width*/
     public static int WIDTH;
+    /**Window height*/
     public static int HEIGHT;
+    /**Window aspect ratio*/
     public static float aspectRatio;
 
+    /**Whether a game session has been created already*/
     public static boolean startedOnce = false;
     
 	public static long currentSimTimeTick;
@@ -90,6 +95,7 @@ public class GameScreen implements Screen {
 
 	public static SimulationThread simulationThread;
 	
+	/**Simulation ticks per second*/
 	public static int sfps;
 	public static int simFrameCount;
 	public static double simFac;
@@ -181,18 +187,20 @@ public class GameScreen implements Screen {
     //Post processing
     //Main game screen buffer
     public static FrameBuffer screenBuffer;
-    //Main game fullscreen quad
+    
+    /**Main game full-screen quad used for post-processing.*/
     public static Mesh screenMesh;
     
     public static FrameBuffer creeperBuffer;
-    //Displacement map used for space distortions
+    /**Displacement map used for space distortions.*/
     public static FrameBuffer displacementBuffer;
     
+    //Bloom tests - //TODO: Disable
     public static FrameBuffer bloomBuffer;
     public static FrameBuffer bloomSourceBuffer;
     public static FrameBuffer temporaryBloomBuffer;
     
-    //Temporary buffers? Kinda unused.
+    //Temporary buffers? Unused.
     public static FrameBuffer corrBuffer;
     public static FrameBuffer blurBuffer;
     
@@ -296,7 +304,9 @@ public class GameScreen implements Screen {
         stage.addActor(pauseMenu);
     }
 
+    /**@return The window width.*/
     public static int getWidth() {return WIDTH;}
+    /**@return The window height.*/
     public static int getHeight() {return HEIGHT;}
 
     @Override
@@ -327,14 +337,21 @@ public class GameScreen implements Screen {
         
         Gdx.input.setInputProcessor(multiplexer); 
         
+        Headquarters hq = new Headquarters(0, 0); 
+        hq.setLocation(Base.WORLD_SIZE/2f, Base.WORLD_SIZE/2f, true);
+        hq.buildAndLevel();
+        
+        BaseClass.logger.info("Generating creeper spawners");
+        GameScreen.chunks.generateCreeperSpawners();
+        
         //Initial fog of war visibility
-        for (Chunk c : GameScreen.chunks.getChunksAroundWorldSpacePoint(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.SECTION_SIZE*2)) {
+        /*for (Chunk c : GameScreen.chunks.getChunksAroundWorldSpacePoint(Base.WORLD_SIZE/2, Base.WORLD_SIZE/2, Base.SECTION_SIZE*2)) {
         	if (c != null) {
         		c.visibility = Chunk.active;
         	}
         };
-        
-        GameScreen.chunks.updateAllFogOfWarMeshes();
+        */
+        //GameScreen.chunks.updateAllFogOfWarMeshes();
     }
 
     @Override
@@ -396,12 +413,12 @@ public class GameScreen implements Screen {
         }
         
         //IOPorts, nodeBuildings and conveyorBuildings
-        buildingManager.drawAllMisc(r, batch);
+        buildingManager.drawAllMisc(batch);
         
         //Connector rendering
         drawConnectors(r, batch);
         
-        buildingManager.drawAllBuildings(r, batch);
+        buildingManager.drawAllRegularBuildings(batch);
         
         if (buildMode && builtBuilding != null) {
         	r.begin(ShapeType.Filled);
@@ -432,21 +449,32 @@ public class GameScreen implements Screen {
             n.draw(batch);
    
             if (n.getID() == selectedID) {
-                Sprite s = new Sprite(SpriteLoader.highlightSprite);              
-                s.setPosition(n.getX(), n.getY());
-                s.setOrigin(n.radius/2, n.radius/2);                            
-                s.setScale(0.50f);             
+                Sprite s = new Sprite(SpriteLoader.selectReticle);              
+                s.setPosition(n.getX() + Base.CHUNK_SIZE/4f, n.getY() + Base.CHUNK_SIZE/4f);
+                //s.setOrigin(n.radius/2, n.radius/2);                            
+                //s.setScale(0.50f);             
+                s.setSize(Base.CHUNK_SIZE/2f, Base.CHUNK_SIZE/2f);
                 s.draw(batch);
             }
            
         }
         batch.end();     
         
+        //Drawing corruption
+        chunks.drawCorruption();
+        
         //Drawing creeper generators on top of creeper itself
-        buildingManager.drawAllGenerators(r, batch);
-    
+        buildingManager.drawAllGenerators(batch);
+        
+        if (GameScreen.selectedEntity instanceof AbstractBuilding) {
+        	AbstractBuilding b = (AbstractBuilding) GameScreen.selectedEntity;
+        	batch.begin();
+        	batch.draw(SpriteLoader.selectReticle, b.getX(), b.getY(), b.getWidth(), b.getHeight());
+        	batch.end();
+        }
+        
         //Drawing the fog of war.
-        //chunks.drawFogOfWar();
+        chunks.drawFogOfWar();
         
         r.begin(ShapeType.Filled);
         r.setColor(0.2f, 0.2f, 0.2f,1);
@@ -455,8 +483,6 @@ public class GameScreen implements Screen {
     	r.rectLine(Base.WORLD_SIZE, Base.WORLD_SIZE, 0, Base.WORLD_SIZE, 16);
     	r.rectLine(0, Base.WORLD_SIZE, 0, 0, 16);
         r.end();
-        
-        chunks.drawCorruption();
         
         bulletHandler.drawAll(r, batch);
         effectManager.drawRegularEffects(batch);
@@ -469,7 +495,7 @@ public class GameScreen implements Screen {
         bloomSourceBuffer.begin();
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);  
-        buildingManager.drawAllBuildings(r, batch);
+        buildingManager.drawAllRegularBuildings(batch);
         effectManager.drawRegularEffects(batch);
         bloomSourceBuffer.end();
         
@@ -821,7 +847,9 @@ public class GameScreen implements Screen {
 		batch.setShader(Shaders.defaultShader);
     }
     
-    
+    /**Renders a simple quad spanning the screen. This quad is rendered with a shader that creates animated clouds that represent the game world background.
+     * Clouds outside of the game world boundary are not rendered using the OpenGL scissor clip function.
+     */
     public void drawBackgroundClouds(SpriteBatch batch) {
         //Getting the time this application has run for, the is fed to the cloud shader and makes it "animated"
     	float secondsSinceStartup = ((System.currentTimeMillis() - BaseClass.startTime) / 1000f);
@@ -890,17 +918,19 @@ public class GameScreen implements Screen {
         r.end();
     }
 
+    /**Renders the build menu semi-transparent placeholder.*/
     void drawPrefab(ShapeRenderer sR, SpriteBatch batch) {
     	Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
     	builtBuilding.drawPrefab(r, batch, worldPos.x, worldPos.y, true);
     }
     
+    /**Renders some additional stats on screen.*/
     void drawStats(SpriteBatch batch) {
         float textheight = font.getCapHeight();
         String stat = "Nodes: " + nodelist.size();
         String stat2 = "Packages: " + packagelist.size();
         String stat3 = "Connectors: " + connectorHandler.getAllConnectors().size();
-        String stat41 = "Buildings: " + buildingManager.getAllBuildings().size(); 
+        String stat41 = "Buildings: " + buildingManager.getAllRegularBuildings().size(); 
         String stat4 = "PackagePaths: " + packageHandler.getNumberOfPaths();
        // String stat5 = "ConnectMode: " + toggleConnectMode;
         //String stat6 = "activeNewConnection: " + activeNewConnection;
@@ -953,7 +983,8 @@ public class GameScreen implements Screen {
         //font.draw(batch, stat12, WIDTH - textstat12width - 10, HEIGHT - (textheight+2)*13);
 
     }
-
+    
+    /**Draws fps, sfps and simtick monitors on screen.*/
     void drawFps(SpriteBatch batch) {
         float textheight = font.getCapHeight();
 
@@ -981,6 +1012,7 @@ public class GameScreen implements Screen {
         font.draw(batch, "simTick: " + SimulationThread.simTick , 5 + 5 + text3width, HEIGHT - textheight*2 - 2);
     }
 
+    /**Draws info about the {@link Chunk} the mouse is current over.*/
     void drawTerrainInfo(SpriteBatch batch) {
     	if (GameScreen.hoverChunk != null) {
     		float textheight = font.getCapHeight();
@@ -995,6 +1027,8 @@ public class GameScreen implements Screen {
 			sb.append("AbsCreeper: " + GameScreen.hoverChunk.getAbsoluteCreeperLevel());
 			sb.append(", ");
 			sb.append("Ore level: (" + GameScreen.hoverChunk.getOreType().toString() + ") " + Base.round(GameScreen.hoverChunk.getOreLevel(), 3));
+			sb.append(", ");
+			sb.append("Visibility: " + GameScreen.hoverChunk.visibility + " (" + GameScreen.hoverChunk.visionProviderNumber + ")");
 			
 			StringBuilder sb2 = new StringBuilder();
 			sb2.append("Layer: " + TerrainEditor.terrainLayerSelected);
@@ -1042,7 +1076,7 @@ public class GameScreen implements Screen {
                             font.draw(batch, "Radius: " + n.radius, (int)x, (int)y - textheight*4);
                             font.draw(batch, "Connections: " + n.getNumberOfConnections(), (int)x, (int)y - textheight*5);
                             font.draw(batch, "Connectable: " + n.connectable, (int)x, (int)y - textheight*6);
-                            font.draw(batch, "Connectors: " + Base.nodeConnectorListToString(n.connectors), (int)x, (int)y - textheight*9);
+                            //font.draw(batch, "Connectors: " + Base.nodeConnectorListToString(n.connectors), (int)x, (int)y - textheight*9);
                             font.draw(batch, "Closed: " + n.isClosed(), (int)x, (int)y - textheight*10);
                         }
                     }
@@ -1119,8 +1153,10 @@ public class GameScreen implements Screen {
         uiMatrix.setToOrtho2D(0, 0, WIDTH, HEIGHT);
         return uiMatrix;
     }
+    
+    /**Handles input every frame.*/
     private void handleInput(float delta) {
-    	if (timeToCameraZoomTarget >= 0){
+    	if (timeToCameraZoomTarget >= 0) {
     	    timeToCameraZoomTarget -= delta;
     	    float progress = timeToCameraZoomTarget < 0 ? 1 : 1f - timeToCameraZoomTarget / cameraZoomDuration;
     	    cam.zoom = Interpolation.pow3Out.apply(cameraZoomOrigin, cameraZoomTarget, progress);       
@@ -1180,9 +1216,10 @@ public class GameScreen implements Screen {
         
         //Making sure the camera doesn't go beyond the world limit
         cam.position.x = MathUtils.clamp(cam.position.x, 0 - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE * 1.2f);
-        cam.position.y = MathUtils.clamp(cam.position.y, 0 - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE * 1.2f);   		
+        cam.position.y = MathUtils.clamp(cam.position.y, 0 - Base.WORLD_SIZE*0.2f, Base.WORLD_SIZE * 1.2f);
     }
 
+    /**Zooms the camera to the specified zoom value and employs some camera zooming smoothness.*/
     public static void zoomTo(float newZoom, float duration){
         cameraZoomOrigin = cam.zoom;
         cam.zoom = MathUtils.clamp(cam.zoom, Base.MIN_ZOOM, Base.WORLD_SIZE*3/cam.viewportWidth);
@@ -1190,6 +1227,10 @@ public class GameScreen implements Screen {
         timeToCameraZoomTarget = cameraZoomDuration = duration;
     }
     
+    /**Selects the entity currently under the mouse cursor.
+     * @param select Whether to select the entity that has been clicked.
+     * @return The {@link Entity} that has been clicked (the first one found).
+     */
     public static Entity checkHighlights(boolean select) {
         Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
         Rectangle rect = new Rectangle(worldPos.x, worldPos.y, 1, 1);;
@@ -1276,7 +1317,8 @@ public class GameScreen implements Screen {
         }
     	return intersectedPackage;
     }
-    static Connector checkConnectors(Rectangle rect, Vector3 worldPos, boolean select) {
+    
+    private static Connector checkConnectors(Rectangle rect, Vector3 worldPos, boolean select) {
         Boolean connectorIntersected = false;
         Connector intersectedConnector = null;
         for (int i = 0; i < connectorHandler.getAllConnectors().size(); i++) {
@@ -1307,6 +1349,7 @@ public class GameScreen implements Screen {
         return intersectedConnector;
     }
    
+    /**Brings up or closes the {@link #pauseMenu} and pauses/resumes the {@link SimulationThread} accordingly.*/
     public static void callPauseMenu() {
     	GameScreen.pauseMenu.setVisible(!GameScreen.pauseMenu.isVisible());
 		GameScreen.gamePaused = GameScreen.pauseMenu.isVisible();
@@ -1318,6 +1361,7 @@ public class GameScreen implements Screen {
 		}
     }
     
+    /**Initialises the {@link SimulationThread}.*/
     public static void startSimulationThread() {
         try {
 			simulationThread = new SimulationThread();

@@ -1,7 +1,7 @@
 package org.dudss.nodeshot.buildings;
 
 import org.dudss.nodeshot.Base;
-import org.dudss.nodeshot.entities.Entity.EntityType;
+import org.dudss.nodeshot.entities.effects.Explosion;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
+import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 
+/**The starting building*/
 public class Headquarters extends AbstractBuilding {
 
 	static float width = Base.CHUNK_SIZE*4, height = Base.CHUNK_SIZE*4;
@@ -24,17 +27,10 @@ public class Headquarters extends AbstractBuilding {
 	}
 
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {
-		batch.begin();
+	public void draw(SpriteBatch batch) {
 		batch.setColor(1f, 1f, 1f, 1f);		
-		if (outlined) {
-			TextureRegion currentFrame = hqOutlinedAnimation.getKeyFrame(GameScreen.stateTime, true);
-			batch.draw(currentFrame, x, y, width, height);
-		} else {
-			TextureRegion currentFrame = hqAnimation.getKeyFrame(GameScreen.stateTime, true);
-			batch.draw(currentFrame, x, y, width, height);
-		}		
-		batch.end();
+		TextureRegion currentFrame = hqAnimation.getKeyFrame(GameScreen.stateTime, true);
+		batch.draw(currentFrame, x, y, width, height);
 	}
 
 	@Override
@@ -45,20 +41,11 @@ public class Headquarters extends AbstractBuilding {
 		batch.draw(currentFrame, getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
 		batch.end();	
 	}
-
-	@Override
-	public void build() {
-		GameScreen.buildingManager.addBuilding(this);
-		
-		updateFogOfWar(true);
-	}
 	
 	@Override
-	public void demolish() {
-		GameScreen.buildingManager.removeBuilding(this);
-	
-		clearBuildingChunks();
-		updateFogOfWar(false);	
+	public void explode() {
+		super.explode();
+		Dialogs.showOKDialog(GameScreen.stage, "Game over", "Your HQ was destroyed! You lose!");
 	}
 	
 	@Override

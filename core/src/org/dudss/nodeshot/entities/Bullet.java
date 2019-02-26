@@ -1,16 +1,16 @@
 package org.dudss.nodeshot.entities;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.entities.effects.Shockwave;
 import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.terrain.Chunk;
-import org.dudss.nodeshot.terrain.Section;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
+/**A bullet object that travels from point A ({@linkplain Turret}) to point B (target) at a speed and damages corruption around its target (point B)*/
 public class Bullet extends Sprite implements Entity {
 
 	int id;
@@ -26,17 +26,21 @@ public class Bullet extends Sprite implements Entity {
 	float percentage = 0;
 	float effectiveSpeed;
 	
-	float damage = 1f;
-	
-	float radius = 6.5f;
+	/**Damage of the bullet.*/
+	float damage = 10f;
+	/**Whether the bullet arcs and how much.*/
+	float archingFactor;
+	/**Diameter of the area where damage is dealt.*/
+	float diameter = 15f;
 	
 	/**A bullet object that travels from point A (turret) to point B (target) at a speed and damages corruption around its target (point B)
 	 * @param x Starting x coordinate.
 	 * @param y Starting y coordinate.
 	 * @param target Coordinates of the target.
 	 * @param inaccuracy A radius of inaccuracy in world-units.
+	 * @param archingFactor How much the bullet arches in the air.
 	 * */
-	public Bullet(float x, float y, Vector2 target, float speed, float inaccuracy) {
+	public Bullet(float x, float y, Vector2 target, float speed, float inaccuracy, float archingFactor) {
 		super();
 		this.id = java.lang.System.identityHashCode(this);
 		
@@ -46,6 +50,7 @@ public class Bullet extends Sprite implements Entity {
 		target.x += Base.getRandomFloatNumberInRange(0f, inaccuracy) - inaccuracy/2f;
 		target.y += Base.getRandomFloatNumberInRange(0f, inaccuracy) - inaccuracy/2f;
 		
+		this.archingFactor = archingFactor;
 		targetCoords = target;
 		trajectoryVector = new Vector2(targetCoords.x - x, targetCoords.y - y);
 		effectiveSpeed = speed * (float)(100/Math.hypot(trajectoryVector.x, trajectoryVector.y));
@@ -63,7 +68,6 @@ public class Bullet extends Sprite implements Entity {
 			double aimLenght = Math.hypot(trajectoryVector.x, trajectoryVector.y);
 			double alpha = Math.asin(trajectoryVector.y/aimLenght);
 			
-			float arcFac = 15;
 			float perFac = 0;
 			if (percentage <= 50) {
 				perFac = percentage/100f;
@@ -75,7 +79,7 @@ public class Bullet extends Sprite implements Entity {
 			float appliedOffset = Interpolation.pow2Out.apply(perFac);
 			//System.out.println("fac:" + perFac);
 			//System.out.println(appliedOffset);
-			this.setPosition((float)((startX - 4) + finalVector.x), (float)((startY - 2) + finalVector.y + arcFac*appliedOffset));	
+			this.setPosition((float)((startX - 4) + finalVector.x), (float)((startY - 2) + finalVector.y + archingFactor*appliedOffset));	
 			
 			if (targetCoords.x <= startX) {
 				rotation = 360 - Math.toDegrees(alpha);
@@ -91,12 +95,8 @@ public class Bullet extends Sprite implements Entity {
 	
 	/**Called when bullet reaches its target, damages corruption*/
 	protected void explode() {
-		for (Chunk c : GameScreen.chunks.getChunksAroundWorldSpacePoint(targetCoords.x, targetCoords.y, radius)) {
-			c.setCreeperLevel(c.getCreeperLevel() - damage);
-		}
-		for (Section s : GameScreen.chunks.getSectionsAroundWorldSpacePoint(targetCoords.x, targetCoords.y)) {
-			GameScreen.chunks.updateSectionMesh(s, true);
-		}
+		GameScreen.terrainEditor.creeperExplosion(new Vector3(targetCoords.x, targetCoords.y, 0), this.diameter, this.damage);
+		new Shockwave(targetCoords.x, targetCoords.y, 1, 200, 18, 1);		
 	}
 	
 	@Override

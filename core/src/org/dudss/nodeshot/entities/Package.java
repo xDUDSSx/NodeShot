@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.items.StorableItem;
 import org.dudss.nodeshot.misc.PathHandler;
@@ -18,10 +19,13 @@ import org.dudss.nodeshot.utils.SpriteLoader;
  * */
 public class Package extends Sprite implements Entity{
 
+	/**Starting {@link Node} of the package*/
 	public Node from;
+	
+	/**Target {@link Node} of the package*/
 	public Node to;
-	//public Package triggerPackage = null;
 
+	/**Percentage representing how far in the current {@link Connector} the package has travelled.*/
 	public double percentage = 0;
 	public double speed;
 	
@@ -84,6 +88,7 @@ public class Package extends Sprite implements Entity{
 		GameScreen.packagelist.add(this);
 	}
 		
+	/**Draws the packages {@link #packageSprite}.*/
 	public void draw(SpriteBatch batch) {
 		packageSprite = SpriteLoader.packageSprite;
 
@@ -97,6 +102,7 @@ public class Package extends Sprite implements Entity{
 		packageSprite.draw(batch);
 	}
 	
+	/**Draws the package highlight.*/
 	public void drawHighlight(SpriteBatch batch) {
 		highlightSprite = SpriteLoader.packageHighlightSprite;
 		highlightSprite.setPosition(x, y);
@@ -105,6 +111,7 @@ public class Package extends Sprite implements Entity{
 		highlightSprite.draw(batch);
 	}
 	
+	/**Resets the starting and target node of the package.*/
 	public void resetState(Node from, Node to) {
 		going = false;
 		this.percentage = 0;
@@ -112,22 +119,27 @@ public class Package extends Sprite implements Entity{
 		this.to = to;
 	}
 	
+	/**Removes the package from the game.*/
 	public void destroy() {
 		GameScreen.packagelist.remove(this); //wont be rendered anymore
 		going = false;
 		this.pathHandler.finish();
 	}
 	
+	/**Changes the going state of this package to false.
+	 * This is used for alerting its {@link PathHandler}*/
 	public void alert() {
 		going = false;
 	}
 	
+	/**Moves the package.*/
 	public void transform(float x, float y) {
 		this.setPosition(x, y);
 		this.x = x;
 		this.y = y;
 	}
 	
+	/**Flags the package as moving along a {@link Connector}.*/
 	public void go() {
 		going = true;
 	}
@@ -136,13 +148,17 @@ public class Package extends Sprite implements Entity{
 		return going;
 	}
 	
+	@Deprecated
 	public void setColor(Color color) {
 		this.color = color;
 	}
+	
+	@Deprecated
 	public Color getColor() {
 		return color;
 	}
 	
+	/**Sets the packages {@link PathHandler}.*/
 	public void setPathHandler(PathHandler pathHandler) {
 		this.pathHandler = pathHandler;
 	}
@@ -151,10 +167,12 @@ public class Package extends Sprite implements Entity{
 		return pathHandler;
 	}
 	
+	@Override
 	public int getID() {
 		return id;
 	}
 	
+	@Override
 	public int getIndex() {
 		return GameScreen.packagelist.indexOf(this);
 	}
@@ -164,6 +182,7 @@ public class Package extends Sprite implements Entity{
 		return EntityType.PACKAGE;
 	}
 	
+	/**Returns the {@link ItemType} of the item this package is representing.*/
 	public ItemType getItemType() {
 		return ItemType.PACKAGE;
 	}

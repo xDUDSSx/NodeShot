@@ -4,6 +4,8 @@ package org.dudss.nodeshot.misc;
 public class ResourceManager {
 	public int power;
 	public int maxPower = 1000;
+	
+	/**The in-game currency*/
 	public int bits;
 	
 	/**A manager class that holds resource amount information.
@@ -14,12 +16,6 @@ public class ResourceManager {
 		power = startPower;
 		bits = startBits; 
 	}
-	
-	/*public void updateMaxPower() {
-		for (AbstractBuilding b : GameScreen.buildingHandler.getAllBuildings()) {
-			
-		}
-	}*/
 	
 	public int getPower() {
 		return power;
@@ -55,6 +51,9 @@ public class ResourceManager {
 	
 	public void removeBits(int remove) {
 		this.bits -= remove;
+		if (bits < 0) {
+			bits = 0;
+		}
 	}
 	
 	public void setPower(int power) {

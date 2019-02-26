@@ -2,6 +2,9 @@ package org.dudss.nodeshot.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import org.dudss.nodeshot.SimulationThread;
+
+/**An {@link Entity} representing an in-game effect.*/
 public abstract class VisualEffect implements Entity {
 	
 	public float x = 0;
@@ -9,6 +12,7 @@ public abstract class VisualEffect implements Entity {
 
 	public int id;
 	
+	/**An {@link Entity} representing an in-game effect.*/
 	public VisualEffect() {
 		this.id = System.identityHashCode(this);
 	}

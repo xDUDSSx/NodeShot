@@ -10,6 +10,7 @@ import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.misc.DefinitePathHandler;
+import org.dudss.nodeshot.misc.PackageHandler;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -18,6 +19,7 @@ public class IONode extends ConveyorNode {
 
 	AlertableBuilding building;
 	
+	/**A special {@link Node} that handles {@link Package} transfer between various package systems. Currently supports {@link org.dudss.nodeshot.misc.IndefinitePathHandler}s only!*/
 	public IONode(float cx, float cy, int radius, AbstractBuilding building) {
 		super(cx, cy, radius);		
 		
@@ -27,6 +29,7 @@ public class IONode extends ConveyorNode {
 		this.setPosition(x, y);
 	}
 	
+	/**Logical update that checks for {@link Package} inputs.*/
 	public void update() {
 		if (this.getConnectors().size() > 0) {
 			for (Connector c : this.getConnectors()) {

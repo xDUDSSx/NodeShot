@@ -11,6 +11,7 @@ import org.dudss.nodeshot.entities.nodes.Node;
 
 import com.badlogic.gdx.graphics.Color;
 
+/**Unused = undocumented*/
 public class DefinitePathHandler implements PathHandler {
 	
 	List<Node> nodesToGo;

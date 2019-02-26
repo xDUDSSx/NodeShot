@@ -1,22 +1,36 @@
 package org.dudss.nodeshot.buildings;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.effects.Explosion;
-import org.dudss.nodeshot.entities.effects.Shockwave;
-import org.dudss.nodeshot.entities.effects.SmokePoof;
+import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
+import org.dudss.nodeshot.terrain.Section;
+import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 /**The basic skeletal representation of a building. All buildings are subclasses of this abstract class.*/
 public abstract class AbstractBuilding implements Entity {
+	/**Building types used for render layering.*/
+	enum BuildingType {
+		BUILDING, MISC, GENERATOR
+	}
+	
+	BuildingType buildingType = BuildingType.BUILDING;
+	
 	float x,y;
 	float cx,cy;
 	
@@ -25,6 +39,14 @@ public abstract class AbstractBuilding implements Entity {
 	
 	boolean outlined = false;
 	boolean isBuilt = false;
+	
+	public int buildingCost = 100;
+	public int initialEnergyCost = 10;
+	
+	boolean isUsingEnergy = true;
+	
+	public int energyCost = 1;
+	int nextEnergyTick = SimulationThread.simTick + Base.ENERGY_COST_UPDATE_RATE;
 	
 	int fogOfWarRadius = Base.SECTION_SIZE;
 	
@@ -46,13 +68,41 @@ public abstract class AbstractBuilding implements Entity {
 		y = cy - (height/2);
 	}
 	
-	/**Sets all the necessary position attributes and sets up building chunks array
-	 * @return Returns whether this building intersects another building
-	 * */
-	public boolean setLocation(float cx, float cy, boolean snap) {
+	/**Sets all the necessary position attributes and sets up building chunks array at the specified position.
+	 * This method does not check for building obstacles!.
+	 * @param cx Building centre X coordinate.
+	 * @param cy Building centre Y coordinate.
+	 * @param snap Whether to snap the coordinates to the nearest {@link Chunk}.
+	 * @see #canBeBuiltAt(float, float, boolean)
+	 */ 
+	public void setLocation(float cx, float cy, boolean snap) {
+		setCoordinates(cx, cy, snap);
+		
+		int index = 0;
+		int buildintWidthInTileSpace = Math.round(width/Base.CHUNK_SIZE);
+		int buildingHeightInTileSpace = Math.round(height/Base.CHUNK_SIZE);
+		
+		buildingChunks = new Chunk[buildintWidthInTileSpace*buildingHeightInTileSpace];
+		for (int gx = 0; gx < buildintWidthInTileSpace; gx++) {
+			for (int gy = 0; gy < buildingHeightInTileSpace; gy++) {
+				Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(this.x/Base.CHUNK_SIZE) + gx, (int)(this.y/Base.CHUNK_SIZE) + gy);
+				if (c != null) {
+					buildingChunks[index++] = c;	
+				}
+			}
+		}
+		
+		for (int i = 0; i < buildingChunks.length; i++) {
+			buildingChunks[i].setBuilding(this);
+		}
+	}
+	
+	/**Method that checks whether a building can be built at this location.
+	 * Should be called before {@link #setLocation(float, float, boolean)}.
+	 * This method also takes terrain height into consideration.
+	 */
+	public boolean canBeBuiltAt(float cx, float cy, boolean snap) {
 		Vector2 newCoords = getCoordinates(cx, cy, snap);
-		x = newCoords.x;
-		y = newCoords.y;
 		
 		int index = 0;
 		int buildintWidthInTileSpace = Math.round(width/Base.CHUNK_SIZE);
@@ -60,33 +110,47 @@ public abstract class AbstractBuilding implements Entity {
 		
 		boolean intersectsAnotherBuilding = false;
 		
-		buildingChunks = new Chunk[buildintWidthInTileSpace*buildingHeightInTileSpace];
+		List<Chunk> oldBuildingChunks = null;		
+		if (buildingChunks != null) {
+			oldBuildingChunks = new ArrayList<Chunk>(Arrays.asList(buildingChunks));
+		}
+		int buildingHeight = (int) GameScreen.chunks.getChunkAtTileSpace((int)(newCoords.x/Base.CHUNK_SIZE) + 0, (int)(newCoords.y/Base.CHUNK_SIZE) + 0).getHeight();
+		Chunk[] buildingChunks = new Chunk[buildintWidthInTileSpace*buildingHeightInTileSpace];	
 		for (int gx = 0; gx < buildintWidthInTileSpace; gx++) {
 			for (int gy = 0; gy < buildingHeightInTileSpace; gy++) {
-				Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(this.x/Base.CHUNK_SIZE) + gx, (int)(this.y/Base.CHUNK_SIZE) + gy);
+				Chunk c = GameScreen.chunks.getChunkAtTileSpace((int)(newCoords.x/Base.CHUNK_SIZE) + gx, (int)(newCoords.y/Base.CHUNK_SIZE) + gy);
 				if (c != null) {
-					buildingChunks[index++] = c;		
-					if (c.getBuilding() != null) {
-						intersectsAnotherBuilding = true;
+					buildingChunks[index++] = c;	
+					
+					if (oldBuildingChunks != null) {
+						if (!oldBuildingChunks.contains(c) && c.getBuilding() != null) {
+							intersectsAnotherBuilding = true;
+						}
+					} else {
+						if (c.getBuilding() != null) {
+							intersectsAnotherBuilding = true;
+						}
+					}
+					if (c.isDiagonalTerrainEdge() || c.getHeight() != buildingHeight) {
+						return false;
 					}
 				} else {
 					return false;
 				}
 			}
 		}
-		
 		if (intersectsAnotherBuilding) {
 			return false;
-		} else {
-			for (int i = 0; i < buildingChunks.length; i++) {
-				buildingChunks[i].setBuilding(this);
-			}
-			return true;
 		}
+		return true;
 	}
 	
-	/**Retrieves the coordinates that would apply for the following world-space cursor coordinates*/
-	protected Vector2 getCoordinates(float cx, float cy, boolean snap) {
+	/**Recalculates the building coordinates that apply for the following world-space cursor coordinates
+	 * @param cx Building centre X coordinate.
+	 * @param cy Building centre Y coordinate.
+	 * @param snap Whether to snap the coordinates to the nearest {@link Chunk}.
+	 */
+	protected void setCoordinates(float cx, float cy, boolean snap) {
 		float newX;
 		float newY;
 		
@@ -107,6 +171,31 @@ public abstract class AbstractBuilding implements Entity {
 			newY = cy - (height/2);
 		}
 		
+		this.x = newX;
+		this.y = newY;
+	}
+	
+	/**Retrieves the coordinates that would apply for the following world-space cursor coordinates.
+	 * @param cx Building centre X coordinate.
+	 * @param cy Building centre Y coordinate.
+	 * @param snap Whether to snap the coordinates to the nearest {@link Chunk}.
+	 */
+	public Vector2 getCoordinates(float cx, float cy, boolean snap) {
+		float newX;
+		float newY;
+		
+		if (snap) {
+			float nx = Math.round(cx - (cx % Base.CHUNK_SIZE));
+			float ny = Math.round(cy - (cy % Base.CHUNK_SIZE));
+			
+			newX = nx - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
+			newY = ny - ((int)(width/2)/Base.CHUNK_SIZE) * Base.CHUNK_SIZE;
+		} else {
+			
+			newX = cx - (width/2);
+			newY = cy - (height/2);
+		}
+		
 		return new Vector2(newX, newY);
 	}
 	
@@ -115,39 +204,69 @@ public abstract class AbstractBuilding implements Entity {
 	}
 	
 	/**Building update method, updated by the {@link SimulationThread}.
-	 * The default {@link AbstractBuilding} update method handles creeper damage and building demolishing.
-	 * So if a building extending this object calls super.update() within its update method, it will be harmed by the creeper.*/
+	 * The default {@link AbstractBuilding} update method handles creeper damage, explosion and resource costs.
+	 * So if a building extending this object calls super.update() within its update method, it will be harmed by the creeper.
+	 */
 	public void update() {
 		for (int i = 0; i < buildingChunks.length; i++) {
 			if (buildingChunks[i] != null) {
 				if (buildingChunks[i].getCreeperLevel() > 0) {
 					this.explode();
+					break;
 				}
+			}
+		}
+		if (isUsingEnergy) {
+			if (SimulationThread.simTick > this.nextEnergyTick) {
+				nextEnergyTick += Base.ENERGY_COST_UPDATE_RATE;
+				GameScreen.resourceManager.removePower(energyCost);
 			}
 		}
 	}	
 	
-	/**Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)*/
-	public abstract void draw(ShapeRenderer r, SpriteBatch batch);
+	/**Draw method*/
+	public abstract void draw(SpriteBatch batch);
 	
-	/**Draw and prefab draw methods (prefab is the building representation following the cursor when in build mode)*/
+	/**Prefab draw method (prefab is the building representation following the cursor when in build mode)*/
 	public abstract void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap);	
 	
 	/**Called when the building is built*/
 	public void build() {
-		GameScreen.buildingManager.addBuilding(this);
+		switch(buildingType) {
+			case BUILDING: GameScreen.buildingManager.addBuilding(this); break;
+ 			case MISC: GameScreen.buildingManager.addMisc(this); break;
+			case GENERATOR: GameScreen.buildingManager.addGenerator(this); break;
+		}
+		GameScreen.resourceManager.removeBits(this.buildingCost);
+		GameScreen.resourceManager.removePower(this.initialEnergyCost);
 		
-		updateFogOfWar(true);
+		if (buildingType != BuildingType.GENERATOR) updateFogOfWar(true);	
+		
+		if (isUsingEnergy) {
+			nextEnergyTick = SimulationThread.simTick + Base.ENERGY_COST_UPDATE_RATE;
+		}
 	}	
-	/**Called upon demolition*/
+	
+	/**Builds the building but flattens the terrain under the building first.*/
+	public void buildAndLevel() {
+		levelTerrainOfBuildingChunks();
+		build();
+	}
+	
+	/**Called upon demolition. Adds the building to a {@link BuildingManager} and updates fog of war.*/
 	public void demolish() {
-		GameScreen.buildingManager.removeBuilding(this);
+		switch(buildingType) {
+			case BUILDING: GameScreen.buildingManager.removeRegularBuilding(this); break;
+			case MISC: GameScreen.buildingManager.removeMisc(this); break;
+			case GENERATOR: GameScreen.buildingManager.removeGenerator(this); break;
+		}
 		
 		clearBuildingChunks();
-		updateFogOfWar(false);	
+
+		if (buildingType != BuildingType.GENERATOR) updateFogOfWar(false);	
 	}
 	/**Called when demolished by force*/
-	public void explode() {	
+	public void explode() {			
 		new Explosion(cx, cy);
 		this.demolish();
 	}
@@ -181,6 +300,44 @@ public abstract class AbstractBuilding implements Entity {
 		}		
 	}
 	
+	/**Levels all the {@link Chunk}s under this building (Makes them the same terrain height) based on surrounding values.
+	 * Updates terrain accordingly.*/
+	public void levelTerrainOfBuildingChunks() {
+		HashSet<Chunk> chunks = new HashSet<Chunk>();
+		ArrayList<Chunk> bChunks = new ArrayList<Chunk>(Arrays.asList(buildingChunks));
+		for(Chunk c : bChunks) {
+			chunks.addAll(c.getNeighbours());
+		}
+		 
+		List<Chunk> borderChunks = new ArrayList<Chunk>(chunks);
+		Iterator<Chunk> i = borderChunks.iterator();
+		while (i.hasNext()) {
+		   Chunk c = i.next();
+		   if (bChunks.contains(c)) i.remove();   
+		}
+		
+		int total = 0;
+		int count = 0;
+		for (Chunk c : borderChunks) {
+			total += (int) c.getHeight();
+			count++;
+		}
+		
+		Set<Section> toUpdate = new HashSet<Section>();
+		int avg = (int) Math.ceil((double) total / count);
+		for (Chunk c : bChunks) {
+			c.setHeight(avg);
+			toUpdate.add(c.getSection());
+		}
+		for (Chunk c : borderChunks) {
+			c.setHeight(avg);
+			toUpdate.add(c.getSection());
+		}
+		for (Section s : toUpdate) {
+			GameScreen.chunks.updateSectionMesh(s, false);
+		}
+	}
+	
 	public float getWidth() {
 		return width;
 	}
@@ -196,7 +353,7 @@ public abstract class AbstractBuilding implements Entity {
 
 	@Override
 	public int getIndex() {
-		return GameScreen.buildingManager.getAllBuildings().indexOf(this);
+		return GameScreen.buildingManager.getAllRegularBuildings().indexOf(this);
 	}
 
 	@Override

@@ -1,8 +1,7 @@
 package org.dudss.nodeshot.buildings;
 
-import static org.dudss.nodeshot.screens.GameScreen.buildingManager;
-
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.utils.SpriteLoader;
@@ -16,6 +15,13 @@ public class CreeperGenerator extends AbstractGenerator {
 	/**Height of the spawned creeper*/
 	public float spawnRate = Base.MAX_CREEP;
 	
+	/**Reward for the destruction of this generator.*/
+	public int reward = 500;
+	
+	/**Amount of damage inflicted to this generator.*/
+	public float damage = 0;
+	public float health = 100;
+	
 	//Building constructor
 	public CreeperGenerator(float cx, float cy) {
 		super(cx, cy);
@@ -23,6 +29,11 @@ public class CreeperGenerator extends AbstractGenerator {
 	
 	@Override
 	public void update() {
+		if (damage > health) {
+			this.explode();
+			BaseClass.logger.info("Creeper Generator destroyed!");
+			return;
+		}
 		if (GameScreen.chunks.getChunkAtTileSpace((int)(this.x/Base.CHUNK_SIZE), (int)(this.y/Base.CHUNK_SIZE)).visibility != Chunk.deactivated) {
 			this.active = true;
 			generate();
@@ -40,15 +51,13 @@ public class CreeperGenerator extends AbstractGenerator {
 	}
 
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {
-		batch.begin();
+	public void draw(SpriteBatch batch) {
 		batch.setColor(1f, 1f, 1f, 1f);		
 		if (active) {
 			batch.draw(SpriteLoader.creeperGenOnFrame, x, y, width, height);
 		} else {
 			batch.draw(SpriteLoader.creeperGenOffFrame, x, y, width, height);
 		}		
-		batch.end();
 	}
 
 	@Override
@@ -64,16 +73,20 @@ public class CreeperGenerator extends AbstractGenerator {
 	}
 
 	@Override
+	public void explode() {
+		super.explode();
+		BaseClass.logger.info("Creeper Generator destroyed, reward: " + reward);
+		GameScreen.resourceManager.addBits(reward);
+	}
+	
+	@Override
 	public void build() { 
-		buildingManager.addGenerator(this);
-		
+		super.build();
 		GameScreen.chunks.getSectionByWorldSpace(x, y).setActive(true);
 	}
 
 	@Override
-	public void demolish() {
-		GameScreen.buildingManager.removeBuilding(this);	
-	
-		clearBuildingChunks();
+	public EntityType getType() {
+		return EntityType.CREEPER_GENERATOR;
 	}
 }

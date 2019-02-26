@@ -2,6 +2,7 @@ package org.dudss.nodeshot.algorithms;
 
 import org.dudss.nodeshot.Base;
 
+/**A simplex noise height map generator.*/
 public class SimplexNoiseGenerator {
 	
 	public float[][] generateOctavedSimplexNoise(int width, int height, int octaves, float roughness, float scale){

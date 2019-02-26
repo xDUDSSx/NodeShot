@@ -11,6 +11,7 @@ import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.misc.ConnectorHandler;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import static org.dudss.nodeshot.Base.PACKAGE_SPEED;
 /**An entity representing a connection between two {@link Node}s. 
  * {@link Package}s travel along them and their movement is handled by them and their assigned {@link ConnectorHandler}.
  * */
-public class Connector implements Entity{
+public class Connector implements Entity {
 	Node from;
 	Node to;
 	
@@ -36,6 +37,9 @@ public class Connector implements Entity{
 	
 	List<Package> packages;
 	
+	/**An entity representing a connection between two {@link Node}s. 
+	 * {@link Package}s travel along them and their movement is handled by them and their assigned {@link ConnectorHandler}.
+	 * */
 	public Connector(Node from, Node to) {
 		this.from = from;
 		this.to = to;
@@ -47,6 +51,7 @@ public class Connector implements Entity{
 		lenght = Math.hypot(from.getCX() - to.getCX(), from.getCY() - to.getCY());
 	}
 	
+	/**Repositions the connector between two new {@link Node}s.*/
 	public void reposition(Node from, Node to) {
 		this.from = from;
 		this.to = to;
@@ -78,7 +83,7 @@ public class Connector implements Entity{
 	} 
 		
 	/**
-	* Call a connector update, updating logic
+	* Call a connector update, updating logic.
 	*/
 	public void update() {
 		
@@ -199,6 +204,7 @@ public class Connector implements Entity{
 		return clear;
 	}
 	
+	/**Method that returns the first {@link Package} that has reached the end of this connector.*/
 	public Package recievePackage(Node n) {
 		Package recievedPackage = null;
 		
@@ -213,7 +219,7 @@ public class Connector implements Entity{
 		return recievedPackage;
 	}
 	
-	/**Add pkg to connector*/
+	/**Adds a {@link Package} to this connector. Resetting its position data.*/
 	public void add(Package pkg) {
 		if (pkg.from == this.from) {
 			pkg.transform(from.getCX() - pkg.radius/2, from.getCY() - pkg.radius/2);
@@ -224,7 +230,7 @@ public class Connector implements Entity{
 		packages.add(pkg);
 	}
 	
-	/**Remove pkg from connector*/
+	/**Removes a {@link Package} from this connector*/
 	public void remove(Package pkg) {
 		packages.remove(pkg);
 	}
@@ -234,14 +240,17 @@ public class Connector implements Entity{
 		packages.clear();
 	}
 	
+	/**Gets the starting {@link Node} of this connector.*/
 	public Node getFrom() {
 		return from;
 	}
 	
+	/**Gets the end {@link Node} of this connector.*/
 	public Node getTo() {
 		return to;
 	}
 	
+	@Override
 	public int getID() {
 		return id;
 	}
@@ -259,17 +268,21 @@ public class Connector implements Entity{
 		}
 	}
 	
+	/**@return A list of all {@link Package}s in this connector.*/
 	public List<Package> getPackages() {
 		return packages;
 	}
 	
+	/**@return Length of this connector in world units.*/
 	public double getLenght() {
 		return lenght;
 	}
 
+	/**@return Whether one or more {@link Package}s are waiting at the end of this connector.*/
 	public boolean isJammed() {
 		return this.jammed;	
 	}
+	
 	@Override
 	public EntityType getType() {
 		return EntityType.CONNECTOR;

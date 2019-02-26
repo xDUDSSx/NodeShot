@@ -11,6 +11,7 @@ public abstract class AbstractGenerator extends AbstractBuilding {
 	
 	public AbstractGenerator(float cx, float cy) {
 		super(cx, cy, width, height);
+		buildingType = BuildingType.GENERATOR;
 	}
 
 	public float spawnRate;

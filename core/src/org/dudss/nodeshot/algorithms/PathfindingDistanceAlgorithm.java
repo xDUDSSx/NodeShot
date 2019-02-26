@@ -12,6 +12,7 @@ import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 
+/**Unused = undocumented*/
 public class PathfindingDistanceAlgorithm {
 	
 	int steps = -1;

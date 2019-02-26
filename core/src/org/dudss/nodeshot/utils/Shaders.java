@@ -5,25 +5,36 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.error.ErrorManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 /**Class that holds and checks proper compilation of GLSL shaders*/
 public class Shaders {
-	
+	/**Just a basic shader that can sample textures.*/ 
 	public static ShaderProgram defaultShader;
+	/**Shader used for rendering corruption.*/
 	public static ShaderProgram corruptionShader;
+	/**Shader that blurs in one direction (used for bilateral blur)*/
 	public static ShaderProgram blurShader;
+	/**Shader used for rendering terrain.*/
+	public static ShaderProgram terrainShader;
+	/**Shader used for rendering fog of war.*/
+	public static ShaderProgram fogOfWarShader;
+	
+	/**Cloud shader is fractal brownian motion shader from: https://github.com/patriciogonzalezvivo/thebookofshaders*/
 	public static ShaderProgram cloudShader;
 	public static ShaderProgram solidCloudShader;
 	public static ShaderProgram rotatingCloudShader;
-	public static ShaderProgram terrainShader;
-	public static ShaderProgram fogOfWarShader;
+
+	/**A special shader that distorts image based on a dedicated height-map.*/
 	public static ShaderProgram waveShader;
+	
+	/**A shader used for the bloom effect.*/
 	public static ShaderProgram thresholdShader;
 	
-	/**Loads and compiles all GLSL shaders
+	/**Loads and compiles all GLSL shaders.
 	 * @throws Throws {@link RuntimeException} when one or more shaders did not compile successfully. Also dumps the compilation logs to the {@link ErrorManager}. 
 	 * */
 	public static void load() {

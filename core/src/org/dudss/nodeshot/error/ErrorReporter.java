@@ -121,6 +121,7 @@ public class ErrorReporter extends JFrame {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(screenSize.width/2 - width/2, screenSize.height/2 - height/2);
 		setAutoRequestFocus(true);
+		setAlwaysOnTop(true);
 		
 		panel = new JPanel();
 		panel.setBackground(Color.DARK_GRAY);
@@ -212,7 +213,7 @@ public class ErrorReporter extends JFrame {
 	}
 	
 	/**Set the additional exception description.
-	 * @message Description.
+	 * @param message Description.
 	 * */
 	public void setDescriptionMessage(String message) {
 		SwingUtilities.invokeLater(new Runnable() 
@@ -224,8 +225,8 @@ public class ErrorReporter extends JFrame {
 	    });
 	}
 	
-	/**Add the stacktrace to textarea contents.
-	 * @message Exception stacktrace.
+	/**Add the stack-trace to text-area contents.
+	 * @param message Exception stack-trace.
 	 * */
 	public void addStacktraceMessage(String message) {
 		SwingUtilities.invokeLater(new Runnable() 

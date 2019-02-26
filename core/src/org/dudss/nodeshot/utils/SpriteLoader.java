@@ -136,10 +136,13 @@ public class SpriteLoader {
 	public static Drawable artilleryDrawable;
 	public static Drawable ammoProcessorDrawable;
 	public static Drawable shipdockDrawable;
+	public static Drawable missingImage;
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
 	public static Sprite bullet;
+	
+	public static Texture selectReticle;
 	
 	/**Loads all textures*/
 	public static void loadAll() {		
@@ -149,7 +152,11 @@ public class SpriteLoader {
 		setMessage("Loading sprites");
 		
 		count = 1;
-		total = 141 + 26;
+		total = 141 + 28;
+		
+		selectReticle = new Texture("res/selectReticle.png");
+		textures.add(selectReticle);
+		updateProgress(count++, total);
 		
 		smokePuffAtlas = new TextureAtlas(Gdx.files.local("/textureData/smokePuff/smokepuff.atlas"));
 		textureAtlases.add(smokePuffAtlas);
@@ -449,6 +456,11 @@ public class SpriteLoader {
 		shipdockDrawable.setMinWidth(Base.buildMenuImgSize);		
 		updateProgress(count++, total);
 		
+		missingImage = new TextureRegionDrawable(new TextureRegion(hqanimAtlas.findRegion("missingIconImage")));
+		missingImage.setMinHeight(Base.buildMenuImgSize);
+		missingImage.setMinWidth(Base.buildMenuImgSize);		
+		updateProgress(count++, total);
+		
 		conveyorTexture = new Texture("res/conveyorHorizontal0000.png");		
 		conveyorTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		textures.add(conveyorTexture);
@@ -491,6 +503,7 @@ public class SpriteLoader {
 		count = 1;
 		total = 510;
 		
+		//Generating texture combinations
 		for (int i = 0; i < Chunks.terrainLayerNames.length; i++) {		
 			String base = null;
 			if (i == 0) {
@@ -498,6 +511,7 @@ public class SpriteLoader {
 			} else {
 				base = Chunks.terrainLayerNames[i];
 			}
+			
 			/*generateTexture("maskBR", "overlayBR", base, "BR");	
 			generateTexture("maskFULL", "overlayBR_corner_bottom", base, "BR_corner_bottom");			
 			generateTexture("maskFULL", "overlayBR_corner_top", base, "BR_corner_top");		
@@ -559,8 +573,8 @@ public class SpriteLoader {
 			generateTexture("maskFULL", "overlayXBS", base, "XBS"); 
 			generateTexture("maskFULL", "overlayYBS", base, "YBS"); 
 			
-			generateTexture("maskFULL", "overlaySingle", base, "Single");
-			*/
+			generateTexture("maskFULL", "overlaySingle", base, "Single");*/
+			
 		}
 		
 		double genTimeEnd = System.currentTimeMillis();	
@@ -577,8 +591,8 @@ public class SpriteLoader {
 		settings.minHeight = 16;
 
 		settings.alphaThreshold = 0;
-		settings.filterMin = Texture.TextureFilter.MipMapLinearNearest;
-		//settings.filterMin = Texture.TextureFilter.MipMapNearestNearest;
+		//settings.filterMin = Texture.TextureFilter.Linear;
+		settings.filterMin = Texture.TextureFilter.MipMapLinearLinear;
 		settings.filterMag = Texture.TextureFilter.Nearest;
 		
 		settings.paddingX = 64;
@@ -599,12 +613,12 @@ public class SpriteLoader {
 			@Override
 			public void progress(float progress) {
 				SpriteLoader.progress = (Math.round(progress * 100));	
-				BaseClass.splashScreen.updateProgress();
+				//BaseClass.splashScreen.updateProgress();
 			}
 		};
 		
 		if (TexturePacker.isModified(System.getProperty("user.dir") + "/textureData", System.getProperty("user.dir") + "/textureData/atlas", "terrainAtlas", settings)) {
-			//TexturePacker.process(settings, System.getProperty("user.dir") + "/textureData", System.getProperty("user.dir") + "/textureData/atlas", "terrainAtlas", progressListener);		
+			TexturePacker.process(settings, System.getProperty("user.dir") + "/textureData", System.getProperty("user.dir") + "/textureData/atlas", "terrainAtlas", progressListener);		
 		}
 			
 		terrainAtlas = new TextureAtlas(System.getProperty("user.dir") + "/textureData/atlas/terrainAtlas.atlas");
@@ -689,7 +703,7 @@ public class SpriteLoader {
 	}
 	
 	/**Returns the name of the current loading task.
-	 * @see {@link #getProgress()}
+	 * @see #getProgress()
 	 */
 	public static String getMessage() {
 		return progressMessage;

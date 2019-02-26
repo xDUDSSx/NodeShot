@@ -30,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+/**A currently unused right click window*/
 public class RightClickWindow extends Window {
 	
 	Entity assignedEntity;
@@ -203,7 +204,7 @@ public class RightClickWindow extends Window {
 			    radiusLabel = new Label("Radius: " + n.radius, skin, "font15");
 			    connectionsLabel = new Label("Connections: " + n.getNumberOfConnections(), skin, "font15");
 			    connectableLabel = new Label("Connectable: " + n.connectable, skin, "font15");
-			    connectorsLabel = new Label("Connectors: " + Base.nodeConnectorListToString(n.connectors), skin, "font15");
+			    //connectorsLabel = new Label("Connectors: " + Base.nodeConnectorListToString(n.connectors), skin, "font15");
 			    connectorsLabel.setWrap(true);
 			    closedLabel = new Label("Closed: " + n.isClosed(), skin, "font15");
 			   
@@ -465,7 +466,7 @@ public class RightClickWindow extends Window {
 				yLabel.setText("Node Y: " + n.getY());
 				radiusLabel.setText("Radius: " + n.radius);
 				connectionsLabel.setText("Connections: " + n.getNumberOfConnections());
-				connectorsLabel .setText("Connectors: " + Base.nodeConnectorListToString(n.connectors));
+				//connectorsLabel .setText("Connectors: " + Base.nodeConnectorListToString(n.connectors));
 				closedLabel.setText("Closed: " + n.isClosed());
 				break;
 			case CONNECTOR:	

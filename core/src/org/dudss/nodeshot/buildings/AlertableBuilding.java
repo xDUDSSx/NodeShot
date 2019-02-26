@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.items.StorableItem;
 
-/**Skeletal construction of a building that can be alerted by I/O {@link Node}s.*/
+/**Skeletal construction of a building that can be alerted by {@link IONode}s.*/
 public abstract class AlertableBuilding extends AbstractBuilding implements Alertable {
 
 	List<ItemType> accepted;
@@ -18,7 +19,7 @@ public abstract class AlertableBuilding extends AbstractBuilding implements Aler
 		super(cx, cy, width, height);
 	}
 
-	/**Method used by {@link InputNode}s used to alert the building that a following package is trying to be transfered.
+	/**Method used by {@link IONode}s used to alert the building that a following package is trying to be transfered.
 	 * @param p The {@link Package} that is being transfered.
 	 * @return Returns if the {@linkplain Package} transfer was successful.
 	 * */

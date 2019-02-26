@@ -1,5 +1,6 @@
 package org.dudss.nodeshot.terrain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import org.dudss.nodeshot.utils.SpriteLoader;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 /**A square tile representation.
- * @see Managed by {@link Chunks}.
+ * @see Chunks
  * */
 public class Chunk {
 	float x, y;
@@ -24,19 +25,25 @@ public class Chunk {
 	float size = Base.CHUNK_SIZE;
 	
 	/**Fog of war visibility value
-	 * 0.8f -> deactivated
-	 * 0.4f -> activated but not in vision
+	 * 0.54f -> deactivated
+	 * 0.3f -> activated but not in vision
 	 * 0f -> active vision
-	 * */
+	 */
 	public float visibility = Base.DEFAULT_VISIBILITY;
-	int visionProviderNumber = 0;
 	
+	/**Number of {@link AbstractBuilding}s that are providing vision to this chunk.*/
+	public int visionProviderNumber = 0;
+	
+	/**Transparency of active state.*/
 	public static float active = 0f;
-	public static float semiactive = 0f;
-	public static float deactivated = 1f;
-	/*public static float semiactive = 0.2f;
-	public static float deactivated = 0.35f;*/
+	/**Transparency of active state.*/
+	public static float semiactive = 0.3f;
+	/**Transparency of active state.*/
+	public static float deactivated = 0.54f;
 	
+	/**Whether this chunk is on an edge of a {@link Section}.
+	 * This is used for flagging {@linkplain Section}s as active (performance optimisation).
+	 */
 	boolean borderChunk = false;
 	
 	boolean isOreOutlined = false;
@@ -61,8 +68,15 @@ public class Chunk {
 	/**Absolute creeper ({@link #c_height} + {@link #creeper} when {@linkplain #creeper} > 0)*/
 	float absCreeper = 0;
 	
-	float flowRate = 0.1f; //0.25
+	/**Percentage of difference between two creeper levels to be added to the lower one.*/
+	float flowRate = 0.1f; //0.25 MAX
+	
+	/**Testing purposes - unused*/
 	float spreadThreshold = 0.2f; //0.5
+	/**Testing purposes - unused*/
+	float[] spreadWeights = new float[] {1f, 0.5f, 1f, 0.5f, 1f, 0.5f, 1f, 0.5f};
+	/**Testing purposes - unused*/
+	float[] hdiff = new float[8];
 	
 	/**A buffer that holds the creeper change between simulation ticks*/
 	public float creeperChange = 0;
@@ -70,7 +84,8 @@ public class Chunk {
 	long lastUpdate = SimulationThread.simTick;
 	long updateRate = 5;		
 	
-	/**Damage caused by explosions*/
+	/**Damage caused by explosions
+	 * NOT IMPLEMENTED YET*/
 	float damage = 0f;
 	
 	/**Terrain height*/
@@ -145,6 +160,68 @@ public class Chunk {
 		this.y = y;
 	}
 	
+	/*public boolean update() {	
+		if (this.getCreeperLevel() > 0) {
+			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
+				for (int i = 0; i < neighbours.length; i+=2) {
+					average(i);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void average(int index) {
+		float nLevel = neighbours[index].getCreeperLevel() + neighbours[index].getCHeight();
+		float tLevel = this.getAbsoluteCreeperLevel();
+		
+		if (tLevel > nLevel) {
+			float desiredLevel = (tLevel + nLevel)/2f;
+			float delta = tLevel - desiredLevel;
+			float availableChange = (this.creeper*0.8f)/4f;
+			
+			float change = 0;
+			if (availableChange >= delta) {
+				change = delta;
+			} else {
+				change = availableChange;
+			}
+			
+			neighbours[index].creeperChange += change;
+			this.creeperChange += -change;
+		} 
+	}*/
+	
+	/*public boolean updateNonPreserving() {	
+		if (this.getCreeperLevel() > 0) {
+			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
+				for (int i = 0; i < neighbours.length; i++) {
+					averageNonPreserving(i);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void averageNonPreserving(int index) {
+		float nLevel = neighbours[index].getCreeperLevel() + neighbours[index].getCHeight();
+		float tLevel = this.getAbsoluteCreeperLevel();
+		
+		if (tLevel > nLevel) {
+			float average = (tLevel + nLevel)/2f;
+			float change = (average - nLevel)*0.25f;
+			neighbours[index].creeperChange += change;
+			this.creeperChange += -change;
+		} 
+		
+		//if (neighbours[index].getAbsoluteCreeperLayer() < this.getAbsoluteCreeperLayer() && neighbours[index].c_height < this.getAbsoluteCreeperLevel()) {
+		//	neighbours[index].creeperChange += 0.05f;
+		//}
+	}
+	*/
+	
 	//TODO: rewrite the update -> simpler more "fluid" like behaviour 
 	/**Current corruption update method, creeper is distributed along the tiles with lower creeper in relation to the difference from this chunks {@link #creeper}.
 	 * The resulting creeper level changes are saved into respectable {@link #creeperChange} variables and the actual creeper is set later
@@ -158,26 +235,26 @@ public class Chunk {
 			
 	        //Top neighbour
 	        if (this.ay < Base.CHUNK_AMOUNT - 1) {
-	        	this.transferCreeper(thisTotal, plusy);
+	        	this.averageCreeper(thisTotal, plusy);
 	        }        
 	        //Bottom neighbour
 	        if (this.ay > 0) {
-	        	this.transferCreeper(thisTotal, minusy);
+	        	this.averageCreeper(thisTotal, minusy);
 	        }
 	        //Right neighbour
 	        if (this.ax < Base.CHUNK_AMOUNT - 1) {
-	        	this.transferCreeper(thisTotal, plusx);
+	        	this.averageCreeper(thisTotal, plusx);
 	        }
 	        //Left neighbour
 	        if (this.ax > 0) {
-	        	this.transferCreeper(thisTotal, minusx);
+	        	this.averageCreeper(thisTotal, minusx);
 	        }
 	        return true;
 		}
 		return false;
 	}
-	
-	private void transferCreeper(float thisTotal, Chunk to) {
+
+	private void averageCreeper(float thisTotal, Chunk to) {
         if (to.c_height >= 0) {
             if (this.getCreeperLevel() > 0 || to.getCreeperLevel() > 0) {
                 float targetTotal = to.c_height + to.getCreeperLevel();
@@ -200,6 +277,64 @@ public class Chunk {
         }
 	}
 	
+	/*public boolean updateTest() {		
+		if (this.getCreeperLevel() != 0 && visibility != deactivated) {
+			if (x >= Base.CHUNK_SIZE && y >= Base.CHUNK_SIZE && x < Base.WORLD_SIZE-Base.CHUNK_SIZE && y < Base.WORLD_SIZE-Base.CHUNK_SIZE) { 
+				float totalDelta = 0;
+				for(int i = 0; i < neighbours.length; i++) {
+					  if (neighbours[i].c_height >= 0) {
+			            	 if (this.getAbsoluteCreeperLevel() > neighbours[i].getAbsoluteCreeperLevel() && this.getAbsoluteCreeperLayer() != 0) {
+			            		 float delta = this.getAbsoluteCreeperLevel() - neighbours[i].getAbsoluteCreeperLevel();
+			                     if (delta > this.getCreeperLevel()) {
+			                     	delta = this.getCreeperLevel();
+			                     }
+			                     hdiff[i] = delta * flowRate * spreadWeights[i];
+			                     totalDelta += hdiff[i];
+			                 }				            
+					  }
+				}
+				float rangeFactor = 1f;
+				if (totalDelta > this.creeper) {
+					rangeFactor = this.creeper / totalDelta;
+				}
+				
+				for(int i = 0; i < neighbours.length; i++) {
+					float change = hdiff[i] * rangeFactor;
+					this.creeperChange -= change;
+					neighbours[i].creeperChange += change;
+					if (neighbours[i].isBorderChunk()) {
+						if (neighbours[i].getSection() != this.getSection()) {
+							neighbours[i].getSection().setActive(true);
+						}
+					}
+				}
+				return true;
+			}
+			
+			//float thisTotal = this.c_height + this.getCreeperLevel();
+			
+	        //Top neighbour
+	        //if (this.ay < Base.CHUNK_AMOUNT - 1) {
+	        //	this.transferCreeper(thisTotal, plusy);
+	        //}        
+	        //Bottom neighbour
+	        //if (this.ay > 0) {
+	        //	this.transferCreeper(thisTotal, minusy);
+	        //}
+	        //Right neighbour
+	        //if (this.ax < Base.CHUNK_AMOUNT - 1) {
+	        //	this.transferCreeper(thisTotal, plusx);
+	        //}
+	        //Left neighbour
+	        //if (this.ax > 0) {
+	        //	this.transferCreeper(thisTotal, minusx);
+	        //}
+	        return false;
+		}
+		return false;
+	}
+	*/
+	
 	/**Called after all the other {@link Chunk}s had been updated using the {@link #update()} method in the current simulation tick*/
 	public void applyUpdate() {
 		setCreeperLevel(creeper + creeperChange);
@@ -208,7 +343,8 @@ public class Chunk {
 		
 	/**Returns an {@link AtlasRegionContainer} representing this {@linkplain Chunk}s terrain.
 	 * The container contains edge resolved combined textures.
-	 * @see {@link TerrainEdgeResolver}*/
+	 * @see TerrainEdgeResolver
+	 */
 	public AtlasRegionContainer getTerrainTexture() {			
 		AtlasRegionContainer misc = new AtlasRegionContainer();
 		
@@ -259,7 +395,7 @@ public class Chunk {
 	
 	/**Returns the appropriate {@link AtlasRegionContainer} for the specified terrain height.
 	 * 
-	 * @see {@link TerrainEdgeResolver}.
+	 * @see TerrainEdgeResolver
 	 * @param level Target height level.
 	 * */
 	private AtlasRegionContainer resolveTerrainEdges(int level) {
@@ -500,10 +636,10 @@ public class Chunk {
 	 * Before, there were {@link Base#MAX_CREEP} individual meshes for every {@link Section}. So multiple corruption layers were rendered on top of each other (with culling).
 	 * By unifying all these meshes into a single textured mesh performance will increase (We no longer need to cycle all chunks multiple times).
 	 * This change was allowed because of the usage of a glsl shader that combines multiple textures within a single draw.
-	 * @see {@link #resolveCorruptionEdges()}*/
+	 * @see #resolveCorruptionEdges()*/
 	public AtlasRegionContainer getCorruptionTexture() {
  		if (this.creeper != 0) {
-			return resolveCorruptionEdges2();					
+			return resolveCorruptionEdges();					
  		} 
 		return null;
 	}
@@ -513,9 +649,9 @@ public class Chunk {
 	 * As of right now the corruption renderer and shader supports 2 individual textures that can be overlaid over each other. (Thats why there is just one secondary shade value).
 	 * 
 	 * The edges are resolved using the same resolver and method as the terrain itself. But the resolve algorithm is slightly modified.
-	 * @see {@link TerrainEdgeResolver}}.
+	 * @see TerrainEdgeResolver
 	 * */
-	private AtlasRegionContainer resolveCorruptionEdges2() {
+	private AtlasRegionContainer resolveCorruptionEdges() {
 		TerrainEdge topLayer = null;
 		TerrainEdge bottomLayer = null;
 		
@@ -543,6 +679,8 @@ public class Chunk {
 			}
 			
 			boolean diagonal = false;
+			int lowerLeveIndex = -1;
+			int lowestLevelIndex = -1;
 			
 			//Checks for a diagonal edge
 			topLayer = TerrainEdgeResolver.resolveDiagonalEdges(topDiffs);
@@ -554,9 +692,11 @@ public class Chunk {
 					if (topLayer.mask[i] == '1') {
 						if (neighbours[i].getAbsoluteCreeperLayer() > lowerLevelHeight) {
 							lowerLevelHeight = (int) neighbours[i].getAbsoluteCreeperLayer();
+							lowerLeveIndex = i;
 						}
 						if (neighbours[i].getAbsoluteCreeperLayer() < lowestLevelHeight) {
 							lowestLevelHeight = (int) neighbours[i].getAbsoluteCreeperLayer();
+							lowestLevelIndex = i;
 						}
 					}
 				}
@@ -576,8 +716,14 @@ public class Chunk {
 					}
 				}
 				//Resolves the bottom layer edge
-				if (this.creeper > 1f) {
-					bottomLayer = TerrainEdgeResolver.resolveSolidEdges(bottomDiffs, bottomOuterDiffs, lowerLevelHeight);
+				if (c_height != height) {
+					if (neighbours[0].creeper > 0 && neighbours[2].creeper > 0 && neighbours[4].creeper > 0 && neighbours[6].creeper > 0) {
+						bottomLayer = TerrainEdgeResolver.resolveSolidEdges(bottomDiffs, bottomOuterDiffs, lowerLevelHeight);
+					}
+				} else {
+					if (creeper > 0) {
+						bottomLayer = TerrainEdgeResolver.resolveSolidEdges(bottomDiffs, bottomOuterDiffs, lowerLevelHeight);
+					}
 				}
 			} else {
 				//Top layer solid, no bottom layer necessary
@@ -588,14 +734,18 @@ public class Chunk {
 			terrainCont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr" + topLayer.name));
 			if (bottomLayer != null) {
 				terrainCont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr" + bottomLayer.name));
-				terrainCont.setSecondaryShade(lowerLevelHeight);
+				if (lowerLeveIndex == -1) {
+					terrainCont.setSecondaryShade(creeper);
+				} else {
+					terrainCont.setSecondaryShade(neighbours[lowerLeveIndex].creeper);
+				}
 			} else
-			if (this.isDiagonalTerrainEdge() && this.getTerrainEdgeType() == topLayer.type) {			
+			/*if (this.isDiagonalTerrainEdge() && this.getTerrainEdgeType() == topLayer.type) {			
 				terrainCont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr"));
 				terrainCont.setSecondaryShade(lowestLevelHeight);
 				setCorruptionEdge(topLayer.isTerrainEdge, topLayer.type);
 				return terrainCont;
-			}
+			}*/
 			
 			setCorruptionEdge(topLayer.isTerrainEdge, topLayer.type);
 			return terrainCont;
@@ -747,6 +897,7 @@ public class Chunk {
 	}
 	
 	/**Returns the {@link #getAbsoluteCreeperLevel()} value but its rounded to the closest lower integer. This represents the creeper "layer".
+	 * If there is no creeper -1 will be returned.
 	 * @return The {@link #getAbsoluteCreeperLevel()} value cast to an int.*/
 	public int getAbsoluteCreeperLayer() {
 		if (creeper == 0) {
@@ -780,7 +931,7 @@ public class Chunk {
 	 * @param edge Edge boolean.
 	 * @param lowerLevel Height difference between the topmost and lowest layer heights in this edge.
 	 * @param edgetype Type of this edge.
-	 * @see {@link Chunk.EdgeType}
+	 * @see Chunk.EdgeType
 	 * */
 	public void setTerrainEdge(boolean edge, int lowerLevel,  EdgeType edgetype) {
 		this.terrainEdge = edge;
@@ -806,6 +957,11 @@ public class Chunk {
 		//return (1f - Interpolation.exp5Out.apply(0.45f, 1f, ((int)creeper/(float)Base.MAX_CREEP)));
 	}
 	
+	/**Calculates the shade color factor that is used to tint the final texture for the specific creeper value.*/
+	public static float calculateShadeForValue(float creeperVal) {
+		return (int)creeperVal/(float)Base.MAX_CREEP;
+	}
+	
 	/**@return Returns the {@link EdgeType} of this chunk, makes sure that this chunk is a terrain edge.*/
 	public EdgeType getTerrainEdgeType() {
 		if (terrainEdge == true) {
@@ -820,7 +976,7 @@ public class Chunk {
 	}
 	
 	/**@return Returns true if this tile is a diagonal terrain edge.
-	 * @see {@link #diagonalEdges}
+	 * @see #diagonalEdges
 	 * */
 	public boolean isDiagonalTerrainEdge() {
 		return diagonalEdges.contains(terrainEdgeType);
@@ -829,7 +985,7 @@ public class Chunk {
 	/**Flag/Unflag this {@link Chunk} as a corr edge.
 	 * @param edge Edge boolean.
 	 * @param edgetype Type of this edge.
-	 * @see {@link Chunk.EdgeType}
+	 * @see Chunk.EdgeType
 	 * */
 	public void setCorruptionEdge(boolean edge, EdgeType edgetype) {
 		this.corrEdge = edge;
@@ -868,10 +1024,17 @@ public class Chunk {
 		return this.isOreOutlined;
 	}
 	
+	/**Returns a list of all chunk neighbours.*/
+	public List<Chunk> getNeighbours() {
+		return new ArrayList<Chunk>(Arrays.asList(neighbours));
+	}
+	
+	/**Set the section this chunk is located in.*/
 	public void setSection(Section s) {
 		section = s;
 	}
 	
+	/**Returns the section this chunk is located in.*/
 	public Section getSection() {
 		return section;
 	}
@@ -891,6 +1054,7 @@ public class Chunk {
 		return damage;
 	}
 	
+	/**Unused - testing purposes*/
 	public void setDamage(float d) {
 		damage = d;
 	}

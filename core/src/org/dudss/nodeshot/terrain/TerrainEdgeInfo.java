@@ -1,5 +1,7 @@
 package org.dudss.nodeshot.terrain;
 
+import org.dudss.nodeshot.terrain.datasubsets.TerrainEdge;
+
 /**Wrapper for some utility {@link TerrainEdge} data.*/
 public class TerrainEdgeInfo {
 	char[] diffs;

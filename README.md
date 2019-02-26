@@ -1,5 +1,8 @@
 Author: Dan Rakusan (DUDSS) 
 
+How to run:
+Downloadable .rar file with the runnable executable should be located in the /exec/ folder.
+
 Currently building a prototype game engine from scratch for a RTS genre game.
 Heavily inspired by Creeper World by KnuckleCracker and Factorio.
 
@@ -30,13 +33,15 @@ and texturing techniques.
 
 * * *
 
-![main menu](img/intro4.PNG)
+![main menu](img/v8screen.PNG)
 
-![node engine](img/overview.PNG)
+![game start](img/ingameScreen.PNG)
+
+![Corruption](img/screen4.PNG)
+
+![Base](img/screen2.PNG)
 
 ![terrain and creeper interaction](img/overlays.PNG)
-
-![game scenario](img/ingame.PNG)
 
 ![map](img/corruptionspread.PNG)
 

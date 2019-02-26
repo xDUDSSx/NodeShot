@@ -2,9 +2,12 @@ package org.dudss.nodeshot.ui;
 
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
+import org.dudss.nodeshot.buildings.AbstractIOStorage;
+import org.dudss.nodeshot.buildings.AbstractStorage;
 import org.dudss.nodeshot.buildings.AmmoProcessor;
 import org.dudss.nodeshot.buildings.ArtilleryCannon;
 import org.dudss.nodeshot.buildings.BasicMine;
+import org.dudss.nodeshot.buildings.ConveyorBuilding;
 import org.dudss.nodeshot.buildings.CreeperGenerator;
 import org.dudss.nodeshot.buildings.Exporter;
 import org.dudss.nodeshot.buildings.Factory;
@@ -15,8 +18,11 @@ import org.dudss.nodeshot.buildings.PowerGenerator;
 import org.dudss.nodeshot.buildings.Shipdock;
 import org.dudss.nodeshot.buildings.Turret;
 import org.dudss.nodeshot.entities.Entity;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
+import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.Gdx;
@@ -38,6 +44,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
+/**The main game tool-bar menu*/
 public class ToolbarMenu extends VisWindow {
 	VisTable mainTable;
 	
@@ -54,17 +61,24 @@ public class ToolbarMenu extends VisWindow {
 	
 	VisLabel bitLabel;
 	VisLabel powerLabel;
-	VisLabel test;
+	VisLabel generatorLabel;
 	
+	/**Current entity selection menu (if an entity is selected)*/
+	SelectTable currentSelectTable;
+	
+	/**The main game tool-bar menu.
+	 * 
+	 * @param title Title of the {@link VisWindow}.
+	 */
 	public ToolbarMenu(String title) {
 		super("Toolbar", true);	
 		TableUtils.setSpacingDefaults(this);
-		setResizable(true);
-		setMovable(true);
+		setResizable(false);
+		setMovable(false);
 		getTitleTable().clear();	
 		
 		structures = new BuildTable();
-		structures.addBuildingTile(SpriteLoader.hqDrawable, "Headquarters", new BuildListener(new Headquarters(0, 0)));	
+		//structures.addBuildingTile(SpriteLoader.hqDrawable, "Headquarters", new BuildListener(new Headquarters(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.mineDrawable, "Mine", new BuildListener(new BasicMine(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.genDrawable, "Power generator", new BuildListener(new PowerGenerator(0, 0)));
 		structures.addBuildingTile(SpriteLoader.factoryDrawable, "Factory", new BuildListener(new Factory(0, 0)));	
@@ -107,8 +121,10 @@ public class ToolbarMenu extends VisWindow {
 		this.getTitleTable().left();
 		bitLabel = new VisLabel("Bits: " + Base.START_BITS);
 		powerLabel = new VisLabel("Power: " + GameScreen.resourceManager.getPower() + " / " + GameScreen.resourceManager.getMaxPower());
+		generatorLabel = new VisLabel("Creeper generators left: " + GameScreen.buildingManager.getAllGenerators().size());
 		this.getTitleTable().add(bitLabel).width(bitLabel.getWidth() + 50).pad(5);
 		this.getTitleTable().add(powerLabel).width(powerLabel.getWidth() + 50).pad(5);	
+		this.getTitleTable().add(generatorLabel).width(generatorLabel.getWidth() + 50).pad(5).right();
 		mainTable.add(infoTable).fill();
 		
 		buildWrapper = new VisTable();
@@ -144,11 +160,13 @@ public class ToolbarMenu extends VisWindow {
 	        	case "WEAPONS": buildPanel.add(weapons).expand().fill(); break;
 	        	case "UTILS":  buildPanel.add(utils).expand().fill(); break;
 	        }
+	        currentSelectTable = null;
 		} else {
 			mainTable.clearChildren();
 			mainTable.add(selectWrapper);
 			selectWrapper.clearChildren();
-			selectWrapper.add(new SelectTable(GameScreen.selectedEntity));
+			currentSelectTable = new SelectTable(GameScreen.selectedEntity);
+			selectWrapper.add(currentSelectTable);
 		}
 	}
 	
@@ -156,6 +174,11 @@ public class ToolbarMenu extends VisWindow {
 	public void updateInfoPanel() {
 		bitLabel.setText("Bits: " + GameScreen.resourceManager.getBits());
 		powerLabel.setText("Power: " + GameScreen.resourceManager.getPower() + " / " + GameScreen.resourceManager.getMaxPower());
+		generatorLabel.setText("Creeper generators left: " + GameScreen.buildingManager.getAllGenerators().size());
+	
+		if (currentSelectTable != null) {
+			currentSelectTable.updateInfo(GameScreen.selectedEntity);
+		}
 	}
 	
 	public void updateBounds() {
@@ -170,6 +193,13 @@ public class ToolbarMenu extends VisWindow {
 	private class SelectTable extends VisTable {
 		VisLabel infoLabel;
 		VisTextButton moveBtn;
+		VisTextButton demoBtn;
+		VisTextButton reverseBtn;
+		
+		VisLabel storageValue;
+		VisLabel processedValue;
+		VisLabel healthDamage;
+		VisLabel percentageLabel;	
 		
 		public SelectTable(Entity e) {
 			super(true);
@@ -177,13 +207,13 @@ public class ToolbarMenu extends VisWindow {
 			TableUtils.setSpacingDefaults(this);
 			align(Align.topLeft);						
 			
-			infoLabel = new VisLabel(e.getType().toString());
-			add(infoLabel).left();
+			VisTable leftPanel = new VisTable(true);	
+			Image thumbnail = new Image(getImageForCurrentEntity(e));
+			leftPanel.add(thumbnail);
+			VisTable btns = new VisTable();
+			leftPanel.add(btns).right().fillY();
 			
-			Image thumbnail = new Image(SpriteLoader.hqDrawable);
-			add(thumbnail).right();
-			
-			moveBtn = new VisTextButton("move");
+			moveBtn = new VisTextButton("Move");
 			moveBtn.addListener(new ClickListener(){
 				@Override
 				public void clicked(InputEvent event, float x, float y) {	 	
@@ -191,8 +221,96 @@ public class ToolbarMenu extends VisWindow {
 						GameScreen.buildingManager.startBuildMode((AbstractBuilding) e, true);
 					}
 			    }
-		    });		
-			add(moveBtn);
+		    });	
+			demoBtn = new VisTextButton("Demolish");
+			demoBtn.addListener(new ClickListener(){
+				@Override
+				public void clicked(InputEvent event, float x, float y) {	 	
+					if (e instanceof AbstractBuilding) {
+						((AbstractBuilding) e).demolish();
+						Selector.deselect();
+						updateMainPanel();
+					}
+			    }
+		    });	
+			reverseBtn = new VisTextButton("Reverse");
+			reverseBtn.addListener(new ClickListener(){
+				@Override
+				public void clicked(InputEvent event, float x, float y) {	 	
+					if (e instanceof ConveyorBuilding) {
+						((ConveyorBuilding) e).getConveyor().reverse();
+					}
+			    }
+		    });	
+			if (e instanceof AbstractBuilding && !(e instanceof CreeperGenerator)) {							
+				if (!(e instanceof Headquarters)) {
+					btns.add(moveBtn).fillX();		
+					btns.row();
+					btns.add(demoBtn).fillX();
+				}
+				if (e instanceof ConveyorBuilding) {
+					btns.row();
+					btns.add(reverseBtn).fillX();
+				}
+			}
+			
+			infoLabel = new VisLabel(e.getType().toString());
+			add(infoLabel).top().left().expandX();
+			row();
+			add(leftPanel).left().top();
+			
+			VisTable dataTable = new VisTable(true);
+			add(dataTable).top().fill();
+			
+			storageValue = new VisLabel("Storage: placeholder");
+			processedValue = new VisLabel("Processed: placeholder");
+			healthDamage = new VisLabel("Damage: placeholder");
+			percentageLabel = new VisLabel("Percentage: placeholder");
+			
+			if (e instanceof AbstractStorage) {
+				dataTable.add(storageValue).left().fillX().top();
+				dataTable.row();
+			}
+			if (e instanceof AbstractIOStorage) {				
+				dataTable.add(processedValue).left().fillX().top();
+				dataTable.row();
+			}
+			if (e instanceof CreeperGenerator) {
+				dataTable.add(healthDamage).left().fillX().top();
+				dataTable.row();
+			}
+			if (e instanceof Package) {
+				dataTable.add(percentageLabel).left().fillX().top();
+				dataTable.row();
+			}
+		}
+		
+		/**Updates the selection data.*/
+		public void updateInfo(Entity e) {
+			if (e instanceof AbstractStorage) storageValue.setText("Storage: " + ((AbstractStorage)e).getStoredItems().size());
+			if (e instanceof AbstractIOStorage) processedValue.setText("Processed: " + ((AbstractIOStorage)e).getProcessedStorage().size());
+			if (e instanceof CreeperGenerator) healthDamage.setText("Health: " + ((((CreeperGenerator)e).health) - ((CreeperGenerator)e).damage));
+			if (e instanceof Package) percentageLabel.setText("Percentage: " + ((Package)e).percentage);
+		}
+		
+		private Drawable getImageForCurrentEntity(Entity e) {
+			switch(e.getType()) {
+				case FACTORY: return SpriteLoader.factoryDrawable;
+				case POWER_GENERATOR: return SpriteLoader.genDrawable;
+				case CONVEYOR: return SpriteLoader.nodeDrawable;
+				case NODE_BUILDING: return SpriteLoader.nodeDrawable;
+				case NODE: return SpriteLoader.nodeDrawable;
+				case CREEPER_GENERATOR: return SpriteLoader.creepergenDrawable;
+				case TURRET: return SpriteLoader.turretDrawable;				
+				case ARTILLERY_CANNON: return SpriteLoader.artilleryDrawable;
+				case EXPORTER: return SpriteLoader.exporterTopDrawable;
+				case IMPORTER: return SpriteLoader.importerTopDrawable;
+				case SHIPDOCK: return SpriteLoader.shipdockDrawable;
+				case AMMO_PROCESSOR: return SpriteLoader.ammoProcessorDrawable;
+				case MINE: return SpriteLoader.mineDrawable;
+				case HQ: return SpriteLoader.hqDrawable;			
+				default: return SpriteLoader.missingImage;
+			}
 		}
 	}
 	

@@ -3,16 +3,15 @@ package org.dudss.nodeshot;
 
 import java.awt.Dimension;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.dudss.nodeshot.buildings.*;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.nodes.Node;
-import org.dudss.nodeshot.terrain.Chunk;
-import org.dudss.nodeshot.terrain.Chunks;
+import org.dudss.nodeshot.terrain.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,15 +23,23 @@ public class Base {
 	public static int SCREEN_WIDTH;
 	public static int SCREEN_HEIGHT;
 
-	public static float MIN_ZOOM = 0.2f;
+	/**Minimal camera zoom.*/
+	public static float MIN_ZOOM = 0.4f;
 
-	public static int START_BITS = 100;
+	public static int START_BITS = 1000;
 	public static int START_POWER = 100;
 	
+	/**How often do building eat up their {@link AbstractBuilding#energyCost}.*/
+	public static int ENERGY_COST_UPDATE_RATE = 30;
+	
+	/**The size of {@link Node}s.*/
 	public static int RADIUS = 16;
+	/**The size of {@link Package}s.*/
 	public static int PACKAGE_RADIUS = 16;
 
+	/**The unadjusted speed of {@link Package}s.*/
 	public static float PACKAGE_SPEED = 0.5f;
+	/**The space that the {@link Package}s take up on the {@link Connector}.*/
 	public static float PACKAGE_BLOCK_RANGE = 8;
 
 	public static int CONNECT_DISTANCE = 900;
@@ -43,19 +50,29 @@ public class Base {
 	public static int HUD_FONT_LARGE_SIZE = 36;
 	
 	//TERRAIN
+	/**The size of the game world (in world units).*/
 	public static int WORLD_SIZE = 2048*2;
 	
+	//Values that alter the terrain generation properties.*/
 	public static float COAL_THRESHOLD = 0.74f;
 	public static float IRON_THRESHOLD = 0.74f;
 	public static float TERRAIN_THRESHOLD = 0.6f;
 	
-	public static float DEFAULT_VISIBILITY = Chunk.active;
+	/**Default fog of war visibility.*/
+	public static float DEFAULT_VISIBILITY = Chunk.deactivated;
 	
+	/**Distance from the centre of the map where {@link CreeperGenerator}s won't spawn.*/
+	public static float GENERATOR_SAFEZONE = 800;
+	
+	/**Maximal layer of creeper/corruption.*/
 	public static int MAX_CREEP = 15;
+	/**The highest layer of terrain.*/
 	public static int MAX_HEIGHT = 10; 
 	
+	/**Size of a {@link Chunk} in world units-*/
 	public static int CHUNK_SIZE = 16;
 	
+	/**Size of a {@link Section} in world units-*/
 	public static int SECTION_SIZE = 32;
 	/*SECTION_SIZE directly affects the number of draw calls. A single section mesh takes 1 draw call.
 
@@ -109,6 +126,7 @@ public class Base {
 	public static Dimension defaultWindowSize = new Dimension(1300, 795);
 	public static int MSAAsamples = 10;
 	
+	/**Returns a random floating point number in the number range.*/
 	public static float getRandomFloatNumberInRange(float min, float max) {
 		if (min == 0 && max == 0) {
 			return 0;
@@ -122,6 +140,7 @@ public class Base {
 		return min + r.nextFloat() * (max - min);
 	}
 
+	/**Returns a random integer number in the integer range.*/
 	public static int getRandomIntNumberInRange(int min, int max) {
 		if (min == 0 && max == 0) {
 			return 0;
@@ -134,7 +153,8 @@ public class Base {
 		Random r = new Random();
 		return r.nextInt((max - min) + 1) + min;
 	}
-
+	
+	/**Prints out a list.*/
 	public static String listToString(List<Entity> list) {
 		StringBuilder stringBuilder = new StringBuilder();
 
@@ -145,134 +165,36 @@ public class Base {
 		return stringBuilder.toString();
 	}
 
-	public static String nodeListToString(List<Node> list) {
-		List<Entity> entityList = new ArrayList<Entity>();
-		for (final Node n : list) {
-			entityList.add(new Entity() {
-				@Override
-				public int getID() {
-					return n.getID();
-				}
-
-				@Override
-				public int getIndex() {
-					return 0;
-				}
-
-				@Override
-				public EntityType getType() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				public float getX() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-
-				@Override
-				public float getY() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-			});
-		}
-			return listToString(entityList);
-	}
-	public static String nodeConnectorListToString (List <Connector> list) {
-		List<Entity> entityList = new ArrayList<Entity>();
-		for (final Connector n : list) {
-			entityList.add(new Entity() {
-				@Override
-				public int getID() {
-					return n.getID();
-				}
-
-				@Override
-				public int getIndex() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-
-				@Override
-				public EntityType getType() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				public float getX() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-
-				@Override
-				public float getY() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-			});
-		}
-		return listToString(entityList);
-	}
-
-	public static String packageListToString (List <Package> list) {
-		List<Entity> entityList = new ArrayList<Entity>();
-		for (final Package n : list) {
-			entityList.add(new Entity() {
-				@Override
-				public int getID() {
-					return n.getID();
-				}
-
-				@Override
-				public int getIndex() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-
-				@Override
-				public EntityType getType() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				public float getX() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-
-				@Override
-				public float getY() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-			});
-		}
-		return listToString(entityList);
-	}
-	
+	/**Enables OpenGL blending.*/
 	public static void enableGlBlend() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
+	/**Disables OpenGL blending.*/
 	public static void disableGlBlend() {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 	
+	/**Rounds a float number to a specified number of decimal places.*/
 	public static float round(float d, int decimalPlace) {
         BigDecimal bd = new BigDecimal(Float.toString(d));
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
         return bd.floatValue();
 	}
 	
+	/**Recalculates a float value into a different number range.
+	 * @param OldValue The original value.
+	 * @param OldMin The original lower limit of the number range.
+	 * @param OldMax The original higher limit of the number range.
+	 * @param NewMin The new lower limit of the number range.
+ 	 * @param NewMax The new higher limit of the number range.
+	 */
 	public static float range(float OldValue, float OldMin, float OldMax, float NewMin, float NewMax) {
 		return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin;
 	}
 	
+	/**Returns an angular distance between two angles. In degrees.*/
 	public static float angleDist(float a1, float a2) {
 		return Math.abs((Math.abs((a1 - a2) + 180) % 360) - 180);
 	}

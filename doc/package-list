@@ -4,6 +4,7 @@ org.dudss.nodeshot.buildings
 org.dudss.nodeshot.desktop
 org.dudss.nodeshot.entities
 org.dudss.nodeshot.entities.connectors
+org.dudss.nodeshot.entities.effects
 org.dudss.nodeshot.entities.nodes
 org.dudss.nodeshot.error
 org.dudss.nodeshot.inputs

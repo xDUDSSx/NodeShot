@@ -3,12 +3,15 @@ package org.dudss.nodeshot.buildings;
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.SimulationThread;
+import org.dudss.nodeshot.buildings.AbstractBuilding.BuildingType;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.items.Item;
 import org.dudss.nodeshot.items.StorableItem;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.misc.IndefinitePathHandler;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -24,7 +27,6 @@ public class Exporter extends AbstractIOPort {
 	public Exporter(float cx, float cy) {
 		super(cx, cy, width, height);
 		sprite = new Sprite(SpriteLoader.exporterTop);
-		
 	}
 	
 	@Override
@@ -91,18 +93,13 @@ public class Exporter extends AbstractIOPort {
 	}
 
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {
-		batch.begin();
+	public void draw(SpriteBatch batch) {
 		batch.setColor(1f, 1f, 1f, 1f);		
 		sprite.setOrigin(Base.CHUNK_SIZE/2, Base.CHUNK_SIZE + Base.CHUNK_SIZE/2);
 		sprite.setRotation(this.spriteRotation);
 		sprite.setSize(width, height + Base.CHUNK_SIZE);
 		sprite.setPosition(x, y - Base.CHUNK_SIZE);
-		sprite.draw(batch);		
-		//batch.draw(sprite, x, y - Base.CHUNK_SIZE, width, height + Base.CHUNK_SIZE);
-		//input.draw(batch);
-		batch.end();
-		
+		sprite.draw(batch);			
 	}
 
 	@Override
@@ -121,6 +118,7 @@ public class Exporter extends AbstractIOPort {
 
 	@Override
 	public void build() {
+		super.build();
 		this.ioNode = new IONode(x + Base.CHUNK_SIZE/2, y + Base.CHUNK_SIZE/2, Base.RADIUS, this);	
 		ioNode.setOutputSprite();
 		GameScreen.nodelist.add(ioNode);
@@ -143,8 +141,10 @@ public class Exporter extends AbstractIOPort {
 		} else {
 			BaseClass.logger.warning("IOPort assigned building is null!");
 		}
-		
-		GameScreen.buildingManager.addMisc(this);
 	}
 
+	@Override
+	public EntityType getType() {
+		return EntityType.EXPORTER;
+	}
 }

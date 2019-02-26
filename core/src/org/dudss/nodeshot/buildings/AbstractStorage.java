@@ -43,8 +43,7 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 	@Override
 	public boolean alert(StorableItem p) {
 		if (canStore(p)) {
-			storage.add(p);	
-			System.out.println("caled at " + storage.size());
+			storage.add(p);			
 			return true;
 		}
 		return false;
@@ -62,48 +61,19 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {	
-		r.set(ShapeType.Filled);
-		r.setColor(color);
-		r.rect(x, y, width, height);
-		 
-		if (storage.size() < maxStorage) {
-			r.setColor(Color.GREEN);
-		} else {
-			r.setColor(Color.RED);
-		}	
-		r.rectLine(this.x, this.y - 2, this.x + (width*((float) (storage.size()/maxStorage))), this.y - 2, 3);
-		if (ioActive) {
-			this.ioNode.draw(batch);
-		}
-	}
-	
-	@Override
-	public void drawPrefab(ShapeRenderer r, SpriteBatch batch, float cx, float cy, boolean snap) {				
-		r.set(ShapeType.Filled);
-		r.setColor(prefabColor);
-		r.rect(getPrefabVector(cx, cy, snap).x, getPrefabVector(cx, cy, snap).y, width, height);
-	}
-	
-	@Override
 	public void build() {
+		super.build();
 		if (ioActive) {
 			ioNode = new IONode(x + (width/2), y + (height/2), Base.RADIUS, this);
 			ioNode.setInputSprite();
 			GameScreen.nodelist.add(ioNode);
 		}
-		GameScreen.buildingManager.addBuilding(this);
-		
-		updateFogOfWar(true);
 	}
 
 	@Override
 	public void demolish() {
-		GameScreen.buildingManager.removeBuilding(this);
-		if (ioActive) this.ioNode.remove();
-		
-		clearBuildingChunks();
-		updateFogOfWar(false);
+		super.demolish();
+		if (ioActive) this.ioNode.remove();	
 	}
 	
 	public void activateIONode(boolean b) {

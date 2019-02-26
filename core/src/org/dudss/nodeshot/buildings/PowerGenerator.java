@@ -1,9 +1,8 @@
 package org.dudss.nodeshot.buildings;
 
-import static org.dudss.nodeshot.screens.GameScreen.buildingManager;
-
 import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
+import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
@@ -11,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 
+/**A building that produces power.*/
 public class PowerGenerator extends AbstractBuilding {
 	
 	static float width = Base.CHUNK_SIZE*2, height = Base.CHUNK_SIZE*2;
@@ -20,7 +21,7 @@ public class PowerGenerator extends AbstractBuilding {
 	Animation<TextureRegion> genOutlinedAnimation;
 		
 	
-	int generationSpeed = 30;
+	int generationSpeed = 6;
 	int nextUpdate = SimulationThread.simTick + generationSpeed;
 	
 	public PowerGenerator(float cx, float cy) {
@@ -39,17 +40,10 @@ public class PowerGenerator extends AbstractBuilding {
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {	
-		batch.begin();
+	public void draw(SpriteBatch batch) {	
 		batch.setColor(1f, 1f, 1f, 1f);		
-		if (outlined) {
-			TextureRegion currentFrame = genOutlinedAnimation.getKeyFrame(GameScreen.stateTime, true);
-			batch.draw(currentFrame, x, y, width, height);
-		} else {
-			TextureRegion currentFrame = genAnimation.getKeyFrame(GameScreen.stateTime, true);
-			batch.draw(currentFrame, x, y, width, height);
-		}		
-		batch.end();
+		TextureRegion currentFrame = genAnimation.getKeyFrame(GameScreen.stateTime, true);
+		batch.draw(currentFrame, x, y, width, height);		
 	}
 	
 	@Override
@@ -62,18 +56,14 @@ public class PowerGenerator extends AbstractBuilding {
 	}
 	
 	@Override
-	public void build() {
-		buildingManager.addBuilding(this);
-		
-		updateFogOfWar(true);
+	public void explode() {
+		super.explode();
+		GameScreen.terrainEditor.explosion(new Vector3(x, y, 0), 11);
 	}
 
 	@Override
-	public void demolish() {
-		GameScreen.buildingManager.removeBuilding(this);
-
-		clearBuildingChunks();
-		updateFogOfWar(false);	
+	public EntityType getType() {
+		return EntityType.POWER_GENERATOR;
 	}
 }
 

@@ -3,6 +3,7 @@ package org.dudss.nodeshot.ui;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.screens.GameScreen;
 
+/**A currently unused class that created right click windows*/
 public class RightClickMenuManager {
 	public static RightClickWindow rightClickMenu;
 	

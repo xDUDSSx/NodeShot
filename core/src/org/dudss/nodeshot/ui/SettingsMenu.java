@@ -24,6 +24,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 
+/**A window containing engine and debug settings*/
 public class SettingsMenu extends Window {
 
 	final Window window = this;

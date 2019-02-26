@@ -33,12 +33,11 @@ public class Explosion extends VisualEffect {
 		this.y = y;
 		
 		startTime = SimulationThread.stateTime;
-		
+
 		GameScreen.effectManager.addRegularEffect(this, layer);
 		
-		new Shockwave(x, y, 1, 400, 30, 10);		
+		new Shockwave(x, y, 1, 520, 40, 10);		
 		new SmokePoof(x, y);	
-		GameScreen.terrainEditor.explosion(new Vector3(x, y, 0), 11);
 	}
 	
 	@Override

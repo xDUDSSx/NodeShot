@@ -34,49 +34,49 @@ cannonFireAnim135
   index: 13
 conveyorHorizontal0000
   rotate: false
-  xy: 522, 90
+  xy: 2, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 conveyorHorizontal0001
   rotate: false
-  xy: 782, 90
+  xy: 262, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 conveyorHorizontal0002
   rotate: false
-  xy: 1042, 90
+  xy: 522, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 conveyorHorizontal0003
   rotate: false
-  xy: 1434, 2
+  xy: 782, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 conveyorHorizontal0004
   rotate: false
+  xy: 1042, 90
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0005
+  rotate: false
+  xy: 1434, 2
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0006
+  rotate: false
   xy: 1694, 2
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0034
-  rotate: false
-  xy: 2, 90
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0041
-  rotate: false
-  xy: 262, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
@@ -88,23 +88,23 @@ conveyorVertical0047
   orig: 128, 256
   offset: 0, 0
   index: -1
-explosion0005
+explosion0008
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0032
   rotate: false
   xy: 1546, 1482
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0008
+explosion0065
   rotate: false
   xy: 1546, 938
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0064
-  rotate: false
-  xy: 1546, 394
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
@@ -220,156 +220,93 @@ cannonFireAnim135
   orig: 768, 768
   offset: 0, 0
   index: 17
-conveyorHorizontal0005
+conveyorHorizontal0007
   rotate: false
   xy: 2, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0006
+conveyorHorizontal0008
   rotate: false
   xy: 262, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0007
+conveyorHorizontal0009
   rotate: false
   xy: 522, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0008
+conveyorHorizontal0010
   rotate: false
   xy: 782, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0009
+conveyorHorizontal0011
   rotate: false
   xy: 1042, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0010
+conveyorHorizontal0012
   rotate: false
   xy: 1302, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0011
+conveyorHorizontal0013
   rotate: false
   xy: 1434, 262
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0012
+conveyorHorizontal0014
   rotate: false
   xy: 1694, 262
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorVertical0044
-  rotate: false
-  xy: 1302, 222
-  size: 128, 256
-  orig: 128, 256
-  offset: 0, 0
-  index: -1
-conveyorVertical0054
+conveyorVertical0048
   rotate: false
   xy: 1822, 2
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-explosion0060
+conveyorVertical0049
   rotate: false
-  xy: 1554, 938
+  xy: 1302, 222
+  size: 128, 256
+  orig: 128, 256
+  offset: 0, 0
+  index: -1
+explosion0059
+  rotate: false
+  xy: 1554, 1482
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0069
+explosion0060
   rotate: false
   xy: 1546, 394
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0094
+explosion0063
   rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0001
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0092
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0093
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0095
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0096
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0097
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0098
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0099
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0100
-  rotate: false
-  xy: 1554, 1482
+  xy: 1554, 938
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
@@ -377,6 +314,13 @@ explosion0100
 mineOFF
   rotate: false
   xy: 782, 134
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0044
+  rotate: false
+  xy: 1042, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -403,13 +347,6 @@ outline_hqframe0049
   offset: 0, 0
   index: -1
 outline_hqframe0050
-  rotate: false
-  xy: 1042, 134
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0051
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -450,133 +387,133 @@ cannonFireAnim247
   orig: 768, 768
   offset: 0, 0
   index: 15
-conveyorHorizontal0013
+conveyorHorizontal0015
   rotate: false
   xy: 2, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0014
+conveyorHorizontal0016
   rotate: false
   xy: 262, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0015
+conveyorHorizontal0017
   rotate: false
   xy: 522, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0016
+conveyorHorizontal0018
   rotate: false
   xy: 782, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0018
+conveyorHorizontal0019
   rotate: false
   xy: 1042, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0019
+conveyorHorizontal0020
   rotate: false
   xy: 1302, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0020
+conveyorHorizontal0021
   rotate: false
   xy: 1434, 262
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0021
+conveyorHorizontal0023
   rotate: false
   xy: 1694, 262
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorVertical0048
-  rotate: false
-  xy: 1302, 222
-  size: 128, 256
-  orig: 128, 256
-  offset: 0, 0
-  index: -1
-conveyorVertical0059
+conveyorVertical0055
   rotate: false
   xy: 1822, 2
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-explosion0004
+conveyorVertical0059
   rotate: false
-  xy: 1554, 938
-  size: 400, 540
-  orig: 400, 540
+  xy: 1302, 222
+  size: 128, 256
+  orig: 128, 256
   offset: 0, 0
   index: -1
-explosion0036
+explosion0004
   rotate: false
   xy: 1546, 394
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0070
+explosion0064
   rotate: false
   xy: 1554, 1482
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-outline_hqframe0052
+explosion0070
+  rotate: false
+  xy: 1554, 938
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+outline_hqframe0051
   rotate: false
   xy: 2, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0053
+outline_hqframe0052
   rotate: false
   xy: 262, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0054
+outline_hqframe0053
   rotate: false
   xy: 522, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0055
+outline_hqframe0054
   rotate: false
   xy: 782, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0056
+outline_hqframe0055
   rotate: false
   xy: 1042, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0057
+outline_hqframe0056
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -617,126 +554,189 @@ cannonFireAnim135
   orig: 768, 768
   offset: 0, 0
   index: 24
-conveyorHorizontal0023
+conveyorHorizontal0024
   rotate: false
   xy: 2, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0024
+conveyorHorizontal0025
   rotate: false
   xy: 262, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0025
+conveyorHorizontal0026
   rotate: false
   xy: 522, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0026
+conveyorHorizontal0027
   rotate: false
   xy: 782, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0027
+conveyorHorizontal0028
   rotate: false
   xy: 1042, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0028
+conveyorHorizontal0029
   rotate: false
   xy: 1302, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0029
+conveyorHorizontal0030
   rotate: false
   xy: 1434, 262
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0030
+conveyorHorizontal0031
   rotate: false
   xy: 1694, 262
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorVertical0049
-  rotate: false
-  xy: 1302, 222
-  size: 128, 256
-  orig: 128, 256
-  offset: 0, 0
-  index: -1
-conveyorVertical0055
+conveyorVertical0036
   rotate: false
   xy: 1822, 2
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-explosion0003
+conveyorVertical0057
   rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
+  xy: 1302, 222
+  size: 128, 256
+  orig: 128, 256
   offset: 0, 0
   index: -1
-explosion0010
-  rotate: false
-  xy: 1554, 938
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0011
+explosion0001
   rotate: false
   xy: 1546, 394
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-outline_hqframe0058
+explosion0092
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0093
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0094
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0095
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0096
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0097
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0098
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0099
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0100
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0002
+  rotate: false
+  xy: 1554, 1482
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0036
+  rotate: false
+  xy: 1554, 938
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+outline_hqframe0057
   rotate: false
   xy: 2, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0059
+outline_hqframe0058
   rotate: false
   xy: 262, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0060
+outline_hqframe0059
   rotate: false
-  xy: 782, 134
+  xy: 522, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0061
+outline_hqframe0060
   rotate: false
   xy: 1042, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0062
+outline_hqframe0061
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -745,7 +745,7 @@ outline_hqframe0062
   index: -1
 turretFrame0048
   rotate: false
-  xy: 522, 222
+  xy: 782, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -763,28 +763,28 @@ cannonFireAnim135
   orig: 768, 768
   offset: 0, 0
   index: 25
-cannonFireAnim315
+cannonFireAnim247
+  rotate: false
+  xy: 774, 482
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 22
+cannonFireAnim67
   rotate: false
   xy: 2, 482
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 5
-cannonFireAnim67
+cannonFireAnim90
   rotate: false
   xy: 782, 1254
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 5
-cannonFireAnim90
-  rotate: false
-  xy: 774, 482
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 18
-conveyorHorizontal0031
+conveyorHorizontal0032
   rotate: false
   xy: 2, 90
   size: 256, 128
@@ -798,42 +798,209 @@ conveyorHorizontal0033
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0035
+conveyorHorizontal0034
   rotate: false
   xy: 522, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0036
+conveyorHorizontal0035
   rotate: false
   xy: 782, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0037
+conveyorHorizontal0036
   rotate: false
   xy: 1042, 2
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0038
+conveyorHorizontal0037
   rotate: false
   xy: 1302, 90
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0039
+conveyorHorizontal0038
   rotate: false
   xy: 1434, 262
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
+conveyorHorizontal0039
+  rotate: false
+  xy: 1694, 262
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorVertical0045
+  rotate: false
+  xy: 1302, 222
+  size: 128, 256
+  orig: 128, 256
+  offset: 0, 0
+  index: -1
+conveyorVertical0046
+  rotate: false
+  xy: 1822, 2
+  size: 128, 256
+  orig: 128, 256
+  offset: 0, 0
+  index: -1
+explosion0003
+  rotate: false
+  xy: 1554, 1482
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0005
+  rotate: false
+  xy: 1554, 938
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0009
+  rotate: false
+  xy: 1546, 394
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+outline_hqframe0062
+  rotate: false
+  xy: 2, 222
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0063
+  rotate: false
+  xy: 262, 222
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0064
+  rotate: false
+  xy: 522, 222
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0065
+  rotate: false
+  xy: 782, 134
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0066
+  rotate: false
+  xy: 1042, 134
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0067
+  rotate: false
+  xy: 1562, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+animtiles6.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim22
+  rotate: false
+  xy: 774, 482
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 20
+cannonFireAnim270
+  rotate: false
+  xy: 2, 482
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 17
+cannonFireAnim270
+  rotate: false
+  xy: 782, 1254
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 8
+cannonFireAnim337
+  rotate: false
+  xy: 2, 1254
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 23
 conveyorHorizontal0040
+  rotate: false
+  xy: 2, 90
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0041
+  rotate: false
+  xy: 262, 90
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0042
+  rotate: false
+  xy: 522, 90
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0043
+  rotate: false
+  xy: 782, 2
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0044
+  rotate: false
+  xy: 1042, 2
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0045
+  rotate: false
+  xy: 1302, 90
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0046
+  rotate: false
+  xy: 1434, 262
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+conveyorHorizontal0047
   rotate: false
   xy: 1694, 262
   size: 256, 128
@@ -854,232 +1021,65 @@ conveyorVertical0001
   orig: 128, 256
   offset: 0, 0
   index: -1
-explosion0012
+explosion0010
   rotate: false
   xy: 1554, 1482
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0011
+  rotate: false
+  xy: 1554, 938
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
 explosion0013
   rotate: false
-  xy: 1554, 938
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0014
-  rotate: false
   xy: 1546, 394
   size: 400, 540
   orig: 400, 540
-  offset: 0, 0
-  index: -1
-outline_hqframe0063
-  rotate: false
-  xy: 2, 222
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0064
-  rotate: false
-  xy: 262, 222
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0065
-  rotate: false
-  xy: 522, 222
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0066
-  rotate: false
-  xy: 782, 134
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0067
-  rotate: false
-  xy: 1042, 134
-  size: 256, 256
-  orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0068
   rotate: false
-  xy: 1562, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-
-animtiles6.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim247
-  rotate: false
-  xy: 782, 1254
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 22
-cannonFireAnim337
-  rotate: false
-  xy: 774, 482
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 23
-cannonFireAnim45
-  rotate: false
-  xy: 2, 1254
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 9
-cannonFireAnim45
-  rotate: false
-  xy: 2, 482
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 24
-conveyorHorizontal0032
-  rotate: false
-  xy: 1694, 262
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0042
-  rotate: false
-  xy: 2, 90
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0043
-  rotate: false
-  xy: 262, 90
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0044
-  rotate: false
-  xy: 522, 90
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0045
-  rotate: false
-  xy: 782, 2
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0046
-  rotate: false
-  xy: 1042, 2
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0047
-  rotate: false
-  xy: 1302, 90
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorHorizontal0048
-  rotate: false
-  xy: 1434, 262
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-conveyorVertical0002
-  rotate: false
-  xy: 1302, 222
-  size: 128, 256
-  orig: 128, 256
-  offset: 0, 0
-  index: -1
-conveyorVertical0003
-  rotate: false
-  xy: 1822, 2
-  size: 128, 256
-  orig: 128, 256
-  offset: 0, 0
-  index: -1
-explosion0015
-  rotate: false
-  xy: 1554, 1482
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0016
-  rotate: false
-  xy: 1554, 938
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0017
-  rotate: false
-  xy: 1546, 394
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0048
-  rotate: false
-  xy: 1562, 2
+  xy: 2, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0069
   rotate: false
-  xy: 2, 222
+  xy: 262, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0070
   rotate: false
-  xy: 522, 222
+  xy: 782, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0071
   rotate: false
-  xy: 782, 134
+  xy: 1042, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0072
   rotate: false
-  xy: 1042, 134
+  xy: 1562, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0069
   rotate: false
-  xy: 262, 222
+  xy: 522, 222
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1090,63 +1090,63 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-conveyorHorizontal0017
+conveyorHorizontal0022
   rotate: false
   xy: 262, 1822
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorHorizontal0022
+conveyorHorizontal0048
   rotate: false
   xy: 2, 1822
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
-conveyorVertical0004
+conveyorVertical0002
   rotate: false
   xy: 1822, 1694
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0005
+conveyorVertical0003
   rotate: false
   xy: 1822, 1434
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0006
+conveyorVertical0004
   rotate: false
   xy: 1822, 1174
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0007
+conveyorVertical0005
   rotate: false
   xy: 1822, 914
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0008
+conveyorVertical0006
   rotate: false
   xy: 1822, 654
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0009
+conveyorVertical0007
   rotate: false
   xy: 1822, 394
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0010
+conveyorVertical0008
   rotate: false
   xy: 1822, 134
   size: 128, 256
@@ -1155,264 +1155,257 @@ conveyorVertical0010
   index: -1
 creepergenONframe
   rotate: false
-  xy: 782, 1694
+  xy: 1562, 1694
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0000
   rotate: false
-  xy: 782, 1434
+  xy: 1302, 1434
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0001
   rotate: false
-  xy: 1042, 1434
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0002
-  rotate: false
-  xy: 1302, 1434
+  xy: 1562, 1434
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0003
   rotate: false
-  xy: 1562, 1434
+  xy: 2, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0004
   rotate: false
-  xy: 2, 1302
+  xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0005
   rotate: false
-  xy: 262, 1302
+  xy: 522, 1174
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0006
   rotate: false
-  xy: 522, 1174
+  xy: 782, 1174
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0007
   rotate: false
-  xy: 782, 1174
+  xy: 1042, 1174
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0008
   rotate: false
-  xy: 1042, 1174
+  xy: 1302, 1174
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0009
   rotate: false
-  xy: 1302, 1174
+  xy: 1562, 1174
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0010
   rotate: false
-  xy: 2, 1042
+  xy: 522, 914
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0011
   rotate: false
-  xy: 262, 1042
+  xy: 782, 914
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0012
   rotate: false
-  xy: 522, 914
+  xy: 1042, 914
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0013
   rotate: false
-  xy: 782, 914
+  xy: 1302, 914
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0014
   rotate: false
-  xy: 1042, 914
+  xy: 1562, 914
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0015
   rotate: false
-  xy: 1302, 914
+  xy: 2, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0016
   rotate: false
-  xy: 1562, 914
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-factoryFrame0017
-  rotate: false
-  xy: 2, 782
+  xy: 262, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0018
   rotate: false
-  xy: 262, 782
+  xy: 522, 654
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0019
   rotate: false
-  xy: 522, 654
+  xy: 782, 654
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0021
   rotate: false
-  xy: 1562, 654
+  xy: 1302, 654
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0022
   rotate: false
-  xy: 2, 522
+  xy: 1562, 654
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0023
   rotate: false
-  xy: 262, 522
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0024
   rotate: false
-  xy: 522, 394
+  xy: 262, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0025
   rotate: false
-  xy: 782, 394
+  xy: 522, 394
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0026
   rotate: false
-  xy: 1042, 394
+  xy: 782, 394
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0027
   rotate: false
-  xy: 1302, 394
+  xy: 1042, 394
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0028
   rotate: false
-  xy: 1562, 394
+  xy: 1302, 394
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0029
   rotate: false
-  xy: 2, 262
+  xy: 1562, 394
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0030
   rotate: false
-  xy: 262, 262
+  xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0031
   rotate: false
-  xy: 522, 134
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0032
   rotate: false
-  xy: 782, 134
+  xy: 522, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0033
   rotate: false
-  xy: 1042, 134
+  xy: 782, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0034
   rotate: false
-  xy: 1302, 134
+  xy: 1042, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0035
   rotate: false
-  xy: 1562, 134
+  xy: 1302, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0036
   rotate: false
-  xy: 2, 2
+  xy: 1562, 134
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0037
+  rotate: false
+  xy: 2, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0038
   rotate: false
   xy: 262, 2
   size: 256, 256
@@ -1421,77 +1414,84 @@ factoryFrame0037
   index: -1
 factoryOFFframe
   rotate: false
-  xy: 1042, 1694
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0021
-  rotate: false
-  xy: 1302, 1694
+  xy: 2, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0040
   rotate: false
-  xy: 1302, 654
+  xy: 1042, 654
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 mineON
   rotate: false
-  xy: 1562, 1174
+  xy: 2, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0015
+outline_factoryFrame0001
   rotate: false
   xy: 522, 1434
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0011
+outline_factoryFrame0015
   rotate: false
-  xy: 782, 654
+  xy: 1042, 1434
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0024
+outline_factoryFrame0048
   rotate: false
-  xy: 1042, 654
+  xy: 1042, 1694
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0011
-  rotate: false
-  xy: 2, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-turretFrame0019
+outline_genframe0017
   rotate: false
   xy: 262, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0063
+outline_genframe0062
   rotate: false
   xy: 522, 1694
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0071
+outline_hqframe0008
   rotate: false
-  xy: 1562, 1694
+  xy: 782, 1694
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0030
+  rotate: false
+  xy: 262, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0019
+  rotate: false
+  xy: 782, 1434
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0063
+  rotate: false
+  xy: 1302, 1694
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1502,105 +1502,112 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-conveyorVertical0011
+conveyorVertical0009
   rotate: false
   xy: 1822, 1562
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0012
+conveyorVertical0010
   rotate: false
   xy: 1822, 1302
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0013
+conveyorVertical0011
   rotate: false
   xy: 1822, 1042
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0014
+conveyorVertical0012
   rotate: false
   xy: 1822, 782
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0015
+conveyorVertical0013
   rotate: false
   xy: 1822, 522
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0016
+conveyorVertical0014
   rotate: false
   xy: 1822, 262
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0017
+conveyorVertical0015
   rotate: false
   xy: 1822, 2
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-factoryFrame0038
+factoryFrame0017
   rotate: false
-  xy: 2, 1562
+  xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0039
   rotate: false
-  xy: 262, 1562
+  xy: 2, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0040
   rotate: false
-  xy: 522, 1562
+  xy: 262, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0041
   rotate: false
-  xy: 782, 1562
+  xy: 522, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0042
   rotate: false
-  xy: 1042, 1562
+  xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0043
   rotate: false
-  xy: 1302, 1562
+  xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0044
   rotate: false
-  xy: 1562, 1562
+  xy: 1302, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0045
+  rotate: false
+  xy: 1562, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0046
   rotate: false
   xy: 2, 1302
   size: 256, 256
@@ -1609,14 +1616,14 @@ factoryFrame0045
   index: -1
 factoryFrame0047
   rotate: false
-  xy: 522, 1302
+  xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 factoryFrame0048
   rotate: false
-  xy: 782, 1302
+  xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1873,23 +1880,16 @@ genframe0036
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0037
-  rotate: false
-  xy: 262, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 outline_factoryFrame0039
   rotate: false
-  xy: 1042, 522
+  xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0009
+turretFrame0037
   rotate: false
-  xy: 782, 522
+  xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -1900,53 +1900,60 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-conveyorVertical0018
+conveyorVertical0016
   rotate: false
   xy: 1822, 1562
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0019
+conveyorVertical0017
   rotate: false
   xy: 1822, 1302
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0020
+conveyorVertical0018
   rotate: false
   xy: 1822, 1042
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0021
+conveyorVertical0019
   rotate: false
   xy: 1822, 782
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0022
+conveyorVertical0020
   rotate: false
   xy: 1822, 522
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0023
+conveyorVertical0021
   rotate: false
   xy: 1822, 262
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0024
+conveyorVertical0022
   rotate: false
   xy: 1822, 2
   size: 128, 256
   orig: 128, 256
+  offset: 0, 0
+  index: -1
+factoryFrame0002
+  rotate: false
+  xy: 1562, 2
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0025
@@ -1979,231 +1986,238 @@ genframe0039
   index: -1
 genframe0040
   rotate: false
-  xy: 1042, 1562
+  xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0041
   rotate: false
-  xy: 1302, 1562
+  xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0042
   rotate: false
-  xy: 1562, 1562
+  xy: 1302, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0043
   rotate: false
-  xy: 2, 1302
+  xy: 1562, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0044
   rotate: false
-  xy: 262, 1302
+  xy: 2, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0045
   rotate: false
-  xy: 522, 1302
+  xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0046
   rotate: false
-  xy: 782, 1302
+  xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0047
   rotate: false
-  xy: 1042, 1302
+  xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0048
   rotate: false
-  xy: 1302, 1302
+  xy: 1042, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0049
   rotate: false
-  xy: 1562, 1302
+  xy: 1302, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0050
   rotate: false
-  xy: 262, 1042
+  xy: 2, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0051
   rotate: false
-  xy: 522, 1042
+  xy: 262, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0052
   rotate: false
-  xy: 782, 1042
+  xy: 522, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0053
   rotate: false
-  xy: 1042, 1042
+  xy: 782, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0054
   rotate: false
-  xy: 1302, 1042
+  xy: 1042, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0055
   rotate: false
-  xy: 1562, 1042
+  xy: 1302, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0056
   rotate: false
-  xy: 2, 782
+  xy: 1562, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0057
   rotate: false
-  xy: 262, 782
+  xy: 2, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0058
   rotate: false
-  xy: 522, 782
+  xy: 262, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0059
   rotate: false
-  xy: 782, 782
+  xy: 522, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0060
   rotate: false
-  xy: 1302, 782
+  xy: 1042, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0061
   rotate: false
-  xy: 1562, 782
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0062
   rotate: false
-  xy: 2, 522
+  xy: 1562, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0063
   rotate: false
-  xy: 262, 522
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0064
   rotate: false
-  xy: 522, 522
+  xy: 262, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0065
   rotate: false
-  xy: 782, 522
+  xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0066
   rotate: false
-  xy: 1042, 522
+  xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0067
   rotate: false
-  xy: 1302, 522
+  xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0068
   rotate: false
-  xy: 1562, 522
+  xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0069
   rotate: false
-  xy: 2, 262
+  xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0070
   rotate: false
-  xy: 262, 262
+  xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0071
   rotate: false
-  xy: 522, 262
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 genframe0072
   rotate: false
-  xy: 782, 262
+  xy: 522, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0010
+  rotate: false
+  xy: 1302, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2229,9 +2243,9 @@ outline_factoryFrame0010
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0013
+outline_factoryFrame0012
   rotate: false
-  xy: 1302, 262
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2257,37 +2271,23 @@ outline_factoryOFFframe
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0033
+outline_hqframe0020
   rotate: false
-  xy: 522, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-turretFrame0028
-  rotate: false
-  xy: 1562, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-turretFrame0034
-  rotate: false
-  xy: 782, 1562
+  xy: 782, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0038
   rotate: false
-  xy: 1042, 782
+  xy: 782, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0059
   rotate: false
-  xy: 2, 1042
+  xy: 1562, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2298,49 +2298,49 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-conveyorVertical0025
+conveyorVertical0023
   rotate: false
   xy: 1822, 1562
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0026
+conveyorVertical0024
   rotate: false
   xy: 1822, 1302
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0027
+conveyorVertical0025
   rotate: false
   xy: 1822, 1042
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0028
+conveyorVertical0026
   rotate: false
   xy: 1822, 782
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0029
+conveyorVertical0027
   rotate: false
   xy: 1822, 522
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0030
+conveyorVertical0028
   rotate: false
   xy: 1822, 262
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0031
+conveyorVertical0029
   rotate: false
   xy: 1822, 2
   size: 128, 256
@@ -2356,133 +2356,119 @@ creepergenOFFframe
   index: -1
 hqframe0001
   rotate: false
-  xy: 1042, 782
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0002
   rotate: false
-  xy: 1302, 782
+  xy: 1562, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0003
   rotate: false
-  xy: 1562, 782
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0004
   rotate: false
-  xy: 2, 522
+  xy: 262, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0006
+hqframe0005
   rotate: false
   xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0007
+hqframe0006
   rotate: false
   xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0008
+hqframe0007
   rotate: false
   xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0009
+hqframe0008
   rotate: false
   xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0010
+hqframe0009
   rotate: false
-  xy: 2, 2
+  xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0012
+hqframe0011
   rotate: false
   xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0013
+hqframe0012
   rotate: false
   xy: 782, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0014
+hqframe0013
   rotate: false
   xy: 1042, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0015
+hqframe0014
   rotate: false
   xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0016
+hqframe0015
   rotate: false
   xy: 1562, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0041
+outline_factoryFrame0011
   rotate: false
   xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0067
+outline_factoryFrame0029
   rotate: false
-  xy: 262, 522
+  xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0003
-  rotate: false
-  xy: 522, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0006
+outline_genframe0002
   rotate: false
   xy: 2, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0038
-  rotate: false
-  xy: 522, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2490,6 +2476,13 @@ outline_factoryFrame0038
 outline_genframe0013
   rotate: false
   xy: 262, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0066
+  rotate: false
+  xy: 522, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2557,6 +2550,13 @@ turretFrame0008
   orig: 256, 256
   offset: 0, 0
   index: -1
+turretFrame0009
+  rotate: false
+  xy: 522, 1042
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 turretFrame0010
   rotate: false
   xy: 782, 1042
@@ -2564,112 +2564,119 @@ turretFrame0010
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0012
+turretFrame0011
   rotate: false
   xy: 1042, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0013
+turretFrame0012
   rotate: false
   xy: 1302, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0014
+turretFrame0013
   rotate: false
   xy: 1562, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0015
+turretFrame0014
   rotate: false
   xy: 2, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0016
+turretFrame0015
   rotate: false
   xy: 262, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0017
+turretFrame0016
   rotate: false
   xy: 522, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0018
+turretFrame0017
   rotate: false
   xy: 782, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0020
+turretFrame0018
   rotate: false
-  xy: 1562, 522
+  xy: 1042, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0021
+turretFrame0020
   rotate: false
   xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0022
+turretFrame0021
   rotate: false
   xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0023
+turretFrame0022
   rotate: false
   xy: 522, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0024
+turretFrame0023
   rotate: false
   xy: 782, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0025
+turretFrame0024
   rotate: false
   xy: 1042, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0026
+turretFrame0025
   rotate: false
   xy: 1302, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0027
+turretFrame0026
   rotate: false
   xy: 1562, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0029
+turretFrame0027
+  rotate: false
+  xy: 2, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0028
   rotate: false
   xy: 262, 2
   size: 256, 256
@@ -2683,92 +2690,85 @@ turretFrame0049
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0070
-  rotate: false
-  xy: 1042, 1562
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 
 animtiles11.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-conveyorVertical0032
+conveyorVertical0030
   rotate: false
   xy: 1822, 1562
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0033
+conveyorVertical0031
   rotate: false
   xy: 1822, 1302
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0034
+conveyorVertical0032
   rotate: false
   xy: 1822, 1042
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0035
+conveyorVertical0033
   rotate: false
   xy: 1822, 782
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0036
+conveyorVertical0034
   rotate: false
   xy: 1822, 522
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0037
+conveyorVertical0035
   rotate: false
   xy: 1822, 262
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0038
+conveyorVertical0037
   rotate: false
   xy: 1822, 2
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-factoryFrame0046
-  rotate: false
-  xy: 2, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0017
+hqframe0016
   rotate: false
   xy: 2, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0018
+hqframe0017
   rotate: false
   xy: 262, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0019
+hqframe0018
   rotate: false
   xy: 522, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0019
+  rotate: false
+  xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2776,6 +2776,13 @@ hqframe0019
 hqframe0020
   rotate: false
   xy: 1042, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0021
+  rotate: false
+  xy: 1302, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -2838,201 +2845,194 @@ hqframe0029
   index: -1
 hqframe0030
   rotate: false
-  xy: 522, 522
+  xy: 262, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0031
   rotate: false
-  xy: 782, 522
+  xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0032
   rotate: false
-  xy: 1042, 522
+  xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0033
   rotate: false
-  xy: 1302, 522
+  xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0034
   rotate: false
-  xy: 1562, 522
+  xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0035
   rotate: false
-  xy: 2, 262
+  xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0036
   rotate: false
-  xy: 262, 262
+  xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0038
   rotate: false
-  xy: 522, 262
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0039
   rotate: false
-  xy: 782, 262
+  xy: 522, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0042
+hqframe0041
   rotate: false
   xy: 1562, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0014
-  rotate: false
-  xy: 2, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 outline_hqframe0022
   rotate: false
-  xy: 1042, 262
+  xy: 782, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0030
   rotate: false
-  xy: 782, 1562
+  xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0031
   rotate: false
-  xy: 1042, 1562
+  xy: 1302, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0032
   rotate: false
-  xy: 1302, 1562
+  xy: 1562, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0033
   rotate: false
-  xy: 1562, 1562
+  xy: 2, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0035
+turretFrame0034
   rotate: false
   xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0036
+turretFrame0035
   rotate: false
   xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0037
+turretFrame0036
   rotate: false
   xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0039
-  rotate: false
-  xy: 1302, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 turretFrame0040
   rotate: false
-  xy: 262, 782
+  xy: 2, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0041
   rotate: false
-  xy: 522, 782
+  xy: 262, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0042
   rotate: false
-  xy: 782, 782
+  xy: 522, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0043
   rotate: false
-  xy: 1042, 782
+  xy: 782, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0044
   rotate: false
-  xy: 1302, 782
+  xy: 1042, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0045
   rotate: false
-  xy: 1562, 782
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0046
   rotate: false
-  xy: 2, 522
+  xy: 1562, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0047
   rotate: false
-  xy: 262, 522
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0050
+  rotate: false
+  xy: 1042, 262
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0051
   rotate: false
   xy: 1302, 262
   size: 256, 256
@@ -3096,54 +3096,54 @@ filter: Nearest,Nearest
 repeat: xy
 ammoProcessor
   rotate: false
-  xy: 522, 262
+  xy: 1042, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-conveyorVertical0039
+conveyorVertical0038
   rotate: false
   xy: 1822, 1562
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0040
+conveyorVertical0039
   rotate: false
   xy: 1822, 1302
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0041
+conveyorVertical0040
   rotate: false
   xy: 1822, 1042
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0042
+conveyorVertical0041
   rotate: false
   xy: 1822, 782
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0043
+conveyorVertical0042
   rotate: false
   xy: 1822, 522
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0045
+conveyorVertical0043
   rotate: false
   xy: 1822, 262
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0046
+conveyorVertical0044
   rotate: false
   xy: 1822, 2
   size: 128, 256
@@ -3152,63 +3152,63 @@ conveyorVertical0046
   index: -1
 factoryFrame0020
   rotate: false
-  xy: 2, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0005
-  rotate: false
   xy: 1562, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0043
+hqframe0042
   rotate: false
   xy: 2, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0044
+hqframe0043
   rotate: false
   xy: 262, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0045
+hqframe0044
   rotate: false
   xy: 522, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0046
+hqframe0045
   rotate: false
   xy: 782, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0047
+hqframe0046
   rotate: false
   xy: 1042, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0048
+hqframe0047
   rotate: false
   xy: 1302, 1562
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0049
+hqframe0048
   rotate: false
   xy: 1562, 1562
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+hqframe0049
+  rotate: false
+  xy: 2, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -3285,117 +3285,103 @@ hqframe0059
   index: -1
 hqframe0060
   rotate: false
-  xy: 522, 782
+  xy: 1042, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0061
   rotate: false
-  xy: 782, 782
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0062
   rotate: false
-  xy: 1042, 782
+  xy: 1562, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0063
   rotate: false
-  xy: 1302, 782
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0064
   rotate: false
-  xy: 1562, 782
+  xy: 262, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0065
   rotate: false
-  xy: 2, 522
+  xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 hqframe0066
   rotate: false
-  xy: 262, 522
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-hqframe0068
-  rotate: false
   xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0069
+hqframe0067
   rotate: false
   xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0070
+hqframe0068
   rotate: false
   xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0071
+hqframe0069
   rotate: false
   xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-hqframe0072
+hqframe0070
   rotate: false
   xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0002
+hqframe0071
   rotate: false
-  xy: 782, 262
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0035
+hqframe0072
   rotate: false
-  xy: 1302, 262
+  xy: 522, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0000
   rotate: false
-  xy: 782, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0001
-  rotate: false
   xy: 1042, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0002
+outline_genframe0001
   rotate: false
   xy: 1302, 2
   size: 256, 256
@@ -3409,70 +3395,70 @@ outline_genframe0003
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0057
+outline_genframe0021
   rotate: false
-  xy: 262, 262
+  xy: 782, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0013
+outline_genframe0022
   rotate: false
-  xy: 522, 522
+  xy: 1302, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shipdock
   rotate: false
-  xy: 522, 2
+  xy: 782, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0029
+  rotate: false
+  xy: 262, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0039
+  rotate: false
+  xy: 522, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0060
   rotate: false
-  xy: 2, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-turretFrame0061
-  rotate: false
-  xy: 1042, 262
+  xy: 262, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0062
   rotate: false
-  xy: 262, 1302
+  xy: 522, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0064
   rotate: false
-  xy: 522, 1302
+  xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 turretFrame0065
   rotate: false
-  xy: 782, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-turretFrame0066
-  rotate: false
   xy: 1042, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0067
+turretFrame0066
   rotate: false
   xy: 1302, 1302
   size: 256, 256
@@ -3481,7 +3467,21 @@ turretFrame0067
   index: -1
 turretFrame0068
   rotate: false
-  xy: 262, 2
+  xy: 2, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0070
+  rotate: false
+  xy: 782, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0071
+  rotate: false
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -3520,39 +3520,25 @@ conveyorVertical0053
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0056
+conveyorVertical0054
   rotate: false
   xy: 1822, 522
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0057
+conveyorVertical0058
   rotate: false
   xy: 1822, 262
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-conveyorVertical0058
+conveyorVertical0060
   rotate: false
   xy: 1822, 2
   size: 128, 256
   orig: 128, 256
-  offset: 0, 0
-  index: -1
-hqframe0011
-  rotate: false
-  xy: 2, 1302
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0029
-  rotate: false
-  xy: 522, 1302
-  size: 256, 256
-  orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0004
@@ -3604,6 +3590,13 @@ outline_genframe0010
   orig: 256, 256
   offset: 0, 0
   index: -1
+outline_genframe0011
+  rotate: false
+  xy: 2, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 outline_genframe0012
   rotate: false
   xy: 262, 1302
@@ -3613,12 +3606,19 @@ outline_genframe0012
   index: -1
 outline_genframe0014
   rotate: false
+  xy: 522, 1302
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0015
+  rotate: false
   xy: 782, 1302
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0017
+outline_genframe0016
   rotate: false
   xy: 1042, 1302
   size: 256, 256
@@ -3641,245 +3641,245 @@ outline_genframe0019
   index: -1
 outline_genframe0020
   rotate: false
-  xy: 782, 782
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0021
-  rotate: false
   xy: 2, 1042
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0022
-  rotate: false
-  xy: 262, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0023
   rotate: false
-  xy: 522, 1042
+  xy: 262, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0024
   rotate: false
-  xy: 782, 1042
+  xy: 522, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0025
   rotate: false
-  xy: 1042, 1042
+  xy: 782, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0026
   rotate: false
-  xy: 1302, 1042
+  xy: 1042, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0027
   rotate: false
-  xy: 1562, 1042
+  xy: 1302, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0028
   rotate: false
-  xy: 2, 782
+  xy: 1562, 1042
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0029
   rotate: false
-  xy: 262, 782
+  xy: 2, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0030
   rotate: false
-  xy: 1042, 782
+  xy: 262, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0031
   rotate: false
-  xy: 1302, 782
+  xy: 522, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0032
   rotate: false
-  xy: 1562, 782
+  xy: 782, 782
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0033
+  rotate: false
+  xy: 1042, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0034
   rotate: false
-  xy: 2, 522
+  xy: 1302, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0035
   rotate: false
-  xy: 262, 522
+  xy: 1562, 782
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0036
   rotate: false
-  xy: 522, 522
+  xy: 2, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0037
   rotate: false
-  xy: 782, 522
+  xy: 262, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0038
   rotate: false
-  xy: 1042, 522
+  xy: 522, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0039
   rotate: false
-  xy: 1302, 522
+  xy: 782, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0040
   rotate: false
-  xy: 1562, 522
+  xy: 1042, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0041
   rotate: false
-  xy: 2, 262
+  xy: 1302, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0042
   rotate: false
-  xy: 262, 262
+  xy: 1562, 522
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0043
   rotate: false
-  xy: 522, 262
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0044
-  rotate: false
-  xy: 782, 262
+  xy: 2, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0045
   rotate: false
-  xy: 1042, 262
+  xy: 262, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0046
   rotate: false
-  xy: 1302, 262
+  xy: 522, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0047
   rotate: false
-  xy: 1562, 262
+  xy: 782, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0048
   rotate: false
-  xy: 2, 2
+  xy: 1042, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0049
   rotate: false
-  xy: 262, 2
+  xy: 1302, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0050
   rotate: false
-  xy: 522, 2
+  xy: 2, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0051
   rotate: false
-  xy: 782, 2
+  xy: 262, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0052
   rotate: false
-  xy: 1042, 2
+  xy: 522, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0053
   rotate: false
-  xy: 1302, 2
+  xy: 782, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_genframe0054
   rotate: false
+  xy: 1042, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0055
+  rotate: false
+  xy: 1302, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_genframe0056
+  rotate: false
   xy: 1562, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-turretFrame0051
+turretFrame0061
   rotate: false
-  xy: 522, 782
+  xy: 1562, 262
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -3890,86 +3890,79 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim112
-  rotate: false
-  xy: 774, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 8
-cannonFireAnim270
+cannonFireAnim202
   rotate: false
   xy: 2, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 17
-cannonFireAnim270
-  rotate: false
-  xy: 774, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 8
-cannonFireAnim337
+cannonFireAnim22
   rotate: false
   xy: 2, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 5
-conveyorVertical0060
+  index: 0
+cannonFireAnim22
+  rotate: false
+  xy: 774, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 1
+cannonFireAnim22
+  rotate: false
+  xy: 774, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 2
+conveyorVertical0056
   rotate: false
   xy: 1302, 90
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
-explosion0018
+explosion0014
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0019
+explosion0015
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0020
+explosion0016
   rotate: false
   xy: 1546, 262
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-outline_genframe0055
+outline_genframe0057
   rotate: false
   xy: 2, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0056
+outline_genframe0058
   rotate: false
   xy: 262, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0058
-  rotate: false
-  xy: 522, 90
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 outline_genframe0059
   rotate: false
-  xy: 782, 90
+  xy: 522, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -3988,9 +3981,16 @@ outline_genframe0061
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0062
+outline_genframe0063
   rotate: false
   xy: 1694, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+turretFrame0067
+  rotate: false
+  xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -4001,98 +4001,98 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim202
-  rotate: false
-  xy: 2, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 8
 cannonFireAnim22
   rotate: false
   xy: 2, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 20
+  index: 3
+cannonFireAnim22
+  rotate: false
+  xy: 2, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 4
+cannonFireAnim22
+  rotate: false
+  xy: 774, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 5
 cannonFireAnim22
   rotate: false
   xy: 774, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 0
-cannonFireAnim292
-  rotate: false
-  xy: 774, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 16
-explosion0021
+  index: 6
+explosion0017
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0022
+explosion0018
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0023
+explosion0019
   rotate: false
   xy: 1546, 262
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-outline_genframe0063
+outline_genframe0064
   rotate: false
   xy: 2, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0064
+outline_genframe0065
   rotate: false
   xy: 262, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0065
+outline_genframe0067
   rotate: false
   xy: 522, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0066
+outline_genframe0068
   rotate: false
   xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0067
+outline_genframe0069
   rotate: false
   xy: 1042, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0068
+outline_genframe0070
   rotate: false
   xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0069
+outline_genframe0071
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -4111,64 +4111,78 @@ cannonFireAnim22
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 1
+  index: 7
 cannonFireAnim22
   rotate: false
   xy: 2, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 2
+  index: 8
 cannonFireAnim22
   rotate: false
   xy: 774, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 3
-cannonFireAnim22
+  index: 9
+cannonFireAnim45
   rotate: false
   xy: 774, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 4
-explosion0024
+  index: 23
+explosion0020
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0025
+explosion0021
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0026
+explosion0022
   rotate: false
   xy: 1546, 262
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-outline_factoryFrame0001
+outline_factoryFrame0002
   rotate: false
-  xy: 782, 90
+  xy: 262, 90
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0003
+  rotate: false
+  xy: 522, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0004
   rotate: false
-  xy: 1042, 90
+  xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0005
+  rotate: false
+  xy: 1042, 90
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0006
   rotate: false
   xy: 1302, 2
   size: 256, 256
@@ -4182,23 +4196,9 @@ outline_factoryFrame0007
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0070
-  rotate: false
-  xy: 2, 90
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_genframe0071
-  rotate: false
-  xy: 262, 90
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 outline_genframe0072
   rotate: false
-  xy: 522, 90
+  xy: 2, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -4209,53 +4209,60 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim22
+cannonFireAnim202
   rotate: false
   xy: 2, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 6
-cannonFireAnim22
-  rotate: false
-  xy: 2, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 7
-cannonFireAnim22
-  rotate: false
-  xy: 774, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 8
+  index: 14
 cannonFireAnim22
   rotate: false
   xy: 774, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 9
-explosion0027
+  index: 10
+cannonFireAnim247
+  rotate: false
+  xy: 774, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 0
+cannonFireAnim292
+  rotate: false
+  xy: 2, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 19
+explosion0023
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0028
+explosion0024
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0029
+explosion0025
   rotate: false
   xy: 1546, 262
   size: 400, 540
   orig: 400, 540
+  offset: 0, 0
+  index: -1
+hqframe0037
+  rotate: false
+  xy: 522, 90
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0008
@@ -4272,35 +4279,28 @@ outline_factoryFrame0009
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0011
-  rotate: false
-  xy: 522, 90
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_factoryFrame0012
+outline_factoryFrame0013
   rotate: false
   xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0016
+outline_factoryFrame0014
   rotate: false
   xy: 1042, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0017
+outline_factoryFrame0016
   rotate: false
   xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0018
+outline_factoryFrame0017
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -4313,98 +4313,98 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim202
-  rotate: false
-  xy: 774, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 14
 cannonFireAnim22
   rotate: false
   xy: 2, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 5
-cannonFireAnim292
-  rotate: false
-  xy: 774, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 19
-cannonFireAnim45
+  index: 11
+cannonFireAnim22
   rotate: false
   xy: 2, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 23
-explosion0030
+  index: 12
+cannonFireAnim22
+  rotate: false
+  xy: 774, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 14
+cannonFireAnim67
+  rotate: false
+  xy: 774, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 3
+explosion0026
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0031
+explosion0027
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0032
+explosion0028
   rotate: false
   xy: 1546, 262
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-outline_hqframe0001
+outline_factoryFrame0018
   rotate: false
   xy: 2, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0002
+outline_hqframe0001
   rotate: false
   xy: 262, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0003
+outline_hqframe0002
   rotate: false
   xy: 522, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0004
+outline_hqframe0003
   rotate: false
   xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0005
+outline_hqframe0004
   rotate: false
   xy: 1042, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0006
+outline_hqframe0005
   rotate: false
   xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0007
+outline_hqframe0006
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -4419,47 +4419,47 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim22
   rotate: false
+  xy: 2, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 15
+cannonFireAnim22
+  rotate: false
   xy: 2, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
+  index: 16
 cannonFireAnim22
   rotate: false
   xy: 774, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 11
+  index: 17
 cannonFireAnim22
   rotate: false
   xy: 774, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 12
-cannonFireAnim247
-  rotate: false
-  xy: 2, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 0
-explosion0033
+  index: 18
+explosion0029
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0034
+explosion0030
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0035
+explosion0031
   rotate: false
   xy: 1546, 262
   size: 400, 540
@@ -4501,7 +4501,7 @@ outline_factoryFrame0024
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0008
+outline_hqframe0007
   rotate: false
   xy: 2, 90
   size: 256, 256
@@ -4521,51 +4521,51 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim22
-  rotate: false
-  xy: 2, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 13
-cannonFireAnim22
-  rotate: false
-  xy: 774, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 15
-cannonFireAnim22
+cannonFireAnim157
   rotate: false
   xy: 774, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 16
-cannonFireAnim67
+  index: 1
+cannonFireAnim202
+  rotate: false
+  xy: 774, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 18
+cannonFireAnim247
   rotate: false
   xy: 2, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 4
-explosion0006
+  index: 7
+cannonFireAnim67
   rotate: false
-  xy: 1546, 262
-  size: 400, 540
-  orig: 400, 540
+  xy: 2, 1122
+  size: 768, 768
+  orig: 768, 768
   offset: 0, 0
-  index: -1
-explosion0037
+  index: 9
+explosion0033
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0038
+explosion0034
   rotate: false
   xy: 1546, 806
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0035
+  rotate: false
+  xy: 1546, 262
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
@@ -4612,7 +4612,7 @@ outline_hqframe0012
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0014
+outline_hqframe0013
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -4625,49 +4625,49 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim202
-  rotate: false
-  xy: 774, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 18
 cannonFireAnim22
-  rotate: false
-  xy: 2, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 17
-cannonFireAnim22
-  rotate: false
-  xy: 2, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 18
-cannonFireAnim247
   rotate: false
   xy: 774, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 7
-explosion0040
+  index: 21
+cannonFireAnim270
+  rotate: false
+  xy: 2, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 9
+cannonFireAnim67
+  rotate: false
+  xy: 2, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 10
+cannonFireAnim67
+  rotate: false
+  xy: 774, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 12
+explosion0037
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0041
+explosion0038
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0042
+explosion0039
   rotate: false
   xy: 1546, 262
   size: 400, 540
@@ -4681,44 +4681,44 @@ outline_factoryFrame0030
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0015
-  rotate: false
-  xy: 1302, 2
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-outline_hqframe0015
+outline_hqframe0014
   rotate: false
   xy: 2, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0016
+outline_hqframe0015
   rotate: false
   xy: 262, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0017
+outline_hqframe0016
   rotate: false
   xy: 522, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0018
+outline_hqframe0017
   rotate: false
   xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0019
+outline_hqframe0018
   rotate: false
   xy: 1042, 90
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+outline_hqframe0019
+  rotate: false
+  xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -4729,21 +4729,21 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim157
+cannonFireAnim22
   rotate: false
   xy: 2, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 1
-cannonFireAnim270
+  index: 23
+cannonFireAnim22
   rotate: false
   xy: 774, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 9
-cannonFireAnim337
+  index: 25
+cannonFireAnim67
   rotate: false
   xy: 2, 350
   size: 768, 768
@@ -4756,22 +4756,22 @@ cannonFireAnim67
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
-explosion0043
+  index: 16
+explosion0006
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0044
+explosion0040
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0045
+explosion0041
   rotate: false
   xy: 1546, 262
   size: 400, 540
@@ -4799,28 +4799,28 @@ outline_factoryFrame0034
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0036
+outline_factoryFrame0035
   rotate: false
   xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0037
+outline_factoryFrame0036
   rotate: false
   xy: 1042, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0020
+outline_factoryFrame0037
   rotate: false
   xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0021
+outline_factoryFrame0038
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -4833,49 +4833,49 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim22
-  rotate: false
-  xy: 2, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 21
-cannonFireAnim22
-  rotate: false
-  xy: 2, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 22
-cannonFireAnim22
-  rotate: false
-  xy: 774, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 23
-cannonFireAnim67
+cannonFireAnim112
   rotate: false
   xy: 774, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 14
-explosion0046
+  index: 21
+cannonFireAnim67
+  rotate: false
+  xy: 2, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 17
+cannonFireAnim67
+  rotate: false
+  xy: 2, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 18
+cannonFireAnim67
+  rotate: false
+  xy: 774, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 19
+explosion0042
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0047
+explosion0043
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0048
+explosion0044
   rotate: false
   xy: 1546, 262
   size: 400, 540
@@ -4884,47 +4884,47 @@ explosion0048
   index: -1
 outline_factoryFrame0019
   rotate: false
-  xy: 2, 90
+  xy: 262, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_genframe0016
+outline_hqframe0021
   rotate: false
-  xy: 522, 90
+  xy: 2, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0023
   rotate: false
-  xy: 262, 90
+  xy: 522, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0025
+outline_hqframe0024
   rotate: false
   xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0026
+outline_hqframe0025
   rotate: false
   xy: 1042, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0027
+outline_hqframe0026
   rotate: false
   xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0028
+outline_hqframe0027
   rotate: false
   xy: 1562, 2
   size: 256, 256
@@ -4937,49 +4937,49 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim22
+cannonFireAnim45
+  rotate: false
+  xy: 774, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 0
+cannonFireAnim45
+  rotate: false
+  xy: 774, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 1
+cannonFireAnim67
   rotate: false
   xy: 2, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 25
+  index: 20
 cannonFireAnim67
   rotate: false
   xy: 2, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 16
-cannonFireAnim67
-  rotate: false
-  xy: 774, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 17
-cannonFireAnim67
-  rotate: false
-  xy: 774, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 18
-explosion0049
+  index: 21
+explosion0045
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0050
+explosion0046
   rotate: false
   xy: 1546, 806
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0051
+explosion0047
   rotate: false
   xy: 1546, 262
   size: 400, 540
@@ -4988,49 +4988,49 @@ explosion0051
   index: -1
 outline_factoryFrame0040
   rotate: false
-  xy: 262, 90
+  xy: 522, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0041
   rotate: false
-  xy: 522, 90
+  xy: 782, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0042
   rotate: false
-  xy: 782, 90
+  xy: 1042, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0043
   rotate: false
-  xy: 1042, 90
+  xy: 1302, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_factoryFrame0044
   rotate: false
-  xy: 1302, 2
+  xy: 1562, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0045
+outline_hqframe0028
   rotate: false
-  xy: 1562, 2
+  xy: 2, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 outline_hqframe0029
   rotate: false
-  xy: 2, 90
+  xy: 262, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -5041,70 +5041,70 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim112
-  rotate: false
-  xy: 774, 1122
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 21
-cannonFireAnim292
-  rotate: false
-  xy: 2, 350
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 22
-cannonFireAnim67
+cannonFireAnim45
   rotate: false
   xy: 2, 1122
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 19
-cannonFireAnim67
+  index: 2
+cannonFireAnim45
+  rotate: false
+  xy: 2, 350
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 3
+cannonFireAnim45
+  rotate: false
+  xy: 774, 1122
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 4
+cannonFireAnim45
   rotate: false
   xy: 774, 350
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 20
-explosion0052
+  index: 5
+explosion0048
   rotate: false
   xy: 1546, 1350
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0053
-  rotate: false
-  xy: 1546, 806
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0054
+explosion0050
   rotate: false
   xy: 1546, 262
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-outline_factoryFrame0046
+explosion0054
+  rotate: false
+  xy: 1546, 806
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+outline_factoryFrame0045
   rotate: false
   xy: 2, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_factoryFrame0047
+outline_factoryFrame0046
   rotate: false
   xy: 262, 90
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-outline_hqframe0030
+outline_factoryFrame0047
   rotate: false
   xy: 522, 90
   size: 256, 256
@@ -5145,49 +5145,49 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
+cannonFireAnim270
+  rotate: false
+  xy: 774, 1034
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 18
+cannonFireAnim45
+  rotate: false
+  xy: 2, 1034
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 6
 cannonFireAnim45
   rotate: false
   xy: 2, 262
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 0
-cannonFireAnim45
-  rotate: false
-  xy: 774, 1034
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 1
+  index: 8
 cannonFireAnim45
   rotate: false
   xy: 774, 262
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 2
-cannonFireAnim67
-  rotate: false
-  xy: 2, 1034
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 21
-explosion0055
+  index: 10
+explosion0051
   rotate: false
   xy: 1546, 1262
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0056
+explosion0052
   rotate: false
   xy: 1546, 718
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0057
+explosion0053
   rotate: false
   xy: 1546, 174
   size: 400, 540
@@ -5244,7 +5244,7 @@ ammoProcessorPreview512
   index: -1
 artilleryPreview512
   rotate: false
-  xy: 518, 602
+  xy: 1034, 602
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
@@ -5256,39 +5256,25 @@ creeperGeneratorPreview512
   orig: 512, 512
   offset: 0, 0
   index: -1
-explosion0058
+explosion0055
   rotate: false
   xy: 1550, 1090
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0059
+explosion0056
   rotate: false
   xy: 1550, 546
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0061
+explosion0057
   rotate: false
   xy: 1550, 2
   size: 400, 540
   orig: 400, 540
-  offset: 0, 0
-  index: -1
-exporterPreview
-  rotate: false
-  xy: 1034, 602
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-factoryPreview512
-  rotate: false
-  xy: 1034, 86
-  size: 512, 512
-  orig: 512, 512
   offset: 0, 0
   index: -1
 importerPreview
@@ -5305,7 +5291,21 @@ minePreview512
   orig: 512, 512
   offset: 0, 0
   index: -1
+missingIconImage
+  rotate: false
+  xy: 518, 602
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 nodePreview512
+  rotate: false
+  xy: 1034, 86
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+selectReticle
   rotate: false
   xy: 518, 86
   size: 512, 512
@@ -5325,100 +5325,93 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-explosion0062
+explosion0058
   rotate: false
   xy: 1550, 1090
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0063
+explosion0061
   rotate: false
-  xy: 2, 574
+  xy: 1034, 574
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0065
+explosion0062
   rotate: false
-  xy: 406, 574
+  xy: 1438, 546
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
 explosion0066
   rotate: false
-  xy: 810, 574
+  xy: 2, 58
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
 explosion0067
   rotate: false
-  xy: 1214, 546
+  xy: 406, 58
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
 explosion0068
   rotate: false
-  xy: 1618, 546
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0071
-  rotate: false
-  xy: 2, 30
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0072
-  rotate: false
-  xy: 406, 30
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0073
-  rotate: false
   xy: 810, 30
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0074
+explosion0069
   rotate: false
   xy: 1214, 2
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0075
+explosion0071
   rotate: false
   xy: 1618, 2
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-generatorPreview512
+exporterPreview
   rotate: false
-  xy: 1034, 1118
+  xy: 2, 1118
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
-hqPreview512
+factoryPreview512
   rotate: false
   xy: 518, 1118
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
+generatorPreview512
+  rotate: false
+  xy: 518, 602
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+hqPreview512
+  rotate: false
+  xy: 2, 602
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 turretPreview512
   rotate: false
-  xy: 2, 1118
+  xy: 1034, 1118
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
@@ -5429,105 +5422,105 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-explosion0076
+explosion0072
   rotate: false
   xy: 2, 1090
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0077
+explosion0073
   rotate: false
   xy: 406, 1090
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0078
+explosion0074
   rotate: false
   xy: 810, 1090
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0079
+explosion0075
   rotate: false
   xy: 1214, 1090
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0080
+explosion0076
   rotate: false
   xy: 1618, 1090
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0081
+explosion0077
   rotate: false
   xy: 2, 546
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0083
+explosion0078
   rotate: false
   xy: 406, 546
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0084
+explosion0079
   rotate: false
   xy: 810, 546
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0085
+explosion0080
   rotate: false
   xy: 1214, 546
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0086
+explosion0081
   rotate: false
   xy: 1618, 546
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0087
+explosion0082
   rotate: false
   xy: 2, 2
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0088
+explosion0083
   rotate: false
   xy: 406, 2
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0089
+explosion0084
   rotate: false
   xy: 810, 2
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0090
+explosion0085
   rotate: false
   xy: 1214, 2
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0091
+explosion0086
   rotate: false
   xy: 1618, 2
   size: 400, 540
@@ -5546,43 +5539,43 @@ cannonFireAnim45
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 3
+  index: 11
 cannonFireAnim45
   rotate: false
   xy: 2, 90
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 4
+  index: 12
 cannonFireAnim45
   rotate: false
   xy: 774, 862
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 5
+  index: 13
 cannonFireAnim45
   rotate: false
   xy: 774, 90
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 6
-explosion0007
-  rotate: false
-  xy: 1546, 546
-  size: 400, 540
-  orig: 400, 540
-  offset: 0, 0
-  index: -1
-explosion0009
+  index: 14
+explosion0087
   rotate: false
   xy: 1546, 1090
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0039
+explosion0088
+  rotate: false
+  xy: 1546, 546
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0089
   rotate: false
   xy: 1546, 2
   size: 400, 540
@@ -5597,42 +5590,49 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim45
   rotate: false
-  xy: 2, 774
+  xy: 2, 862
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 8
+  index: 15
 cannonFireAnim45
   rotate: false
-  xy: 2, 2
+  xy: 2, 90
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
+  index: 16
 cannonFireAnim45
   rotate: false
-  xy: 774, 774
+  xy: 774, 862
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 11
+  index: 17
 cannonFireAnim45
   rotate: false
-  xy: 774, 2
+  xy: 774, 90
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 12
-explosion0002
+  index: 18
+explosion0012
   rotate: false
-  xy: 1546, 458
+  xy: 1546, 2
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
   index: -1
-explosion0082
+explosion0090
   rotate: false
-  xy: 1546, 1002
+  xy: 1546, 1090
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
+explosion0091
+  rotate: false
+  xy: 1546, 546
   size: 400, 540
   orig: 400, 540
   offset: 0, 0
@@ -5643,40 +5643,13 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim45
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 13
-cannonFireAnim45
+cannonFireAnim202
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 14
-cannonFireAnim45
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 15
-cannonFireAnim45
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 16
-
-animtiles33.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
+  index: 0
 cannonFireAnim202
   rotate: false
   xy: 774, 774
@@ -5691,22 +5664,29 @@ cannonFireAnim202
   orig: 768, 768
   offset: 0, 0
   index: 2
-cannonFireAnim45
+cannonFireAnim67
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 17
-cannonFireAnim45
+  index: 0
+explosion0007
   rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
+  xy: 1546, 1002
+  size: 400, 540
+  orig: 400, 540
   offset: 0, 0
-  index: 18
+  index: -1
+explosion0049
+  rotate: false
+  xy: 1546, 458
+  size: 400, 540
+  orig: 400, 540
+  offset: 0, 0
+  index: -1
 
-animtiles34.png
+animtiles33.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -5740,7 +5720,7 @@ cannonFireAnim202
   offset: 0, 0
   index: 5
 
-animtiles35.png
+animtiles34.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -5774,7 +5754,7 @@ cannonFireAnim0
   offset: 0, 0
   index: 6
 
-animtiles36.png
+animtiles35.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -5808,39 +5788,73 @@ cannonFireAnim45
   offset: 0, 0
   index: 25
 
-animtiles37.png
+animtiles36.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim202
   rotate: false
-  xy: 2, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 10
 cannonFireAnim202
   rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 11
-cannonFireAnim202
-  rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 12
-cannonFireAnim270
+  index: 11
+cannonFireAnim225
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
+  index: 9
+cannonFireAnim270
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
   index: 11
+
+animtiles37.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim0
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 11
+cannonFireAnim112
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 18
+cannonFireAnim202
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 12
+cannonFireAnim202
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 13
 
 animtiles38.png
 size: 2048,2048
@@ -5849,32 +5863,32 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim0
   rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 12
+cannonFireAnim0
+  rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
+  index: 13
 cannonFireAnim0
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 11
+  index: 14
 cannonFireAnim0
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 12
-cannonFireAnim202
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 13
+  index: 15
 
 animtiles39.png
 size: 2048,2048
@@ -5887,58 +5901,58 @@ cannonFireAnim0
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 13
+  index: 16
 cannonFireAnim0
   rotate: false
   xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 14
-cannonFireAnim0
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 15
-cannonFireAnim0
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 16
-
-animtiles40.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim0
-  rotate: false
-  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 17
 cannonFireAnim0
   rotate: false
-  xy: 2, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 18
 cannonFireAnim0
   rotate: false
-  xy: 774, 774
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 19
-cannonFireAnim67
+
+animtiles40.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim202
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 20
+cannonFireAnim202
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 21
+cannonFireAnim202
   rotate: false
   xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 22
+cannonFireAnim67
+  rotate: false
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -5949,30 +5963,30 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim202
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 20
-cannonFireAnim202
+cannonFireAnim0
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 21
-cannonFireAnim202
+  index: 20
+cannonFireAnim0
   rotate: false
   xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 21
+cannonFireAnim0
+  rotate: false
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 22
 cannonFireAnim202
   rotate: false
-  xy: 774, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -5989,44 +6003,17 @@ cannonFireAnim0
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 20
+  index: 23
 cannonFireAnim0
   rotate: false
   xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 21
-cannonFireAnim0
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 23
-cannonFireAnim247
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 16
-
-animtiles43.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim0
-  rotate: false
-  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 24
 cannonFireAnim0
   rotate: false
-  xy: 2, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -6038,15 +6025,8 @@ cannonFireAnim135
   orig: 768, 768
   offset: 0, 0
   index: 0
-cannonFireAnim225
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 22
 
-animtiles44.png
+animtiles43.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -6079,6 +6059,40 @@ cannonFireAnim247
   orig: 768, 768
   offset: 0, 0
   index: 23
+
+animtiles44.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim225
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 2
+cannonFireAnim225
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 4
+cannonFireAnim225
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 5
+cannonFireAnim67
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 13
 
 animtiles45.png
 size: 2048,2048
@@ -6091,40 +6105,6 @@ cannonFireAnim225
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 2
-cannonFireAnim225
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 4
-cannonFireAnim225
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 5
-cannonFireAnim67
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 13
-
-animtiles46.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim225
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 6
 cannonFireAnim225
   rotate: false
@@ -6140,15 +6120,15 @@ cannonFireAnim225
   orig: 768, 768
   offset: 0, 0
   index: 8
-cannonFireAnim225
+cannonFireAnim247
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 9
+  index: 25
 
-animtiles47.png
+animtiles46.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -6181,6 +6161,40 @@ cannonFireAnim292
   orig: 768, 768
   offset: 0, 0
   index: 14
+
+animtiles47.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim225
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 13
+cannonFireAnim225
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 14
+cannonFireAnim225
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 15
+cannonFireAnim225
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 16
 
 animtiles48.png
 size: 2048,2048
@@ -6193,370 +6207,336 @@ cannonFireAnim225
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 13
-cannonFireAnim225
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 14
-cannonFireAnim225
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 15
-cannonFireAnim225
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 16
-
-animtiles49.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim225
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 17
-cannonFireAnim225
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 18
 cannonFireAnim225
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 19
-cannonFireAnim292
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 4
-
-animtiles50.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim202
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 24
 cannonFireAnim225
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 20
-cannonFireAnim225
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 23
-cannonFireAnim247
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 9
-
-animtiles51.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim225
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 24
-cannonFireAnim225
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 25
-cannonFireAnim292
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 17
-cannonFireAnim315
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 17
-
-animtiles52.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim157
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 2
-cannonFireAnim247
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 1
-cannonFireAnim270
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 5
-cannonFireAnim270
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 14
-
-animtiles53.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim157
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 5
-cannonFireAnim180
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 18
-cannonFireAnim315
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 7
-cannonFireAnim45
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 21
-
-animtiles54.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim0
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 22
-cannonFireAnim202
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 19
-cannonFireAnim202
+cannonFireAnim247
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 15
-cannonFireAnim247
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 2
+  index: 9
 
-animtiles55.png
+animtiles49.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim225
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 1
-cannonFireAnim247
+cannonFireAnim202
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 24
+cannonFireAnim225
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 20
+cannonFireAnim225
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 23
+cannonFireAnim225
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 24
+
+animtiles50.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim225
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 25
 cannonFireAnim270
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 5
+cannonFireAnim292
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 17
+cannonFireAnim315
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 17
+
+animtiles51.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim157
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 10
+cannonFireAnim247
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 1
+cannonFireAnim270
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 14
+cannonFireAnim315
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 7
+
+animtiles52.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim202
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 15
-cannonFireAnim270
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 23
-
-animtiles56.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
 cannonFireAnim247
   rotate: false
-  xy: 2, 2
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 19
+  index: 2
 cannonFireAnim292
   rotate: false
-  xy: 2, 774
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 7
+  index: 24
 cannonFireAnim45
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 21
+
+animtiles53.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim202
+  rotate: false
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 19
-cannonFireAnim67
+cannonFireAnim22
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 6
-
-animtiles57.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim180
+  index: 13
+cannonFireAnim247
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 24
+cannonFireAnim270
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 0
-cannonFireAnim270
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 20
-cannonFireAnim292
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 3
-cannonFireAnim67
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 25
+  index: 15
 
-animtiles58.png
+animtiles54.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim337
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 0
-cannonFireAnim337
+cannonFireAnim225
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 1
-cannonFireAnim337
+cannonFireAnim247
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 16
+cannonFireAnim270
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 2
-cannonFireAnim337
+  index: 23
+cannonFireAnim292
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 7
+
+animtiles55.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim247
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 19
+cannonFireAnim292
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 3
+cannonFireAnim45
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 19
+cannonFireAnim67
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 6
 
-animtiles59.png
+animtiles56.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim112
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 7
+cannonFireAnim270
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 20
+cannonFireAnim337
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 0
+cannonFireAnim67
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 25
+
+animtiles57.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim337
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 1
+cannonFireAnim337
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 2
+cannonFireAnim337
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 3
+cannonFireAnim337
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 4
+
+animtiles58.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -6581,7 +6561,7 @@ cannonFireAnim337
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 4
+  index: 5
 cannonFireAnim337
   rotate: false
   xy: 2, 2
@@ -6589,6 +6569,40 @@ cannonFireAnim337
   orig: 768, 768
   offset: 0, 0
   index: 6
+
+animtiles59.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim135
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 1
+cannonFireAnim270
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 16
+cannonFireAnim337
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 9
+cannonFireAnim67
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 2
 
 animtiles60.png
 size: 2048,2048
@@ -6597,32 +6611,32 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim22
   rotate: false
-  xy: 774, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 19
-cannonFireAnim270
+cannonFireAnim337
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 16
+  index: 10
 cannonFireAnim337
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 9
-cannonFireAnim67
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 2
+  index: 11
+cannonFireAnim337
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 12
 
 animtiles61.png
 size: 2048,2048
@@ -6635,55 +6649,21 @@ cannonFireAnim337
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
+  index: 13
 cannonFireAnim337
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 11
+  index: 14
 cannonFireAnim337
   rotate: false
   xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 12
-cannonFireAnim337
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 13
-
-animtiles62.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim157
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 4
-cannonFireAnim337
-  rotate: false
-  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 15
-cannonFireAnim337
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 16
 cannonFireAnim337
   rotate: false
   xy: 774, 2
@@ -6692,7 +6672,7 @@ cannonFireAnim337
   offset: 0, 0
   index: 17
 
-animtiles63.png
+animtiles62.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -6726,7 +6706,7 @@ cannonFireAnim337
   offset: 0, 0
   index: 20
 
-animtiles64.png
+animtiles63.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -6760,7 +6740,7 @@ cannonFireAnim337
   offset: 0, 0
   index: 21
 
-animtiles65.png
+animtiles64.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -6785,30 +6765,30 @@ cannonFireAnim315
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 6
+  index: 5
 cannonFireAnim315
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 8
+  index: 6
 
-animtiles66.png
+animtiles65.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim135
   rotate: false
-  xy: 774, 774
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 2
 cannonFireAnim22
   rotate: false
-  xy: 2, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -6819,16 +6799,16 @@ cannonFireAnim315
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 9
+  index: 8
 cannonFireAnim315
   rotate: false
-  xy: 774, 2
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
+  index: 9
 
-animtiles67.png
+animtiles66.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -6839,37 +6819,37 @@ cannonFireAnim315
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 11
+  index: 10
 cannonFireAnim315
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 12
+  index: 11
 cannonFireAnim315
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 13
+  index: 12
 cannonFireAnim315
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 14
+  index: 13
 
-animtiles68.png
+animtiles67.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim202
   rotate: false
-  xy: 2, 2
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -6880,17 +6860,51 @@ cannonFireAnim315
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 16
+  index: 14
+cannonFireAnim315
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 15
 cannonFireAnim315
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
+  index: 16
+
+animtiles68.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim112
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 12
+cannonFireAnim225
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 21
+cannonFireAnim315
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
   index: 18
 cannonFireAnim315
   rotate: false
-  xy: 774, 2
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -6903,32 +6917,32 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim202
   rotate: false
-  xy: 774, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 9
-cannonFireAnim225
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 21
 cannonFireAnim315
   rotate: false
-  xy: 2, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 20
 cannonFireAnim315
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 21
+cannonFireAnim315
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 23
 
 animtiles70.png
 size: 2048,2048
@@ -6937,7 +6951,7 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim292
   rotate: false
-  xy: 774, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -6948,91 +6962,57 @@ cannonFireAnim315
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 23
+  index: 24
 cannonFireAnim315
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 24
-cannonFireAnim315
+  index: 25
+cannonFireAnim67
   rotate: false
-  xy: 774, 774
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 25
+  index: 8
 
 animtiles71.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim112
+cannonFireAnim247
   rotate: false
-  xy: 2, 2
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 24
+  index: 18
 cannonFireAnim270
   rotate: false
-  xy: 774, 2
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 21
 cannonFireAnim292
   rotate: false
-  xy: 774, 774
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 13
 cannonFireAnim67
   rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 8
-
-animtiles72.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim112
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 22
-cannonFireAnim22
-  rotate: false
   xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 14
-cannonFireAnim247
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 18
-cannonFireAnim67
-  rotate: false
-  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 23
 
-animtiles73.png
+animtiles72.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -7043,112 +7023,146 @@ cannonFireAnim0
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 1
-cannonFireAnim202
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 4
-cannonFireAnim67
+  index: 10
+cannonFireAnim112
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 7
-cannonFireAnim90
+  index: 22
+cannonFireAnim45
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 9
+cannonFireAnim67
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
+  index: 7
+
+animtiles73.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim0
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 1
+cannonFireAnim202
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 4
+cannonFireAnim90
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
   index: 9
+cannonFireAnim90
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 17
 
 animtiles74.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim112
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 17
 cannonFireAnim247
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 13
 cannonFireAnim270
   rotate: false
-  xy: 774, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 10
 cannonFireAnim45
   rotate: false
-  xy: 2, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 20
+cannonFireAnim90
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 25
 
 animtiles75.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim157
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 0
-cannonFireAnim270
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 24
-cannonFireAnim67
+cannonFireAnim112
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 1
-cannonFireAnim90
+  index: 25
+cannonFireAnim270
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 25
+cannonFireAnim337
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 16
+cannonFireAnim67
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 25
+  index: 1
 
 animtiles76.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim112
+cannonFireAnim157
   rotate: false
-  xy: 2, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 25
+  index: 7
 cannonFireAnim202
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -7160,19 +7174,26 @@ cannonFireAnim247
   orig: 768, 768
   offset: 0, 0
   index: 8
-cannonFireAnim270
+cannonFireAnim292
   rotate: false
-  xy: 2, 774
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 25
+  index: 22
 
 animtiles77.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
+cannonFireAnim157
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 25
 cannonFireAnim270
   rotate: false
   xy: 2, 774
@@ -7182,55 +7203,48 @@ cannonFireAnim270
   index: 19
 cannonFireAnim270
   rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 1
-cannonFireAnim67
-  rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 15
-cannonFireAnim67
+  index: 1
+cannonFireAnim45
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 9
+  index: 22
 
 animtiles78.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim157
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 25
-cannonFireAnim180
+cannonFireAnim112
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 21
-cannonFireAnim270
+  index: 16
+cannonFireAnim157
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 4
-cannonFireAnim45
+  index: 6
+cannonFireAnim270
   rotate: false
   xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 4
+cannonFireAnim337
+  rotate: false
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -7241,34 +7255,34 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim157
+cannonFireAnim180
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 6
-cannonFireAnim247
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 5
-cannonFireAnim337
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 22
-cannonFireAnim67
+  index: 0
+cannonFireAnim180
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 12
+  index: 1
+cannonFireAnim180
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 2
+cannonFireAnim247
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 5
 
 animtiles80.png
 size: 2048,2048
@@ -7281,28 +7295,28 @@ cannonFireAnim180
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 1
+  index: 3
 cannonFireAnim180
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 2
+  index: 4
 cannonFireAnim180
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 3
+  index: 5
 cannonFireAnim180
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 4
+  index: 6
 
 animtiles81.png
 size: 2048,2048
@@ -7315,28 +7329,28 @@ cannonFireAnim180
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 5
+  index: 7
 cannonFireAnim180
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 6
+  index: 8
 cannonFireAnim180
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 7
-cannonFireAnim180
+  index: 9
+cannonFireAnim292
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 8
+  index: 25
 
 animtiles82.png
 size: 2048,2048
@@ -7345,11 +7359,11 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim180
   rotate: false
-  xy: 2, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 9
+  index: 10
 cannonFireAnim180
   rotate: false
   xy: 774, 774
@@ -7364,13 +7378,13 @@ cannonFireAnim180
   orig: 768, 768
   offset: 0, 0
   index: 12
-cannonFireAnim292
+cannonFireAnim90
   rotate: false
-  xy: 2, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 25
+  index: 19
 
 animtiles83.png
 size: 2048,2048
@@ -7424,55 +7438,55 @@ cannonFireAnim180
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 19
-cannonFireAnim247
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 14
-cannonFireAnim315
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 22
-
-animtiles85.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
+  index: 18
 cannonFireAnim180
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 20
-cannonFireAnim225
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 3
+  index: 19
 cannonFireAnim247
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 25
+  index: 14
+
+animtiles85.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim112
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 10
+cannonFireAnim225
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 3
 cannonFireAnim292
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 12
+cannonFireAnim315
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 12
+  index: 22
 
 animtiles86.png
 size: 2048,2048
@@ -7485,28 +7499,28 @@ cannonFireAnim180
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 22
+  index: 21
 cannonFireAnim180
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 23
+  index: 22
 cannonFireAnim180
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 24
+  index: 23
 cannonFireAnim180
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 25
+  index: 24
 
 animtiles87.png
 size: 2048,2048
@@ -7515,32 +7529,32 @@ filter: Nearest,Nearest
 repeat: xy
 cannonBase
   rotate: false
-  xy: 774, 774
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: -1
+cannonFireAnim180
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 25
 cannonFireAnim202
   rotate: false
-  xy: 2, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 16
 cannonFireAnim247
   rotate: false
-  xy: 2, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 12
-cannonFireAnim337
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 25
 
 animtiles88.png
 size: 2048,2048
@@ -7549,48 +7563,82 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim112
   rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 13
-cannonFireAnim247
-  rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 17
-cannonFireAnim292
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 6
-cannonFireAnim292
+  index: 14
+cannonFireAnim247
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 9
+  index: 17
+cannonFireAnim337
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 25
+cannonFireAnim45
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 24
 
 animtiles89.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim270
+cannonFireAnim112
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 13
-cannonFireAnim67
+cannonFireAnim270
   rotate: false
   xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 13
+cannonFireAnim292
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 9
+cannonFireAnim90
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 23
+
+animtiles90.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim157
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 14
+cannonFireAnim67
+  rotate: false
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -7601,44 +7649,10 @@ cannonFireAnim90
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 23
-cannonFireAnim90
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 8
-
-animtiles90.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim157
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 22
-cannonFireAnim202
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 7
-cannonFireAnim270
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 6
 cannonFireAnim90
   rotate: false
-  xy: 2, 774
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -7651,32 +7665,32 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim202
   rotate: false
-  xy: 774, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 0
+  index: 7
 cannonFireAnim247
   rotate: false
-  xy: 2, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 4
 cannonFireAnim270
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 6
+cannonFireAnim270
+  rotate: false
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 22
-cannonFireAnim67
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 0
 
 animtiles92.png
 size: 2048,2048
@@ -7685,14 +7699,14 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim292
   rotate: false
-  xy: 2, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 5
 cannonFireAnim90
   rotate: false
-  xy: 2, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -7751,27 +7765,13 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim112
+cannonFireAnim337
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 19
-cannonFireAnim337
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 7
-cannonFireAnim67
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 3
 cannonFireAnim90
   rotate: false
   xy: 2, 774
@@ -7779,6 +7779,20 @@ cannonFireAnim90
   orig: 768, 768
   offset: 0, 0
   index: 7
+cannonFireAnim90
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 10
+cannonFireAnim90
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 11
 
 animtiles95.png
 size: 2048,2048
@@ -7791,64 +7805,30 @@ cannonFireAnim90
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
+  index: 12
 cannonFireAnim90
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 11
-cannonFireAnim90
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 12
-cannonFireAnim90
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 13
-
-animtiles96.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim45
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 7
 cannonFireAnim90
   rotate: false
-  xy: 2, 774
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 14
 cannonFireAnim90
   rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 15
-cannonFireAnim90
-  rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 17
+  index: 15
 
-animtiles97.png
+animtiles96.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -7860,13 +7840,13 @@ cannonFireAnim247
   orig: 768, 768
   offset: 0, 0
   index: 6
-cannonFireAnim90
+cannonFireAnim45
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 19
+  index: 7
 cannonFireAnim90
   rotate: false
   xy: 774, 774
@@ -7882,7 +7862,7 @@ cannonFireAnim90
   offset: 0, 0
   index: 21
 
-animtiles98.png
+animtiles97.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -7916,11 +7896,18 @@ cannonFireAnim90
   offset: 0, 0
   index: 24
 
-animtiles99.png
+animtiles98.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
+cannonFireAnim112
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 15
 cannonFireAnim292
   rotate: false
   xy: 2, 774
@@ -7941,84 +7928,77 @@ cannonFireAnim292
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
+  index: 4
+
+animtiles99.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim225
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 17
+cannonFireAnim292
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
   index: 10
+cannonFireAnim292
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 11
 cannonFireAnim292
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 11
+  index: 15
 
 animtiles100.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim112
+cannonFireAnim292
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 20
-cannonFireAnim157
+cannonFireAnim292
   rotate: false
   xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 23
-cannonFireAnim157
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 8
-cannonFireAnim292
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 20
-
-animtiles101.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim292
-  rotate: false
-  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 21
 cannonFireAnim292
   rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 15
-cannonFireAnim292
-  rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 8
-cannonFireAnim315
+cannonFireAnim67
   rotate: false
-  xy: 2, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 15
+  index: 4
 
-animtiles102.png
+animtiles101.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -8039,27 +8019,61 @@ cannonFireAnim270
   index: 12
 cannonFireAnim270
   rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 24
+cannonFireAnim315
+  rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 2
-cannonFireAnim315
+  index: 3
+
+animtiles102.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim112
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 19
+cannonFireAnim157
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 3
+  index: 13
+cannonFireAnim270
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 2
+cannonFireAnim67
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 11
 
 animtiles103.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim180
+cannonFireAnim247
   rotate: false
-  xy: 774, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -8070,21 +8084,21 @@ cannonFireAnim292
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 24
-cannonFireAnim337
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 24
-cannonFireAnim67
+  index: 16
+cannonFireAnim292
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 11
+  index: 6
+cannonFireAnim67
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 15
 
 animtiles104.png
 size: 2048,2048
@@ -8093,32 +8107,32 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim112
   rotate: false
-  xy: 2, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 0
 cannonFireAnim112
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 1
 cannonFireAnim112
   rotate: false
-  xy: 774, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 2
-cannonFireAnim247
+cannonFireAnim112
   rotate: false
-  xy: 2, 774
+  xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
+  index: 3
 
 animtiles105.png
 size: 2048,2048
@@ -8131,28 +8145,28 @@ cannonFireAnim112
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 3
+  index: 4
 cannonFireAnim112
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 4
+  index: 5
 cannonFireAnim112
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 5
-cannonFireAnim112
+  index: 6
+cannonFireAnim180
   rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 6
+  index: 20
 
 animtiles106.png
 size: 2048,2048
@@ -8165,10 +8179,10 @@ cannonFireAnim112
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 7
+  index: 8
 cannonFireAnim112
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -8179,48 +8193,48 @@ cannonFireAnim112
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 10
-cannonFireAnim157
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 13
-
-animtiles107.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim112
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 11
-cannonFireAnim112
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 12
-cannonFireAnim112
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 14
 cannonFireAnim157
   rotate: false
   xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
+  index: 0
+
+animtiles107.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim157
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 2
+cannonFireAnim157
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
   index: 3
+cannonFireAnim157
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 4
+cannonFireAnim157
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 5
 
 animtiles108.png
 size: 2048,2048
@@ -8229,148 +8243,39 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim112
   rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 15
-cannonFireAnim112
-  rotate: false
   xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 16
-cannonFireAnim112
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 18
-cannonFireAnim157
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 7
-
-animtiles109.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim157
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 9
-cannonFireAnim157
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 10
-cannonFireAnim270
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 18
-cannonFireAnim292
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 23
-
-animtiles110.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim112
-  rotate: false
-  xy: 774, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 23
-cannonFireAnim157
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 11
-cannonFireAnim157
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 12
-cannonFireAnim157
-  rotate: false
-  xy: 774, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 14
-
-animtiles111.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim157
-  rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 15
-cannonFireAnim157
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 16
-cannonFireAnim157
-  rotate: false
-  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 17
 cannonFireAnim157
   rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 8
+cannonFireAnim157
+  rotate: false
   xy: 774, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 18
-
-animtiles112.png
-size: 2048,2048
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: xy
-cannonFireAnim157
+  index: 9
+cannonFireAnim22
   rotate: false
   xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 19
-cannonFireAnim157
+  index: 22
+
+animtiles109.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim112
   rotate: false
   xy: 2, 2
   size: 768, 768
@@ -8383,7 +8288,82 @@ cannonFireAnim157
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 21
+  index: 11
+cannonFireAnim157
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 12
+cannonFireAnim292
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 23
+
+animtiles110.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim112
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 23
+cannonFireAnim112
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 24
+cannonFireAnim157
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 15
+cannonFireAnim157
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 16
+
+animtiles111.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim157
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 17
+cannonFireAnim157
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 18
+cannonFireAnim157
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 19
 cannonFireAnim337
   rotate: false
   xy: 774, 2
@@ -8392,6 +8372,40 @@ cannonFireAnim337
   offset: 0, 0
   index: 8
 
+animtiles112.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: xy
+cannonFireAnim157
+  rotate: false
+  xy: 2, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 20
+cannonFireAnim157
+  rotate: false
+  xy: 2, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 21
+cannonFireAnim157
+  rotate: false
+  xy: 774, 774
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 22
+cannonFireAnim157
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 23
+
 animtiles113.png
 size: 2048,2048
 format: RGBA8888
@@ -8399,28 +8413,28 @@ filter: Nearest,Nearest
 repeat: xy
 cannonFireAnim135
   rotate: false
-  xy: 2, 774
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
-  index: 1
-cannonFireAnim135
-  rotate: false
-  xy: 774, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 3
 cannonFireAnim135
   rotate: false
-  xy: 774, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 4
+cannonFireAnim135
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 5
 cannonFireAnim157
   rotate: false
-  xy: 2, 2
+  xy: 2, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
@@ -8437,38 +8451,38 @@ cannonFireAnim135
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 5
-cannonFireAnim135
-  rotate: false
-  xy: 2, 2
-  size: 768, 768
-  orig: 768, 768
-  offset: 0, 0
   index: 6
 cannonFireAnim135
   rotate: false
-  xy: 774, 774
+  xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 7
 cannonFireAnim135
   rotate: false
-  xy: 774, 2
+  xy: 774, 774
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
   index: 8
+cannonFireAnim135
+  rotate: false
+  xy: 774, 2
+  size: 768, 768
+  orig: 768, 768
+  offset: 0, 0
+  index: 9
 
 animtiles115.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: xy
-cannonFireAnim135
+cannonFireAnim337
   rotate: false
   xy: 2, 2
   size: 768, 768
   orig: 768, 768
   offset: 0, 0
-  index: 9
+  index: 24

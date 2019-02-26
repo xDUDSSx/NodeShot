@@ -6,12 +6,16 @@ import static org.dudss.nodeshot.screens.GameScreen.selectedType;
 import static org.dudss.nodeshot.screens.GameScreen.selectedEntity;
 
 import org.dudss.nodeshot.buildings.AbstractBuilding;
+import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.entities.Package;
 
+/**A utility class that handles {@link Entity} highlighting.*/
 public class Selector {
+	
+	/**Deselects the currently selected {@link Entity}.*/
 	public static void deselect() {
 		if (selectedEntity instanceof AbstractBuilding) {
 			((AbstractBuilding) selectedEntity).outline(false);
@@ -22,6 +26,7 @@ public class Selector {
     	selectedType = EntityType.NONE;
     }
     
+	/**Selects the specified {@link Node}.*/
     public static void selectNode(Node n) {
     	selectedEntity = n;
     	selectedID = n.getID();
@@ -29,6 +34,7 @@ public class Selector {
         selectedType = EntityType.NODE;            
     }
     
+    /**Selects the specified {@link Package}.*/
     public static void selectPackage(Package p) {
     	selectedEntity = p;
     	selectedID = p.getID();
@@ -36,6 +42,7 @@ public class Selector {
         selectedType = EntityType.PACKAGE;    
     }
     
+    /**Selects the specified {@link Connector}.*/
     public static void selectNodeConnector(Connector nC) {
     	selectedEntity = nC;
     	selectedID =  nC.getID();
@@ -43,6 +50,7 @@ public class Selector {
         selectedType = EntityType.CONNECTOR;
     }
     
+    /**Selects the specified {@link AbstractBuilding}.*/
     public static void selectBuilding(AbstractBuilding b) {
     	Selector.deselect();
     	selectedEntity = b;

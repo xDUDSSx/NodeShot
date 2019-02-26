@@ -2,11 +2,13 @@ package org.dudss.nodeshot.buildings;
 
 import java.util.HashMap;
 
+import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.entities.ArtilleryShell;
 import org.dudss.nodeshot.items.Item.ItemType;
 import org.dudss.nodeshot.items.StorableItem;
 import org.dudss.nodeshot.screens.GameScreen;
+import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -15,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 /**A cannon firing {@link ArtilleryShell}s. What makes it special is its firing animation. This animation is unique for all 16 angles of rotation.*/
 public class ArtilleryCannon extends Turret {
@@ -28,7 +29,8 @@ public class ArtilleryCannon extends Turret {
 	float animTime = 0;
 	
 	float inaccuracy = 64;
-	float projectileSpeed = 20f;
+	float projectileSpeed = 14f;
+	float archingFactor = 28;
 	
 	public ArtilleryCannon(float cx, float cy) {
 		super(cx, cy);
@@ -37,8 +39,16 @@ public class ArtilleryCannon extends Turret {
 			this.storage.add(new StorableItem(ItemType.AMMO));
 		}
 		
-		rechargeRate = 100;
+		this.fogOfWarRadius = 40;
+		inaccuracy = 64;
+		projectileSpeed = 15f;
+		rechargeRate = 220;
 		rotationSpeed = 2.5f;
+		ammoPerShot = 3;
+		this.targetPollingRate = 90;
+		
+		this.minDiameter = 512;
+		this.maxDiameter = 72*16*2;
 		
 		fireAnims = new HashMap<Integer, Animation<TextureRegion>>();
 		for (int i = 0; i < 16; i++) {
@@ -54,16 +64,13 @@ public class ArtilleryCannon extends Turret {
 	public void update() {
 		super.update();
 		
-		aim(findTarget());
-		
 		if(GameScreen.sfps > 0) {
 			fireAnims.get(currentRotation).setFrameDuration(((1000f/GameScreen.sfps)/1000f));
 		}	
 	}
 	
 	@Override
-	public void draw(ShapeRenderer r, SpriteBatch batch) {	
-		batch.begin();
+	public void draw(SpriteBatch batch) {			
 		batch.setColor(1f, 1f, 1f, 1f);
 		
 		if (fireAnimPlaying && fireAnims.get(currentRotation).isAnimationFinished(animTime)) {
@@ -88,7 +95,6 @@ public class ArtilleryCannon extends Turret {
 			batch.draw(SpriteLoader.artilleryBase, x - width*4.36f*0.385f , y - height*4.36f*0.385f, width*4.36f, height*4.36f);
 			batch.draw(SpriteLoader.artilleryFiringFrames.get(currentRotation)[0], x - width*5.37f*0.407f , y - height*5.37f*0.407f, width*5.37f, height*5.37f);
 		}
-		batch.end();
 	}
 	
 	@Override
@@ -101,7 +107,7 @@ public class ArtilleryCannon extends Turret {
 	
 	@Override
 	protected void fire() {
-		ArtilleryShell b = new ArtilleryShell(this.cx, this.cy, target, projectileSpeed, inaccuracy);
+		ArtilleryShell b = new ArtilleryShell(this.cx, this.cy, target, projectileSpeed, inaccuracy, archingFactor);
 		GameScreen.bulletHandler.addBullet(b);
 		
 		fireAnimPlaying = true;
@@ -110,11 +116,11 @@ public class ArtilleryCannon extends Turret {
 		lastShot = SimulationThread.simTick;
 		nextShot = SimulationThread.simTick + rechargeRate;
 		lastTarget = target;						
-		target = findTarget();
+		target = null;
 		aimed = false;
 	}
 	
-	@Override
+	/*@Override
 	protected Vector2 findTarget() {
 		Vector3 mouse = GameScreen.cam.unproject(new Vector3(GameScreen.mouseX, GameScreen.mouseY, 0));
 	
@@ -127,6 +133,38 @@ public class ArtilleryCannon extends Turret {
 		//target = new Vector2(targetChunk.getX() + (Base.CHUNK_SIZE/2), targetChunk.getY() + (Base.CHUNK_SIZE/2));		
 		target = new Vector2(mouse.x, mouse.y);
 		return target;
+	}*/
+
+	@Override
+	protected Vector2 findTarget() {
+		Vector2 target = null;
+		
+		//Checking for closest creeper generators first
+		Chunk targetChunk = null;
+		float closestDist = Float.MAX_VALUE;
+		for (AbstractBuilding b : GameScreen.buildingManager.getAllGenerators()) {
+			if (b != null) {
+				float dist = (float) Math.hypot(x - b.getX(), y - b.getY());
+				if (dist < closestDist && dist > minDiameter && dist < maxDiameter) {
+					targetChunk = GameScreen.chunks.getChunkAtWorldSpace(b.getCX(), b.getCY());
+					closestDist = dist;				
+				}
+			}			
+		} 
+		if (targetChunk == null) {
+			targetChunk = GameScreen.chunks.getClosestCorruptionChunkToWorldSpace(this.cx, this.cy, minDiameter, maxDiameter, 0f);
+			
+			if (targetChunk == null) {
+				return null;
+			}
+		}
+		target = new Vector2(targetChunk.getX() + (Base.CHUNK_SIZE/2), targetChunk.getY() + (Base.CHUNK_SIZE/2));		
+		return target;
+	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.ARTILLERY_CANNON;
 	}
 }
 

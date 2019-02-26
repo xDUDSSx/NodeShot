@@ -12,10 +12,12 @@ public class StorableItem {
 		this.type = type;
 	}
 	
+	/**Returns the {@link ItemType} of this item.*/
 	public ItemType getType() {
 		return type;
 	}
 	
+	/**Initialises a new {@link Package} of its {@link ItemType}.*/
 	public Package getPackage() {
 		switch(type) {
 			case COAL: return new Coal();

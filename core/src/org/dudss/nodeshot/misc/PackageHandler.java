@@ -1,6 +1,5 @@
 package org.dudss.nodeshot.misc;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -13,6 +12,7 @@ import org.dudss.nodeshot.entities.nodes.Node;
 
 import com.badlogic.gdx.graphics.Color;
 
+/**A manager object that keeps track of all {@link PathHandler}s.*/
 public class PackageHandler {
 	
 	List<PathHandler> pathHandlers;
@@ -60,6 +60,7 @@ public class PackageHandler {
 		newIPH.start();		
 	}
 	
+	/**Removes all packages from the game.*/
 	public void clear() {
 		pathHandlers.clear();
 		GameScreen.packagelist.clear();
@@ -86,6 +87,7 @@ public class PackageHandler {
 		return pathHandlers;
 	}
 	
+	/**Returns the number of {@link PathHandler}s.*/
 	public int getNumberOfPaths() {
 		return pathHandlers.size();
 	}
