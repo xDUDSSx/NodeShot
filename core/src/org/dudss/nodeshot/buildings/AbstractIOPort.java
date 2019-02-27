@@ -34,8 +34,8 @@ public abstract class AbstractIOPort extends AlertableBuilding implements Connec
 	}
 	
 	@Override
-	public void demolish() {	
-		super.demolish();
+	public void demolish(boolean returnBits) {	
+		super.demolish(returnBits);
 		ioNode.remove();
 	}
 	
@@ -65,6 +65,14 @@ public abstract class AbstractIOPort extends AlertableBuilding implements Connec
 	
 	public AbstractBuilding getBuilding() {
 		return this.buildingChunk.getBuilding();
+	}
+	
+	public int getBuildCost() {
+		return Base.IOPORT_BUILD_COST;
+	}
+	
+	public int getEnergyCost() {
+		return Base.IOPORT_ENERGY_COST;
 	}
 	
 	@Override  

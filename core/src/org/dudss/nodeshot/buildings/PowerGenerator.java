@@ -19,7 +19,6 @@ public class PowerGenerator extends AbstractBuilding {
 	
 	Animation<TextureRegion> genAnimation;
 	Animation<TextureRegion> genOutlinedAnimation;
-		
 	
 	int generationSpeed = 6;
 	int nextUpdate = SimulationThread.simTick + generationSpeed;
@@ -28,15 +27,7 @@ public class PowerGenerator extends AbstractBuilding {
 		super(cx, cy, width, height);
 		genAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.genanimFrames);	
 		genOutlinedAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.genanimoutlineFrames);
-	}
-
-	@Override
-	public void update() {
-		super.update();
-		if (nextUpdate < SimulationThread.simTick) {
-			GameScreen.resourceManager.addPower(1);
-			nextUpdate = SimulationThread.simTick + generationSpeed;
-		}
+		isUsingEnergy = false;
 	}
 	
 	@Override

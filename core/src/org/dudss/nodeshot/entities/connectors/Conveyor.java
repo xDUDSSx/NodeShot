@@ -110,7 +110,7 @@ public class Conveyor extends Connector {
 	/**Demolishes all the {@link ConveyorBuilding}s that are assigned to this conveyor.*/
 	public void clearBuildingChunks() {
 		for (ConveyorBuilding c : conveyorBuildings) {
-			c.demolish();
+			c.demolish(true);
 		}	
 	}
 	

@@ -51,7 +51,15 @@ public class ConveyorBuilding extends AbstractBuilding {
 	public Conveyor getConveyor() {
 		return assignedConveyor;
 	}
-
+	
+	public int getBuildCost() {
+		return Base.CONVEYOR_BUILD_COST;
+	}
+	
+	public int getEnergyCost() {
+		return Base.CONVEYOR_ENERGY_COST;
+	}
+	
 	@Override
 	public EntityType getType() {
 		return EntityType.CONVEYOR;

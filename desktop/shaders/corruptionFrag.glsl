@@ -35,7 +35,6 @@ void main()
 			gl_FragColor = tex1Shaded;
 	}
 
-
 	if (texColor.a == 0 && tex1Color.a == 0) {
 			gl_FragColor = vec4(1,1,1,0);
 	}

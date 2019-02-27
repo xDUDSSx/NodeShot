@@ -84,6 +84,19 @@ public class CreeperGenerator extends AbstractGenerator {
 		super.build();
 		GameScreen.chunks.getSectionByWorldSpace(x, y).setActive(true);
 	}
+	
+	public int getBuildCost() {
+		return Base.CREEPER_GENERATOR_BUILD_COST;
+	}
+	
+	public int getEnergyCost() {
+		return Base.CREEPER_GENERATOR_ENERGY_COST;
+	}
+	
+	public int getEnergyUsage() {
+		return Base.CREEPER_GENERATOR_ENERGY_USAGE;
+	}
+	
 
 	@Override
 	public EntityType getType() {

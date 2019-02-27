@@ -42,4 +42,8 @@ public abstract class AbstractIOStorage extends AbstractStorage {
 	public List<StorableItem> getProcessedStorage() {
 		return processedStorage;
 	}
+	
+	public int getMaxProcessedStorage() {
+		return maxProcessedStorage;
+	}
 }

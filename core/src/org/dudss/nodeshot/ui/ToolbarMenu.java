@@ -229,9 +229,8 @@ public class ToolbarMenu extends VisWindow {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {	 	
 					if (e instanceof AbstractBuilding) {
-						((AbstractBuilding) e).demolish();
+						((AbstractBuilding) e).demolish(true);
 						Selector.deselect();
-						updateMainPanel();
 					}
 			    }
 		    });	
@@ -251,7 +250,6 @@ public class ToolbarMenu extends VisWindow {
 					if (e instanceof ConveyorBuilding) {
 						((ConveyorBuilding) e).getConveyor().getFrom().disconnect(((ConveyorBuilding) e).getConveyor().getTo());
 						Selector.deselect();
-						updateMainPanel();
 					}
 			    }
 		    });	
@@ -305,7 +303,7 @@ public class ToolbarMenu extends VisWindow {
 		/**Updates the selection data.*/
 		public void updateInfo(Entity e) {
 			if (e instanceof AbstractStorage) storageValue.setText("Storage: " + ((AbstractStorage)e).getStoredItems().size() + "/" + ((AbstractStorage)e).getMaxStorage());
-			if (e instanceof AbstractIOStorage) processedValue.setText("Processed: " + ((AbstractIOStorage)e).getProcessedStorage().size());
+			if (e instanceof AbstractIOStorage) processedValue.setText("Processed: " + ((AbstractIOStorage)e).getProcessedStorage().size() + "/" + ((AbstractIOStorage)e).getMaxProcessedStorage());
 			if (e instanceof CreeperGenerator) healthDamage.setText("Health: " + ((((CreeperGenerator)e).health) - ((CreeperGenerator)e).damage));
 			if (e instanceof Package) percentageLabel.setText("Percentage: " + ((Package)e).percentage);
 		}

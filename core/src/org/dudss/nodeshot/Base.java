@@ -29,9 +29,6 @@ public class Base {
 	public static int START_BITS = 1000;
 	public static int START_POWER = 100;
 	
-	/**How often do building eat up their {@link AbstractBuilding#energyCost}.*/
-	public static int ENERGY_COST_UPDATE_RATE = 30;
-	
 	/**The size of {@link Node}s.*/
 	public static int RADIUS = 16;
 	/**The size of {@link Package}s.*/
@@ -119,12 +116,50 @@ public class Base {
 	public static boolean drawSectionBorders = false;
 	public static boolean drawCreeperLevel = false;
 	
+	//Game settings
+	public static boolean infiniteResources = false;
+	
 	//Graphical settings
 	public static boolean vSyncEnabled = true;
 	public static boolean fullscreen = false;
 	public static int foregroundFps = 144;
 	public static Dimension defaultWindowSize = new Dimension(1300, 795);
 	public static int MSAAsamples = 10;
+	
+	//Render settings
+	public static boolean disableBackground = false;
+	public static boolean enableBloom = false;	
+	public static boolean clipMap = false;
+	public static boolean disableEdges = false;
+	
+	
+	//Building costs	
+	/**How often do building get their energy usage and generation updated.
+	 * Energy updates are handled by the {@link BuildingManager}.*/
+	public static int ENERGY_UPDATE_RATE = 30;
+	public static int POWER_GENERATOR_GENERATION_AMOUNT = 3;
+	
+	/**Portion of the bits returned upon building demolition.*/
+	public static float DEMOLISH_RETURN_VALUE = 0.5f;
+	
+	public static int DEFAULT_ENERGY_USAGE = 1;
+	public static int DEFAULT_ENERGY_COST = 10;
+	public static int DEFAULT_BUILD_COST = 100;
+	
+	public static int CONVEYOR_BUILD_COST = 5;
+	public static int CONVEYOR_ENERGY_COST = 1;
+	
+	public static int NODE_BUILD_COST = 10;
+	public static int NODE_ENERGY_COST = 5;
+	
+	public static int IOPORT_BUILD_COST = 10;
+	public static int IOPORT_ENERGY_COST = 5;
+	
+	
+	public static int CREEPER_GENERATOR_BUILD_COST = 0;
+	public static int CREEPER_GENERATOR_ENERGY_COST = 0;
+	public static int CREEPER_GENERATOR_ENERGY_USAGE = 0;
+	
 	
 	/**Returns a random floating point number in the number range.*/
 	public static float getRandomFloatNumberInRange(float min, float max) {

@@ -102,67 +102,70 @@ public class DesktopInputProcessor implements InputProcessor {
 
 				//Building
 				if (GameScreen.buildMode == true && GameScreen.builtBuilding != null) {		
-					//h
-					if (GameScreen.builtBuilding.canBeBuiltAt(worldPos.x, worldPos.y, true)) {							
-						if (GameScreen.buildMoving) {;
-							GameScreen.builtBuilding.demolish();							
-						}
-						GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true);
-						GameScreen.builtBuilding.build();
-						
-						if (GameScreen.expandingANode && builtBuilding instanceof NodeBuilding) {
-							GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)builtBuilding).getNode());	
-							if (!((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((NodeBuilding)builtBuilding).getNode())).isBuiltProperly()) {
-								GameScreen.expandedConveyorNode.disconnect(((NodeBuilding)builtBuilding).getNode());	
-								GameScreen.builtBuilding.demolish();
-								return false;
+					if (GameScreen.resourceManager.bits >= GameScreen.builtBuilding.getBuildCost() && GameScreen.resourceManager.power >= GameScreen.builtBuilding.getEnergyCost()) {
+						if (GameScreen.builtBuilding.canBeBuiltAt(worldPos.x, worldPos.y, true)) {							
+							if (GameScreen.buildMoving) {
+								GameScreen.builtBuilding.demolish(true);							
 							}
-						}
-								
-						if (!GameScreen.buildMoving) {
-							if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
-								try {					
-									if (builtBuilding instanceof NodeBuilding) {
-										GameScreen.expandingANode = true;
-										GameScreen.expandedConveyorNode = ((NodeBuilding) builtBuilding).getNode();
-									}
-									Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
-									Constructor buildingConstructor;
-									buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
-									Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
-									GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
-								} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
-									BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
-								}													
+							GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true);
+							GameScreen.builtBuilding.build();
+							
+							if (GameScreen.expandingANode && builtBuilding instanceof NodeBuilding) {
+								GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)builtBuilding).getNode());	
+								if (!((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((NodeBuilding)builtBuilding).getNode())).isBuiltProperly()) {
+									GameScreen.expandedConveyorNode.disconnect(((NodeBuilding)builtBuilding).getNode());	
+									GameScreen.builtBuilding.demolish(true);
+									return false;
+								}
+							}
+									
+							if (!GameScreen.buildMoving) {
+								if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {					
+									try {					
+										if (builtBuilding instanceof NodeBuilding) {
+											GameScreen.expandingANode = true;
+											GameScreen.expandedConveyorNode = ((NodeBuilding) builtBuilding).getNode();
+										}
+										Class<? extends AbstractBuilding> buildingClass = GameScreen.builtBuilding.getClass();
+										Constructor buildingConstructor;
+										buildingConstructor = buildingClass.getConstructor(new Class[] {float.class, float.class});
+										Object[] buildingArgs = new Object[] { new Float(0), new Float(0) };
+										GameScreen.builtBuilding = (AbstractBuilding) buildingConstructor.newInstance(buildingArgs);		
+									} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
+										BaseClass.errorManager.report(e, "An exception occurred while reinitialising a new building object");
+									}													
+								} else {
+									GameScreen.buildingManager.disableBuildMode();
+								}			
 							} else {
 								GameScreen.buildingManager.disableBuildMode();
-							}			
-						} else {
-							GameScreen.buildingManager.disableBuildMode();
-						}
-					} else		
-					if (expandingANode) {					
-						Vector2 nbCoords = GameScreen.builtBuilding.getCoordinates(worldPos.x, worldPos.y, true);
-						if (GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x,  nbCoords.y).getBuilding() instanceof Connectable) {
-							if (((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode() != null) {
-								if(!((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode().getAllConnectedNodes().contains(GameScreen.expandedConveyorNode)) {
-									if(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode() != GameScreen.expandedConveyorNode) {			
-										GameScreen.expandedConveyorNode.connectTo(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode());
-										if (!(((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode())).isBuiltProperly())) {
-											GameScreen.expandedConveyorNode.disconnect(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode());	
-											return false;
+							}
+						} else		
+						if (expandingANode) {					
+							Vector2 nbCoords = GameScreen.builtBuilding.getCoordinates(worldPos.x, worldPos.y, true);
+							if (GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x,  nbCoords.y).getBuilding() instanceof Connectable) {
+								if (((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode() != null) {
+									if(!((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode().getAllConnectedNodes().contains(GameScreen.expandedConveyorNode)) {
+										if(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode() != GameScreen.expandedConveyorNode) {			
+											GameScreen.expandedConveyorNode.connectTo(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode());
+											if (!(((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode())).isBuiltProperly())) {
+												GameScreen.expandedConveyorNode.disconnect(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode());	
+												return false;
+											}
+											if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {				
+												GameScreen.expandedConveyorNode = (ConveyorNode) ((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode();
+											} else {
+												GameScreen.buildingManager.disableBuildMode();
+											}
 										}
-										if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {				
-											GameScreen.expandedConveyorNode = (ConveyorNode) ((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode();
-										} else {
-											GameScreen.buildingManager.disableBuildMode();
-										}
-									}
-								}			
+									}			
+								}
 							}
 						}
+						GameScreen.chunks.updateAllSectionMeshes(false);
+					} else {
+						BaseClass.logger.warning("Cannot build building: " + GameScreen.builtBuilding.getType().toString() + "! Not enough resources!");
 					}
-					GameScreen.chunks.updateAllSectionMeshes(false);
 				} else {
 					GameScreen.checkHighlights(true);	
 				}

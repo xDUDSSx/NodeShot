@@ -174,13 +174,21 @@ public class NodeBuilding extends AbstractBuilding implements Connectable {
 	}
 
 	@Override
-	public void demolish() {
-		super.demolish();
+	public void demolish(boolean returnBits) {
+		super.demolish(returnBits);
 		n.remove();
 	}
 
 	public ConveyorNode getNode() {
 		return n;
+	}
+	
+	public int getBuildCost() {
+		return Base.NODE_BUILD_COST;
+	}
+	
+	public int getEnergyCost() {
+		return Base.NODE_ENERGY_COST;
 	}
 	
 	@Override

@@ -68,8 +68,8 @@ public abstract class AbstractStorage extends AlertableBuilding implements Conne
 	}
 
 	@Override
-	public void demolish() {
-		super.demolish();
+	public void demolish(boolean returnBits) {
+		super.demolish(returnBits);
 		if (ioActive) this.ioNode.remove();	
 	}
 	

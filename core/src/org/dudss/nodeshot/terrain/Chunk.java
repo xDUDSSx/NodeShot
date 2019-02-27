@@ -377,18 +377,34 @@ public class Chunk {
 		
 		AtlasRegionContainer terrain = new AtlasRegionContainer();
 		
-		switch(height) {
-			case 0: this.setTerrainEdge(false, 0, EdgeType.NONE); return null; //TODO: ore at level 0?
-			case 1: terrain.addContainer(resolveTerrainEdges(1)); break;
-			case 2: terrain.addContainer(resolveTerrainEdges(2)); break;
-			case 3:	terrain.addContainer(resolveTerrainEdges(3)); break;
-			case 4: terrain.addContainer(resolveTerrainEdges(4)); break;
-			case 5: terrain.addContainer(resolveTerrainEdges(5)); break;
-			case 6: terrain.addContainer(resolveTerrainEdges(6)); break;
-			case 7: terrain.addContainer(resolveTerrainEdges(7)); break;
-			case 8: terrain.addContainer(resolveTerrainEdges(8)); break;
-			case 9: terrain.addContainer(resolveTerrainEdges(9)); break;
-			case 10: terrain.addContainer(resolveTerrainEdges(10)); break;	
+		if (!Base.disableEdges) {
+			switch(height) {
+				case 0: this.setTerrainEdge(false, 0, EdgeType.NONE); return null; //TODO: ore at level 0?
+				case 1: terrain.addContainer(resolveTerrainEdges(1)); break;
+				case 2: terrain.addContainer(resolveTerrainEdges(2)); break;
+				case 3:	terrain.addContainer(resolveTerrainEdges(3)); break;
+				case 4: terrain.addContainer(resolveTerrainEdges(4)); break;
+				case 5: terrain.addContainer(resolveTerrainEdges(5)); break;
+				case 6: terrain.addContainer(resolveTerrainEdges(6)); break;
+				case 7: terrain.addContainer(resolveTerrainEdges(7)); break;
+				case 8: terrain.addContainer(resolveTerrainEdges(8)); break;
+				case 9: terrain.addContainer(resolveTerrainEdges(9)); break;
+				case 10: terrain.addContainer(resolveTerrainEdges(10)); break;	
+			}
+		} else {
+			switch(height) {
+				case 0: this.setTerrainEdge(false, 0, EdgeType.NONE); return null; //TODO: ore at level 0?
+				case 1: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[1]))); break;
+				case 2: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[2]))); break;
+				case 3:	terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[3]))); break;
+				case 4: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[4]))); break;
+				case 5: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[5]))); break;
+				case 6: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[6]))); break;
+				case 7: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[7]))); break;
+				case 8: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[8]))); break;
+				case 9: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[9]))); break;
+				case 10: terrain.addContainer(new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion(Chunks.terrainLayerNames[10]))); break;
+			}
 		}
 		return misc.addContainer(terrain);
 	}
@@ -639,7 +655,15 @@ public class Chunk {
 	 * @see #resolveCorruptionEdges()*/
 	public AtlasRegionContainer getCorruptionTexture() {
  		if (this.creeper != 0) {
-			return resolveCorruptionEdges();					
+ 			if (!Base.disableEdges) {
+ 				return resolveCorruptionEdges();					
+ 			} else {
+ 				AtlasRegionContainer cont = new AtlasRegionContainer();
+ 				cont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr"));			
+ 				cont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr")); 					
+ 				cont.setSecondaryShade(creeper);
+ 				return cont;
+ 			}
  		} 
 		return null;
 	}
@@ -730,14 +754,14 @@ public class Chunk {
 				topLayer = TerrainEdgeResolver.resolveSolidEdges(topDiffs, outerDiffs, this.getAbsoluteCreeperLayer());
 			}
 			//Final terrain container
-			AtlasRegionContainer terrainCont = new AtlasRegionContainer();			
-			terrainCont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr" + topLayer.name));
+			AtlasRegionContainer creeperCont = new AtlasRegionContainer();			
+			creeperCont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr" + topLayer.name));
 			if (bottomLayer != null) {
-				terrainCont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr" + bottomLayer.name));
+				creeperCont.addTexture(SpriteLoader.terrainAtlas.findRegion("corr" + bottomLayer.name));
 				if (lowerLeveIndex == -1) {
-					terrainCont.setSecondaryShade(creeper);
+					creeperCont.setSecondaryShade(creeper);
 				} else {
-					terrainCont.setSecondaryShade(neighbours[lowerLeveIndex].creeper);
+					creeperCont.setSecondaryShade(neighbours[lowerLeveIndex].creeper);
 				}
 			} else
 			/*if (this.isDiagonalTerrainEdge() && this.getTerrainEdgeType() == topLayer.type) {			
@@ -748,7 +772,7 @@ public class Chunk {
 			}*/
 			
 			setCorruptionEdge(topLayer.isTerrainEdge, topLayer.type);
-			return terrainCont;
+			return creeperCont;
 		}
 		setCorruptionEdge(false, EdgeType.NONE);
 		return new AtlasRegionContainer(SpriteLoader.terrainAtlas.findRegion("corr"));

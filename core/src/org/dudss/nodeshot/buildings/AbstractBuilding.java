@@ -16,6 +16,7 @@ import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.terrain.Chunk;
 import org.dudss.nodeshot.terrain.Chunks;
 import org.dudss.nodeshot.terrain.Section;
+import org.dudss.nodeshot.utils.Selector;
 import org.dudss.nodeshot.utils.SpriteLoader;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,15 +40,8 @@ public abstract class AbstractBuilding implements Entity {
 	
 	boolean outlined = false;
 	boolean isBuilt = false;
-	
-	public int buildingCost = 100;
-	public int initialEnergyCost = 10;
-	
 	boolean isUsingEnergy = true;
-	
-	public int energyCost = 1;
-	int nextEnergyTick = SimulationThread.simTick + Base.ENERGY_COST_UPDATE_RATE;
-	
+
 	int fogOfWarRadius = Base.SECTION_SIZE;
 	
 	Chunk[] buildingChunks;
@@ -216,12 +210,6 @@ public abstract class AbstractBuilding implements Entity {
 				}
 			}
 		}
-		if (isUsingEnergy) {
-			if (SimulationThread.simTick > this.nextEnergyTick) {
-				nextEnergyTick += Base.ENERGY_COST_UPDATE_RATE;
-				GameScreen.resourceManager.removePower(energyCost);
-			}
-		}
 	}	
 	
 	/**Draw method*/
@@ -239,15 +227,10 @@ public abstract class AbstractBuilding implements Entity {
 	 * @param register Whether to register the building to its {@link BuildingManager} immediately.
 	 */
 	public void build(boolean register) {
-		GameScreen.resourceManager.removeBits(this.buildingCost);
-		GameScreen.resourceManager.removePower(this.initialEnergyCost);
+		GameScreen.resourceManager.removeBits(getBuildCost());
+		GameScreen.resourceManager.removePower(getEnergyCost());
 		
 		if (buildingType != BuildingType.GENERATOR) updateFogOfWar(true);	
-		
-		if (isUsingEnergy) {
-			nextEnergyTick = SimulationThread.simTick + Base.ENERGY_COST_UPDATE_RATE;
-		}
-		
 		if (register) register();
 	}	
 	
@@ -277,8 +260,10 @@ public abstract class AbstractBuilding implements Entity {
 		build(true);
 	}
 	
-	/**Called upon demolition. Adds the building to a {@link BuildingManager} and updates fog of war.*/
-	public void demolish() {
+	/**Called upon demolition. Adds the building to a {@link BuildingManager} and updates fog of war.
+	 * @param returnBits Whether to return a portion of the buildings build cost.
+	 */
+	public void demolish(boolean returnBits) {
 		switch(buildingType) {
 			case BUILDING: GameScreen.buildingManager.removeRegularBuilding(this); break;
 			case MISC: GameScreen.buildingManager.removeMisc(this); break;
@@ -286,13 +271,15 @@ public abstract class AbstractBuilding implements Entity {
 		}
 		
 		clearBuildingChunks();
-
+		
+		if (returnBits) GameScreen.resourceManager.addBits((int) (getBuildCost()*Base.DEMOLISH_RETURN_VALUE));
 		if (buildingType != BuildingType.GENERATOR) updateFogOfWar(false);	
+		if (GameScreen.selectedEntity == this) Selector.deselect();
 	}
 	/**Called when demolished by force*/
 	public void explode() {			
 		new Explosion(cx, cy);
-		this.demolish();
+		this.demolish(false);
 	}
 	
 	/**Flags the building as outlined/selected*/
@@ -360,6 +347,25 @@ public abstract class AbstractBuilding implements Entity {
 		for (Section s : toUpdate) {
 			GameScreen.chunks.updateSectionMesh(s, false);
 		}
+	}
+	
+	/**@return Build cost of the building.*/
+	public int getBuildCost() {
+		return Base.DEFAULT_BUILD_COST;
+	}
+	
+	/**@return Energy cost of the building.*/
+	public int getEnergyCost() {
+		return Base.DEFAULT_ENERGY_COST;
+	}
+	
+	/**@return Energy usage of the building.*/
+	public int getEnergyUsage() {
+		return Base.DEFAULT_ENERGY_USAGE;
+	}
+	
+	public boolean isUsingEnergy() {
+		return isUsingEnergy;
 	}
 	
 	public float getWidth() {

@@ -86,6 +86,25 @@ public class SettingsMenu extends Window {
 		table.add(engineSettingsButton).fillX().row();
 		table.add(engineSettingsCollapsibleWidget).expandX().fillX().row();
 		
+		VisTextButton gameSettingsButton = new VisTextButton("Game settings");
+		VisTable gameSettingsTable = new VisTable(true);
+		CollapsibleWidget gameSettingsCollapsibleWidget = new CollapsibleWidget(gameSettingsTable);	
+		gameSettingsTable.defaults().left();
+		
+		gameSettingsButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 	
+				gameSettingsCollapsibleWidget.setCollapsed(!gameSettingsCollapsibleWidget.isCollapsed());
+			}
+		});
+		
+		VisCheckBox infiniteResourcesCheckbox = new VisCheckBox("Infinite resources", Base.infiniteResources);
+		
+		gameSettingsTable.add(infiniteResourcesCheckbox).left().row();
+		
+		table.add(gameSettingsButton).fillX().row();
+		table.add(gameSettingsCollapsibleWidget).expandX().fillX().row();
+		
 		VisTextButton graphicsSettingsButton = new VisTextButton("Graphics settings");
 		VisTable graphicsSettingsTable = new VisTable(true);
 		CollapsibleWidget graphicSettingsCollapsibleWidget = new CollapsibleWidget(graphicsSettingsTable);	
@@ -100,8 +119,18 @@ public class SettingsMenu extends Window {
 		
 		VisCheckBox vsyncCheckbox = new VisCheckBox("Enable vSync", Base.vSyncEnabled);
 		VisCheckBox fullscreenCheckbox = new VisCheckBox("Fullscreen", Base.fullscreen);
+		VisCheckBox disableBackgroundCheckbox = new VisCheckBox("Disable background shader", Base.disableBackground);
+		VisCheckBox enableBloomCheckbox	 = new VisCheckBox("Bloom", Base.enableBloom);
+		VisCheckBox clipMapCheckbox = new VisCheckBox("Clip map edges", Base.clipMap);
+		VisCheckBox disableEdgesCheckbox = new VisCheckBox("Disable edge resolving", Base.disableEdges);
+		
+
 		graphicsSettingsTable.add(vsyncCheckbox).left().row();	
 		graphicsSettingsTable.add(fullscreenCheckbox).left().row();	
+		graphicsSettingsTable.add(disableBackgroundCheckbox).left().row();	
+		graphicsSettingsTable.add(enableBloomCheckbox).left().row();	
+		graphicsSettingsTable.add(clipMapCheckbox).left().row();	
+		graphicsSettingsTable.add(disableEdgesCheckbox).left().row();	
 		
 		table.add(graphicsSettingsButton).fillX().row();
 		table.add(graphicSettingsCollapsibleWidget).expandX().fillX().row();	
@@ -197,6 +226,17 @@ public class SettingsMenu extends Window {
 				Base.drawGeneralStats = drawGeneralStatsCheckbox.isChecked();
 		    }
 	    });		
+		infiniteResourcesCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 	
+				Base.infiniteResources = infiniteResourcesCheckbox.isChecked();
+				if (infiniteResourcesCheckbox.isChecked()) {					
+					GameScreen.resourceManager.addBits(99999999);
+				} else {
+					GameScreen.resourceManager.removeBits(99999999);
+				}
+		    }
+	    });		
 		vsyncCheckbox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 	
@@ -214,6 +254,32 @@ public class SettingsMenu extends Window {
 				}
 		    }
 	    });					
+		disableBackgroundCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 	
+				Base.disableBackground = disableBackgroundCheckbox.isChecked();
+		    }
+	    });		
+		clipMapCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 	
+				Base.clipMap = clipMapCheckbox.isChecked();
+		    }
+	    });	
+		disableEdgesCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 	
+				Base.disableEdges = disableEdgesCheckbox.isChecked();
+				GameScreen.chunks.updateAllSectionMeshes(false);
+				GameScreen.chunks.updateAllSectionMeshes(true);
+		    }
+	    });	
+		enableBloomCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 	
+				Base.enableBloom = enableBloomCheckbox.isChecked();
+		    }
+	    });	
 		closeButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 

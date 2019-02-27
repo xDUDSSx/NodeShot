@@ -322,9 +322,9 @@ public class Chunks {
  		 		
 		Shaders.corruptionShader.begin();
 		Shaders.corruptionShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
-		Shaders.corruptionShader.setUniformi("u_texture", 0);			
-		    
- 		for (Section s : sectionsInView) {	   	 
+		Shaders.corruptionShader.setUniformi("u_texture", 0);
+		 
+		for (Section s : sectionsInView) {	   	 
  			if (s.needsCorruptionMeshUpdate() == true) {		
  				s.getCorruptionMesh().setVertices(s.getCorruptionVerts());
 		    	s.getCorruptionMesh().setIndices(s.getCorruptionIndices());
@@ -630,7 +630,7 @@ public class Chunks {
 		  	        if (tC.getTexture(0) != null) {  
 		  	        	
 		  	        	float shade = 0; //Main texture shade
-		  	        	float shade1 = 0; //Secondary texture shade (Only used when a tile has mutiple shades)
+		  	        	float shade1 = -1; //Secondary texture shade (Only used when a tile has mutiple shades)
 		  	        					  	        	
 			  	        //First set of texture coordinates for the texture1
 			  	        au = tC.getTexture(0).getU();
@@ -672,7 +672,8 @@ public class Chunks {
 			  	        */
 			  	        float f = 0;
 			  	        if (corr) {
-			  	        	shade = c.calculateShade();	  	        				  	       
+			  	        	shade = c.calculateShade();	  	        		
+			  	        	if (shade1 == -1) shade1 = Chunk.calculateShadeForValue(1);
 			  	        	//Transparency and shade interpolation assigns different gradient types to the overall structure
 			  	        	float alpha = Interpolation.exp5Out.apply(0.8f, 1f, shade);			  	        	
 			  	        	float alpha1 = Interpolation.exp5Out.apply(0.8f, 1f, shade1);			  	        	

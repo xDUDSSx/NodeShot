@@ -10,6 +10,7 @@ import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.connectors.Connector;
 import org.dudss.nodeshot.entities.nodes.Node;
+import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.entities.Package;
 
 /**A utility class that handles {@link Entity} highlighting.*/
@@ -24,6 +25,7 @@ public class Selector {
     	selectedID = -1;
     	selectedIndex = -1;
     	selectedType = EntityType.NONE;
+    	GameScreen.toolbarMenu.updateMainPanel();
     }
     
 	/**Selects the specified {@link Node}.*/

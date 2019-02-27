@@ -6,8 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.dudss.nodeshot.Base;
 import org.dudss.nodeshot.BaseClass;
+import org.dudss.nodeshot.SimulationThread;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
+import org.dudss.nodeshot.buildings.Headquarters;
+import org.dudss.nodeshot.buildings.PowerGenerator;
 import org.dudss.nodeshot.screens.GameScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,17 +24,35 @@ public class BuildingManager {
 	List<AbstractBuilding> generators;
 	List<AbstractBuilding> misc;
 	
+	int nextEnergyTick = SimulationThread.simTick + Base.ENERGY_UPDATE_RATE;
+	
 	//A lot of methods in this class are self-explanatory so I haven't written any documentation.
 	/**Manages all buildings in the game world. Calls logic updates and render calls*/
 	public BuildingManager() {
 		regularBuildings = new CopyOnWriteArrayList<AbstractBuilding>();
 		generators = new CopyOnWriteArrayList<AbstractBuilding>();
 		misc = new CopyOnWriteArrayList<AbstractBuilding>();
+		nextEnergyTick = SimulationThread.simTick + Base.ENERGY_UPDATE_RATE;
 	}
 	
+	/**Updates regular buildings and manages power updates.*/
 	public void updateAllRegularBuildings() {
 		for (AbstractBuilding b : regularBuildings) {
 			b.update();
+			if (SimulationThread.simTick > this.nextEnergyTick) {
+				if (b.isUsingEnergy()) {
+					GameScreen.resourceManager.removePower(b.getEnergyUsage());
+				}
+				if (b instanceof PowerGenerator || b instanceof Headquarters) {
+					GameScreen.resourceManager.addPower(Base.POWER_GENERATOR_GENERATION_AMOUNT);
+				}
+				if (Base.infiniteResources) {
+					GameScreen.resourceManager.setPower(999999);
+				}
+			}
+		}	
+		if (SimulationThread.simTick > this.nextEnergyTick) {
+			nextEnergyTick += Base.ENERGY_UPDATE_RATE;
 		}
 	}
 	

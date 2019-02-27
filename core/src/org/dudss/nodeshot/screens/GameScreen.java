@@ -392,7 +392,9 @@ public class GameScreen implements Screen {
         if (Base.enableGlProgilerLogging) glProfiler.reset();           
 		
         //Background cloud rendering
-        drawBackgroundClouds(batch);
+        if (!Base.disableBackground) {
+        	drawBackgroundClouds(batch);
+        }
  		
         //Setting the world space projection matrix
         batch.setProjectionMatrix(cam.combined);
@@ -476,13 +478,15 @@ public class GameScreen implements Screen {
         //Drawing the fog of war.
         chunks.drawFogOfWar();
         
-        r.begin(ShapeType.Filled);
-        r.setColor(0.2f, 0.2f, 0.2f,1);
-        r.rectLine(0, 0, Base.WORLD_SIZE, 0, 16);
-    	r.rectLine(Base.WORLD_SIZE, 0, Base.WORLD_SIZE, Base.WORLD_SIZE, 16);
-    	r.rectLine(Base.WORLD_SIZE, Base.WORLD_SIZE, 0, Base.WORLD_SIZE, 16);
-    	r.rectLine(0, Base.WORLD_SIZE, 0, 0, 16);
-        r.end();
+        if (Base.clipMap) {
+	        r.begin(ShapeType.Filled);
+	        r.setColor(0.2f, 0.2f, 0.2f,1);
+	        r.rectLine(0, 0, Base.WORLD_SIZE, 0, 16);
+	    	r.rectLine(Base.WORLD_SIZE, 0, Base.WORLD_SIZE, Base.WORLD_SIZE, 16);
+	    	r.rectLine(Base.WORLD_SIZE, Base.WORLD_SIZE, 0, Base.WORLD_SIZE, 16);
+	    	r.rectLine(0, Base.WORLD_SIZE, 0, 0, 16);
+	        r.end();
+        }
         
         bulletHandler.drawAll(r, batch);
         effectManager.drawRegularEffects(batch);
@@ -492,12 +496,14 @@ public class GameScreen implements Screen {
        
         screenBuffer.end();
          		
-        bloomSourceBuffer.begin();
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);  
-        buildingManager.drawAllRegularBuildings(batch);
-        effectManager.drawRegularEffects(batch);
-        bloomSourceBuffer.end();
+        if (Base.enableBloom) {
+	        bloomSourceBuffer.begin();
+	        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);  
+	        buildingManager.drawAllRegularBuildings(batch);
+	        effectManager.drawRegularEffects(batch);
+	        bloomSourceBuffer.end();
+        }
         
 		displacementBuffer.begin();
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f);
@@ -510,7 +516,7 @@ public class GameScreen implements Screen {
         setHudProjectionMatrix(batch);
         setHudProjectionMatrix(r);     
        
-		drawScreenBuffer();
+		drawScreenBuffer(Base.enableBloom);
 
 		//postProcessor.capture();
 		//effectManager.drawRegularEffects(batch);
@@ -547,44 +553,56 @@ public class GameScreen implements Screen {
      * 
      * Wave distortion strenght is hard coded as well but can be changed by editing the distortion/displacement map.
      * Distortion shader is named waveShader.
+     * 
+     * @param Enable bloom.
      */
-    public void drawScreenBuffer() {    	     	
-    	bloomBuffer.begin();
-		batch.setShader(Shaders.thresholdShader);   	
-				
-		Sprite bufferSprite = new Sprite(bloomSourceBuffer.getColorBufferTexture());
-		Matrix4 hudMatrix = new Matrix4();
-		hudMatrix.setToOrtho2D(0, 0, bloomSourceBuffer.getWidth(), bloomSourceBuffer.getHeight());
-		batch.setProjectionMatrix(hudMatrix);	
-
-		bufferSprite.flip(false, true);
-		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);                 	   	
-		batch.begin();
-		bufferSprite.draw(batch);
-		batch.end();
-		batch.setShader(Shaders.defaultShader);
-		bloomBuffer.end();
-    	
-    	blur(bloomBuffer, temporaryBloomBuffer, bloomBuffer, 1.8f*2f, 900*cam.zoom);
-    	
-    	//screenBuffer.begin();
-    	Sprite targetSourceTexture = new Sprite(bloomBuffer.getColorBufferTexture());
-		Matrix4 m2 = new Matrix4();
-		m2.setToOrtho2D(0, 0, screenBuffer.getWidth(), screenBuffer.getHeight());
-		batch.setProjectionMatrix(m2);	
-		targetSourceTexture.flip(false, true);
-		//batch.begin();
-		//targetSourceTexture.setPosition(0, 0);
-		//targetSourceTexture.setSize(screenBuffer.getWidth(), screenBuffer.getHeight());
-		//targetSourceTexture.draw(batch);
-		//batch.end();
-    	//screenBuffer.end();
+    public void drawScreenBuffer(boolean bloom) {   
+    	Sprite targetSourceTexture = null;
+    	if (bloom) {
+	    	bloomBuffer.begin();
+			batch.setShader(Shaders.thresholdShader);   	
+					
+			Sprite bufferSprite = new Sprite(bloomSourceBuffer.getColorBufferTexture());
+			Matrix4 hudMatrix = new Matrix4();
+			hudMatrix.setToOrtho2D(0, 0, bloomSourceBuffer.getWidth(), bloomSourceBuffer.getHeight());
+			batch.setProjectionMatrix(hudMatrix);	
+	
+			bufferSprite.flip(false, true);
+			Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);                 	   	
+			batch.begin();
+			bufferSprite.draw(batch);
+			batch.end();
+			batch.setShader(Shaders.defaultShader);
+			bloomBuffer.end();
+	    
+			blur(bloomBuffer, temporaryBloomBuffer, bloomBuffer, 1.8f*2f, 900*cam.zoom);
+			
+	    	//screenBuffer.begin();
+			targetSourceTexture = new Sprite(bloomBuffer.getColorBufferTexture());
+			Matrix4 m2 = new Matrix4();
+			m2.setToOrtho2D(0, 0, screenBuffer.getWidth(), screenBuffer.getHeight());
+			batch.setProjectionMatrix(m2);	
+			targetSourceTexture.flip(false, true);
+			//batch.begin();
+			//targetSourceTexture.setPosition(0, 0);
+			//targetSourceTexture.setSize(screenBuffer.getWidth(), screenBuffer.getHeight());
+			//targetSourceTexture.draw(batch);
+			//batch.end();
+	    	//screenBuffer.end();
+    	} else {
+    		bloomBuffer.begin();
+    		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);     
+    		bloomBuffer.end();
+    		targetSourceTexture = new Sprite(bloomBuffer.getColorBufferTexture());
+    		targetSourceTexture.flip(false, true);
+    	}
 		
     	Texture displacementTexture = displacementBuffer.getColorBufferTexture();
 		Texture screenTexture = screenBuffer.getColorBufferTexture();
 	    screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-	    displacementTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+	    displacementTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);  
 	    targetSourceTexture.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 	    
 	    screenTexture.bind(2);
@@ -881,12 +899,14 @@ public class GameScreen implements Screen {
  		Shaders.solidCloudShader.setUniformf("pos", cam.position.x, cam.position.y);
  		Shaders.solidCloudShader.end(); 		        
         
- 		Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
- 		Vector3 lbc = new Vector3(0, 0, 0);
- 		Vector3 rtc = new Vector3(Base.WORLD_SIZE, Base.WORLD_SIZE, 0);
- 		Vector3 nlbc = cam.project(lbc);
- 		Vector3 nrtc = cam.project(rtc);
- 		Gdx.gl.glScissor((int)nlbc.x, (int)nlbc.y, (int) (nrtc.x - nlbc.x), (int) (nrtc.y - nlbc.y));
+ 		if (Base.clipMap) {
+	 		Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+	 		Vector3 lbc = new Vector3(0, 0, 0);
+	 		Vector3 rtc = new Vector3(Base.WORLD_SIZE, Base.WORLD_SIZE, 0);
+	 		Vector3 nlbc = cam.project(lbc);
+	 		Vector3 nrtc = cam.project(rtc);
+	 		Gdx.gl.glScissor((int)nlbc.x, (int)nlbc.y, (int) (nrtc.x - nlbc.x), (int) (nrtc.y - nlbc.y));
+ 		}
  		
         batch.begin();
         batch.setShader(Shaders.solidCloudShader);       
@@ -897,7 +917,7 @@ public class GameScreen implements Screen {
  		batch.end();
  		batch.setShader(Shaders.defaultShader);
  		
- 		Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+ 		if (Base.clipMap) Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }
     
     void drawConnectors(ShapeRenderer sR, SpriteBatch batch) {

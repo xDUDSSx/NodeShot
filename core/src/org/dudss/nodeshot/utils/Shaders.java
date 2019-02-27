@@ -16,6 +16,8 @@ public class Shaders {
 	public static ShaderProgram defaultShader;
 	/**Shader used for rendering corruption.*/
 	public static ShaderProgram corruptionShader;
+	/**Shader used for rendering corruption without edges.*/
+	public static ShaderProgram simpleCorruptionShader;
 	/**Shader that blurs in one direction (used for bilateral blur)*/
 	public static ShaderProgram blurShader;
 	/**Shader used for rendering terrain.*/
@@ -49,6 +51,10 @@ public class Shaders {
 		corruptionShader = new ShaderProgram(vertShader, fragShader);		
 		corruptionShader.pedantic = true;
 		
+		String simpleCorrFragShader = Gdx.files.internal("shaders/simpleCorruptionFrag.glsl").readString();
+		simpleCorruptionShader = new ShaderProgram(vertShader, simpleCorrFragShader);		
+		simpleCorruptionShader.pedantic = true;
+
 		String fogVertShader = Gdx.files.internal("shaders/fogVertex.glsl").readString();
 		String fogFragShader = Gdx.files.internal("shaders/fogFragment.glsl").readString();
 		fogOfWarShader = new ShaderProgram(fogVertShader, fogFragShader);			
@@ -80,6 +86,7 @@ public class Shaders {
 		//Shader compilation diagnostics and logging
 		compiled.put(defaultShader, "default shader");
 		compiled.put(defaultShader, "corruption shader");
+		compiled.put(simpleCorruptionShader, "simple corruption shader");
 		compiled.put(fogOfWarShader, "fog of war shader");
 		compiled.put(terrainShader, "terrain shader");
 		compiled.put(blurShader, "blur shader");

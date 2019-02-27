@@ -24,6 +24,7 @@ public class Headquarters extends AbstractBuilding {
 		super(cx, cy, width, height);
 		hqAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.hqanimFrames);	
 		hqOutlinedAnimation = new Animation<TextureRegion>(0.042f, SpriteLoader.hqanimoutlineFrames);	
+		isUsingEnergy = false;
 	}
 
 	@Override
