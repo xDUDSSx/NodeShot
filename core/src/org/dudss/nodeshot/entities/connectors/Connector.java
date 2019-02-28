@@ -48,7 +48,9 @@ public class Connector implements Entity {
 		
 		packages = new CopyOnWriteArrayList<Package>();
 		
-		lenght = Math.hypot(from.getCX() - to.getCX(), from.getCY() - to.getCY());
+		if (from != null && to != null) {
+			lenght = Math.hypot(from.getCX() - to.getCX(), from.getCY() - to.getCY());
+		}
 	}
 	
 	/**Repositions the connector between two new {@link Node}s.*/

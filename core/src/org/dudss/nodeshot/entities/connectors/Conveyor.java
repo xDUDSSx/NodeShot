@@ -30,7 +30,7 @@ public class Conveyor extends Connector {
 	float angle;
 	
 	public boolean reversed = false;
-	
+
 	List<ConveyorBuilding> conveyorBuildings;
 	
 	/**Whether this {@link Conveyor} encountered building chunk collision while 
@@ -107,11 +107,73 @@ public class Conveyor extends Connector {
 		}
 	}
 	
+	/**A utility method used for determining whether a conveyor can be built and how many {@link ConveyorBuilding}s it will need.
+	 * @param cx from center X coordinate.
+	 * @param cy from center Y coordinate.
+	 * @param cx2 to center X coordinate.
+	 * @param cy2 to center Y coordinate.
+	 * @return Returns a number of {@link ConveyorBuildings} required to build a conveyor inbetween those two points.
+	 * Returns -1 if the conveyor CANNOT be built at all.
+	 */
+	public static int checkCollision(float cx, float cy, float cx2, float cy2) {
+		int conveyorBuildings = 0;
+		
+		List<Chunk> intersectedChunks = GameScreen.chunks.retrieveChunksIntersectingLine((int) (cx / Base.CHUNK_SIZE),
+				(int) (cy / Base.CHUNK_SIZE),
+				(int)(cx2 / Base.CHUNK_SIZE), 
+				(int) (cy2 / Base.CHUNK_SIZE));
+		intersectedChunks.remove(GameScreen.chunks.getChunkAtWorldSpace(cx, cy));
+		intersectedChunks.remove(GameScreen.chunks.getChunkAtWorldSpace(cx2, cy2));
+				
+		boolean canBeBuilt = true;
+		int nOfConveyorBuildings = 0;
+		int nOfBuildings = 0;
+		
+		//Checks if this conveyor can be built
+		//If the conveyor intersects a regular building -> cannot be built
+		//If the conveyor intersects a conveyor building of a single conveyor twice or more -> cannot be built
+		//Conveyor intersects a conveyor building ONLY once -> can be built
+		List<Conveyor> intersectedConveyors = new ArrayList<Conveyor>();
+		
+		for (Chunk c : intersectedChunks) {
+			if (c.getBuilding() != null) {
+				if (c.getBuilding() instanceof ConveyorBuilding) {
+					if (intersectedConveyors.contains(((ConveyorBuilding) c.getBuilding()).getConveyor())) {
+						canBeBuilt = false;
+					}
+					intersectedConveyors.add(((ConveyorBuilding) c.getBuilding()).getConveyor());
+					nOfConveyorBuildings++;
+				} else {
+					nOfBuildings++;
+				}
+			}
+		}
+		if (nOfBuildings > 0) {
+			canBeBuilt = false;
+		}
+		
+		if (canBeBuilt) {
+			for (Chunk c : intersectedChunks) {
+				conveyorBuildings++;
+			}
+		} else {
+			conveyorBuildings = -1;
+		}
+		
+		return conveyorBuildings;
+	}
+	
 	/**Demolishes all the {@link ConveyorBuilding}s that are assigned to this conveyor.*/
 	public void clearBuildingChunks() {
 		for (ConveyorBuilding c : conveyorBuildings) {
 			c.demolish(true);
 		}	
+	}
+	
+	/**Returns a list of its {@link ConveyorBuilding}s.
+	 * @return */
+	public List<ConveyorBuilding> getConveyorBuildings() {
+		return conveyorBuildings;
 	}
 	
 	/**Whether an obstacle was encountered during the last build attempt.*/
@@ -198,6 +260,10 @@ public class Conveyor extends Connector {
 			}
 		}
 		return false;
+	}
+	
+	public float getAngle() {
+		return angle;
 	}
 	
 	@Override

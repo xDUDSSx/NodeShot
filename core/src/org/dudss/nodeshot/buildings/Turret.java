@@ -86,7 +86,8 @@ public class Turret extends AbstractStorage {
 	public void draw(SpriteBatch batch) {	
 		batch.setColor(1f, 1f, 1f, 1f);		
 		if ((int)(angle/animStep) == 72 || (int)(angle/animStep) == 0) {
-			batch.draw(SpriteLoader.turretFrames[0], x - 4, y + 5, width * 1.3f, height * 1.3f);
+			//batch.draw(SpriteLoader.turretFrames[0], x - 4, y + 5, width * 1.3f, height * 1.3f);
+			batch.draw(SpriteLoader.turretFrames[0], x, y, width, height);	
 		} else { 
 			batch.draw(SpriteLoader.turretFrames[(int) (angle/animStep) - 1], x, y, width, height);	
 		}

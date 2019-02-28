@@ -13,6 +13,7 @@ import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
 import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.inputs.DesktopInputProcessor;
@@ -54,6 +55,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -73,6 +75,8 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 
 /**The main game screen. Currently holds its resources statically.*/
 public class GameScreen implements Screen {
@@ -140,13 +144,15 @@ public class GameScreen implements Screen {
 	public static TerrainEditor terrainEditor;
 	public static Chunk hoverChunk = null;
 
-	
     //Build mode
 	public static boolean buildMode = false;
 	public static boolean buildMoving = false;
 	public static AbstractBuilding builtBuilding = null;
 	public static int activeRotation = 0;
-
+	
+	public static int bCost = 0;
+	public static int eCost = 0;
+	
 	//public static AbstractBuilding expandedNodeBuilding;
 	public static ConveyorNode expandedConveyorNode;
 	public static boolean expandingANode = false;
@@ -181,6 +187,7 @@ public class GameScreen implements Screen {
     public static RightClickMenuManager rightClickMenuManager;
     public static PauseMenu pauseMenu;
     public static ToolbarMenu toolbarMenu;
+    public static VisTable cursorTooltip;
     
     public static GLProfiler glProfiler;
     
@@ -302,6 +309,15 @@ public class GameScreen implements Screen {
         
         pauseMenu = new PauseMenu(false);
         stage.addActor(pauseMenu);
+    
+        cursorTooltip = new VisTable(true);       
+        VisLabel line1 = new VisLabel("test1");
+        VisLabel line2 = new VisLabel("test1");
+        cursorTooltip.setPosition(WIDTH/2, HEIGHT/2);
+        cursorTooltip.add(line1);
+        cursorTooltip.row();
+        cursorTooltip.add(line2);
+        stage.addActor(cursorTooltip);
     }
 
     /**@return The window width.*/
@@ -416,6 +432,15 @@ public class GameScreen implements Screen {
         
         //IOPorts, nodeBuildings and conveyorBuildings
         buildingManager.drawAllMisc(batch);
+        
+        //Setting built building costs (set BEFORE drawing connectors as connectors may change these values)
+        if (buildMode = true && builtBuilding != null) {
+        	bCost = builtBuilding.getBuildCost();
+        	eCost = builtBuilding.getEnergyCost();
+        } else {
+        	bCost = 0;
+        	eCost = 0;
+        }
         
         //Connector rendering
         drawConnectors(r, batch);
@@ -535,7 +560,29 @@ public class GameScreen implements Screen {
 	        batch.setColor(Color.WHITE);
         }
         
-        batch.end();
+        batch.end();     
+        
+        //Mouse cursor tooltip
+        if (this.buildMode == true && builtBuilding != null) {
+        	if (resourceManager.getBits() < bCost) {
+        		((VisLabel)(cursorTooltip.getCells().get(0).getActor())).setColor(Color.RED);
+        	} else {
+        		((VisLabel)(cursorTooltip.getCells().get(0).getActor())).setColor(Color.WHITE);
+        	}
+        	if (resourceManager.getPower() < eCost) {
+        		((VisLabel)(cursorTooltip.getCells().get(1).getActor())).setColor(Color.RED);
+        	}else {
+        		((VisLabel)(cursorTooltip.getCells().get(1).getActor())).setColor(Color.WHITE);
+        	}
+        	((VisLabel)(cursorTooltip.getCells().get(0).getActor())).setText("Bits: " + bCost);
+        	((VisLabel)(cursorTooltip.getCells().get(1).getActor())).setText("Power: " + eCost);
+        } else {
+        	((VisLabel)(cursorTooltip.getCells().get(0).getActor())).setColor(Color.WHITE);
+        	((VisLabel)(cursorTooltip.getCells().get(1).getActor())).setColor(Color.WHITE);
+        	((VisLabel)(cursorTooltip.getCells().get(0).getActor())).setText("");
+        	((VisLabel)(cursorTooltip.getCells().get(1).getActor())).setText("");
+        }
+        cursorTooltip.setPosition(mousePos.x, HEIGHT - mousePos.y + 25);
         
         //Stage UI drawing
         stage.act();
@@ -924,18 +971,82 @@ public class GameScreen implements Screen {
     	if(!nodelist.isEmpty()) {
             connectorHandler.drawAll(sR, batch);
         }
-    	r.begin(ShapeType.Filled);
-        r.setColor(Color.WHITE);
-        //ConnectMode line
-        if (expandingANode && expandedConveyorNode != null) {
-            Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
-            r.rectLine(	expandedConveyorNode.getCX(),
-            			expandedConveyorNode.getCY(),
-            			builtBuilding.getPrefabVector(worldPos.x, worldPos.y, true).x + builtBuilding.getWidth()/2,
-            			builtBuilding.getPrefabVector(worldPos.x, worldPos.y, true).y + builtBuilding.getHeight()/2, 
-            			Base.lineWidth);
-        }
-        r.end();
+    	
+    	if (expandingANode && expandedConveyorNode != null) {
+	    	batch.begin();
+			batch.setColor(1f, 1f, 1f, 0.5f);		
+			Vector3 worldPos = cam.unproject(new Vector3(mouseX, mouseY, 0));
+			Texture currentFrame = SpriteLoader.conveyorVertical[0];
+			
+			float tX = builtBuilding.getPrefabVector(worldPos.x, worldPos.y, true).x + builtBuilding.getWidth()/2;
+			float tY = builtBuilding.getPrefabVector(worldPos.x, worldPos.y, true).y + builtBuilding.getHeight()/2;
+			
+			Vector2 v = new Vector2(tX - (expandedConveyorNode.getCX()), 
+								   (tY - (expandedConveyorNode.getCY())));
+			float lenght = v.len();
+			
+			float angle = 0;
+			double alpha = Math.asin(v.y/lenght);
+			if (expandedConveyorNode.getCX() <= tX) {
+				angle = (float) (360 - Math.toDegrees(alpha)) % 360;
+			} else {
+				angle = (float) (180 + Math.toDegrees(alpha)) % 360;
+			}
+			
+			if (expandedConveyorNode.getCY() >= tY) {
+				angle = Math.abs((angle - 180) % 360);
+			} else {
+				angle = 360 - Math.abs((angle - 180) % 360);
+			}
+			
+			angle = (angle - 180) % 360;
+			
+			TextureRegion reg = new TextureRegion(currentFrame);
+			reg.setRegion(0, 0, (int)(currentFrame.getWidth()*(lenght/50f)), currentFrame.getHeight());
+			
+			int cb = Conveyor.checkCollision(expandedConveyorNode.getCX(), expandedConveyorNode.getCY(), tX, tY);
+			if (cb != -1) {
+				bCost += (cb*Base.CONVEYOR_BUILD_COST);
+				eCost += (cb*Base.CONVEYOR_ENERGY_COST);
+				/*String buildInfo = "B: " + (cb*Base.CONVEYOR_BUILD_COST);
+				String energyInfo = "E: " + (cb*Base.CONVEYOR_ENERGY_COST);
+				
+				float bIlen;
+				float eIlen;
+				
+				float textheight = font.getCapHeight();
+				
+				layout.setText(font, buildInfo);
+				bIlen = layout.width;
+				layout.setText(font, energyInfo);
+				eIlen = layout.width;
+				
+				float dX = expandedConveyorNode.getCX() + v.x*0.5f;
+				float dY = expandedConveyorNode.getCY() + v.y*0.5f;
+				
+				batch.setColor(0f, 0f, 1f, 1f);			
+				if (resourceManager.getBits() - Base.NODE_BUILD_COST >= (cb*Base.CONVEYOR_BUILD_COST)) {
+					font.setColor(Color.GREEN);					
+				} else {
+					font.setColor(Color.RED);	
+				}
+				font.draw(batch, buildInfo, dX - bIlen/2f, dY + textheight + 5);
+				if (resourceManager.getPower() - Base.NODE_ENERGY_COST >= (cb*Base.CONVEYOR_ENERGY_COST)) {
+					font.setColor(Color.GREEN);					
+				} else {
+					font.setColor(Color.RED);	
+				}				
+				font.draw(batch, energyInfo, dX - eIlen/2f, dY + 5);
+				*/
+				batch.setColor(0f, 1f, 0f, 0.5f);	
+				batch.draw(reg, expandedConveyorNode.getCX(), expandedConveyorNode.getCY() - 8, 0, 8, (float) lenght, 16, 1, 1, angle);
+			} else {
+				batch.setColor(1f, 0f, 0f, 0.5f);	
+				batch.draw(reg, expandedConveyorNode.getCX(), expandedConveyorNode.getCY() - 8, 0, 8, (float) lenght, 16, 1, 1, angle);
+			}
+			font.setColor(Color.WHITE);
+			batch.end();
+    	}
     }
 
     /**Renders the build menu semi-transparent placeholder.*/

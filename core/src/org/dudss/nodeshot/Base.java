@@ -24,7 +24,7 @@ public class Base {
 	public static int SCREEN_HEIGHT;
 
 	/**Minimal camera zoom.*/
-	public static float MIN_ZOOM = 0.4f;
+	public static float MIN_ZOOM = 0.3f;
 
 	public static int START_BITS = 1000;
 	public static int START_POWER = 100;
@@ -122,7 +122,7 @@ public class Base {
 	//Graphical settings
 	public static boolean vSyncEnabled = true;
 	public static boolean fullscreen = false;
-	public static int foregroundFps = 144;
+	public static int foregroundFps = 0;
 	public static Dimension defaultWindowSize = new Dimension(1300, 795);
 	public static int MSAAsamples = 10;
 	

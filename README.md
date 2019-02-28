@@ -2,6 +2,7 @@ Author: Dan Rakusan (DUDSS)
 
 How to run:
 Downloadable .rar file with the runnable executable should be located in the /exec/ folder.
+Older versions are in /desktop/build/libs/ folder. Some work, some don't.
 
 Currently building a prototype game engine from scratch for a RTS genre game.
 Heavily inspired by Creeper World by KnuckleCracker and Factorio.

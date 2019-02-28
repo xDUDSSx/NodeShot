@@ -112,9 +112,13 @@ public class DesktopInputProcessor implements InputProcessor {
 							
 							if (GameScreen.expandingANode && builtBuilding instanceof NodeBuilding) {
 								GameScreen.expandedConveyorNode.connectTo(((NodeBuilding)builtBuilding).getNode());	
-								if (!((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((NodeBuilding)builtBuilding).getNode())).isBuiltProperly()) {
+								Conveyor newConveyor = ((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((NodeBuilding)builtBuilding).getNode()));
+								int nOfBuiltConveyors = newConveyor.getConveyorBuildings().size();
+								//Checks if the newly built conveyor buildings can actually be built
+								if (!newConveyor.isBuiltProperly() || !((GameScreen.resourceManager.getBits() >= nOfBuiltConveyors*Base.CONVEYOR_BUILD_COST) && (GameScreen.resourceManager.getPower() >= nOfBuiltConveyors*Base.CONVEYOR_ENERGY_COST))) {								
 									GameScreen.expandedConveyorNode.disconnect(((NodeBuilding)builtBuilding).getNode());	
 									GameScreen.builtBuilding.demolish(true);
+									BaseClass.logger.warning("Cannot build the conveyor/s (" + nOfBuiltConveyors + ")! Not enough resources!");
 									return false;
 								}
 							}
@@ -153,7 +157,11 @@ public class DesktopInputProcessor implements InputProcessor {
 												return false;
 											}
 											if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {				
-												GameScreen.expandedConveyorNode = (ConveyorNode) ((Connectable)GameScreen.chunks.getChunkAtWorldSpace(worldPos.x, worldPos.y).getBuilding()).getNode();
+												try {
+												GameScreen.expandedConveyorNode = (ConveyorNode) ((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode();
+												} catch (Exception e) {
+													System.out.println("oohh");
+												}
 											} else {
 												GameScreen.buildingManager.disableBuildMode();
 											}
@@ -320,14 +328,14 @@ public class DesktopInputProcessor implements InputProcessor {
 						TerrainEditor.terrainBrushSize = 1;
 					}
 				} else {				
-					GameScreen.zoomTo(cam.zoom + 1f, 0.5f);
+					GameScreen.zoomTo(cam.zoom + 0.64f, 0.45f);
 				}
 			} else {
 				if (Gdx.input.isKeyPressed(Keys.T)) {
 					TerrainEditor.terrainBrushSize += 2;
 				} else {
-					if (cam.zoom > Base.MIN_ZOOM) {
-						GameScreen.zoomTo(cam.zoom - 1f, 0.5f);
+					if (cam.zoom + 0.64f > Base.MIN_ZOOM) {
+						GameScreen.zoomTo(cam.zoom - 0.64f, 0.45f);
 					}
 				}
 			}
