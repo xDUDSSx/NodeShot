@@ -7,6 +7,7 @@ public interface Entity {
 		NODE, 
 		CONNECTOR, 
 		CONVEYOR,
+		CONVEYOR_BUILDING,
 		PACKAGE, 
 		NONE, 
 		IONODE, 

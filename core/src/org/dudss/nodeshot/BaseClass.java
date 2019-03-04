@@ -1,6 +1,9 @@
 package org.dudss.nodeshot;
 
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import org.dudss.nodeshot.error.ErrorManager;
 import org.dudss.nodeshot.error.ErrorReporter;
@@ -40,14 +43,19 @@ public class BaseClass extends Game {
 	}
 	
 	@Override
-	public void create() {
-		System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
-		//System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tT] [%4$s]: %5$s %n");
-		//System.setProperty("java.util.logging.SimpleFormatter.format", "[%p] %t: %m");
-	
-		logger = Logger.getLogger(Base.class.getSimpleName());
-		errorManager = new ErrorManager();
+	public void create() {		
+		System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tT] [%4$s]: %5$s %n");
+		//System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
 		
+		logger = Logger.getAnonymousLogger();
+		logger.setUseParentHandlers(false);
+		logger.setLevel(Level.FINER);
+		ConsoleHandler handler = new ConsoleHandler();		
+        handler.setLevel(Level.FINER);
+        
+        logger.addHandler(handler);
+
+		errorManager = new ErrorManager();
 		//Splash screen is going to be listening to loader information
 		splashScreen = new SplashScreen();
 		//Loading resources

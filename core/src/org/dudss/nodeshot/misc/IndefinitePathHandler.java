@@ -51,7 +51,7 @@ public class IndefinitePathHandler implements PathHandler {
 					toBeRemoved.add(c);
 				}
 				
-				if (c.getType() == EntityType.CONVEYOR) {
+				if (c.getType() == EntityType.CONVEYOR_BUILDING) {
 					if (!currentConnector.facesTheSameDirection((Conveyor)c)) {
 						toBeRemoved.add(c);
 					}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dudss.nodeshot.Base;
+import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.buildings.ConveyorBuilding;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.entities.Package;
@@ -29,7 +30,7 @@ public class Conveyor extends Connector {
 	TextureRegion reg;
 	float angle;
 	
-	public boolean reversed = false;
+	boolean reversed = false;
 
 	List<ConveyorBuilding> conveyorBuildings;
 	
@@ -64,21 +65,19 @@ public class Conveyor extends Connector {
 		for (Chunk c : intersectedChunks) {
 			if (c.getBuilding() != null) {
 				if (c.getBuilding() instanceof ConveyorBuilding) {
-					if (intersectedConveyors.contains(((ConveyorBuilding) c.getBuilding()).getConveyor())) {
-						canBeBuilt = false;
-						encounteredBuildingCollision = true;
+					for (Conveyor con : intersectedConveyors) {
+						if (((ConveyorBuilding) c.getBuilding()).getConveyors().contains(con)) {
+							canBeBuilt = false;
+							encounteredBuildingCollision = true;
+						}			
 					}
-					intersectedConveyors.add(((ConveyorBuilding) c.getBuilding()).getConveyor());
+					intersectedConveyors.addAll(((ConveyorBuilding) c.getBuilding()).getConveyors());
 					nOfConveyorBuildings++;
 				} else {
 					nOfBuildings++;
 				}
 			}
 		}
-		/*if (nOfConveyorBuildings > 1) {
-			canBeBuilt = false;
-			encounteredBuildingCollision = true;
-		}*/
 		if (nOfBuildings > 0) {
 			canBeBuilt = false;
 			encounteredBuildingCollision = true;
@@ -86,7 +85,13 @@ public class Conveyor extends Connector {
 		
 		if (canBeBuilt) {
 			for (Chunk c : intersectedChunks) {
-				conveyorBuildings.add(new ConveyorBuilding(c.getCX(), c.getCY(), this));
+				//Guaranteed ConveyorBuilding, no need to check
+				if (c.getBuilding() != null) {
+					((ConveyorBuilding)c.getBuilding()).addConveyor(this);
+					conveyorBuildings.add((ConveyorBuilding)c.getBuilding());
+				} else {
+					conveyorBuildings.add(new ConveyorBuilding(c.getCX(), c.getCY(), this));
+				}
 			}
 		}
 		
@@ -138,10 +143,10 @@ public class Conveyor extends Connector {
 		for (Chunk c : intersectedChunks) {
 			if (c.getBuilding() != null) {
 				if (c.getBuilding() instanceof ConveyorBuilding) {
-					if (intersectedConveyors.contains(((ConveyorBuilding) c.getBuilding()).getConveyor())) {
+					if (intersectedConveyors.contains(((ConveyorBuilding) c.getBuilding()).getConveyors())) {
 						canBeBuilt = false;
 					}
-					intersectedConveyors.add(((ConveyorBuilding) c.getBuilding()).getConveyor());
+					intersectedConveyors.addAll(((ConveyorBuilding) c.getBuilding()).getConveyors());
 					nOfConveyorBuildings++;
 				} else {
 					nOfBuildings++;
@@ -163,10 +168,19 @@ public class Conveyor extends Connector {
 		return conveyorBuildings;
 	}
 	
-	/**Demolishes all the {@link ConveyorBuilding}s that are assigned to this conveyor.*/
+	/**Demolishes all the {@link ConveyorBuilding}s that are assigned to this conveyor.
+	 * If a {@linkplain ConveyorBuilding} manages more than one conveyor, this conveyor is just removed from it.*/
 	public void clearBuildingChunks() {
 		for (ConveyorBuilding c : conveyorBuildings) {
-			c.demolish(true);
+			if (c.isBuilt() == false) {
+				BaseClass.logger.fine("Demolished conveyor building encountered!");
+			} else {
+				if (c.getConveyors().size() == 1) {
+					c.demolish(true);
+				} else {
+					c.removeConveyor(this);
+				}
+			}
 		}	
 	}
 	
@@ -209,9 +223,10 @@ public class Conveyor extends Connector {
 	/**Reverses the direction of {@linkplain Package}s in this conveyor.*/
 	public void reverse() {
 		reversed = !reversed;
-		recalculateReversePositions();
+		//recalculateReversePositions();
 	}
 	
+	@Deprecated
 	/**Recalculates positions of conveyor packages and swaps their targets.*/
 	private void recalculateReversePositions() {
 		for (Package p : packages) {

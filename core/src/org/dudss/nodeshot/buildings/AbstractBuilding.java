@@ -41,7 +41,8 @@ public abstract class AbstractBuilding implements Entity {
 	boolean outlined = false;
 	boolean isBuilt = false;
 	boolean isUsingEnergy = true;
-
+	boolean selectable = true;
+	
 	int fogOfWarRadius = Base.SECTION_SIZE;
 	
 	Chunk[] buildingChunks;
@@ -227,6 +228,8 @@ public abstract class AbstractBuilding implements Entity {
 	 * @param register Whether to register the building to its {@link BuildingManager} immediately.
 	 */
 	public void build(boolean register) {
+		isBuilt = true;
+		
 		GameScreen.resourceManager.removeBits(getBuildCost());
 		GameScreen.resourceManager.removePower(getEnergyCost());
 		
@@ -264,6 +267,8 @@ public abstract class AbstractBuilding implements Entity {
 	 * @param returnBits Whether to return a portion of the buildings build cost.
 	 */
 	public void demolish(boolean returnBits) {
+		isBuilt = false;
+		
 		switch(buildingType) {
 			case BUILDING: GameScreen.buildingManager.removeRegularBuilding(this); break;
 			case MISC: GameScreen.buildingManager.removeMisc(this); break;
@@ -347,6 +352,16 @@ public abstract class AbstractBuilding implements Entity {
 		for (Section s : toUpdate) {
 			GameScreen.chunks.updateSectionMesh(s, false);
 		}
+	}
+	
+	/**@return Whether this building has been built.*/
+	public boolean isBuilt() {
+		return isBuilt;
+	}
+	
+	/**@return Whether this building can be selected by the user*/
+	public boolean isSelectable() {
+		return selectable;
 	}
 	
 	/**@return Build cost of the building.*/

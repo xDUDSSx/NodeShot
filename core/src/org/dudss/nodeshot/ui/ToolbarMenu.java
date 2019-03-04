@@ -20,6 +20,7 @@ import org.dudss.nodeshot.buildings.Turret;
 import org.dudss.nodeshot.buildings.UniversalStorage;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Package;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.misc.BuildingManager;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.utils.Selector;
@@ -76,7 +77,7 @@ public class ToolbarMenu extends VisWindow {
 		setResizable(false);
 		setMovable(false);
 		getTitleTable().clear();	
-		
+
 		structures = new BuildTable();
 		//structures.addBuildingTile(SpriteLoader.hqDrawable, "Headquarters", new BuildListener(new Headquarters(0, 0)));	
 		structures.addBuildingTile(SpriteLoader.mineDrawable, "Mine", new BuildListener(new BasicMine(0, 0)));	
@@ -238,8 +239,8 @@ public class ToolbarMenu extends VisWindow {
 			reverseBtn.addListener(new ClickListener(){
 				@Override
 				public void clicked(InputEvent event, float x, float y) {	 	
-					if (e instanceof ConveyorBuilding) {
-						((ConveyorBuilding) e).getConveyor().reverse();
+					if (e instanceof Conveyor) {
+						((Conveyor) e).reverse();
 					}
 			    }
 		    });	
@@ -247,8 +248,8 @@ public class ToolbarMenu extends VisWindow {
 			demoConveyorBtn.addListener(new ClickListener(){
 				@Override
 				public void clicked(InputEvent event, float x, float y) {	 	
-					if (e instanceof ConveyorBuilding) {
-						((ConveyorBuilding) e).getConveyor().getFrom().disconnect(((ConveyorBuilding) e).getConveyor().getTo());
+					if (e instanceof Conveyor) {
+						((Conveyor) e).getFrom().disconnect(((Conveyor) e).getTo());
 						Selector.deselect();
 					}
 			    }
@@ -260,16 +261,30 @@ public class ToolbarMenu extends VisWindow {
 				if (!(e instanceof Headquarters) && !(e instanceof ConveyorBuilding)) {
 					btns.row();
 					btns.add(demoBtn).fillX();
-				}
-				if (e instanceof ConveyorBuilding) {
-					btns.row();
-					btns.add(demoConveyorBtn).fillX();
-					btns.row();
-					btns.add(reverseBtn).fillX();
-				}
+				}				
 			}
 			
-			infoLabel = new VisLabel(e.getType().toString());
+			if (e instanceof Conveyor) {
+				btns.row();
+				btns.add(demoConveyorBtn).fillX();
+				//btns.row();
+				//btns.add(reverseBtn).fillX();
+				//TODO: fix conveyor reverse
+			}
+			
+			switch(e.getType()) {			
+				case CONVEYOR_BUILDING: 
+					if (((ConveyorBuilding)e).getConveyors().size() > 1) {
+						infoLabel = new VisLabel("Conveyor (Junction)"); 
+					} else {
+						infoLabel = new VisLabel("Conveyor"); 
+					}					
+					break;
+				default: 
+					infoLabel = new VisLabel(e.getType().toString()); 
+					break;
+			}
+			
 			add(infoLabel).top().left().expandX();
 			row();
 			add(leftPanel).left().top();
@@ -312,7 +327,7 @@ public class ToolbarMenu extends VisWindow {
 			switch(e.getType()) {
 				case FACTORY: return SpriteLoader.factoryDrawable;
 				case POWER_GENERATOR: return SpriteLoader.genDrawable;
-				case CONVEYOR: return SpriteLoader.nodeDrawable;
+				case CONVEYOR_BUILDING: return SpriteLoader.nodeDrawable;
 				case NODE_BUILDING: return SpriteLoader.nodeDrawable;
 				case NODE: return SpriteLoader.nodeDrawable;
 				case CREEPER_GENERATOR: return SpriteLoader.creepergenDrawable;
@@ -325,6 +340,7 @@ public class ToolbarMenu extends VisWindow {
 				case MINE: return SpriteLoader.mineDrawable;
 				case HQ: return SpriteLoader.hqDrawable;		
 				case UNIVERSAL_STORAGE: return SpriteLoader.storageDrawable;
+				case CONVEYOR: return SpriteLoader.beltDrawable;
 				default: return SpriteLoader.missingImage;
 			}
 		}

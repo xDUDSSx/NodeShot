@@ -101,7 +101,7 @@ public class RightClickWindow extends Window {
 			this.setPosition(GameScreen.mouseX + 10, Gdx.graphics.getHeight() - GameScreen.mouseY - this.getHeight() - 10);
 			this.setMovable(false);
 			break;
-		case CONVEYOR:	
+		case CONVEYOR_BUILDING:	
 			populateConveyor(skin, (Conveyor) entity);
 			this.setPosition(GameScreen.mouseX + 10, Gdx.graphics.getHeight() - GameScreen.mouseY - this.getHeight() - 10);
 			this.setMovable(false);
@@ -161,7 +161,7 @@ public class RightClickWindow extends Window {
         table.setFillParent(true);       
         this.setSize(180, 270);
         
-        initalizeNewWindowComponents(EntityType.CONVEYOR, entity, table, skin);
+        initalizeNewWindowComponents(EntityType.CONVEYOR_BUILDING, entity, table, skin);
 
         this.addActor(table);   
 	}
@@ -310,7 +310,7 @@ public class RightClickWindow extends Window {
 		        table.add(jammedLabel).pad(1).fill(true).padLeft(10);
 		                    		       		              								
 				break;
-			case CONVEYOR: 				     
+			case CONVEYOR_BUILDING: 				     
 				Conveyor co = (Conveyor) entity;
 				emptyLabel = new Label("", skin, "font15");
 		        

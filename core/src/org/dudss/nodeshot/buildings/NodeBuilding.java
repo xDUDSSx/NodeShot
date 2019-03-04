@@ -154,6 +154,10 @@ public class NodeBuilding extends AbstractBuilding implements Connectable {
 	public void draw(SpriteBatch batch) {
 		batch.setColor(1f, 1f, 1f, 1f);		 
 		batch.draw(s, x, y, width, height);				
+		int i = this.getNode().getConnectors().indexOf(GameScreen.selectedEntity);
+		if (i != -1) {
+			batch.draw(SpriteLoader.selectReticleBigRed, getX(), getY(), getWidth(), getHeight());
+		}
 	}
 
 	@Override

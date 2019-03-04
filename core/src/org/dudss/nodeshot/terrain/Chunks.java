@@ -286,7 +286,7 @@ public class Chunks {
 	
 	public void drawTerrain() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      
+		Gdx.gl.glBlendFuncSeparate(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_SRC_ALPHA, GL20.GL_DST_ALPHA);     
 		SpriteLoader.terrainAtlas.findRegion("tiledCoal").getTexture().bind();   
 	    Shaders.terrainShader.begin();
 	    Shaders.terrainShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
@@ -312,7 +312,7 @@ public class Chunks {
 	 */
 	public void drawCorruption() {
 	 	Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	    
+	 	Gdx.gl.glBlendFuncSeparate(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_SRC_ALPHA, GL20.GL_DST_ALPHA);  
 
         //For blur
 	    //GameScreen.corrBuffers.get(layer).begin();
@@ -341,8 +341,8 @@ public class Chunks {
 	
 	public void drawFogOfWar() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	      	
-	  
+		Gdx.gl.glBlendFuncSeparate(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_SRC_ALPHA, GL20.GL_DST_ALPHA);
+		
 	    Shaders.fogOfWarShader.begin();
 	    Shaders.fogOfWarShader.setUniformMatrix("u_projTrans", GameScreen.cam.combined);
 	    for (Section s : sectionsInView) {

@@ -34,7 +34,7 @@ public class SettingsMenu extends Window {
 		setVisible(true);
 		setMovable(true);
 		setResizable(true);
-		setPosition(10, Gdx.graphics.getHeight()/2 - this.getHeight());
+		setPosition(10, 50);
 		align(Align.top);
 		addWidgets();
 	}
@@ -65,6 +65,7 @@ public class SettingsMenu extends Window {
 		VisCheckBox drawBorderChunksCheckbox = new VisCheckBox("Highlight border chunks", Base.drawBorderChunks);
 		VisCheckBox drawActiveSectionsCheckbox = new VisCheckBox("Highlight active update sections", Base.drawActiveSections);
 		VisCheckBox drawBuildingTilesCheckbox = new VisCheckBox("Highlight building tiles", Base.drawBuildingTiles);
+		VisCheckBox drawConnectorCollidersCheckbox = new VisCheckBox("Draw connector colliders", Base.drawConnectorColliders);
 		
 		VisCheckBox drawOresCheckbox = new VisCheckBox("Draw ores", Base.drawOres);
 		VisCheckBox errorCheckbox = new VisCheckBox("Test error", false);
@@ -82,7 +83,8 @@ public class SettingsMenu extends Window {
 		engineSettingsTable.add(drawBorderChunksCheckbox).left().row();
 		engineSettingsTable.add(drawActiveSectionsCheckbox).left().row();
 		engineSettingsTable.add(drawBuildingTilesCheckbox).left().row();	
-		
+		engineSettingsTable.add(drawConnectorCollidersCheckbox).left().row();	
+	
 		table.add(engineSettingsButton).fillX().row();
 		table.add(engineSettingsCollapsibleWidget).expandX().fillX().row();
 		
@@ -119,18 +121,20 @@ public class SettingsMenu extends Window {
 		
 		VisCheckBox vsyncCheckbox = new VisCheckBox("Enable vSync", Base.vSyncEnabled);
 		VisCheckBox fullscreenCheckbox = new VisCheckBox("Fullscreen", Base.fullscreen);
-		VisCheckBox disableBackgroundCheckbox = new VisCheckBox("Disable background shader", Base.disableBackground);
-		VisCheckBox enableBloomCheckbox	 = new VisCheckBox("Bloom", Base.enableBloom);
+		VisCheckBox disableBackgroundCheckbox = new VisCheckBox("Disable background shader", Base.disableBackground);	
 		VisCheckBox clipMapCheckbox = new VisCheckBox("Clip map edges", Base.clipMap);
 		VisCheckBox disableEdgesCheckbox = new VisCheckBox("Disable edge resolving", Base.disableEdges);
+		VisCheckBox enablePostProcessingCheckbox = new VisCheckBox("Enable post-processing", Base.enablePostProcessing);
+		VisCheckBox enableBloomCheckbox	 = new VisCheckBox("Bloom", Base.enableBloom);
 		
 
 		graphicsSettingsTable.add(vsyncCheckbox).left().row();	
 		graphicsSettingsTable.add(fullscreenCheckbox).left().row();	
 		graphicsSettingsTable.add(disableBackgroundCheckbox).left().row();	
-		graphicsSettingsTable.add(enableBloomCheckbox).left().row();	
 		graphicsSettingsTable.add(clipMapCheckbox).left().row();	
-		graphicsSettingsTable.add(disableEdgesCheckbox).left().row();	
+		graphicsSettingsTable.add(disableEdgesCheckbox).left().row();
+		graphicsSettingsTable.add(enablePostProcessingCheckbox).left().row();	
+		graphicsSettingsTable.add(enableBloomCheckbox).left().row();	
 		
 		table.add(graphicsSettingsButton).fillX().row();
 		table.add(graphicSettingsCollapsibleWidget).expandX().fillX().row();	
@@ -226,6 +230,13 @@ public class SettingsMenu extends Window {
 				Base.drawGeneralStats = drawGeneralStatsCheckbox.isChecked();
 		    }
 	    });		
+		drawConnectorCollidersCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 		
+				Base.drawConnectorColliders = drawConnectorCollidersCheckbox.isChecked();
+		    }
+	    });			
+		
 		infiniteResourcesCheckbox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 	
@@ -240,6 +251,7 @@ public class SettingsMenu extends Window {
 		vsyncCheckbox.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 	
+				Base.vSyncEnabled = vsyncCheckbox.isChecked();
 				Gdx.graphics.setVSync(vsyncCheckbox.isChecked());
 		    }
 	    });		
@@ -278,6 +290,12 @@ public class SettingsMenu extends Window {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {	 	
 				Base.enableBloom = enableBloomCheckbox.isChecked();
+		    }
+	    });	
+		enablePostProcessingCheckbox.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {	 	
+				Base.enablePostProcessing = enablePostProcessingCheckbox.isChecked();
 		    }
 	    });	
 		closeButton.addListener(new ClickListener(){

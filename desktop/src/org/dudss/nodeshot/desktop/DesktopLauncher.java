@@ -24,8 +24,9 @@ public class DesktopLauncher {
 	 * v7.0 - terrain update
 	 * v7.1 - effects update
 	 * v8.0 - gameplay update
+	 * v8.1 - conveyor update 2
 	 * */
-	public static final String ver = "v8.0";
+	public static final String ver = "v8.1";
 	
 	/**The main method*/
 	public static void main (String[] arg) {
@@ -43,7 +44,7 @@ public class DesktopLauncher {
 		//Dialogs.showErrorDialog(GameScreen.stage, "A runtime error occured.", ex);
 
 		MenuScreen.ver = ver;
-		MenuScreen.subver = "Gameplay update";
+		MenuScreen.subver = "Conveyor update 2";
 		
 		//Uncaught error handling
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {

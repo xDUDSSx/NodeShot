@@ -9,7 +9,6 @@ import static org.dudss.nodeshot.screens.GameScreen.lastMousePressType;
 import static org.dudss.nodeshot.screens.GameScreen.mousePos;
 import static org.dudss.nodeshot.screens.GameScreen.mouseX;
 import static org.dudss.nodeshot.screens.GameScreen.mouseY;
-import static org.dudss.nodeshot.screens.GameScreen.nodelist;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -19,19 +18,16 @@ import org.dudss.nodeshot.BaseClass;
 import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.buildings.AbstractIOPort;
 import org.dudss.nodeshot.buildings.Connectable;
+import org.dudss.nodeshot.buildings.ConveyorBuilding;
 import org.dudss.nodeshot.buildings.NodeBuilding;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.connectors.Conveyor;
-import org.dudss.nodeshot.entities.effects.Explosion;
-import org.dudss.nodeshot.entities.effects.Shockwave;
-import org.dudss.nodeshot.entities.effects.SmokePoof;
 import org.dudss.nodeshot.entities.nodes.ConveyorNode;
 import org.dudss.nodeshot.entities.nodes.IONode;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
 import org.dudss.nodeshot.screens.GameScreen.MouseType;
 import org.dudss.nodeshot.terrain.TerrainEditor;
-import org.dudss.nodeshot.utils.Selector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -147,27 +143,57 @@ public class DesktopInputProcessor implements InputProcessor {
 						} else		
 						if (expandingANode) {					
 							Vector2 nbCoords = GameScreen.builtBuilding.getCoordinates(worldPos.x, worldPos.y, true);
-							if (GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x,  nbCoords.y).getBuilding() instanceof Connectable) {
-								if (((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode() != null) {
-									if(!((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode().getAllConnectedNodes().contains(GameScreen.expandedConveyorNode)) {
-										if(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode() != GameScreen.expandedConveyorNode) {			
-											GameScreen.expandedConveyorNode.connectTo(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode());
-											if (!(((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode())).isBuiltProperly())) {
-												GameScreen.expandedConveyorNode.disconnect(((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode());	
+							AbstractBuilding b = GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x,  nbCoords.y).getBuilding();
+							if (b instanceof Connectable) {
+								if (((Connectable) b).getNode() != null) {
+									if(!((Connectable) b).getNode().getAllConnectedNodes().contains(GameScreen.expandedConveyorNode)) {
+										if(((Connectable) b).getNode() != GameScreen.expandedConveyorNode) {			
+											GameScreen.expandedConveyorNode.connectTo(((Connectable) b).getNode());
+											if (!(((Conveyor) GameScreen.expandedConveyorNode.getConnectorConnecting(((Connectable) b).getNode())).isBuiltProperly())) {
+												GameScreen.expandedConveyorNode.disconnect(((Connectable)b ).getNode());	
 												return false;
 											}
 											if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {				
-												try {
-												GameScreen.expandedConveyorNode = (ConveyorNode) ((Connectable)GameScreen.chunks.getChunkAtWorldSpace(nbCoords.x, nbCoords.y).getBuilding()).getNode();
-												} catch (Exception e) {
-													System.out.println("oohh");
-												}
+												GameScreen.expandedConveyorNode = (ConveyorNode) ((Connectable) b).getNode();
 											} else {
 												GameScreen.buildingManager.disableBuildMode();
 											}
 										}
 									}			
 								}
+							} else 
+							if (b instanceof ConveyorBuilding && GameScreen.builtBuilding instanceof NodeBuilding) {
+								ConveyorBuilding cb = (ConveyorBuilding) b;			
+							
+								b.demolish(true);
+								if (GameScreen.builtBuilding.canBeBuiltAt(worldPos.x, worldPos.y, true)) {
+									GameScreen.builtBuilding.setLocation(worldPos.x, worldPos.y, true);
+									GameScreen.builtBuilding.build();
+									Node newlyBuiltNode = ((NodeBuilding) GameScreen.builtBuilding).getNode();
+										
+									for (Conveyor c : cb.getConveyors()) {				
+										c.disconnect();
+										
+										Node n1 = c.getFrom();
+										Node n2 = c.getTo();
+										
+										if(!c.isReversed()) {
+											n1.connectTo(newlyBuiltNode);
+											newlyBuiltNode.connectTo(n2);
+										} else {
+											n2.connectTo(newlyBuiltNode);
+											newlyBuiltNode.connectTo(n1);
+										}										
+									}	
+									GameScreen.expandedConveyorNode.connectTo(newlyBuiltNode);
+									if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {				
+										GameScreen.expandedConveyorNode = ((NodeBuilding) GameScreen.builtBuilding).getNode();
+									} else {
+										GameScreen.buildingManager.disableBuildMode();
+									}
+								} else {
+									b.build();
+								}							
 							}
 						}
 						GameScreen.chunks.updateAllSectionMeshes(false);

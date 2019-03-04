@@ -137,13 +137,17 @@ public class SpriteLoader {
 	public static Drawable ammoProcessorDrawable;
 	public static Drawable shipdockDrawable;
 	public static Drawable storageDrawable;
+	public static Drawable beltDrawable;
 	public static Drawable missingImage;
+
 	
 	public static Sprite turret;
 	public static Sprite turretHead;
 	public static Sprite bullet;
 	
 	public static Texture selectReticle;
+	public static Texture selectReticleBig;
+	public static Texture selectReticleBigRed;
 	
 	/**Loads all textures*/
 	public static void loadAll() {		
@@ -153,9 +157,17 @@ public class SpriteLoader {
 		setMessage("Loading sprites");
 		
 		count = 1;
-		total = 141 + 29;
+		total = 141 + 29 + 3;
 		
 		selectReticle = new Texture("res/selectReticle.png");
+		textures.add(selectReticle);
+		updateProgress(count++, total);
+		
+		selectReticleBig = new Texture("res/selectReticleBig.png");
+		textures.add(selectReticle);
+		updateProgress(count++, total);
+		
+		selectReticleBigRed = new Texture("res/selectReticleBigRed.png");
 		textures.add(selectReticle);
 		updateProgress(count++, total);
 		
@@ -462,6 +474,11 @@ public class SpriteLoader {
 		storageDrawable.setMinWidth(Base.buildMenuImgSize);		
 		updateProgress(count++, total);
 		
+		beltDrawable = new TextureRegionDrawable(new TextureRegion(hqanimAtlas.findRegion("conveyorVertical0000")));
+		beltDrawable.setMinHeight(Base.buildMenuImgSize);
+		beltDrawable.setMinWidth(Base.buildMenuImgSize);		
+		updateProgress(count++, total);
+		
 		missingImage = new TextureRegionDrawable(new TextureRegion(hqanimAtlas.findRegion("missingIconImage")));
 		missingImage.setMinHeight(Base.buildMenuImgSize);
 		missingImage.setMinWidth(Base.buildMenuImgSize);		
@@ -579,7 +596,8 @@ public class SpriteLoader {
 			generateTexture("maskFULL", "overlayXBS", base, "XBS"); 
 			generateTexture("maskFULL", "overlayYBS", base, "YBS"); 
 			
-			generateTexture("maskFULL", "overlaySingle", base, "Single");*/
+			generateTexture("maskFULL", "overlaySingle", base, "Single");
+			*/
 			
 		}
 		
@@ -598,7 +616,10 @@ public class SpriteLoader {
 
 		settings.alphaThreshold = 0;
 		//settings.filterMin = Texture.TextureFilter.Linear;
-		settings.filterMin = Texture.TextureFilter.MipMapLinearLinear;
+		//settings.filterMin = Texture.TextureFilter.MipMapLinearLinear;
+		
+		//Use this one
+		settings.filterMin = Texture.TextureFilter.MipMapNearestLinear;
 		settings.filterMag = Texture.TextureFilter.Nearest;
 		
 		settings.paddingX = 64;
@@ -618,8 +639,8 @@ public class SpriteLoader {
 		TexturePacker.ProgressListener progressListener = new TexturePacker.ProgressListener() {			
 			@Override
 			public void progress(float progress) {
-				SpriteLoader.progress = (Math.round(progress * 100));	
-				//BaseClass.splashScreen.updateProgress();
+				//SpriteLoader.progress = (Math.round(progress * 100));	
+				BaseClass.splashScreen.updateProgress();
 			}
 		};
 		
@@ -667,7 +688,7 @@ public class SpriteLoader {
 				if (maskColor.a > 0) {
 					Color baseColor =  new Color(baseBRpixmap.getPixel(x, y));
 					Color overlayColor = new Color(overlayBRpixmap.getPixel(x, y)); 
-					overlayColor.mul(1f, 1f, 1f, 0.75f);
+					overlayColor.mul(1f, 1f, 1f, 0.5f);
 					
 					float r = (float) (overlayColor.r * overlayColor.a + baseColor.r * (1.0 - overlayColor.a));
 					float g = (float) (overlayColor.g * overlayColor.a + baseColor.g * (1.0 - overlayColor.a));

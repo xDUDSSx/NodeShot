@@ -242,6 +242,11 @@ public class Connector implements Entity {
 		packages.clear();
 	}
 	
+	/**Disconnects the {@link Node}s this connector is connecting. (Removes this connector)*/
+	public void disconnect() {
+		this.getFrom().disconnect(this.getTo());
+	}
+	
 	/**Gets the starting {@link Node} of this connector.*/
 	public Node getFrom() {
 		return from;

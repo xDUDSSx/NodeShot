@@ -1,17 +1,18 @@
 package org.dudss.nodeshot.utils;
 
+import static org.dudss.nodeshot.screens.GameScreen.selectedEntity;
 import static org.dudss.nodeshot.screens.GameScreen.selectedID;
 import static org.dudss.nodeshot.screens.GameScreen.selectedIndex;
 import static org.dudss.nodeshot.screens.GameScreen.selectedType;
-import static org.dudss.nodeshot.screens.GameScreen.selectedEntity;
 
 import org.dudss.nodeshot.buildings.AbstractBuilding;
 import org.dudss.nodeshot.entities.Entity;
 import org.dudss.nodeshot.entities.Entity.EntityType;
+import org.dudss.nodeshot.entities.Package;
 import org.dudss.nodeshot.entities.connectors.Connector;
+import org.dudss.nodeshot.entities.connectors.Conveyor;
 import org.dudss.nodeshot.entities.nodes.Node;
 import org.dudss.nodeshot.screens.GameScreen;
-import org.dudss.nodeshot.entities.Package;
 
 /**A utility class that handles {@link Entity} highlighting.*/
 public class Selector {

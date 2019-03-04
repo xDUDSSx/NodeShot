@@ -20,7 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 /**A turret that targets chunks with corruption. Requires ammo to be stored in order to fire a {@link Bullet}.*/
 public class Turret extends AbstractStorage {
 
-	static float width = Base.CHUNK_SIZE*3, height = Base.CHUNK_SIZE*3;
+	static float width = Base.CHUNK_SIZE*2, height = Base.CHUNK_SIZE*2;
 	
 	/**Minimum delay between shots*/
 	int rechargeRate = 68;
@@ -58,8 +58,16 @@ public class Turret extends AbstractStorage {
 		accepted = Arrays.asList(ItemType.AMMO);
 		
 		maxStorage = 5;
-		//activateIONode(true);
 	}
+	
+	/**A turret that targets chunks with corruption. Requires ammo to be stored in order to fire a {@link Bullet}.*/
+	public Turret(float cx, float cy, float width, float height) {
+		super(cx, cy, width, height);
+		accepted = Arrays.asList(ItemType.AMMO);
+		
+		maxStorage = 5;
+	}
+	
 	
 	@Override
 	public void update() {
@@ -87,9 +95,9 @@ public class Turret extends AbstractStorage {
 		batch.setColor(1f, 1f, 1f, 1f);		
 		if ((int)(angle/animStep) == 72 || (int)(angle/animStep) == 0) {
 			//batch.draw(SpriteLoader.turretFrames[0], x - 4, y + 5, width * 1.3f, height * 1.3f);
-			batch.draw(SpriteLoader.turretFrames[0], x, y, width, height);	
+			batch.draw(SpriteLoader.turretFrames[0], x - 8.4819f , y - 0.5783f, width * 1.5421f, height * 1.5421f);	
 		} else { 
-			batch.draw(SpriteLoader.turretFrames[(int) (angle/animStep) - 1], x, y, width, height);	
+			batch.draw(SpriteLoader.turretFrames[(int) (angle/animStep) - 1], x - 8.4819f, y - 0.5783f, width * 1.5421f, height * 1.5421f);	
 		}
 	}
 	

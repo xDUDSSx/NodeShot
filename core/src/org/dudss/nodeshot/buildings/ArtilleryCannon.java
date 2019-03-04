@@ -21,6 +21,8 @@ import com.badlogic.gdx.math.Vector2;
 /**A cannon firing {@link ArtilleryShell}s. What makes it special is its firing animation. This animation is unique for all 16 angles of rotation.*/
 public class ArtilleryCannon extends Turret {
 	
+	static float width = Base.CHUNK_SIZE*3, height = Base.CHUNK_SIZE*3;
+	
 	boolean fireAnimPlaying = false;
 	float fireAnimStartTime = 1;
 	HashMap<Integer, Animation<TextureRegion>> fireAnims;	
@@ -33,7 +35,7 @@ public class ArtilleryCannon extends Turret {
 	float archingFactor = 28;
 	
 	public ArtilleryCannon(float cx, float cy) {
-		super(cx, cy);
+		super(cx, cy, width, height);
 		
 		/*for (int i = 0; i < 50; i++) {
 			this.storage.add(new StorableItem(ItemType.AMMO));

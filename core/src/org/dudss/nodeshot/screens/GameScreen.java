@@ -387,23 +387,22 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-    	Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1f);
+    	Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
  		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	
- 		GameScreen.screenBuffer.begin();
+ 		if (Base.enablePostProcessing) GameScreen.screenBuffer.begin();
     	
     	stateTime += delta;
     	 	
         handleInput(delta);
         cam.update();	        	
         toolbarMenu.updateInfoPanel();
-
-        /*Gdx.gl.glClearColor(0, 0, 0, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-         */
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-     
+        
+        if (Base.enablePostProcessing) {
+	        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        }
+		
         //OpenGL performance logging
         if (Base.enableGlProgilerLogging) glProfiler.reset();           
 		
@@ -449,8 +448,8 @@ public class GameScreen implements Screen {
         
         if (buildMode && builtBuilding != null) {
         	r.begin(ShapeType.Filled);
-        	Gdx.gl.glEnable(GL20.GL_BLEND);       
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);                  	
+        	Gdx.gl.glEnable(GL20.GL_BLEND);                         	
+        	Gdx.gl.glBlendFuncSeparate(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_SRC_ALPHA, GL20.GL_DST_ALPHA);
         	drawPrefab(r, batch);        	
         	r.end();         	 
             Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -496,7 +495,11 @@ public class GameScreen implements Screen {
         if (GameScreen.selectedEntity instanceof AbstractBuilding) {
         	AbstractBuilding b = (AbstractBuilding) GameScreen.selectedEntity;
         	batch.begin();
-        	batch.draw(SpriteLoader.selectReticle, b.getX(), b.getY(), b.getWidth(), b.getHeight());
+        	if (b.getWidth() == Base.CHUNK_SIZE && b.getHeight() == Base.CHUNK_SIZE) {
+        		batch.draw(SpriteLoader.selectReticleBig, b.getX(), b.getY(), b.getWidth(), b.getHeight());
+        	} else {
+        		batch.draw(SpriteLoader.selectReticle, b.getX(), b.getY(), b.getWidth(), b.getHeight());
+        	}
         	batch.end();
         }
         
@@ -519,29 +522,31 @@ public class GameScreen implements Screen {
         //Draw debug info-graphics
         drawDebug(r);              
        
-        screenBuffer.end();
-         		
-        if (Base.enableBloom) {
-	        bloomSourceBuffer.begin();
-	        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);  
-	        buildingManager.drawAllRegularBuildings(batch);
-	        effectManager.drawRegularEffects(batch);
-	        bloomSourceBuffer.end();
+        if (Base.enablePostProcessing) screenBuffer.end();
+
+        if (Base.enablePostProcessing) {
+	        if (Base.enableBloom) {
+		        bloomSourceBuffer.begin();
+		        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0f);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);  
+		        buildingManager.drawAllRegularBuildings(batch);
+		        effectManager.drawRegularEffects(batch);
+		        bloomSourceBuffer.end();
+	        }
+	        
+			displacementBuffer.begin();
+			Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			effectManager.drawDisplacementEffects(batch);
+			displacementBuffer.end();
         }
-        
-		displacementBuffer.begin();
-		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		effectManager.drawDisplacementEffects(batch);
-		displacementBuffer.end();
 		
         //HUD, draw last
         //setting screen matrix    
         setHudProjectionMatrix(batch);
         setHudProjectionMatrix(r);     
        
-		drawScreenBuffer(Base.enableBloom);
+		if (Base.enablePostProcessing) drawScreenBuffer(Base.enableBloom);
 
 		//postProcessor.capture();
 		//effectManager.drawRegularEffects(batch);
@@ -646,25 +651,42 @@ public class GameScreen implements Screen {
     		targetSourceTexture.flip(false, true);
     	}
 		
-    	Texture displacementTexture = displacementBuffer.getColorBufferTexture();
-		Texture screenTexture = screenBuffer.getColorBufferTexture();
-	    screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-	    displacementTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);  
-	    targetSourceTexture.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-	    
-	    screenTexture.bind(2);
-	    displacementTexture.bind(1);
-	    targetSourceTexture.getTexture().bind(0);
+    	Texture displacementTexture = null;
+    	Texture screenTexture = null;
+    	if (Base.enablePostProcessing) {
+    		displacementTexture = displacementBuffer.getColorBufferTexture();
+    		screenTexture = screenBuffer.getColorBufferTexture();
+    	    screenTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Nearest);
+    	    displacementTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);  
+    	    targetSourceTexture.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+    	    
+    	    screenTexture.bind(2);
+    	    displacementTexture.bind(1);
+    	    targetSourceTexture.getTexture().bind(0);
+    	} else {
+            screenTexture = screenBuffer.getColorBufferTexture();
+    	    screenTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Nearest);       
+    	    screenTexture.bind();
+    	}
 	    
 	    Matrix4 uiMatrix = cam.combined.cpy();
         uiMatrix.setToOrtho2D(0, 0, 1, 1);
         
-        Shaders.waveShader.begin();        
-        Shaders.waveShader.setUniformi("u_texture", 2);	
-		Shaders.waveShader.setUniformi("displacementMap", 1);	
-		Shaders.waveShader.setUniformi("bloomMap", 0);	
-	    Shaders.waveShader.setUniformMatrix("u_projTrans", uiMatrix);
-	    
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFuncSeparate(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_SRC_ALPHA, GL20.GL_DST_ALPHA);
+		
+		if (Base.enablePostProcessing) {
+	        Shaders.waveShader.begin();        
+	        Shaders.waveShader.setUniformi("u_texture", 2);	
+			Shaders.waveShader.setUniformi("displacementMap", 1);	
+			Shaders.waveShader.setUniformi("bloomMap", 0);	
+		    Shaders.waveShader.setUniformMatrix("u_projTrans", uiMatrix);
+        } else {
+        	Shaders.defaultShader.begin();        
+            Shaders.defaultShader.setUniformi("u_texture", 0);	
+            Shaders.defaultShader.setUniformMatrix("u_projTrans", uiMatrix);
+        }
+   
 	    float[] verts = new float[20];
     	int i = 0;
     	
@@ -701,13 +723,43 @@ public class GameScreen implements Screen {
 	    			new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
     	}
     	screenMesh.setVertices(verts);
-    	screenMesh.setIndices(indices);    	
-    	screenMesh.render(Shaders.defaultShader, GL20.GL_TRIANGLES);
-    	Shaders.waveShader.end();    
+    	screenMesh.setIndices(indices);  
+    	
+    	if (Base.enablePostProcessing) {
+    		screenMesh.render(Shaders.waveShader, GL20.GL_TRIANGLES);
+    		Shaders.waveShader.end();
+    	} else {
+    		screenMesh.render(Shaders.defaultShader, GL20.GL_TRIANGLES);
+    		Shaders.defaultShader.end();
+    	}
+    	
+    	Gdx.gl.glDisable(GL20.GL_BLEND);    
     }
     
     /**Draws all debug infographics if enabled*/
     public static void drawDebug(ShapeRenderer r) {
+    	if (Base.drawCreeperLevel) {
+	        r.begin(ShapeType.Filled);
+	        r.setColor(Color.WHITE);
+	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
+	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
+	        		if (chunks.getChunkAtTileSpace(x, y).getCreeperLevel() > 0) {
+	        			float n = chunks.getChunkAtTileSpace(x, y).getCreeperLevel() * 100;	        			
+	        			if (n == 100) {
+	        				n = 99;
+	        			}
+	        			float rc = (255 * n) / 100;
+	        			float g = (255 * (100 - n)) / 100 ;
+	        			float b = 0;
+	        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));	        			
+	        			r.setColor(c);
+	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
+	        		}
+	        	}
+	        }
+	        r.end();
+        }
+    	
     	//Shows terrain edges in blue
         if (Base.drawTerrainEdges) {
 	        r.begin(ShapeType.Line);
@@ -839,26 +891,21 @@ public class GameScreen implements Screen {
 	        }      
 	        r.end();
         }
-        
-        if (Base.drawCreeperLevel) {
-	        r.begin(ShapeType.Filled);
-	        r.setColor(Color.WHITE);
-	        for (int x = 0; x < Base.CHUNK_AMOUNT; x++) {
-	        	for (int y = 0; y < Base.CHUNK_AMOUNT; y++) {	    
-	        		if (chunks.getChunkAtTileSpace(x, y).getCreeperLevel() > 0) {
-	        			float n = chunks.getChunkAtTileSpace(x, y).getCreeperLevel() * 100;	        			
-	        			if (n == 100) {
-	        				n = 99;
-	        			}
-	        			float rc = (255 * n) / 100;
-	        			float g = (255 * (100 - n)) / 100 ;
-	        			float b = 0;
-	        			Color c = new Color(Color.rgba8888(rc/255f, g/255f, b/255f, 1.0f));	        			
-	        			r.setColor(c);
-	        			r.rect((float) (x * Base.CHUNK_SIZE), (float) (y * Base.CHUNK_SIZE), Base.CHUNK_SIZE, Base.CHUNK_SIZE);
-	        		}
-	        	}
-	        }
+        if (Base.drawConnectorColliders) {
+	        r.begin(ShapeType.Line);
+	        r.setColor(Color.YELLOW);
+	        for (Connector c : GameScreen.connectorHandler.getAllConnectors()) {	   
+	        	Node n1 = c.getFrom();
+	            Node n2 = c.getTo();
+
+	            float x1 = n1.getCX();
+	            float y1 = n1.getCY();
+	             
+	            float x2 = n2.getCX();
+	            float y2 = n2.getCY();
+	        	
+	            r.rectLine(new Vector2(x1, y1), new Vector2(x2, y2), Base.CONNECTOR_COLLIDER_RADIUS*2);
+	        }      
 	        r.end();
         }
     }
@@ -1372,9 +1419,9 @@ public class GameScreen implements Screen {
         if (highlightedEntity == null) {
         	highlightedEntity = checkPackages(rect, worldPos, select);
         	if (highlightedEntity == null) {
-        		highlightedEntity = checkBuildings(rect, worldPos, select);
+        		highlightedEntity = checkConnectors(rect, worldPos, select);
         		if (highlightedEntity == null) {
-        			highlightedEntity = checkConnectors(rect, worldPos, select);
+        			highlightedEntity = checkBuildings(rect, worldPos, select);
         		}
         	}
         }
@@ -1389,12 +1436,14 @@ public class GameScreen implements Screen {
         if ((buildingManager.getAllBuildings().size() > 0)) {
             for(int i = 0; i < buildingManager.getAllBuildings().size(); i++) {
                 AbstractBuilding b = buildingManager.getAllBuildings().get(i);
-                Rectangle r = new Rectangle(b.getX(), b.getY(), b.getWidth(), b.getHeight());
-                if(r.overlaps(rect)) {
-                	if (select) Selector.selectBuilding(b);
-                    buildingIntersected = true;
-                    intersectedBuilding = b;
-                    break;
+                if (b.isSelectable()) {
+	                Rectangle r = new Rectangle(b.getX(), b.getY(), b.getWidth(), b.getHeight());
+	                if(r.overlaps(rect)) {
+	                	if (select) Selector.selectBuilding(b);
+	                    buildingIntersected = true;
+	                    intersectedBuilding = b;
+	                    break;
+	                }
                 }
             }
             if (!buildingIntersected) {
@@ -1452,16 +1501,17 @@ public class GameScreen implements Screen {
     private static Connector checkConnectors(Rectangle rect, Vector3 worldPos, boolean select) {
         Boolean connectorIntersected = false;
         Connector intersectedConnector = null;
-        for (int i = 0; i < connectorHandler.getAllConnectors().size(); i++) {
+        for (int i = connectorHandler.getAllConnectors().size()-1; i >= 0 ; i--) {
             Node n1 = connectorHandler.getAllConnectors().get(i).getFrom();
             Node n2 = connectorHandler.getAllConnectors().get(i).getTo();
-
+            
             float x1 = n1.getCX();
             float y1 = n1.getCY();
+            
             float x2 = n2.getCX();
             float y2 = n2.getCY();
 
-            if (Intersector.distanceSegmentPoint(x1, y1, x2, y2, worldPos.x, worldPos.y) <= 3)
+            if (Intersector.distanceSegmentPoint(x1, y1, x2, y2, worldPos.x, worldPos.y) <= Base.CONNECTOR_COLLIDER_RADIUS)
             {
                 if (select) Selector.selectNodeConnector(connectorHandler.getAllConnectors().get(i));
                

@@ -39,9 +39,9 @@ public class Base {
 	/**The space that the {@link Package}s take up on the {@link Connector}.*/
 	public static float PACKAGE_BLOCK_RANGE = 8;
 
-	public static int CONNECT_DISTANCE = 900;
 	public static int MAX_CONNECTIONS = 9;
-
+	public static float CONNECTOR_COLLIDER_RADIUS = 4;
+	
 	public static int lineWidth = 3;
 	public static int HUD_FONT_SIZE = 16;  //Mobile 32
 	public static int HUD_FONT_LARGE_SIZE = 36;
@@ -115,6 +115,7 @@ public class Base {
 	public static boolean drawBuildingTiles = false;
 	public static boolean drawSectionBorders = false;
 	public static boolean drawCreeperLevel = false;
+	public static boolean drawConnectorColliders = false;
 	
 	//Game settings
 	public static boolean infiniteResources = false;
@@ -128,10 +129,10 @@ public class Base {
 	
 	//Render settings
 	public static boolean disableBackground = false;
-	public static boolean enableBloom = false;	
 	public static boolean clipMap = false;
 	public static boolean disableEdges = false;
-	
+	public static boolean enablePostProcessing = false;
+	public static boolean enableBloom = false;	
 	
 	//Building costs	
 	/**How often do building get their energy usage and generation updated.
